@@ -1,0 +1,178 @@
+body {
+    overflow-y: scroll;
+}
+.disciplina_lista {
+    background-color: #ffffff;
+    margin: 1%;
+    padding: 3px;
+    /* padding-top: 2em; */
+    padding-bottom: 10%;
+}
+.disciplina_container {
+    background-color: #FDEBCC;
+    margin: 0;
+    padding: 0.2em;
+    border-style: solid;
+    border-width: 0px;
+    border-radius: 5px;
+}
+.disciplina_container_s {
+    background-color: #050505;
+    margin: 0;
+    padding: 0.2em;
+    border-style: solid;
+    border-width: 0px;
+    border-radius: 5px;
+}
+.disciplina_identificacao {
+    display: flex;
+}
+.disciplina_nome {
+    background-color: #FCA44A;
+    margin-left: 0px;
+    padding: 0.1em;
+    border-style: solid;
+    border-width: 0px;
+    border-radius: 5px;
+    flex-grow: 1;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+.disciplina_docente {
+    background-color: #fdcfa0;
+    margin-left: 0px;
+    padding: 0.1em;
+    border-style: solid;
+    border-width: 0px;
+    border-radius: 5px;
+    flex-grow: 1;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+.disciplina_selecao {
+    background-color: #FCA44A;
+    margin-left: 0px;
+    padding: 0.1em;
+    border-style: solid;
+    border-width: 0px;
+    border-radius: 5px;
+    font-size: 1.5em;
+    text-align: right;
+    width: 2.2em;
+    max-width: 2.2em;
+    min-width: 2.2em;
+}
+.disciplina_selecao_docente {
+    background-color: #fdcfa0;
+    margin-left: 0px;
+    padding: 0.1em;
+    border-style: solid;
+    border-width: 0px;
+    border-radius: 5px;
+    font-size: 1.5em;
+    text-align: right;
+    width: 2.2em;
+    max-width: 2.2em;
+    min-width: 2.2em;
+}
+.docente_nome {
+    background-color: #FCA44A;
+    margin-left: 0px;
+    padding: 1em;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    flex-grow: 1;
+    font-size: 1.5em;
+}
+.disciplina_codigo {
+    background-color: #FCA44A;
+    margin-right: 0px;
+    padding: 0.1em;
+    border-style: solid;
+    border-right-style: none;
+    border-width: 0px;
+    border-radius: 5px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+.disciplina_detalhes {
+    display: flex;
+}
+.disciplina_horario {
+    background-color: #ffba75;
+    margin-right: 0px;
+    padding: 0.1em;
+    border-style: solid;
+    border-right-style: none;
+    border-top-style: none;
+    border-width: 0;
+    border-radius: 5px;
+    font-family: monospace;
+}
+.disciplina_ementa {
+    background-color: #ffba75;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0.1em;
+    padding-left: 1em;
+    border-style: solid;
+    border-right-style: none;
+    border-top-style: none;
+    border-width: 0px;
+    border-radius: 5px;
+    font-family: monospace;
+}
+.disciplina_cursos {
+    background-color: #ffba75;
+    margin-right: 0px;
+    padding: 0.1em;
+    padding-left: 1em;
+    border-style: solid;
+    border-top-style: none;
+    border-width: 0px;
+    border-radius: 5px;
+    flex-grow: 1;
+    font-family: monospace;
+}
+.cabecalho {
+    position: sticky;
+    top:0;
+    z-index: 999;
+    font-size: large;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    border-style: solid;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #FCA44A;
+}
+.lista_selecoes {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 999;
+    font-size: 1em;
+    border-style: solid;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #FDEBCC;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+.disciplina_escolhedores {
+    background-color: #fdcfa0;
+    margin-right: 0px;
+    padding: 0.1em;
+    border-style: solid;
+    border-right-style: none;
+    border-top-style: none;
+    border-width: 0;
+    border-radius: 5px;
+    font-family: monospace;
+}
+
+.btn_container {
+}
+.btn {
+}

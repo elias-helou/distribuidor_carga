@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="distribuidor.css">
+    <script src="display.js"></script>
+    <script src="distribuidor.js"></script>
+    <title>Formulário de escolha de disciplinas SME - Segundo semestre de 2024 - Envios</title>
+</head>
+    <body onload="inicializa_pagina();" id="body">
+        <div class="cabecalho", id="cabecalho">
+            <label for="selec_docente">Docente: </label>
+            <select id="selec_docente"></select><br><br>
+            <button id="btn_salvar", onclick="salva();">Salvar</button>
+            <input type="file" id="nomearq">
+            <button id="btn_carregar", onclick="carrega();">Carregar</button><br>
+            <button id="btn_busca", onclick="busca();">Buscar</button>
+        </div>
+        <div class="disciplina_lista", id="lista"></div>
+    </body>
+</html>
