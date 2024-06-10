@@ -9,15 +9,17 @@
             border-width: 0;
             overflow: scroll;
         }
-        .sheet {
+
+        /* Estilos pertinentes à visão de planilha começam com shvw_ */
+        .shvw_sheet {
             margin: 0;
             padding: 0;
             border-style: solid;
             border-width: 0;
             display: flex;
         }
-        .c_header {
-            background-color: #FCA44A;
+        .shvw_c_header {
+            background-color: rgb(252, 164, 74);
             margin: 0;
             padding: 0.1em;
             border-style: solid;
@@ -30,7 +32,7 @@
             height: 1.2em;
             text-align: center;
         }
-        .c_header_container {
+        .shvw_c_header_container {
             margin: 0;
             padding: 0;
             border-style: solid;
@@ -40,8 +42,8 @@
             position: fixed;
             overflow-x: hidden;
         }
-        .r_header {
-            background-color: #FCA44A;
+        .shvw_r_header {
+            background-color: rgb(252, 164, 74);
             margin: 0;
             padding: 0.1em;
             border-style: solid;
@@ -55,10 +57,9 @@
             text-align: left;
             overflow: hidden;
             white-space: nowrap;
-            /* width: max-content; */
             text-overflow: ellipsis;
         }
-        .r_header_container {
+        .shvw_r_header_container {
             margin: 0;
             padding: 0;
             border-style: solid;
@@ -68,7 +69,7 @@
             max-height: 100%;
             overflow-y: hidden;
         }
-        .col_container {
+        .shvw_col_container {
             margin: 0;
             padding: 0;
             border-style: solid;
@@ -76,7 +77,7 @@
             position: fixed;
             min-width: fit-content;
         }
-        .corner {
+        .shvw_corner {
             margin: 0;
             padding: 0.1em;
             background-color: white;
@@ -88,15 +89,16 @@
             font-size: 1em;
             font-weight: bold;
             width: 10em;
+            min-width: 10em;
             height: 1.2em;
             position: fixed;
             left: 0;
             top: 0;
         }
-        .cell {
+        .shvw_cell {
             margin: 0;
             padding: 0.1em;
-            background-color: #ffdebc;
+            background-color: rgb(255, 222, 188);
             border-color: rgb(157, 157, 157);
             border-style: solid;
             border-width: 1px;
@@ -110,7 +112,7 @@
 
         function make_c_header( text ) {
             var retval = document.createElement( "div" );
-            retval.className = "c_header";
+            retval.className = "shvw_c_header";
             retval.innerHTML = text;
 
             return retval;
@@ -118,7 +120,7 @@
 
         function make_r_header( text ) {
             var retval = document.createElement( "div" );
-            retval.className = "r_header";
+            retval.className = "shvw_r_header";
             retval.innerHTML = text;
 
             return retval;
@@ -127,10 +129,10 @@
         function handle_scroll_rhc( e ) {
             var w = document.getElementById( "window" );
 
-            var rhc = document.getElementById( "r_header_container" );
+            var rhc = document.getElementById( "shvw_r_header_container" );
             rhc.scroll( { top: w.scrollTop, left: 0, behavior: "instant" } );
 
-            var chc = document.getElementById( "c_header_container" );
+            var chc = document.getElementById( "shvw_c_header_container" );
             chc.scroll( { top: 0, left: w.scrollLeft, behavior: "instant" } );
         }
 
@@ -139,8 +141,8 @@
             var body = document.getElementById( "body" );
 
             var sheet = document.createElement( "div" );
-            sheet.className = "sheet";
-            sheet.id = "sheet";
+            sheet.className = "shvw_sheet";
+            sheet.id = "shvw_sheet";
             body.appendChild( sheet );
 
             window.addEventListener( "scroll", handle_scroll_rhc );
@@ -152,7 +154,7 @@
             sheet.appendChild( cells_container );
 
             var frhc = document.createElement( "div" );
-            frhc.className = "r_header_container";
+            frhc.className = "shvw_r_header_container";
             frhc.style.position = "static";
             frhc.style.left = "auto";
             frhc.id = "frhc";
@@ -160,52 +162,61 @@
 
             for ( var i = 0; i < n_rows + 1; ++i ) {
                 var frh = document.createElement( "div" );
-                frh.className = "r_header";
+                frh.className = "shvw_r_header";
                 frh.style.opacity = 0.0;
                 frhc.appendChild( frh );
             }
 
             for ( var j = 0; j < n_columns; j++ ) {
                 var frhc = document.createElement( "div" );
-                frhc.className = "col_container";
+                frhc.className = "shvw_col_container";
                 frhc.style.position = "static";
                 frhc.style.left = "auto";
                 sheet.appendChild( frhc );
 
                 var frh = document.createElement( "div" );
-                frh.className = "c_header";
+                frh.className = "shvw_c_header";
                 frh.style.opacity = 0.0;
                 frhc.appendChild( frh );
                 for ( var i = 0; i < n_rows; ++i ) {
                     var frh = document.createElement( "div" );
-                    frh.className = "cell";
-                    frh.style.opacity = 0.5;
+                    frh.className = "shvw_cell";
+                    frh.style.textAlign = "center";
+                    frh.innerHTML = "( " +  ( i + 1 )  + ", " + ( j + 1 ) + " )";
                     frhc.appendChild( frh );
                 }
             }
 
             var rhc = document.createElement( "div" );
-            rhc.className = "r_header_container";
-            rhc.id = "r_header_container";
+            rhc.className = "shvw_r_header_container";
+            rhc.id = "shvw_r_header_container";
             sheet.appendChild( rhc );
 
             var chc = document.createElement( "div" );
-            chc.className = "c_header_container";
-            chc.id = "c_header_container";
+            chc.className = "shvw_c_header_container";
+            chc.id = "shvw_c_header_container";
             sheet.appendChild( chc );
 
-            rhc.appendChild( make_r_header( "" ) );
+            var corner = document.createElement( "div" );
+            corner.className =  "shvw_corner";
+            corner.style.position = "static";
+            rhc.appendChild( corner );
+            // rhc.appendChild( make_r_header( "" ) );
             for ( var i = 0; i < n_rows; i++ ) {
-                rhc.appendChild( make_r_header( "Elias Salomão Helou Neto Row. " + ( i + 1 ) ) );
+                rhc.appendChild( make_r_header( "Row. " + ( i + 1 ) ) );
             }
 
-            chc.appendChild( make_r_header( "" ) );
+            var corner = document.createElement( "div" );
+            corner.className =  "shvw_corner";
+            corner.style.position = "static";
+            chc.appendChild( corner );
+            // chc.appendChild( make_r_header( "" ) );
             for ( var i = 0; i < n_columns; i++ ) {
                 chc.appendChild( make_c_header( "Col. " + ( i + 1 ) ) );
             }
 
             var corner = document.createElement( "div" );
-            corner.className = "corner";
+            corner.className = "shvw_corner";
             sheet.appendChild( corner );
         }
     </script>
