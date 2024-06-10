@@ -7,14 +7,14 @@
             padding: 0;
             margin: 0;
             border-width: 0;
-            overflow: scroll;
+            overflow: auto;
         }
 
         /* Estilos pertinentes à visão de planilha começam com shvw_ */
         .shvw_sheet {
             margin: 0;
             padding: 0;
-            border-style: solid;
+            border-style: none;
             border-width: 0;
             display: flex;
         }
@@ -39,8 +39,8 @@
             border-width: 0;
             display: flex;
             max-width: 100%;
-            position: fixed;
-            overflow-x: hidden;
+            /* position: fixed; */
+            overflow: hidden;
         }
         .shvw_r_header {
             background-color: rgb(252, 164, 74);
@@ -64,10 +64,10 @@
             padding: 0;
             border-style: solid;
             border-width: 0;
-            position: fixed;
+            /* position: fixed; */
             min-width: fit-content;
-            max-height: 100%;
-            overflow-y: hidden;
+            max-height: 98vh;
+            overflow: hidden;
         }
         .shvw_col_container {
             margin: 0;
@@ -92,8 +92,8 @@
             min-width: 10em;
             height: 1.2em;
             position: fixed;
-            left: 0;
-            top: 0;
+            left: auto;
+            top: auto;
         }
         .shvw_cell {
             margin: 0;
@@ -104,6 +104,20 @@
             border-width: 1px;
             width: 7em;
             height: 1.2em;
+        }
+
+        .abas_aba {
+            background-color: rgb(252, 164, 74);
+            margin: 0;
+            padding: 0.1em;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 5px 5px 0 0;
+            font-size: 1em;
+            font-weight: bold;
+            text-align: center;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
     </style>
     <script>
@@ -136,48 +150,29 @@
             chc.scroll( { top: 0, left: w.scrollLeft, behavior: "instant" } );
         }
 
-        function cria_tabela() {
-
-            var body = document.getElementById( "body" );
+        function cria_tabela( parent ) {
 
             var sheet = document.createElement( "div" );
-            sheet.className = "shvw_sheet";
             sheet.id = "shvw_sheet";
-            body.appendChild( sheet );
-
-            window.addEventListener( "scroll", handle_scroll_rhc );
+            sheet.style.backgroundColor = "white";
+            sheet.style.display = "grid";
+            sheet.style.width = "fit-content";
+            sheet.style.height = "fit-content";
+            parent.appendChild( sheet );
 
             var cells_container = document.createElement( "div" );
             cells_container.style.padding = "0";
             cells_container.style.margin = "0";
             cells_container.style.borderWidth = "0";
+            cells_container.style.gridRow = "2";
+            cells_container.style.gridColumn = "2";
+            cells_container.style.display = "flex";
             sheet.appendChild( cells_container );
-
-            var frhc = document.createElement( "div" );
-            frhc.className = "shvw_r_header_container";
-            frhc.style.position = "static";
-            frhc.style.left = "auto";
-            frhc.id = "frhc";
-            sheet.appendChild( frhc );
-
-            for ( var i = 0; i < n_rows + 1; ++i ) {
-                var frh = document.createElement( "div" );
-                frh.className = "shvw_r_header";
-                frh.style.opacity = 0.0;
-                frhc.appendChild( frh );
-            }
 
             for ( var j = 0; j < n_columns; j++ ) {
                 var frhc = document.createElement( "div" );
-                frhc.className = "shvw_col_container";
-                frhc.style.position = "static";
-                frhc.style.left = "auto";
-                sheet.appendChild( frhc );
+                cells_container.appendChild( frhc );
 
-                var frh = document.createElement( "div" );
-                frh.className = "shvw_c_header";
-                frh.style.opacity = 0.0;
-                frhc.appendChild( frh );
                 for ( var i = 0; i < n_rows; ++i ) {
                     var frh = document.createElement( "div" );
                     frh.className = "shvw_cell";
@@ -188,29 +183,31 @@
             }
 
             var rhc = document.createElement( "div" );
-            rhc.className = "shvw_r_header_container";
             rhc.id = "shvw_r_header_container";
+            rhc.style.gridRow = "2";
+            rhc.style.gridColumn = "1";
+            rhc.style.height = "inherit";
+            rhc.style.overflow = "hidden";
+            rhc.style.position = "sticky";
+            rhc.style.left = "0";
+            rhc.style.width = "max-content";
             sheet.appendChild( rhc );
 
             var chc = document.createElement( "div" );
-            chc.className = "shvw_c_header_container";
+            chc.style.display = "flex";
             chc.id = "shvw_c_header_container";
+            chc.style.gridRow = "1";
+            chc.style.gridColumn = "2";
+            chc.style.width = "inherit";
+            chc.style.overflow = "hidden";
+            chc.style.position = "sticky";
+            chc.style.top = "0";
             sheet.appendChild( chc );
 
-            var corner = document.createElement( "div" );
-            corner.className =  "shvw_corner";
-            corner.style.position = "static";
-            rhc.appendChild( corner );
-            // rhc.appendChild( make_r_header( "" ) );
             for ( var i = 0; i < n_rows; i++ ) {
                 rhc.appendChild( make_r_header( "Row. " + ( i + 1 ) ) );
             }
 
-            var corner = document.createElement( "div" );
-            corner.className =  "shvw_corner";
-            corner.style.position = "static";
-            chc.appendChild( corner );
-            // chc.appendChild( make_r_header( "" ) );
             for ( var i = 0; i < n_columns; i++ ) {
                 chc.appendChild( make_c_header( "Col. " + ( i + 1 ) ) );
             }
@@ -218,10 +215,39 @@
             var corner = document.createElement( "div" );
             corner.className = "shvw_corner";
             sheet.appendChild( corner );
+
+            return sheet;
+        }
+
+        abas = [ "Planilha", "Formulários", "Agendas", "Otimização", "Análise" ];
+        function cria_abas() {
+            var body = document.getElementById( "body" );
+            body.style.paddingTop = "1vh";
+            body.style.paddingBottom = "1vh";
+            body.style.paddingLeft = "1vw";
+            body.style.paddingRight = "1vw";
+            body.style.border = "none";
+            body.style.borderWidth = "0";
+            body.style.backgroundColor = "gray";
+            body.style.alignItems = "center";
+
+            var w = document.getElementById( "window" );
+            w.style.overflow = "hidden";
+
+            var main_el = document.createElement( "div" );
+            main_el.style.backgroundColor = "rgb( 200, 200, 200 )";
+            main_el.style.overflow = "scroll";
+            main_el.style.padding = "0";
+            main_el.style.margin = "0";
+            main_el.style.borderWidth = "0";
+            main_el.style.maxHeight = "98vh";
+            body.appendChild( main_el );
+
+            var sheet = cria_tabela( main_el );
         }
     </script>
 </head>
 
 <html id="window">
-<body onload="cria_tabela();" id="body"></body>
+<body onload="cria_abas();" id="body"></body>
 </html>
