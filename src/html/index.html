@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Distribuidor de Carga Didática</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            border-width: 0;
+            overflow: scroll;
+        }
+        .sheet {
+            margin: 0;
+            padding: 0;
+            border-style: solid;
+            border-width: 0;
+            display: flex;
+        }
+        .c_header {
+            background-color: #FCA44A;
+            margin: 0;
+            padding: 0.1em;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 1px;
+            font-size: 1em;
+            font-weight: bold;
+            width: 7em;
+            min-width: 7em;
+            height: 1em;
+            text-align: center;
+        }
+        .c_header_container {
+            margin: 0;
+            padding: 0;
+            border-style: solid;
+            border-width: 0;
+            display: flex;
+            width: 100%;
+            position: fixed;
+            overflow-x: hidden;
+        }
+        .r_header {
+            background-color: #FCA44A;
+            margin: 0;
+            padding: 0.1em;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 1px;
+            font-size: 1em;
+            font-weight: bold;
+            width: 10em;
+            min-width: 10em;
+            height: 1em;
+            text-align: center;
+        }
+        .r_header_container {
+            margin: 0;
+            padding: 0;
+            border-style: solid;
+            border-width: 0;
+            position: fixed;
+            min-width: fit-content;
+            max-height: 100%;
+            overflow-y: hidden;
+        }
+        .col_container {
+            margin: 0;
+            padding: 0;
+            border-style: solid;
+            border-width: 0;
+            position: fixed;
+            min-width: fit-content;
+        }
+        .corner {
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0.1em;
+            border-style: solid;
+            border-width: 1px;
+            border-color: white;
+            font-size: 1em;
+            font-weight: bold;
+            width: 10em;
+            height: 1em;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+    </style>
+    <script>
+        var n_rows = 40;
+        var n_columns = 70;
+
+        function make_c_header( text ) {
+            var retval = document.createElement( "div" );
+            retval.className = "c_header";
+            retval.innerHTML = text;
+
+            return retval;
+        }
+
+        function make_r_header( text ) {
+            var retval = document.createElement( "div" );
+            retval.className = "r_header";
+            retval.innerHTML = text;
+
+            return retval;
+        }
+
+        function handle_scroll_rhc( e ) {
+            // var el = document.getElementById( "frhc" );
+
+            // console.log( el.scrollTop );
+
+            // var els = document. getElementsByTagName('*');
+            // console.log( els );
+            // for ( var i in els ) {
+            //     if ( els[ i ].scrollTop ){
+            //         console.log( els[ i ].id );
+            //     }
+            // }
+
+            var w = document.getElementById( "window" );
+
+            var rhc = document.getElementById( "r_header_container" );
+            rhc.scroll( { top: w.scrollTop, left: 0, behavior: "instant" } );
+
+            var chc = document.getElementById( "c_header_container" );
+            chc.scroll( { top: 0, left: w.scrollLeft, behavior: "instant" } );
+        }
+
+        function cria_tabela() {
+
+            var body = document.getElementById( "body" );
+
+
+            var sheet = document.createElement( "div" );
+            sheet.className = "sheet";
+            sheet.id = "sheet";
+            body.appendChild( sheet );
+
+            window.addEventListener( "scroll", handle_scroll_rhc );
+
+            var cells_container = document.createElement( "div" );
+            cells_container.style.padding = "0";
+            cells_container.style.margin = "0";
+            cells_container.style.borderWidth = "0";
+            sheet.appendChild( cells_container );
+
+            var frhc = document.createElement( "div" );
+            frhc.className = "r_header_container";
+            frhc.style.position = "static";
+            frhc.style.left = "auto";
+            frhc.id = "frhc";
+            sheet.appendChild( frhc );
+
+            for ( var i = 0; i < n_rows + 1; ++i ) {
+                var frh = document.createElement( "div" );
+                frh.className = "r_header";
+                frh.style.opacity = 0.0;
+                frhc.appendChild( frh );
+            }
+
+            for ( var j = 0; j < n_columns; j++ ) {
+                var frhc = document.createElement( "div" );
+                frhc.className = "col_container";
+                frhc.style.position = "static";
+                frhc.style.left = "auto";
+                sheet.appendChild( frhc );
+
+                var frh = document.createElement( "div" );
+                frh.className = "c_header";
+                frh.style.opacity = 0.0;
+                frhc.appendChild( frh );
+                for ( var i = 0; i < n_rows; ++i ) {
+                    var frh = document.createElement( "div" );
+                    frh.className = "c_header";
+                    frh.style.opacity = 0.5;
+                    frhc.appendChild( frh );
+                }
+            }
+
+            var rhc = document.createElement( "div" );
+            rhc.className = "r_header_container";
+            rhc.id = "r_header_container";
+            sheet.appendChild( rhc );
+
+            var chc = document.createElement( "div" );
+            chc.className = "c_header_container";
+            chc.id = "c_header_container";
+            sheet.appendChild( chc );
+
+            rhc.appendChild( make_r_header( "" ) );
+            for ( var i = 0; i < n_rows; i++ ) {
+                rhc.appendChild( make_r_header( "Row. " + ( i + 1 ) ) );
+            }
+
+            chc.appendChild( make_r_header( "" ) );
+            for ( var i = 0; i < n_columns; i++ ) {
+                chc.appendChild( make_c_header( "Col. " + ( i + 1 ) ) );
+            }
+
+            var corner = document.createElement( "div" );
+            corner.className = "corner";
+            sheet.appendChild( corner );
+        }
+    </script>
+</head>
+
+<html id="window">
+<body onload="cria_tabela();" id="body"></body>
+</html>
