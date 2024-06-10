@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+<meta charset="UTF-8">
 <head>
     <title>Distribuidor de Carga Didática</title>
     <style>
@@ -27,7 +27,7 @@
             font-weight: bold;
             width: 7em;
             min-width: 7em;
-            height: 1em;
+            height: 1.2em;
             text-align: center;
         }
         .c_header_container {
@@ -36,7 +36,7 @@
             border-style: solid;
             border-width: 0;
             display: flex;
-            width: 100%;
+            max-width: 100%;
             position: fixed;
             overflow-x: hidden;
         }
@@ -51,8 +51,12 @@
             font-weight: bold;
             width: 10em;
             min-width: 10em;
-            height: 1em;
-            text-align: center;
+            height: 1.2em;
+            text-align: left;
+            overflow: hidden;
+            white-space: nowrap;
+            /* width: max-content; */
+            text-overflow: ellipsis;
         }
         .r_header_container {
             margin: 0;
@@ -73,19 +77,31 @@
             min-width: fit-content;
         }
         .corner {
-            background-color: #ffffff;
             margin: 0;
             padding: 0.1em;
+            background-color: white;
+            border-color: white;
+            border-right-color: black;
+            border-bottom-color: black;
             border-style: solid;
             border-width: 1px;
-            border-color: white;
             font-size: 1em;
             font-weight: bold;
             width: 10em;
-            height: 1em;
+            height: 1.2em;
             position: fixed;
             left: 0;
             top: 0;
+        }
+        .cell {
+            margin: 0;
+            padding: 0.1em;
+            background-color: #ffdebc;
+            border-color: rgb(157, 157, 157);
+            border-style: solid;
+            border-width: 1px;
+            width: 7em;
+            height: 1.2em;
         }
     </style>
     <script>
@@ -109,18 +125,6 @@
         }
 
         function handle_scroll_rhc( e ) {
-            // var el = document.getElementById( "frhc" );
-
-            // console.log( el.scrollTop );
-
-            // var els = document. getElementsByTagName('*');
-            // console.log( els );
-            // for ( var i in els ) {
-            //     if ( els[ i ].scrollTop ){
-            //         console.log( els[ i ].id );
-            //     }
-            // }
-
             var w = document.getElementById( "window" );
 
             var rhc = document.getElementById( "r_header_container" );
@@ -133,7 +137,6 @@
         function cria_tabela() {
 
             var body = document.getElementById( "body" );
-
 
             var sheet = document.createElement( "div" );
             sheet.className = "sheet";
@@ -175,7 +178,7 @@
                 frhc.appendChild( frh );
                 for ( var i = 0; i < n_rows; ++i ) {
                     var frh = document.createElement( "div" );
-                    frh.className = "c_header";
+                    frh.className = "cell";
                     frh.style.opacity = 0.5;
                     frhc.appendChild( frh );
                 }
@@ -193,7 +196,7 @@
 
             rhc.appendChild( make_r_header( "" ) );
             for ( var i = 0; i < n_rows; i++ ) {
-                rhc.appendChild( make_r_header( "Row. " + ( i + 1 ) ) );
+                rhc.appendChild( make_r_header( "Elias Salomão Helou Neto Row. " + ( i + 1 ) ) );
             }
 
             chc.appendChild( make_r_header( "" ) );
