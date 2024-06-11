@@ -137,7 +137,7 @@
             const t = e.target;
             const rt = e.relatedTarget;
 
-            if ( rt.iscell ) {
+            if ( rt && rt.iscell ) {
                 document.getElementById( "ch_" + rt.disciplina ).style.backgroundColor = cor_cabecalho_inativo;
                 document.getElementById( "rh_" + rt.docente ).style.backgroundColor = cor_cabecalho_inativo;
             }
@@ -150,7 +150,7 @@
             const t = e.target;
             const rt = e.relatedTarget;
 
-            if ( rt.iscell ) {
+            if ( rt && rt.iscell ) {
                 return;
             }
 
