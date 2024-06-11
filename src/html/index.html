@@ -3,13 +3,6 @@
 <head>
     <title>Distribuidor de Carga Didática</title>
     <style>
-        body {
-            padding: 0;
-            margin: 0;
-            border-width: 0;
-            overflow: auto;
-        }
-
         /* Estilos pertinentes à visão de planilha começam com shvw_ */
         .shvw_sheet {
             margin: 0;
@@ -18,72 +11,11 @@
             border-width: 0;
             display: flex;
         }
-        .shvw_c_header {
-            background-color: rgb(252, 164, 74);
-            margin: 0;
-            padding: 0.1em;
-            border-style: solid;
-            border-width: 1px;
-            border-radius: 1px;
-            font-size: 1em;
-            font-weight: bold;
-            width: 7em;
-            min-width: 7em;
-            height: 1.4em;
-            text-align: center;
-        }
-        .shvw_c_header_container {
-            margin: 0;
-            padding: 0;
-            border-style: solid;
-            border-width: 0;
-            display: flex;
-            max-width: 100%;
-            /* position: fixed; */
-            overflow: hidden;
-        }
-        .shvw_r_header {
-            background-color: rgb(252, 164, 74);
-            margin: 0;
-            padding: 0.1em;
-            border-style: solid;
-            border-width: 1px;
-            border-radius: 1px;
-            font-size: 1em;
-            font-weight: bold;
-            width: 10em;
-            min-width: 10em;
-            height: 1.4em;
-            text-align: left;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-        .shvw_r_header_container {
-            margin: 0;
-            padding: 0;
-            border-style: solid;
-            border-width: 0;
-            /* position: fixed; */
-            min-width: fit-content;
-            max-height: 98vh;
-            overflow: hidden;
-        }
-        .shvw_col_container {
-            margin: 0;
-            padding: 0;
-            border-style: solid;
-            border-width: 0;
-            position: fixed;
-            min-width: fit-content;
-        }
         .shvw_corner {
             margin: 0;
             padding: 0.1em;
             background-color: white;
             border-color: black;
-            /* border-right-color: black;
-            border-bottom-color: black; */
             border-style: solid;
             border-width: 1px;
             font-size: 1em;
@@ -95,44 +27,47 @@
             left: auto;
             top: auto;
         }
-        .shvw_cell {
-            margin: 0;
-            padding: 0.1em;
-            background-color: rgb(255, 222, 188);
-            border-color: rgb(157, 157, 157);
-            border-style: solid;
-            border-width: 1px;
-            width: 7em;
-            height: 1.4em;
-        }
-
-        .abas_aba {
-            background-color: rgb(252, 164, 74);
-            margin: 0;
-            padding: 0.1em;
-            border-style: solid;
-            border-width: 1px;
-            border-radius: 5px 5px 0 0;
-            font-size: 1em;
-            font-weight: bold;
-            text-align: center;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
     </style>
     <script>
         function make_c_header( text ) {
             var retval = document.createElement( "div" );
-            retval.className = "shvw_c_header";
+            retval.style.backgroundColor = "rgb(252, 164, 74)";
+            retval.style.margin = "0";
+            retval.style.padding = "0.1em";
+            retval.style.borderStyle = "solid";
+            retval.style.borderWidth = "1px";
+            retval.style.borderRadius = "1px";
+            retval.style.fontSize = "1em";
+            retval.style.width = "7em";
+            retval.style.minWidth = "7em";
+            retval.style.height = "1.4em";
+            retval.style.textAlign = "center";
+            retval.style.alignContent = "center";
             retval.innerHTML = text;
+            retval.id = "ch_" + text;
 
             return retval;
         }
 
         function make_r_header( text ) {
             var retval = document.createElement( "div" );
-            retval.className = "shvw_r_header";
+            retval.style.backgroundColor = "rgb(252, 164, 74)";
+            retval.style.margin = "0";
+            retval.style.padding = "0.1em";
+            retval.style.borderStyle = "solid";
+            retval.style.borderWidth = "1px";
+            retval.style.borderRadius = "1px";
+            retval.style.fontSize = "1em";
+            retval.style.width = "10em";
+            retval.style.minWidth = "10em";
+            retval.style.height = "1.4em";
+            retval.style.textAlign = "left";
+            retval.style.alignContent = "center";
+            retval.style.overflow = "hidden";
+            retval.style.whiteSpace = "nowrap";
+            retval.style.textOverflow =  "ellipsis";
             retval.innerHTML = text;
+            retval.id = "rh_" + text;
 
             return retval;
         }
@@ -145,6 +80,82 @@
 
             var chc = document.getElementById( "shvw_c_header_container" );
             chc.scroll( { top: 0, left: w.scrollLeft, behavior: "instant" } );
+        }
+
+        function atua_celula( e ) {
+            var t = e.target;
+            const disc = t.disciplina;
+            const doc = t.docente;
+
+            if ( atribuicao[ disc ].includes( doc ) ) {
+                const idx = atribuicao[ disc ].indexOf( doc );
+                atribuicao[ disc ].splice( idx, 1 );
+            }
+            else {
+                atribuicao[ disc ].push( doc );
+                atribuicao[ disc ].sort();
+            }
+
+            alterna_celula_atribuicao( disc, doc );
+        }
+
+        function alterna_celula_atribuicao( disc, doc ) {
+            var cell = document.getElementById( "cel_" + disc + "_" + doc );
+            if ( !cell ) {
+                return;
+            }
+
+            var o = document.getElementById( "o_cel_" + disc + "_" + doc );
+            if ( o ) {
+                o.remove();
+            }
+
+            if ( atribuicao[ disc ].includes( doc ) ) {
+                var o = document.createElement( "div" );
+                o.style.margin = "0";
+                o.style.backgroundColor = "red";
+                o.style.opacity = "0.5";
+                o.style.left = "0";
+                o.style.minWidth = "100%";
+                o.style.minHeight = "100%";
+                cell.appendChild( o );
+                o.style.position = "absolute";
+                o.style.left = "0";
+                o.style.top = "0";
+                o.disciplina = cell.disciplina;
+                o.docente = cell.docente;
+                o.id = "o_" + cell.id;
+                o.iscell = true;
+            }
+        }
+
+        var cor_cabecalho_inativo = "rgb(252, 164, 74)";
+        var cor_cabecalho_ativo = "rgb(255, 220, 200)";
+
+
+        function ilumina_cabecalho( e ) {
+            const t = e.target;
+            const rt = e.relatedTarget;
+
+            if ( rt.iscell ) {
+                document.getElementById( "ch_" + rt.disciplina ).style.backgroundColor = cor_cabecalho_inativo;
+                document.getElementById( "rh_" + rt.docente ).style.backgroundColor = cor_cabecalho_inativo;
+            }
+
+            document.getElementById( "ch_" + t.disciplina ).style.backgroundColor = cor_cabecalho_ativo;
+            document.getElementById( "rh_" + t.docente ).style.backgroundColor = cor_cabecalho_ativo;
+        }
+
+        function apaga_cabecalho( e ) {
+            const t = e.target;
+            const rt = e.relatedTarget;
+
+            if ( rt.iscell ) {
+                return;
+            }
+
+            document.getElementById( "ch_" + t.disciplina ).style.backgroundColor = cor_cabecalho_inativo;
+            document.getElementById( "rh_" + t.docente ).style.backgroundColor = cor_cabecalho_inativo;
         }
 
         function cria_tabela( parent ) {
@@ -192,24 +203,33 @@
                 var frhc = document.createElement( "div" );
                 cells_container.appendChild( frhc );
 
-                for ( var i = 0; i < n_rows; ++i ) {
-                    var frh = document.createElement( "div" );
-                    frh.style.textAlign = "left";
-                    frh.style.minHeight = "1.4em";
-                    frh.style.maxHeight = "1.4em";
-                    frh.style.minWidth = "7em";
-                    frh.style.borderWidth = "1px";
-                    frh.style.borderStyle = "solid";
-                    frh.style.padding = "0.1em";
-                    frh.style.fontWeight = "bold";
-                    frh.style.position = "relative";
-                    frh.style.borderColor = "rgb( 200, 200, 200 )";
-                    frhc.appendChild( frh );
+                var d = d_list[ j ];
 
-                    var d = d_list[ j ];
+                for ( var i = 0; i < n_rows; ++i ) {
+
+                    var cell = document.createElement( "div" );
+                    cell.style.textAlign = "left";
+                    cell.style.minHeight = "1.4em";
+                    cell.style.maxHeight = "1.4em";
+                    cell.style.minWidth = "7em";
+                    cell.style.borderWidth = "1px";
+                    cell.style.borderStyle = "solid";
+                    cell.style.padding = "0.1em";
+                    cell.style.fontWeight = "bold";
+                    cell.style.position = "relative";
+                    cell.style.borderColor = "rgb( 200, 200, 200 )";
+                    cell.addEventListener( "click", atua_celula );
+                    cell.disciplina = d;
+                    cell.docente = docentes[ i ];
+                    cell.id = "cel_" + d + "_" + docentes[ i ];
+                    cell.iscell = true;
+                    cell.addEventListener( "mouseover", ilumina_cabecalho );
+                    cell.addEventListener( "mouseleave", apaga_cabecalho );
+                    frhc.appendChild( cell );
+
                     if ( formularios[ docentes[ i ] ][ d ] ) {
                         var p = formularios[ docentes[ i ] ][ d ][ 'prioridade' ];
-                        frh.innerHTML = p.toString();
+                        cell.innerHTML = p.toString();
 
                         var r = 80;
                         var g = 180;
@@ -220,29 +240,13 @@
                         g = g * alpha + 255 * ( 1 - alpha );
                         b = b * alpha + 255 * ( 1 - alpha );
 
-                        frh.style.backgroundColor = "rgb( " + r + ", " + g + ", " + b + " )";
+                        cell.style.backgroundColor = "rgb( " + r + ", " + g + ", " + b + " )";
                     }
                     else {
-                        frh.style.backgroundColor = "white";
+                        cell.style.backgroundColor = "white";
                     }
 
-                    if ( atribuicao[ d ].includes( docentes[ i ] ) ){
-                        // frh.style.borderColor = "red";
-                        var o = document.createElement( "div" );
-                        o.style.margin = "0";
-                        o.style.backgroundColor = "red";
-                        o.style.opacity = "0.5";
-                        o.style.left = "0";
-                        o.style.minWidth = "100%";
-                        o.style.minHeight = "100%";
-                        frh.appendChild( o );
-                        o.style.position = "absolute";
-                        o.style.left = "0";
-                        o.style.top = "0";
-                    }
-                    else {
-                        frh.style.borderColor = "rgb( 200, 200, 200 )";
-                    }
+                    alterna_celula_atribuicao( d, docentes[ i ] );
                 }
             }
 
@@ -296,6 +300,8 @@
             body.style.borderWidth = "0";
             body.style.backgroundColor = "rgb(250, 250, 250)";
             body.style.alignItems = "center";
+            body.style.margin = "0";
+            body.style.overflow = "hidden";
 
             var w = document.getElementById( "window" );
             w.style.overflow = "hidden";
