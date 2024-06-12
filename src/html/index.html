@@ -29,6 +29,33 @@
         }
     </style>
     <script>
+        // Variáveis globais
+
+        // Aparência:
+        var cor_cabecalho_inativo = "rgb(255, 220, 200)";
+        var cor_cabecalho_ativo = "rgb(252, 164, 74)";
+        var cor_aba_ativa = "rgb(150, 150, 200)";
+        var cor_aba_inativa = "rgb(190, 190, 240)";
+        var cor_celula_ativa = "rgb(0, 0, 0)";
+        var cor_celula_inativa = "rgb(200, 200, 200)";
+        var rh_width = "10em";
+        var rh_height = "1.6em";
+        var ch_width = "9em";
+        var ch_height = "5.3em";
+
+        // Dados:
+        var disciplinas = {};
+        var docentes = [];
+        var formularios = {};
+        var saldos = {};
+        var popularidade = {};
+        var atribuicao =  {};
+        var trava = {};
+        var exclui = {};
+        var log = [];
+
+        ////////////////////////////////////////////////////////////
+
         function make_c_header( text ) {
             var retval = document.createElement( "div" );
             retval.style.backgroundColor = cor_cabecalho_inativo;
@@ -41,8 +68,10 @@
             retval.style.width = ch_width;
             retval.style.minWidth = ch_width;
             retval.style.height = ch_height;
+            retval.style.userSelect = "none";
             retval.id = "ch_" + text;
             retval.disciplina = text;
+            retval.addEventListener( "click", trava_disc );
 
             var cursos = disciplinas[ text ][ "cursos" ]
             cursos = cursos.replace( "Cursos:<br>", "" );
@@ -64,19 +93,19 @@
 
             var dc = document.createElement( "div" );
             dc.style.marginTop = "0.2em";
-            dc.style.marginBottom = "0.2em";
+            dc.style.paddingBottom = "0.3em";
             dc.style.textAlign  = "left";
             dc.style.marginRight = "1em";
             dc.style.flexGrow = "0";
             dc.style.textOverflow = "ellipsis";
             dc.style.whiteSpace = "nowrap";
             dc.style.overflow = "hidden";
-            // dc.style.fontWeight = "bold";
 
             dc.innerHTML = text.slice( 0, 7 ) + "  <small>" + disciplinas[ text ][ 'nome' ] + "</small>";
             retval.appendChild( dc );
 
             var dcur = document.createElement( "div" );
+            // dcur.style.marginTop = "0.2em";
             dcur.style.display = "block";
             dcur.style.whiteSpace = "nowrap";
             dcur.style.maxWidth = ch_width;
@@ -101,14 +130,17 @@
             retval.style.fontSize = "1em";
             retval.style.width = rh_width;
             retval.style.minWidth = rh_width;
-            retval.style.height = "1.4em";
+            retval.style.height = rh_height;
             retval.style.textAlign = "left";
             retval.style.alignContent = "center";
             retval.style.overflow = "hidden";
             retval.style.whiteSpace = "nowrap";
             retval.style.textOverflow = "ellipsis";
+            retval.style.userSelect = "none";
+            retval.docente = text;
             retval.innerHTML = text;
             retval.id = "rh_" + text;
+            retval.addEventListener( "click", trava_doc );
 
             return retval;
         }
@@ -170,9 +202,6 @@
             }
         }
 
-        var cor_cabecalho_inativo = "rgb(255, 220, 200)";
-        var cor_cabecalho_ativo = "rgb(252, 164, 74)";
-
         function ilumina_cabecalho( e ) {
             const t = e.target;
             const rt = e.relatedTarget;
@@ -198,13 +227,13 @@
             document.getElementById( "rh_" + t.docente ).style.backgroundColor = cor_cabecalho_inativo;
         }
 
-        var rh_width = "10em";
-        var rh_height = "1.4em";
-        var ch_width = "9em";
-        var ch_height = "5em";
         function cria_tabela( parent ) {
             const n_columns = Object.keys( disciplinas ).length;
             const n_rows = docentes.length;
+
+            if ( ! ( n_columns * n_rows ) ) {
+                return;
+            }
 
             var planilha = document.createElement( "div" );
             planilha.style.overflow = "scroll";
@@ -261,7 +290,7 @@
                     cell.style.padding = "0.1em";
                     cell.style.fontWeight = "bold";
                     cell.style.position = "relative";
-                    cell.style.borderColor = "rgb( 200, 200, 200 )";
+                    // cell.style.borderColor = "rgb( 200, 200, 200 )";
                     cell.addEventListener( "click", atua_celula );
                     cell.disciplina = d;
                     cell.docente = docentes[ i ];
@@ -319,10 +348,12 @@
 
             for ( var i = 0; i < n_rows; i++ ) {
                 rhc.appendChild( make_r_header( docentes[ i ] ) );
+                alterna_trava_doc( i );
             }
 
             for ( var d in disciplinas ) {
                 chc.appendChild( make_c_header( d ) );
+                alterna_trava_disc( d );
             }
 
             var corner = document.createElement( "div" );
@@ -335,8 +366,6 @@
 
         var abas = [ "E/S", "Planilha", "Formulários", "Agendas", "Otimização", "Análise" ];
         var aba_ativa = abas[ 0 ];
-        var cor_aba_ativa = "rgb(150, 150, 200)";
-        var cor_aba_inativa = "rgb(190, 190, 240)";
         
         function cria_abas() {
             var body = document.getElementById( "body" );
@@ -399,13 +428,6 @@
             atua_aba();
         }
 
-        var disciplinas = {};
-        var docentes = [];
-        var formularios = {};
-        var saldos = {};
-        var popularidade = {};
-        var atribuicao =  {};
-        var trava = {};
         function carrega() {
             var arqinput = document.getElementById( "arqinput" );
 
@@ -418,12 +440,29 @@
                 docentes = tmp[ 'docentes' ];
                 formularios = tmp[ 'formularios' ];
                 saldos = tmp[ 'saldos' ];
-                atribuicao = tmp[ 'atribuicao' ];
 
-                // for ( var d in disciplinas ) {
-                //     atribuicao[ d ] = [];
-                //     trava[ d ] = false;
-                // }
+                var a = tmp[ 'atribuicao' ];
+                if ( a ) {
+                    atribuicao = a;
+                }
+                else{
+                    for ( var d in disciplinas ) {
+                        atribuicao[ d ] = [];
+                    }
+                }
+            
+                var t = tmp[ 'trava' ];
+                if ( t ) {
+                    trava = t;
+                }
+                else{
+                    for ( var d in disciplinas ) {
+                        trava[ d ] = false;
+                    }
+                    for ( var i in docentes ) {
+                        trava[ docentes[ i ] ] = false;
+                    }
+                }            
 
                 // atualiza_seletores();
                 // cria_escolhedores();
@@ -482,6 +521,59 @@
             case abas[ 3 ]:
                 break;
         }
+    }
+
+    function alterna_trava_disc( disc ) {
+        for ( var i in docentes ) {
+            var c = document.getElementById( "cel_" + disc + "_" + docentes[ i ] );
+            if ( trava[ disc ] ) {
+                c.style.borderLeftColor = cor_celula_ativa;
+                c.style.borderRightColor = cor_celula_ativa;
+            }
+            else {
+                c.style.borderLeftColor = cor_celula_inativa;
+                c.style.borderRightColor = cor_celula_inativa;
+            }
+        }
+    }
+    function trava_disc( e ) {
+        var t = e.target;
+        while ( !t.disciplina ) {
+            t = t.parentElement;
+        }
+
+        trava[ t.disciplina ] = !trava[ t.disciplina ];
+        alterna_trava_disc( t.disciplina );
+    }
+
+    function trava_doc( e ) {
+        var t = e.target;
+        while ( !t.docente ) {
+            t = t.parentElement;
+        }
+
+        trava[ t.docente ] = !trava[ t.docente ];
+        alterna_trava_doc( docentes.indexOf( t.docente ) );
+    }
+
+    function alterna_trava_doc( i ) {
+        for ( var disc in disciplinas ) {
+            var c = document.getElementById( "cel_" + disc + "_" + docentes[ i ] );
+            if ( trava[ docentes[ i ] ] ) {
+                c.style.borderTopColor = cor_celula_ativa;
+                c.style.borderBottomColor = cor_celula_ativa;
+            }
+            else {
+                c.style.borderTopColor = cor_celula_inativa;
+                c.style.borderBottomColor = cor_celula_inativa;
+            }
+        }
+    }
+
+    function cria_otimizador( texto_aba ) {
+
+        var optc = document.createElement( "div" );
+
     }
     </script>
 </head>
