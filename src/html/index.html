@@ -31,41 +31,82 @@
     <script>
         function make_c_header( text ) {
             var retval = document.createElement( "div" );
-            retval.style.backgroundColor = "rgb(252, 164, 74)";
+            retval.style.backgroundColor = cor_cabecalho_inativo;
             retval.style.margin = "0";
             retval.style.padding = "0.1em";
             retval.style.borderStyle = "solid";
             retval.style.borderWidth = "1px";
             retval.style.borderRadius = "1px";
             retval.style.fontSize = "1em";
-            retval.style.width = "7em";
-            retval.style.minWidth = "7em";
-            retval.style.height = "1.4em";
-            retval.style.textAlign = "center";
-            retval.style.alignContent = "center";
-            retval.innerHTML = text;
+            retval.style.width = ch_width;
+            retval.style.minWidth = ch_width;
+            retval.style.height = ch_height;
             retval.id = "ch_" + text;
+            retval.disciplina = text;
+
+            var cursos = disciplinas[ text ][ "cursos" ]
+            cursos = cursos.replace( "Cursos:<br>", "" );
+            cursos = cursos.replace( "Curso:<br>", "" );
+            cursos = cursos.replaceAll( "<br>", "," );
+            cursos = cursos.replaceAll( "&emsp;", " " );
+
+            var dn = document.createElement( "div" );
+            dn.style.display = "block";
+            dn.style.textOverflow = "ellipsis";
+            dn.style.whiteSpace = "nowrap";
+            dn.style.maxWidth = ch_width;
+            dn.style.minWidth = "100%";
+            dn.style.overflow = "hidden";
+            dn.style.fontSize = "small";
+            // dn.style.fontWeight = "bold";
+            dn.innerHTML = cursos;
+            retval.appendChild( dn );
+
+            var dc = document.createElement( "div" );
+            dc.style.marginTop = "0.2em";
+            dc.style.marginBottom = "0.2em";
+            dc.style.textAlign  = "left";
+            dc.style.marginRight = "1em";
+            dc.style.flexGrow = "0";
+            dc.style.textOverflow = "ellipsis";
+            dc.style.whiteSpace = "nowrap";
+            dc.style.overflow = "hidden";
+            // dc.style.fontWeight = "bold";
+
+            dc.innerHTML = text.slice( 0, 7 ) + "  <small>" + disciplinas[ text ][ 'nome' ] + "</small>";
+            retval.appendChild( dc );
+
+            var dcur = document.createElement( "div" );
+            dcur.style.display = "block";
+            dcur.style.whiteSpace = "nowrap";
+            dcur.style.maxWidth = ch_width;
+            dcur.style.overflow = "hidden";
+            dcur.style.fontFamily = "monospace";
+            // dcur.style.fontWeight = "bold";
+            dcur.style.fontSize = "small";
+            dcur.innerHTML = disciplinas[ text ][ 'horario' ];
+            retval.appendChild( dcur );
 
             return retval;
         }
 
         function make_r_header( text ) {
             var retval = document.createElement( "div" );
-            retval.style.backgroundColor = "rgb(252, 164, 74)";
+            retval.style.backgroundColor = cor_cabecalho_inativo;
             retval.style.margin = "0";
             retval.style.padding = "0.1em";
             retval.style.borderStyle = "solid";
             retval.style.borderWidth = "1px";
             retval.style.borderRadius = "1px";
             retval.style.fontSize = "1em";
-            retval.style.width = "10em";
-            retval.style.minWidth = "10em";
+            retval.style.width = rh_width;
+            retval.style.minWidth = rh_width;
             retval.style.height = "1.4em";
             retval.style.textAlign = "left";
             retval.style.alignContent = "center";
             retval.style.overflow = "hidden";
             retval.style.whiteSpace = "nowrap";
-            retval.style.textOverflow =  "ellipsis";
+            retval.style.textOverflow = "ellipsis";
             retval.innerHTML = text;
             retval.id = "rh_" + text;
 
@@ -129,9 +170,8 @@
             }
         }
 
-        var cor_cabecalho_inativo = "rgb(252, 164, 74)";
-        var cor_cabecalho_ativo = "rgb(255, 220, 200)";
-
+        var cor_cabecalho_inativo = "rgb(255, 220, 200)";
+        var cor_cabecalho_ativo = "rgb(252, 164, 74)";
 
         function ilumina_cabecalho( e ) {
             const t = e.target;
@@ -158,6 +198,10 @@
             document.getElementById( "rh_" + t.docente ).style.backgroundColor = cor_cabecalho_inativo;
         }
 
+        var rh_width = "10em";
+        var rh_height = "1.4em";
+        var ch_width = "9em";
+        var ch_height = "5em";
         function cria_tabela( parent ) {
             const n_columns = Object.keys( disciplinas ).length;
             const n_rows = docentes.length;
@@ -209,9 +253,9 @@
 
                     var cell = document.createElement( "div" );
                     cell.style.textAlign = "left";
-                    cell.style.minHeight = "1.4em";
-                    cell.style.maxHeight = "1.4em";
-                    cell.style.minWidth = "7em";
+                    cell.style.minHeight = rh_height;
+                    cell.style.maxHeight = rh_height;
+                    cell.style.minWidth = ch_width;
                     cell.style.borderWidth = "1px";
                     cell.style.borderStyle = "solid";
                     cell.style.padding = "0.1em";
@@ -259,6 +303,7 @@
             rhc.style.position = "sticky";
             rhc.style.left = "0";
             rhc.style.width = "max-content";
+            rhc.style.backgroundColor = cor_cabecalho_inativo;
             sheet.appendChild( rhc );
 
             var chc = document.createElement( "div" );
@@ -282,6 +327,9 @@
 
             var corner = document.createElement( "div" );
             corner.className = "shvw_corner";
+            corner.style.minHeight = ch_height;
+            corner.style.height = ch_height;
+            corner.style.minWidth = rh_width;
             sheet.appendChild( corner );
         }
 
