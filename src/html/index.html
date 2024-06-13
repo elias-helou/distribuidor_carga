@@ -39,10 +39,11 @@
         var cor_celula_ativa = "rgb(0, 0, 0)";
         var cor_celula_inativa = "rgb(200, 200, 200)";
         var cor_travado = "rgba( 0, 0, 0, 0.2 )";
-        var rh_width = "10em";
+        var rh_width = "11em";
         var rh_height = "1.6em";
         var ch_width = "9em";
         var ch_height = "5.3em";
+        var h_fontsize = "1.0em";
 
         // Dados:
         var disciplinas = {};
@@ -65,11 +66,14 @@
             retval.style.borderStyle = "solid";
             retval.style.borderWidth = "1px";
             retval.style.borderRadius = "1px";
-            retval.style.fontSize = "1em";
+            retval.style.fontSize = h_fontsize;
             retval.style.width = ch_width;
             retval.style.minWidth = ch_width;
+            retval.style.maxWidth = ch_width;
             retval.style.height = ch_height;
             retval.style.userSelect = "none";
+            retval.style.position = "relative";
+            retval.style.fontWeight = "bold";
             retval.id = "ch_" + text;
             retval.disciplina = text;
             retval.addEventListener( "click", trava_disc );
@@ -88,7 +92,6 @@
             dn.style.minWidth = "100%";
             dn.style.overflow = "hidden";
             dn.style.fontSize = "small";
-            // dn.style.fontWeight = "bold";
             dn.innerHTML = cursos;
             retval.appendChild( dn );
 
@@ -101,18 +104,17 @@
             dc.style.textOverflow = "ellipsis";
             dc.style.whiteSpace = "nowrap";
             dc.style.overflow = "hidden";
+            dc.style.maxWidth = "100%";
 
             dc.innerHTML = text.slice( 0, 7 ) + "  <small>" + disciplinas[ text ][ 'nome' ] + "</small>";
             retval.appendChild( dc );
 
             var dcur = document.createElement( "div" );
-            // dcur.style.marginTop = "0.2em";
             dcur.style.display = "block";
             dcur.style.whiteSpace = "nowrap";
-            dcur.style.maxWidth = ch_width;
+            dcur.style.maxWidth = "100%";
             dcur.style.overflow = "hidden";
             dcur.style.fontFamily = "monospace";
-            // dcur.style.fontWeight = "bold";
             dcur.style.fontSize = "small";
             dcur.innerHTML = disciplinas[ text ][ 'horario' ];
             retval.appendChild( dcur );
@@ -128,7 +130,8 @@
             retval.style.borderStyle = "solid";
             retval.style.borderWidth = "1px";
             retval.style.borderRadius = "1px";
-            retval.style.fontSize = "1em";
+            retval.style.fontSize = h_fontsize;
+            retval.style.fontWeight = "bold";
             retval.style.width = rh_width;
             retval.style.minWidth = rh_width;
             retval.style.height = rh_height;
@@ -293,6 +296,7 @@
                     cell.style.fontWeight = "bold";
                     cell.style.position = "relative";
                     cell.style.borderColor = cor_celula_inativa;
+                    cell.style.fontSize = h_fontsize;
                     cell.addEventListener( "click", atua_celula );
                     cell.disciplina = d;
                     cell.docente = docentes[ i ];
@@ -360,6 +364,7 @@
 
             var corner = document.createElement( "div" );
             corner.className = "shvw_corner";
+            corner.style.fontSize = h_fontsize;
             corner.style.minHeight = ch_height;
             corner.style.height = ch_height;
             corner.style.minWidth = rh_width;
@@ -528,16 +533,51 @@
     function alterna_trava_disc( disc ) {
         for ( var i in docentes ) {
             var c = document.getElementById( "cel_" + disc + "_" + docentes[ i ] );
-            if ( trava[ disc ] ) {
-                c.style.borderLeftColor = cor_celula_ativa;
-                c.style.borderRightColor = cor_celula_ativa;
+            var t = document.getElementById( "t_cel_" + disc + "_" + docentes[ i ] );
+
+            if ( t ) {
+                t.remove();
             }
-            else {
-                c.style.borderLeftColor = cor_celula_inativa;
-                c.style.borderRightColor = cor_celula_inativa;
+
+            if ( trava[ disc ] || trava[ docentes[ i ] ] ) {
+                var t = document.createElement( "div" );
+                t.style.margin = "0";
+                t.style.height = "100%";
+                t.style.width = "100%";
+                t.style.backgroundColor = "rgba( 0, 0, 0, 0.2 )";
+                c.appendChild( t );
+                t.style.position = "absolute";
+                t.style.left = "0";
+                t.style.top = "0";
+                t.iscell = true;
+                t.docente = c.docente;
+                t.disciplina = c.disciplina;
+                t.id = "t_cel_" + disc + "_" + docentes[ i ];
             }
         }
+        var c = document.getElementById( "ch_" + disc );
+        var t = document.getElementById( "t_ch_" + disc );
+
+        if ( t ) {
+            t.remove();
+        }
+
+        if ( trava[ disc ] ) {
+            var t = document.createElement( "div" );
+            t.style.margin = "0";
+            t.style.height = "100%";
+            t.style.width = "100%";
+            t.style.backgroundColor = cor_travado;
+            c.appendChild( t );
+            t.style.position = "absolute";
+            t.style.left = "0";
+            t.style.top = "0";
+            t.docente = c.docente;
+            t.disciplina = c.disciplina;
+            t.id = "t_ch_" + disc;
+        }
     }
+
     function trava_disc( e ) {
         var t = e.target;
         while ( !t.disciplina ) {
@@ -567,7 +607,7 @@
                 t.remove();
             }
 
-            if ( trava[ docentes[ i ] ] ) {
+            if ( trava[ docentes[ i ] ] || trava[ disc ] ) {
                 var t = document.createElement( "div" );
                 t.style.margin = "0";
                 t.style.height = "100%";
