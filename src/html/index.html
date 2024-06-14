@@ -175,6 +175,7 @@
             }
 
             alterna_celula_atribuicao( disc, doc );
+            console.log( otm_verifica_conflitos( atribuicao ) );
         }
 
         function alterna_celula_atribuicao( disc, doc ) {
@@ -650,6 +651,119 @@
 
         var optc = document.createElement( "div" );
 
+    }
+
+    // Otimização e busca
+
+    // Constantes de avaliação:
+    var K_natrib      = 1.0e6;    // Penalização por disciplina sem atribuição
+    var k_conflito    = 1.0e7;    // Penalização por conflito de horário
+    var k_disc_gemeas = 1.0;      // Bônus por atribuição de disciplinas gêmeas
+    var k_nesc        = 1.0e5;    // Penalização por atribuição de não escolhida
+    var k_score_disc  = 1.0e2;    // Penalização por docente com menos score ter menos disciplinas
+    var k_score_escs  = 1.0e1;    // Penalização por docente com menos score ter mais prioridades
+
+    // Calcula score de prioridades atribuídas do docente:
+    function otm_score_escolhas_doc( doc, atrib ){
+        var retval = 0.0;
+
+        for ( var disc in disciplinas ) {
+            if ( ! ( trava[ disc ] || exclui[ disc ] ) ) {
+                if ( atrib[ disc ].includes( doc ) ){
+                    var p = formularios[ doc ][ disc ]
+                    if ( p ) {
+                        p = formularios[ doc ][ disc ][ 'prioridade' ];
+                        retval = retval + 2 ** p;
+                    }
+                    else {
+                        retval = retval + k_nesc;
+                    }
+                }
+            }
+        }
+
+        return retval;
+    }
+    function otm_score_escolhas( atrib ) {
+        var retval = 0.0;
+
+        for ( var i in docentes ) {
+            retval = retval + otm_score_escolhas_doc( docentes[ i ], atrib );
+        }
+
+        return retval;
+    }
+
+    function otm_horario2triplet( disc ) {
+        var htexto = disciplinas[ disc ][ "horario" ];
+        htexto = htexto.replace( "Horário:<br>&emsp;", "" );
+
+        retval = [];
+
+        if ( htexto == "A definir" ) {
+            return retval;
+        }
+        retval.push( [ htexto.slice( 0, 3 ), htexto.slice( 5, 10 ), htexto.slice( 11, 16 ) ] );
+        if ( htexto.length == 16 ) {
+            return retval;
+        }
+        htexto = htexto.slice( 26 );
+        retval.push( [ htexto.slice( 0, 3 ), htexto.slice( 5, 10 ), htexto.slice( 11, 16 ) ] );
+
+        return retval;
+    }
+
+    function otm_horario2minutos( disc ) {
+        var retval = otm_horario2triplet( disc );
+
+        dias = [ "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom" ];
+        for ( var i in retval ) {
+            var tmp = 24 * 60 * dias.indexOf( retval[ i ][ 0 ] );
+            retval[ i ] = [
+                tmp + 60 * parseInt( retval[ i ][ 1 ].slice( 0, 2 ) ) + parseInt( retval[ i ][ 1 ].slice( 3 ) ),
+                tmp + 60 * parseInt( retval[ i ][ 2 ].slice( 0, 2 ) ) + parseInt( retval[ i ][ 2 ].slice( 3 ) )
+            ];
+        }
+
+        return retval;
+    }
+
+    function otm_verifica_conflito( doc, atrib ) {
+        var minutos = [];
+
+        for ( var disc in disciplinas ) {
+            if ( atrib[ disc ].includes( doc ) ) {
+                minutos.push( otm_horario2minutos( disc ) );
+            }
+        }
+        
+        retval = 0.0;
+
+        for ( var i = 0; i < minutos.length; i++ ) {
+            for ( var j = i + 1; j < minutos.length; j++ ) {
+                for ( var k in minutos[ i ] ) {
+                    for ( var l in minutos[ j ] ) {
+                        if (
+                            (
+                                ( minutos[ i ][ k ][ 0 ] <= minutos[ j ][ l ][ 1 ] ) &&
+                                ( minutos[ i ][ k ][ 1 ] >= minutos[ j ][ l ][ 0 ] )
+                            )
+                        ) {
+                            retval = retval + 1.0;
+                        }
+                    }
+                }
+            }
+        }
+
+        return retval;
+    }
+    function otm_verifica_conflitos( atrib ) {
+        var retval = 0.0;
+        for ( var i in docentes ) {
+            retval = retval + otm_verifica_conflito( docentes[ i ], atrib );
+        }
+        return retval;
     }
     </script>
 </head>
