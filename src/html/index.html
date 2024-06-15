@@ -175,7 +175,7 @@
             }
 
             alterna_celula_atribuicao( disc, doc );
-            console.log( otm_verifica_conflitos( atribuicao ) );
+            console.log( otm_vizinhanca( atribuicao ) );
         }
 
         function alterna_celula_atribuicao( disc, doc ) {
@@ -762,6 +762,91 @@
         var retval = 0.0;
         for ( var i in docentes ) {
             retval = retval + otm_verifica_conflito( docentes[ i ], atrib );
+        }
+        return retval;
+    }
+
+    function otm_atrib_iguais ( atribA, atribB ) {
+        for ( var dis in disciplinas ) {
+            if ( !atribA[ dis ].every( ( val, index ) => val ===atribB[ dis ][ index ] ) ) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    function otm_vizinhanca( atrib, tabu ) {
+        var viz = [];
+
+        var dis_arr = Object.keys( disciplinas ); 
+
+        for ( var i = 0; i < dis_arr.length; i++ ) {
+            var dis = dis_arr[ i ];
+
+            if ( trava[ dis ] || exclui[ dis ] ) {
+                continue;
+            }
+            for ( var id in docentes ) {
+                var doc = docentes[ id ];
+                if (
+                    trava[ doc ] || 
+                    exclui[ doc ] || 
+                    !formularios[ doc ][ dis ]
+                ) {
+                    continue;
+                }
+                var v = {...atrib};
+                v[ dis ] = [ doc ];
+                viz.push( v );
+            }
+
+            if ( atrib[ dis ].length > 0 ) {
+                var v = {...atrib};
+                v[ dis ] = [];
+                viz.push( v );
+            }
+
+            for ( var j = i + 1; j < dis_arr.length; j++ ) {
+                var disb = dis_arr[ j ];
+
+                if(
+                    (
+                        ( atrib[ dis ].length == 0 ) ||
+                        ( formularios[ atrib[ dis ][ 0 ] ][ disb ] ) // Generalizar para o caso de haver
+                        // mais de um docente na atribuição
+                    ) &&
+                    (
+                        ( atrib[ disb ].length == 0 ) ||
+                        ( formularios[ atrib[ disb ][ 0 ] ][ dis ] )  
+                    )
+                ) {
+                        if ( atrib[ dis ].length + atrib[ disb.length ] == 0 ) {
+                            continue;
+                        }
+                        if (
+                            ( atrib[ dis ].length === atrib[ disb ].length ) &&
+                            atrib[ dis ].every( ( val, index ) => val === atrib[ disb ][ index ] )
+                        ) {
+                            continue;
+                        }
+                        var v = {...atrib};
+                        v[ dis ] = atrib[ disb ];
+                        v[ disb ] = atrib[ dis ];
+                        viz.push( v );
+                }
+            }
+        }
+
+        return viz;
+    }
+
+    function ana_verifica_conflitos( atrib ) {
+        var retval = [];
+        for ( var i in docentes ) {
+            if( otm_verifica_conflito( docentes[ i ], atrib ) > 0 ) {
+                retval.push( docentes[ i ] );
+            }
         }
         return retval;
     }
