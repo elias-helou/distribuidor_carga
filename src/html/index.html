@@ -55,6 +55,7 @@
         var trava = {};
         var exclui = {};
         var log = [];
+        var cargas = {};
 
         ////////////////////////////////////////////////////////////
 
@@ -470,7 +471,18 @@
                     for ( var i in docentes ) {
                         trava[ docentes[ i ] ] = false;
                     }
-                }            
+                }
+
+                var c = tmp[ "cargas" ];
+                if( c ) {
+                    console.log( c );
+                    cargas = c;
+                }
+                else {
+                    for ( d in disciplinas ) {
+                        cargas[ d ] = 1.0;
+                    }
+                }
 
                 // atualiza_seletores();
                 // cria_escolhedores();
