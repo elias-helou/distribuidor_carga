@@ -175,7 +175,7 @@
             }
 
             alterna_celula_atribuicao( disc, doc );
-            console.log( otm_vizinhanca( atribuicao ) );
+            console.log( otm_vizinhanca( atribuicao, [] ) );
         }
 
         function alterna_celula_atribuicao( disc, doc ) {
@@ -768,12 +768,16 @@
 
     function otm_atrib_iguais ( atribA, atribB ) {
         for ( var dis in disciplinas ) {
-            if ( !atribA[ dis ].every( ( val, index ) => val ===atribB[ dis ][ index ] ) ) {
+            if ( !atribA[ dis ].every( ( val, index ) => val === atribB[ dis ][ index ] ) ) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    function otm_tabu_contem( atrib, tabu ) {
+        return tabu.some( ( val, index ) => otm_atrib_iguais( atrib, val ) );
     }
 
     function otm_vizinhanca( atrib, tabu ) {
@@ -798,13 +802,17 @@
                 }
                 var v = {...atrib};
                 v[ dis ] = [ doc ];
-                viz.push( v );
+                if ( !otm_tabu_contem( v, tabu ) ){
+                    viz.push( v );
+                }
             }
 
             if ( atrib[ dis ].length > 0 ) {
                 var v = {...atrib};
                 v[ dis ] = [];
-                viz.push( v );
+                if ( !otm_tabu_contem( v, tabu ) ){
+                    viz.push( v );
+                }
             }
 
             for ( var j = i + 1; j < dis_arr.length; j++ ) {
@@ -833,7 +841,9 @@
                         var v = {...atrib};
                         v[ dis ] = atrib[ disb ];
                         v[ disb ] = atrib[ dis ];
-                        viz.push( v );
+                        if ( !otm_tabu_contem( v, tabu ) ){
+                            viz.push( v );
+                        }
                 }
             }
         }
