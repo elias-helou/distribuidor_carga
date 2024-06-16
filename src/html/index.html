@@ -233,6 +233,74 @@
             document.getElementById( "rh_" + t.docente ).style.backgroundColor = cor_cabecalho_inativo;
         }
 
+        function cria_play_btn() {
+            var play_btn = document.createElement( "button" );
+
+            play_btn.style.width = "50%";
+            play_btn.style.minHeight = "50%";
+            
+            var play_icon = document.createElementNS( "http://www.w3.org/2000/svg", "svg" );
+            play_icon.innerHTML = `
+                <path d="M-4 -4 L5 0 L-4 4 Z" style="fill:gray;stroke:black;stroke-width:0.5;" stroke-linejoin="round" />
+            `;
+            play_icon.setAttribute( "viewBox", "-15 -5 30 10" );
+            play_btn.appendChild( play_icon );
+
+            return play_btn;
+        }
+
+        function cria_next_btn() {
+            var retval = document.createElement( "button" );
+
+            retval.style.width = "50%";
+            retval.style.minHeight = "50%";
+            
+            var icon = document.createElementNS( "http://www.w3.org/2000/svg", "svg" );
+            icon.innerHTML = `
+                <path d="M0 -4 L9 0 L0 4 Z" style="fill:gray;stroke:black;stroke-width:0.5;" 
+                stroke-linejoin="round" />
+                <path d="M10 -4 L13 -4 L13 4 L10 4 Z" style="fill:gray;stroke:black;stroke-width:0.5;" stroke-linejoin="round" />
+            `;
+            icon.setAttribute( "viewBox", "-8.5 -5 30 10" );
+            retval.appendChild( icon );
+
+            return retval;
+        }
+
+        function cria_undo_btn() {
+                var retval = document.createElement( "button" );
+
+            retval.style.width = "50%";
+            retval.style.minHeight = "50%";
+            
+            var icon = document.createElementNS( "http://www.w3.org/2000/svg", "svg" );
+            icon.innerHTML = `
+                <path d="M5.5 0 A5.5 5.5 0 1 0 -5.5 0 L-7.5 0 L-3.5 2.5 L-0.5 0 L-2.5 0 A2.5 2.5 0 1 1 2.5 0 Z" style="fill:gray;stroke:black;stroke-width:0.5;" 
+                stroke-linejoin="round" />
+            `;
+            icon.setAttribute( "viewBox", "-15 -7 30 10" );
+            retval.appendChild( icon );
+
+            return retval;
+        }
+
+        function cria_pause_btn() {
+            var pause_btn = document.createElement( "button" );
+
+            pause_btn.style.width = "50%";
+            pause_btn.style.minHeight = "50%";
+            
+            var pause_icon = document.createElementNS( "http://www.w3.org/2000/svg", "svg" );
+            pause_icon.innerHTML = `
+                <path d="M-4 -4 L-1 -4 L-1 4 L-4 4 Z" style="fill:gray;stroke:black;stroke-width:0.5;" stroke-linejoin="round" />
+                <path d="M1 -4 L4 -4 L4 4 L1 4 Z" style="fill:gray;stroke:black;stroke-width:0.5;" stroke-linejoin="round" />
+            `;
+            pause_icon.setAttribute( "viewBox", "-15 -5 30 10" );
+            pause_btn.appendChild( pause_icon );
+
+            return pause_btn;
+        }
+
         function cria_tabela( parent ) {
             const n_columns = Object.keys( disciplinas ).length;
             const n_rows = docentes.length;
@@ -371,6 +439,15 @@
             corner.style.height = ch_height;
             corner.style.minWidth = rh_width;
             sheet.appendChild( corner );
+
+            var play_btn = cria_play_btn();
+            corner.appendChild( play_btn );
+            var next_btn = cria_next_btn();
+            corner.appendChild( next_btn );
+            var pause_btn = cria_pause_btn();
+            corner.appendChild( pause_btn );
+            var undo_btn = cria_undo_btn();
+            corner.appendChild( undo_btn );
         }
 
         var abas = [ "E/S", "Planilha", "Formulários", "Agendas", "Otimização", "Análise" ];
@@ -475,7 +552,6 @@
 
                 var c = tmp[ "cargas" ];
                 if( c ) {
-                    console.log( c );
                     cargas = c;
                 }
                 else {
