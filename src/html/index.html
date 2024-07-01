@@ -441,8 +441,17 @@
             sheet.appendChild( corner );
 
             var play_btn = cria_play_btn();
+            play_btn.addEventListener(
+                "click",
+                () => { 
+                    parar_loop = false;
+                    alert_new();
+                    loop_tabu();
+                }
+            )
             corner.appendChild( play_btn );
             var next_btn = cria_next_btn();
+            next_btn.addEventListener( "click", loop_tabu );
             corner.appendChild( next_btn );
             var pause_btn = cria_pause_btn();
             corner.appendChild( pause_btn );
@@ -947,6 +956,76 @@
             }
         }
         return retval;
+    }
+
+    var parar_loop = true;
+    var niter = 0;
+
+    function loop_tabu() {
+
+        // Executa um passo da busca
+
+        console.log( "Rodando!" );
+        console.time( "loop_tabu" )
+
+        var viz = otm_vizinhanca( atribuicao, [] );
+        niter = niter + 1;
+        console.log( niter, viz.length, otm_verifica_conflitos( atribuicao ) );
+
+        if ( !parar_loop ) {
+            setTimeout( loop_tabu, 1 );
+        }
+        else {
+            var dim = document.getElementById( "dim" );
+            if ( dim ) {
+                dim.remove();
+            }
+        }
+
+        console.timeEnd( "loop_tabu" )
+    }
+
+    function alert_new() {
+        var w = document.getElementById( "window" );
+        w.style.width = "100vw";
+        w.style.height = "100vh";
+
+        var dim = document.createElement( "div" );
+        dim.style.backgroundColor = "rgba( 0, 0, 0, 0.5 )";
+        dim.style.position = "absolute";
+        dim.style.left = "0";
+        dim.style.top = "0";
+        dim.style.width = "100%";
+        dim.style.height = "100%";
+        dim.style.minWidth = "100%";
+        dim.style.minHeight = "100%";
+        dim.style.display = "flex";
+        dim.style.justifyContent = "center";
+        dim.style.alignItems = "center";
+        dim.id = "dim";
+        w.appendChild( dim );
+
+        var a = document.createElement( "div" );
+        a.style.width = "50%";
+        a.style.minWidth = "50%";
+        a.style.height = "50%";
+        a.style.minHeight = "50%";
+        a.style.backgroundColor = "rgb( 255, 255, 255 )";
+        a.style.borderRadius = "20px";
+        a.style.display = "flex";
+        a.style.flexDirection = "column";
+        a.style.alignItems = "center";
+        a.style.padding = "5px";
+        a.style.position = "relative";
+        dim.appendChild( a );
+
+        var bp = document.createElement( "button" );
+        bp.style.position = "absolute";
+        bp.style.bottom = a.style.padding;
+        bp.style.fontSize = "1.5em";
+        bp.innerHTML = "Parar busca";
+        bp.addEventListener( "click", ( e ) => parar_loop = true );
+        a.appendChild( bp );
     }
     </script>
 </head>
