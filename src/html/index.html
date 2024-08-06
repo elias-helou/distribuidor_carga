@@ -77,7 +77,7 @@
             retval.style.fontWeight = "bold";
             retval.id = "ch_" + text;
             retval.disciplina = text;
-            retval.addEventListener( "click", trava_disc );
+            retval.addEventListener( "dblclick", trava_disc );
 
             var cursos = disciplinas[ text ][ "cursos" ]
             cursos = cursos.replace( "Cursos:<br>", "" );
@@ -146,7 +146,7 @@
             retval.docente = text;
             retval.innerHTML = text;
             retval.id = "rh_" + text;
-            retval.addEventListener( "click", trava_doc );
+            retval.addEventListener( "dblclick", trava_doc );
 
             return retval;
         }
@@ -161,15 +161,20 @@
             chc.scroll( { top: 0, left: w.scrollLeft, behavior: "instant" } );
         }
 
-        function atua_celula( e ) {
+        // Clique na célula:
+        function clique_celula( e ) {
             var t = e.target;
+            // Qual disciplina e qual docente da célula?
             const disc = t.disciplina;
             const doc = t.docente;
 
+            // Se o docente está atribuído, remove
             if ( atribuicao[ disc ].includes( doc ) ) {
                 const idx = atribuicao[ disc ].indexOf( doc );
                 atribuicao[ disc ].splice( idx, 1 );
             }
+            // Caso contrário inclui o docente e ordena a lista
+            // de atribuídos
             else {
                 atribuicao[ disc ].push( doc );
                 atribuicao[ disc ].sort();
@@ -367,7 +372,7 @@
                     cell.style.position = "relative";
                     cell.style.borderColor = cor_celula_inativa;
                     cell.style.fontSize = h_fontsize;
-                    cell.addEventListener( "click", atua_celula );
+                    cell.addEventListener( "click", clique_celula );
                     cell.disciplina = d;
                     cell.docente = docentes[ i ];
                     cell.id = "cel_" + d + "_" + docentes[ i ];
