@@ -184,17 +184,24 @@
             console.log( otm_vizinhanca( atribuicao, [] ) );
         }
 
+        // Esta função alterna o destaque em vermelho da célula
+        // quando esta está ou não atribuída.
+        // Esta função não altera a atribuição, somente liga ou
+        // desliga o destaque em vermelho de acordo com a atribuição
+        // atual
         function alterna_celula_atribuicao( disc, doc ) {
             var cell = document.getElementById( "cel_" + disc + "_" + doc );
             if ( !cell ) {
                 return;
             }
 
+            // Remove destaque, se houver:
             var o = document.getElementById( "o_cel_" + disc + "_" + doc );
             if ( o ) {
                 o.remove();
             }
 
+            // Caso esteja atribuída, cria o destaque em vermelho:
             if ( atribuicao[ disc ].includes( doc ) ) {
                 var o = document.createElement( "div" );
                 o.style.margin = "0";
@@ -202,7 +209,7 @@
                 o.style.opacity = "0.5";
                 o.style.minWidth = "100%";
                 o.style.minHeight = "100%";
-                cell.appendChild( o );
+                cell.insertAdjacentElement( 'afterbegin', o );
                 o.style.position = "absolute";
                 o.style.left = "0";
                 o.style.top = "0";
