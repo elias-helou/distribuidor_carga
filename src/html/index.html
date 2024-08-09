@@ -77,7 +77,7 @@
             retval.style.fontWeight = "bold";
             retval.id = "ch_" + text;
             retval.disciplina = text;
-            retval.addEventListener( "dblclick", trava_disc );
+            retval.addEventListener( "click", trava_disc );
 
             var cursos = disciplinas[ text ][ "cursos" ]
             cursos = cursos.replace( "Cursos:<br>", "" );
@@ -146,7 +146,7 @@
             retval.docente = text;
             retval.innerHTML = text;
             retval.id = "rh_" + text;
-            retval.addEventListener( "dblclick", trava_doc );
+            retval.addEventListener( "click", trava_doc );
 
             return retval;
         }
@@ -163,6 +163,11 @@
 
         // Clique na célula:
         function clique_celula( e ) {
+            if ( e.ctrlKey ) {
+                trava_doc_disc( e );
+                return;
+            }
+
             var t = e.target;
             // Qual disciplina e qual docente da célula?
             const disc = t.disciplina;
@@ -380,6 +385,7 @@
                     cell.style.borderColor = cor_celula_inativa;
                     cell.style.fontSize = h_fontsize;
                     cell.addEventListener( "click", clique_celula );
+                    cell.addEventListener( "dblclick", trava_doc_disc );
                     cell.disciplina = d;
                     cell.docente = docentes[ i ];
                     cell.id = "cel_" + d + "_" + docentes[ i ];
@@ -569,6 +575,11 @@
                     for ( var i in docentes ) {
                         trava[ docentes[ i ] ] = false;
                     }
+                    for ( var d in disciplinas ) {
+                        for ( var i in docentes ) {
+                            trava[ docentes[ i ] + d ] = false;
+                        }
+                    }
                 }
 
                 var c = tmp[ "cargas" ];
@@ -649,7 +660,7 @@
                 t.remove();
             }
 
-            if ( trava[ disc ] || trava[ docentes[ i ] ] ) {
+            if ( trava[ disc ] || trava[ docentes[ i ] ] || trava[ docentes[ i ] + disc ] ) {
                 var t = document.createElement( "div" );
                 t.style.margin = "0";
                 t.style.height = "100%";
@@ -689,6 +700,9 @@
     }
 
     function trava_disc( e ) {
+        if ( !e.ctrlKey ) {
+            return;
+        }
         var t = e.target;
         while ( !t.disciplina ) {
             t = t.parentElement;
@@ -699,6 +713,9 @@
     }
 
     function trava_doc( e ) {
+        if ( !e.ctrlKey ) {
+            return;
+        }
         var t = e.target;
         while ( !t.docente ) {
             t = t.parentElement;
@@ -717,7 +734,7 @@
                 t.remove();
             }
 
-            if ( trava[ docentes[ i ] ] || trava[ disc ] ) {
+            if ( trava[ docentes[ i ] ] || trava[ disc ] || trava[ docentes[ i ] + disc ] ) {
                 var t = document.createElement( "div" );
                 t.style.margin = "0";
                 t.style.height = "100%";
@@ -753,6 +770,42 @@
             t.docente = c.docente;
             t.disciplina = c.disciplina;
             t.id = "t_rh_" + docentes[ i ];
+        }
+    }
+
+    function trava_doc_disc( e ) {
+        var t = e.target;
+
+        // Qual disciplina e qual docente da célula?
+        const disc = t.disciplina;
+        const doc = t.docente;
+
+        trava[ doc + disc ] = !trava[ doc + disc ];
+        alterna_trava_doc_disc( doc, disc );
+    }
+
+    function alterna_trava_doc_disc( doc, disc ) {
+        var c = document.getElementById( "cel_" + disc + "_" + doc );
+        var t = document.getElementById( "t_cel_" + disc + "_" + doc );
+
+        if ( t ) {
+            t.remove();
+        }
+
+        if ( trava[ disc ] || trava[ doc ] || trava[ doc + disc ] ) {
+            var t = document.createElement( "div" );
+            t.style.margin = "0";
+            t.style.height = "100%";
+            t.style.width = "100%";
+            t.style.backgroundColor = "rgba( 0, 0, 0, 0.2 )";
+            c.appendChild( t );
+            t.style.position = "absolute";
+            t.style.left = "0";
+            t.style.top = "0";
+            t.iscell = true;
+            t.docente = c.docente;
+            t.disciplina = c.disciplina;
+            t.id = "t_cel_" + disc + "_" + doc;
         }
     }
 
@@ -903,8 +956,9 @@
             for ( var id in docentes ) {
                 var doc = docentes[ id ];
                 if (
-                    trava[ doc ] || 
-                    exclui[ doc ] || 
+                    trava[ doc ] ||
+                    trava[ doc + dis ] ||
+                    exclui[ doc ] ||
                     !formularios[ doc ][ dis ]
                 ) {
                     continue;
