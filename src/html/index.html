@@ -385,7 +385,6 @@
                     cell.style.borderColor = cor_celula_inativa;
                     cell.style.fontSize = h_fontsize;
                     cell.addEventListener( "click", clique_celula );
-                    cell.addEventListener( "dblclick", trava_doc_disc );
                     cell.disciplina = d;
                     cell.docente = docentes[ i ];
                     cell.id = "cel_" + d + "_" + docentes[ i ];
@@ -830,13 +829,18 @@
         var retval = 0.0;
 
         for ( var disc in disciplinas ) {
+            // Não avalia disciplinas travadas
             if ( ! ( trava[ disc ] || exclui[ disc ] ) ) {
+                // Caso tenha sido escolhida, soma valor
+                // da penalidade por prioridade
                 if ( atrib[ disc ].includes( doc ) ){
                     var p = formularios[ doc ][ disc ]
                     if ( p ) {
                         p = formularios[ doc ][ disc ][ 'prioridade' ];
                         retval = retval + 2 ** p;
                     }
+                    // Caso não tenha sido escolhida, soma
+                    // penalidade por não ter sido escolhida
                     else {
                         retval = retval + k_nesc;
                     }
@@ -846,6 +850,8 @@
 
         return retval;
     }
+
+    // Soma de scores de todas proridades
     function otm_score_escolhas( atrib ) {
         var retval = 0.0;
 
@@ -856,25 +862,37 @@
         return retval;
     }
 
+    // Transforma o horário de cada aula em um
+    // trio de strings: dia da semana, hora de início
+    // e hora de fim
     function otm_horario2triplet( disc ) {
         var htexto = disciplinas[ disc ][ "horario" ];
         htexto = htexto.replace( "Horário:<br>&emsp;", "" );
 
         retval = [];
 
+        // Sem horário retorna lista vazia
         if ( htexto == "A definir" ) {
             return retval;
         }
+
+        // Primeira aula
         retval.push( [ htexto.slice( 0, 3 ), htexto.slice( 5, 10 ), htexto.slice( 11, 16 ) ] );
         if ( htexto.length == 16 ) {
             return retval;
         }
+
+        // Segunda aula
         htexto = htexto.slice( 26 );
         retval.push( [ htexto.slice( 0, 3 ), htexto.slice( 5, 10 ), htexto.slice( 11, 16 ) ] );
+
+        // Generalizar para se houver mais de duas aulas semanais!
 
         return retval;
     }
 
+    // Transforma horário em par de minutos passados desde as
+    // 00:00 de segunda (começo e fim de cada aula)
     function otm_horario2minutos( disc ) {
         var retval = otm_horario2triplet( disc );
 
