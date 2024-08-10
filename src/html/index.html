@@ -942,19 +942,32 @@
         return tabu.some( ( val, index ) => otm_atrib_iguais( atrib, val ) );
     }
 
+    // Esta função calcula a vizinhança de uma atribuição
+    // levando o tabu em consideração (as atribuições que
+    // estão no tabu são ignoradas).
     function otm_vizinhanca( atrib, tabu ) {
         var viz = [];
 
         var dis_arr = Object.keys( disciplinas ); 
 
+        // Percorre todas as disciplinas
         for ( var i = 0; i < dis_arr.length; i++ ) {
             var dis = dis_arr[ i ];
 
+            // Caso a disciplinas esteja travada ou excluída,
+            // não a consideramos na vizinhança
             if ( trava[ dis ] || exclui[ dis ] ) {
                 continue;
             }
+
+            // Percorre todos os docentes
             for ( var id in docentes ) {
                 var doc = docentes[ id ];
+
+                // Caso o docente esteja travado ou excluído,
+                // não o consideramos na vizinhança. Também
+                // não consideramos docentes que não escolheram
+                // a disciplina atual.
                 if (
                     trava[ doc ] ||
                     trava[ doc + dis ] ||
@@ -963,13 +976,21 @@
                 ) {
                     continue;
                 }
+
+                // A vizinha é quase idêntica à atribuição atual
                 var v = {...atrib};
+
+                // Exceto pela disciplina atual, que será atribuída
+                // ao docente atual
                 v[ dis ] = [ doc ];
                 if ( !otm_tabu_contem( v, tabu ) ){
                     viz.push( v );
                 }
             }
 
+            // Remover o docente atualmente atribuído à
+            // disciplina também é uma possibilidade de
+            // atribuição vizinha
             if ( atrib[ dis ].length > 0 ) {
                 var v = {...atrib};
                 v[ dis ] = [];
@@ -978,20 +999,29 @@
                 }
             }
 
+            // Percorre todas as disciplinas
             for ( var j = i + 1; j < dis_arr.length; j++ ) {
                 var disb = dis_arr[ j ];
 
+                // Caso seja possível trocar as atribuições de
+                // dis e disb sem violar as escolhas nos formulários,
+                // essa troca também gera um vizinho
                 if(
                     (
                         ( atrib[ dis ].length == 0 ) ||
-                        ( formularios[ atrib[ dis ][ 0 ] ][ disb ] ) // Generalizar para o caso de haver
+                        ( formularios[ atrib[ dis ][ 0 ] ][ disb ] )
+                        // Generalizar para o caso de haver
                         // mais de um docente na atribuição
                     ) &&
                     (
                         ( atrib[ disb ].length == 0 ) ||
-                        ( formularios[ atrib[ disb ][ 0 ] ][ dis ] )  
+                        ( formularios[ atrib[ disb ][ 0 ] ][ dis ] )
+                        // Generalizar para o caso de haver
+                        // mais de um docente na atribuição
                     )
                 ) {
+                        // Se dis e disb são iguais, não faz sentido trocar
+                        // e este caso não gera um vizinho
                         if ( atrib[ dis ].length + atrib[ disb.length ] == 0 ) {
                             continue;
                         }
@@ -1001,6 +1031,8 @@
                         ) {
                             continue;
                         }
+
+                        // Efetua a troca e inclui na vizinhança
                         var v = {...atrib};
                         v[ dis ] = atrib[ disb ];
                         v[ disb ] = atrib[ dis ];
