@@ -603,7 +603,8 @@
                 }
 
                 // atualiza_lista_disciplinas();
-
+                console.log( atribuicao );
+                console.log( otm_verifica_conflitos( atribuicao ) );
             };
             fr.readAsText( arqinput.files[ 0 ] );
         }
@@ -816,6 +817,24 @@
 
     // Otimização e busca
 
+    // Calcula, a partir da atribuição descrita por
+    // disciplinas, a mesma atribuição, mas agora
+    // descrita por docente.
+    function otm_disc2doc( atrib ) {
+        retval = {}
+        for ( i in docentes ) {
+            retval[ docentes[ i ] ] = [];
+        }
+
+        for ( disc in disciplinas ) {
+            for ( i in atrib[ disc ] ) {
+                retval[ atrib[ disc ][ i ] ].push( [ disc, atrib[ disc ].length ] );
+            }
+        }
+
+        return retval;
+    }
+
     // Constantes de avaliação:
     var K_natrib      = 1.0e6;    // Penalização por disciplina sem atribuição
     var k_conflito    = 1.0e7;    // Penalização por conflito de horário
@@ -824,7 +843,9 @@
     var k_score_disc  = 1.0e2;    // Penalização por docente com menos score ter menos disciplinas
     var k_score_escs  = 1.0e1;    // Penalização por docente com menos score ter mais prioridades
 
-    // Calcula score de prioridades atribuídas do docente:
+    // Calcula score de prioridades atribuídas do docente
+    // TODO: esta função pode ser aprimorada se utilizarmos
+    // a atribuição descrita por docente.
     function otm_score_escolhas_doc( doc, atrib ){
         var retval = 0.0;
 
@@ -851,7 +872,7 @@
         return retval;
     }
 
-    // Soma de scores de todas proridades
+    // Soma todos scores de prioridades
     function otm_score_escolhas( atrib ) {
         var retval = 0.0;
 
@@ -908,9 +929,14 @@
         return retval;
     }
 
+    // Verifica disciplinas com horários conflitantes
+    // atribuídas a um docente.
+    // TODO: esta disciplina fica mais eficiente
+    // se a atribuição for descrita por docente
     function otm_verifica_conflito( doc, atrib ) {
         var minutos = [];
 
+        // Aqui é possível melhorar fazendo por docente!
         for ( var disc in disciplinas ) {
             if ( atrib[ disc ].includes( doc ) ) {
                 minutos.push( otm_horario2minutos( disc ) );
@@ -938,6 +964,8 @@
 
         return retval;
     }
+    // TODO: calcular aqui a atribuição descrita por docente e passar ela
+    // para a função otm_verifica_conflito
     function otm_verifica_conflitos( atrib ) {
         var retval = 0.0;
         for ( var i in docentes ) {
@@ -946,6 +974,7 @@
         return retval;
     }
 
+    // Checa igualdade entre uas atribuições.
     function otm_atrib_iguais ( atribA, atribB ) {
         for ( var dis in disciplinas ) {
             if ( !atribA[ dis ].every( ( val, index ) => val === atribB[ dis ][ index ] ) ) {
@@ -956,6 +985,7 @@
         return true;
     }
 
+    // Verifica se alguma atribuição está no tabu
     function otm_tabu_contem( atrib, tabu ) {
         return tabu.some( ( val, index ) => otm_atrib_iguais( atrib, val ) );
     }
@@ -972,7 +1002,7 @@
         for ( var i = 0; i < dis_arr.length; i++ ) {
             var dis = dis_arr[ i ];
 
-            // Caso a disciplinas esteja travada ou excluída,
+            // Caso a disciplina esteja travada ou excluída,
             // não a consideramos na vizinhança
             if ( trava[ dis ] || exclui[ dis ] ) {
                 continue;
@@ -1089,6 +1119,8 @@
         console.log( niter, viz.length, otm_verifica_conflitos( atribuicao ) );
 
         if ( !parar_loop ) {
+            // Sem esse timeout o loop nunca devolve
+            // o controle à GUI
             setTimeout( loop_tabu, 1 );
         }
         else {
