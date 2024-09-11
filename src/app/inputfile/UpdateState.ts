@@ -54,7 +54,7 @@ export const processDocentes = (data: any): Docente[] => {
   return newDocentes;
 };
 
-export const processDisciplinas = (data: any): Disciplina[] => {
+export const processDisciplinas = (data: Disciplina[]): Disciplina[] => {
   const disciplinasJson: Disciplina[] = data;
   const newDisciplinas: Disciplina[] = [];
 
@@ -78,8 +78,8 @@ export const processDisciplinas = (data: any): Disciplina[] => {
   return newDisciplinas;
 };
 
-export const processAtribuicoes = (data: any): Atribuicao[] => {
-  const atribuicoesJson: Record<string, Docente[]> = data;
+export const processAtribuicoes = (data: Record<string, string[]>): Atribuicao[] => {
+  const atribuicoesJson: Record<string, string[]> = data;
   const newAtribuicoes: Atribuicao[] = [];
 
   for (const [idDisciplina, docentes] of Object.entries(atribuicoesJson)) {
@@ -91,7 +91,7 @@ export const processAtribuicoes = (data: any): Atribuicao[] => {
   return newAtribuicoes;
 };
 
-export const processFormularios = (data: any): Formulario[] => {
+export const processFormularios = (data: Record<string, Disciplina[]>): Formulario[] => {
   const formulariosJson: Record<string, Disciplina[]> = data;
   const newFormularios: Formulario[] = [];
 

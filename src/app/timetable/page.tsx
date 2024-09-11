@@ -1,15 +1,14 @@
 "use client";
 
-import { TipoTrava, Trava, useGlobalContext } from "@/context/Global";
+import { TipoTrava, Celula, useGlobalContext } from "@/context/Global";
 import { createTheme, ThemeProvider, Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { styled } from "@mui/material/styles";
 
 // Customizar todos os TableCell
 const customTheme = createTheme({
@@ -25,8 +24,15 @@ const customTheme = createTheme({
 });
 
 export default function Timetable() {
-  const { docentes, disciplinas, atribuicoes, formularios, travas, setTravas } =
-    useGlobalContext();
+  const {
+    docentes,
+    disciplinas,
+    formularios,
+    atribuicoes,
+    setAtribuicoes,
+    travas,
+    setTravas,
+  } = useGlobalContext();
 
   let maxPriority = 0;
 
@@ -109,7 +115,7 @@ export default function Timetable() {
     return `rgb(${red}, ${green}, ${blue})`;
   };
 
-  const setCellColor = (prioridade: number, trava: Trava) => {
+  const setCellColor = (prioridade: number, trava: Celula) => {
     if (
       travas.some(
         (obj) =>
@@ -118,20 +124,84 @@ export default function Timetable() {
       )
     ) {
       return `rgba(224, 224, 224, 1)`;
+    } else if (
+      atribuicoes.some(
+        (obj) =>
+          obj.id_disciplina == trava.id_disciplina &&
+          obj.docentes.some((docente) => docente == trava.nome_docente)
+      )
+    ) {
+      return `red`;
     } else {
       return getPriorityColor(prioridade);
     }
   };
 
-  // Função para lidar com o clique nas células e travar caso Ctrl estiver pressionado
-  const handleCellClick = (event, trava: Trava) => {
+  // Adiciona um novo docente a uma disciplina no state de atribuições
+  const adicionarDocente = (id_disciplina: string, novo_docente: string) => {
+  setAtribuicoes((prevAtribuicoes) =>
+    prevAtribuicoes.map((atribuicao) =>
+      atribuicao.id_disciplina === id_disciplina
+        ? {
+            ...atribuicao,
+            docentes: [...atribuicao.docentes, novo_docente], // Adiciona o novo docente de forma imutável
+          }
+        : atribuicao
+    )
+  );
+};
+
+// Remove um docente de uma disciplina no state de atribuições
+const removerDocente = (idDisciplina, docenteARemover) => {
+  setAtribuicoes((prevAtribuicoes) =>
+    prevAtribuicoes.map((atribuicao) =>
+      atribuicao.id_disciplina === idDisciplina
+        ? {
+            ...atribuicao,
+            docentes: atribuicao.docentes.filter(
+              (docente) => docente !== docenteARemover
+            ), // Remove o docente
+          }
+        : atribuicao
+    )
+  );
+};
+
+  const handleCellClick = (event, celula: Celula) => {
+    if (event.ctrlKey) {
+      if (
+        !travas.some((obj) => JSON.stringify(obj) === JSON.stringify(celula))
+      ) {
+        setTravas([...travas, celula]);
+      } else {
+        // Verifica o tipo da trava sendo removida, se for a de coluna as células também serão destravadas. 
+        // Caso a célula tenho sido travada, ela permanescerá travada.
+        setTravas([
+          ...travas.filter(
+            (obj) => JSON.stringify(obj) !== JSON.stringify(celula)
+          ),
+        ]);
+      }
+    }else {
+      // Procura pelo objeto Atribuição no state pelo id_disciplina
+      const newAtribuicao = atribuicoes.find(atribuicao => atribuicao.id_disciplina == celula.id_disciplina)
+      // Se o docente ainda não atribuido a disciplina, realizar a inserção, caso contrário remover.
+      if(!newAtribuicao.docentes.some(docente => docente == celula.nome_docente)) {
+          adicionarDocente(celula.id_disciplina, celula.nome_docente)
+      }else {
+        removerDocente(celula.id_disciplina, celula.nome_docente)
+      }
+    }
+  };
+
+  const handleColumnClick = (event, trava: Celula) => {
     if (event.ctrlKey) {
       if (
         !travas.some((obj) => JSON.stringify(obj) === JSON.stringify(trava))
       ) {
         // Se a trava for do Tipo Coluna, todas as células devem ser travadas
         if (trava.tipo_trava == TipoTrava.Column) {
-          const travar: Trava[] = docentes.map((docente) => ({
+          const travar: Celula[] = docentes.map((docente) => ({
             id_disciplina: trava.id_disciplina,
             nome_docente: docente.nome,
             tipo_trava: TipoTrava.ColumnCell,
@@ -140,23 +210,18 @@ export default function Timetable() {
           travar.push(trava);
 
           setTravas([...travas, ...travar]);
-        } else {
-          setTravas([...travas, trava]);
         }
       } else {
         // Verifica o tipo da trava sendo removida, se for a de coluna as células também serão destravadas. Caso a célula tenho sido travada, ela permanescerá travada.
         if (trava.tipo_trava == TipoTrava.Column) {
           const newTravas = travas.filter(
-            (obj) => (obj.tipo_trava !== TipoTrava.ColumnCell && obj.tipo_trava !== TipoTrava.Column || obj.id_disciplina != trava.id_disciplina)
+            (obj) =>
+              (obj.tipo_trava !== TipoTrava.ColumnCell &&
+                obj.tipo_trava !== TipoTrava.Column) ||
+              obj.id_disciplina != trava.id_disciplina
           );
 
           setTravas(newTravas);
-        } else {
-          setTravas([
-            ...travas.filter(
-              (obj) => JSON.stringify(obj) !== JSON.stringify(trava)
-            ),
-          ]);
         }
       }
     }
@@ -174,20 +239,32 @@ export default function Timetable() {
             >
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ minWidth: "15rem" }}>Botões</TableCell>
+                  <TableCell
+                    sx={{
+                      minWidth: "15rem",
+                      position: "sticky",
+                      left: 0, // Fixando a célula à esquerda
+                      backgroundColor: "white", // Evitando que o fundo fique transparente ao fixar
+                      zIndex: 1, // Assegurando que o cabeçalho da célula esteja sobreposto
+                    }}
+                  >
+                    Botões
+                  </TableCell>
                   {disciplinas.map((disciplina) => (
                     <TableCell
                       key={disciplina.id}
                       align="center"
                       onClick={(event) =>
-                        handleCellClick(event, {
+                        handleColumnClick(event, {
                           id_disciplina: disciplina.id,
                           tipo_trava: TipoTrava.Column,
                         })
                       }
                       style={{
-                          backgroundColor: setCellColor(null, {id_disciplina: disciplina.id}),
-                        }}
+                        backgroundColor: setCellColor(null, {
+                          id_disciplina: disciplina.id,
+                        }),
+                      }}
                     >
                       {disciplina.id}
                     </TableCell>
@@ -200,7 +277,13 @@ export default function Timetable() {
                     <TableCell
                       component="th"
                       scope="row"
-                      sx={{ minWidth: "15rem" }}
+                      sx={{
+                        minWidth: "15rem",
+                        position: "sticky",
+                        left: 0, // Fixando a célula à esquerda
+                        backgroundColor: "white", // Evitando que o fundo fique transparente ao fixar
+                        zIndex: 1, // Para manter sobre as demais células
+                      }}
                     >
                       <Typography
                         align="left"

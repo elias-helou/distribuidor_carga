@@ -19,7 +19,7 @@ interface IPages {
 }
 
 const drawerWidth = 240;
-const navItems: IPages[] = [{name: 'Home', link: '/'}, {name: 'Timetable', link: '/timetable'}, {name: 'Carregar dados', link: '/inputfile'}];
+const navItems: IPages[] = [{name: 'Home', link: '/'}, {name: 'Carregar dados', link: '/inputfile'}, {name: 'Timetable', link: '/timetable'}, {name: 'Seleção', link:'/select'}];
 
 export default function DrawerAppBar() {
 

@@ -22,7 +22,7 @@ export interface Disciplina {
 
 export interface Atribuicao {
   id_disciplina: string;
-  docentes: Docente[];
+  docentes: string[];
 }
 
 export interface Formulario {
@@ -38,7 +38,7 @@ export enum TipoTrava {
   ColumnCell // Identificar se, após a coluna ser destravada, a célula deve continuar travada
 }
 
-export interface Trava {
+export interface Celula {
   id_disciplina?: string;
   nome_docente?: string;
   tipo_trava?: TipoTrava
@@ -53,8 +53,8 @@ interface GlobalContextInterface {
   setAtribuicoes: React.Dispatch<React.SetStateAction<Atribuicao[]>>;
   formularios: Formulario[];
   setFormularios: React.Dispatch<React.SetStateAction<Formulario[]>>;
-  travas: Trava[];
-  setTravas: React.Dispatch<React.SetStateAction<Trava[]>>;
+  travas: Celula[];
+  setTravas: React.Dispatch<React.SetStateAction<Celula[]>>;
 }
 
 const GlobalContext = createContext<GlobalContextInterface>({
@@ -75,7 +75,7 @@ export function GlobalWrapper({ children }: { children: React.ReactNode }) {
   const [disciplinas, setDisciplinas] = useState<Disciplina[]>([]);
   const [atribuicoes, setAtribuicoes] = useState<Atribuicao[]>([]);
   const [formularios, setFormularios] = useState<Formulario[]>([]);
-  const [travas, setTravas] = useState<Trava[]>([]);
+  const [travas, setTravas] = useState<Celula[]>([]);
 
   return (
     <GlobalContext.Provider

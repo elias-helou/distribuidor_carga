@@ -32,17 +32,17 @@ const VisuallyHiddenInput = styled("input")({
 export default function InputFileUpload() {
   const [activeLoader, setActiveLoader] = React.useState<boolean>(true); // Controla se o botão de carregar estará habilitado
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null); // Armazena o arquivo selecionado
-  const [fileContent, setFileContent] = React.useState(null); // Armazena o conteúdo do arquivo JSON
+  //const [fileContent, setFileContent] = React.useState(null); // Armazena o conteúdo do arquivo JSON
   const [open, setOpen] = React.useState(false); // Alerta de erro
   const [message, setMessage] = React.useState("");
   const {
-    atribuicoes,
+   // atribuicoes,
     setAtribuicoes,
-    disciplinas,
+    //disciplinas,
     setDisciplinas,
-    docentes,
+   // docentes,
     setDocentes,
-    formularios,
+   // formularios,
     setFormularios
   } = useGlobalContext();
 
@@ -70,7 +70,7 @@ export default function InputFileUpload() {
       reader.onload = (event) => {
         try {
           const json = JSON.parse(event.target?.result as string);
-          setFileContent(json); // Armazena o conteúdo JSON
+          //setFileContent(json); // Armazena o conteúdo JSON
           console.log("Conteúdo do arquivo JSON:", json);
           loadContext(json);
         } catch (error) {
@@ -82,7 +82,7 @@ export default function InputFileUpload() {
     }
   };
 
-  const loadContext = (json: Record<string, any>) => {
+  const loadContext = (json) => {
     // Processa e atualiza o estado de "docentes"
     processAndUpdateState(
       json,
