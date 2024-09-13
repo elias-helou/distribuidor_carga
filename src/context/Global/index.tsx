@@ -3,6 +3,7 @@ import { createContext, useContext, useState } from "react";
 export interface Docente {
   nome: string;
   saldo?: number;
+  ativo: boolean;
 }
 
 export interface Disciplina {
@@ -18,6 +19,7 @@ export interface Disciplina {
   noturna: boolean;
   ingles: boolean;
   docentes?: string[];
+  ativo: boolean;
 }
 
 export interface Atribuicao {

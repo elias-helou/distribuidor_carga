@@ -43,11 +43,12 @@ export const processDocentes = (data: any): Docente[] => {
 
   if (saldos) {
     for (const [nome, saldo] of Object.entries(saldos)) {
-      newDocentes.push({ nome, saldo });
+      newDocentes.push({ nome:nome, saldo:saldo, ativo: true });
     }
   } else if (docentesJson) {
     for (const docente of docentesJson) {
-      newDocentes.push({ nome: docente });
+      // Verificar depois com o Elias de adicionarmos o campo Ativo no arquivo exportado pelo nosso sistema
+      newDocentes.push({ nome: docente, ativo: true });
     }
   }
 
@@ -72,6 +73,7 @@ export const processDisciplinas = (data: Disciplina[]): Disciplina[] => {
       noturna: disciplina.noturna,
       ingles: disciplina.ingles,
       docentes: disciplina.docentes,
+      ativo: true,
     });
   }
 
