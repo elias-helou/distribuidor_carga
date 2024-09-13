@@ -6,8 +6,9 @@ import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import PublishRoundedIcon from "@mui/icons-material/PublishRounded";
 import CloseIcon from "@mui/icons-material/Close";
-import { Alert, Box, Collapse, IconButton, Stack } from "@mui/material";
+import { Alert, Box, Collapse, IconButton, Stack, Typography } from "@mui/material";
 import { useGlobalContext } from "@/context/Global";
+import { motion } from "framer-motion";
 
 import {
   processAndUpdateState,
@@ -35,20 +36,25 @@ export default function InputFileUpload() {
   //const [fileContent, setFileContent] = React.useState(null); // Armazena o conteúdo do arquivo JSON
   const [open, setOpen] = React.useState(false); // Alerta de erro
   const [message, setMessage] = React.useState("");
+  const [loaded, setLoaded] = React.useState(false)
+
   const {
-   // atribuicoes,
+    // atribuicoes,
     setAtribuicoes,
     //disciplinas,
     setDisciplinas,
-   // docentes,
+    // docentes,
     setDocentes,
-   // formularios,
-    setFormularios
+    // formularios,
+    setFormularios,
   } = useGlobalContext();
 
   // Função para lidar com a seleção de arquivo
   const setFileState = (files: FileList | null) => {
     if (files && files.length > 0) {
+      // Altera o state da variávle que controla o texto de "carregado com sucesso" para falso
+      setLoaded(false)
+
       const file = files[0];
       // Verifica se o arquivo é do tipo JSON
       if (file.type === "application/json") {
@@ -79,6 +85,7 @@ export default function InputFileUpload() {
         }
       };
       reader.readAsText(selectedFile); // Lê o arquivo como texto
+      setLoaded(true)
     }
   };
 
@@ -121,7 +128,7 @@ export default function InputFileUpload() {
       sx={{ width: "100%" }}
       display="flex"
       flexDirection="column"
-      alignItems="flex-end"
+      alignItems="center"
     >
       <Box sx={{ width: "100%" }} display="flex" justifyContent="center">
         <Stack
@@ -157,7 +164,7 @@ export default function InputFileUpload() {
           </Button>
         </Stack>
       </Box>
-      <Box sx={{ width: "30%", margin: "5px" }}>
+      <Box sx={{ width: "50%", margin: "5px" }}>
         <Collapse in={open}>
           <Alert
             severity="error"
@@ -178,6 +185,18 @@ export default function InputFileUpload() {
             {message}
           </Alert>
         </Collapse>
+        {loaded && <motion.div layout
+          className="loaded"
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{
+            duration: 0.8,
+            delay: 0.5,
+            ease: [0, 0.71, 0.2, 1.01],
+          }}
+          style={{textAlign: 'center'}}
+        ><Typography align="center" variant="button" style={{}}>Arquivo Carregado com sucesso!</Typography></motion.div>}
+        
       </Box>
     </Box>
   );
