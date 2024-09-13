@@ -1,7 +1,13 @@
 "use client";
 
 import { TipoTrava, Celula, useGlobalContext } from "@/context/Global";
-import { createTheme, ThemeProvider, Typography } from "@mui/material";
+import {
+  Button,
+  ButtonGroup,
+  createTheme,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -9,6 +15,8 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import StopIcon from "@mui/icons-material/Stop";
 
 // Customizar todos os TableCell
 const customTheme = createTheme({
@@ -47,6 +55,10 @@ export default function Timetable() {
     }[] = [];
 
     for (const docente of docentes) {
+      // Se o docente não estiver ativo o loop deve ir para a próxima interação
+      if(!docente.ativo) {
+        continue;
+      }
       const newDocente: {
         nome: string;
         prioridades: { id_disciplina: string; prioridade: number }[];
@@ -59,7 +71,7 @@ export default function Timetable() {
         if (
           docenteDisciplinas
             .map((dd) => dd.id_disciplina)
-            .indexOf(disciplina.id) != -1
+            .indexOf(disciplina.id) != -1 && disciplina.ativo
         ) {
           const prioridade = docenteDisciplinas.filter(
             (dd) => dd.id_disciplina == disciplina.id
@@ -139,33 +151,33 @@ export default function Timetable() {
 
   // Adiciona um novo docente a uma disciplina no state de atribuições
   const adicionarDocente = (id_disciplina: string, novo_docente: string) => {
-  setAtribuicoes((prevAtribuicoes) =>
-    prevAtribuicoes.map((atribuicao) =>
-      atribuicao.id_disciplina === id_disciplina
-        ? {
-            ...atribuicao,
-            docentes: [...atribuicao.docentes, novo_docente], // Adiciona o novo docente de forma imutável
-          }
-        : atribuicao
-    )
-  );
-};
+    setAtribuicoes((prevAtribuicoes) =>
+      prevAtribuicoes.map((atribuicao) =>
+        atribuicao.id_disciplina === id_disciplina
+          ? {
+              ...atribuicao,
+              docentes: [...atribuicao.docentes, novo_docente], // Adiciona o novo docente de forma imutável
+            }
+          : atribuicao
+      )
+    );
+  };
 
-// Remove um docente de uma disciplina no state de atribuições
-const removerDocente = (idDisciplina, docenteARemover) => {
-  setAtribuicoes((prevAtribuicoes) =>
-    prevAtribuicoes.map((atribuicao) =>
-      atribuicao.id_disciplina === idDisciplina
-        ? {
-            ...atribuicao,
-            docentes: atribuicao.docentes.filter(
-              (docente) => docente !== docenteARemover
-            ), // Remove o docente
-          }
-        : atribuicao
-    )
-  );
-};
+  // Remove um docente de uma disciplina no state de atribuições
+  const removerDocente = (idDisciplina, docenteARemover) => {
+    setAtribuicoes((prevAtribuicoes) =>
+      prevAtribuicoes.map((atribuicao) =>
+        atribuicao.id_disciplina === idDisciplina
+          ? {
+              ...atribuicao,
+              docentes: atribuicao.docentes.filter(
+                (docente) => docente !== docenteARemover
+              ), // Remove o docente
+            }
+          : atribuicao
+      )
+    );
+  };
 
   const handleCellClick = (event, celula: Celula) => {
     if (event.ctrlKey) {
@@ -174,7 +186,7 @@ const removerDocente = (idDisciplina, docenteARemover) => {
       ) {
         setTravas([...travas, celula]);
       } else {
-        // Verifica o tipo da trava sendo removida, se for a de coluna as células também serão destravadas. 
+        // Verifica o tipo da trava sendo removida, se for a de coluna as células também serão destravadas.
         // Caso a célula tenho sido travada, ela permanescerá travada.
         setTravas([
           ...travas.filter(
@@ -182,14 +194,20 @@ const removerDocente = (idDisciplina, docenteARemover) => {
           ),
         ]);
       }
-    }else {
+    } else {
       // Procura pelo objeto Atribuição no state pelo id_disciplina
-      const newAtribuicao = atribuicoes.find(atribuicao => atribuicao.id_disciplina == celula.id_disciplina)
+      const newAtribuicao = atribuicoes.find(
+        (atribuicao) => atribuicao.id_disciplina == celula.id_disciplina
+      );
       // Se o docente ainda não atribuido a disciplina, realizar a inserção, caso contrário remover.
-      if(!newAtribuicao.docentes.some(docente => docente == celula.nome_docente)) {
-          adicionarDocente(celula.id_disciplina, celula.nome_docente)
-      }else {
-        removerDocente(celula.id_disciplina, celula.nome_docente)
+      if (
+        !newAtribuicao.docentes.some(
+          (docente) => docente == celula.nome_docente
+        )
+      ) {
+        adicionarDocente(celula.id_disciplina, celula.nome_docente);
+      } else {
+        removerDocente(celula.id_disciplina, celula.nome_docente);
       }
     }
   };
@@ -247,10 +265,27 @@ const removerDocente = (idDisciplina, docenteARemover) => {
                       backgroundColor: "white", // Evitando que o fundo fique transparente ao fixar
                       zIndex: 1, // Assegurando que o cabeçalho da célula esteja sobreposto
                     }}
+                    style={{ display: "flex", justifyContent: "center" }}
                   >
-                    Botões
+                    <ButtonGroup variant="outlined" aria-label="Button group">
+                      <Button
+                        onClick={() => {
+                          console.log("Executar processo");
+                        }}
+                      >
+                        <PlayArrowIcon />
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          console.log("Pausar processo");
+                        }}
+                      >
+                        <StopIcon />
+                      </Button>
+                    </ButtonGroup>
                   </TableCell>
-                  {disciplinas.map((disciplina) => (
+                  {disciplinas.map((disciplina) => ( 
+                    disciplina.ativo &&
                     <TableCell
                       key={disciplina.id}
                       align="center"
