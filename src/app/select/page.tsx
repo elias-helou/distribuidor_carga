@@ -1,23 +1,23 @@
-"use client"
+"use client";
 
-import * as React from 'react';
-import Grid from '@mui/material/Grid2';
-import List from '@mui/material/List';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Checkbox from '@mui/material/Checkbox';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import { Disciplina, Docente, useGlobalContext } from '@/context/Global';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-
+import * as React from "react";
+import Grid from "@mui/material/Grid2";
+import List from "@mui/material/List";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import Checkbox from "@mui/material/Checkbox";
+import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { useGlobalContext } from "@/context/Global";
+import { Disciplina, Docente, isDisciplina } from "@/context/Global/utils";
 
 function not<T>(a: readonly T[], b: readonly T[]) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -32,23 +32,32 @@ function union<T>(a: readonly T[], b: readonly T[]) {
 }
 
 export default function Seletor() {
-  const { docentes, setDocentes, disciplinas, setDisciplinas } = useGlobalContext(); // Pega docentes e disciplinas do contexto global
-  const [checked, setChecked] = React.useState<readonly (Docente | Disciplina)[]>([]);
-  const [selectedEntity, setSelectedEntity] = React.useState<'docente' | 'disciplina'>('docente'); // Estado para selecionar a entidade atual
+  const { docentes, setDocentes, disciplinas, setDisciplinas } =
+    useGlobalContext(); // Pega docentes e disciplinas do contexto global
+  const [checked, setChecked] = React.useState<
+    readonly (Docente | Disciplina)[]
+  >([]);
+  const [selectedEntity, setSelectedEntity] = React.useState<
+    "docente" | "disciplina"
+  >("docente"); // Estado para selecionar a entidade atual
 
   const handleToggleEntity = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked([]); // Limpa os itens selecionados ao mudar a entidade
-    setSelectedEntity((event.target as HTMLInputElement).value as 'docente' | 'disciplina');
+    setSelectedEntity(
+      (event.target as HTMLInputElement).value as "docente" | "disciplina"
+    );
   };
 
   // Filtra docentes ou disciplinas com base na seleção do botão de rádio
-  const left = selectedEntity === 'docente'
-    ? docentes.filter((docente) => docente.ativo)
-    : disciplinas.filter((disciplina) => disciplina.ativo);
+  const left =
+    selectedEntity === "docente"
+      ? docentes.filter((docente) => docente.ativo)
+      : disciplinas.filter((disciplina) => disciplina.ativo);
 
-  const right = selectedEntity === 'docente'
-    ? docentes.filter((docente) => !docente.ativo)
-    : disciplinas.filter((disciplina) => !disciplina.ativo);
+  const right =
+    selectedEntity === "docente"
+      ? docentes.filter((docente) => !docente.ativo)
+      : disciplinas.filter((disciplina) => !disciplina.ativo);
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
@@ -77,8 +86,8 @@ export default function Seletor() {
     }
   };
 
-  const updateAtivos = (updatedLeft: (Docente | Disciplina)[], updatedRight: (Docente | Disciplina)[]) => {
-    if (selectedEntity === 'docente') {
+  const updateAtivos = (updatedLeft: (Docente | Disciplina)[]) => {
+    if (selectedEntity === "docente") {
       // Atualiza os docentes
       const updatedDocentes = docentes.map((docente) => ({
         ...docente,
@@ -97,32 +106,36 @@ export default function Seletor() {
 
   const handleCheckedRight = () => {
     const updatedLeft = not(left, leftChecked);
-    const updatedRight = right.concat(leftChecked);
-    updateAtivos(updatedLeft, updatedRight);
+    updateAtivos(updatedLeft);
     setChecked(not(checked, leftChecked));
   };
 
   const handleCheckedLeft = () => {
     const updatedLeft = left.concat(rightChecked);
-    const updatedRight = not(right, rightChecked);
-    updateAtivos(updatedLeft, updatedRight);
+    updateAtivos(updatedLeft);
     setChecked(not(checked, rightChecked));
   };
 
-  const customList = (title: React.ReactNode, items: readonly (Disciplina| Docente )[]) => (
+  const customList = (
+    title: React.ReactNode,
+    items: readonly (Disciplina | Docente)[]
+  ) => (
     <Card>
       <CardHeader
         sx={{ px: 2, py: 1 }}
         avatar={
           <Checkbox
             onClick={handleToggleAll(items)}
-            checked={numberOfChecked(items) === items.length && items.length !== 0}
+            checked={
+              numberOfChecked(items) === items.length && items.length !== 0
+            }
             indeterminate={
-              numberOfChecked(items) !== items.length && numberOfChecked(items) !== 0
+              numberOfChecked(items) !== items.length &&
+              numberOfChecked(items) !== 0
             }
             disabled={items.length === 0}
             inputProps={{
-              'aria-label': 'all items selected',
+              "aria-label": "all items selected",
             }}
           />
         }
@@ -134,19 +147,21 @@ export default function Seletor() {
         sx={{
           width: 400,
           height: 500,
-          bgcolor: 'background.paper',
-          overflow: 'auto',
+          bgcolor: "background.paper",
+          overflow: "auto",
         }}
         dense
         component="div"
         role="list"
       >
-        {items.map((value: Disciplina|Docente) => {
-          const labelId = `transfer-list-all-item-${selectedEntity == 'disciplina' ? value.id : value.nome}-label`;
+        {items.map((value: Docente | Disciplina) => {
+          const labelId = `transfer-list-all-item-${
+           isDisciplina(value) ? value.id : value.nome
+          }-label`;
 
           return (
             <ListItemButton
-              key={selectedEntity == 'disciplina' ? value.id : value.nome}
+              key={isDisciplina(value) ? value.id : value.nome}
               role="listitem"
               onClick={handleToggle(value)}
             >
@@ -156,13 +171,16 @@ export default function Seletor() {
                   tabIndex={-1}
                   disableRipple
                   inputProps={{
-                    'aria-labelledby': labelId,
+                    "aria-labelledby": labelId,
                   }}
                 />
               </ListItemIcon>
               <ListItemText
                 id={labelId}
-                primary={selectedEntity == 'disciplina' ? `${value.id} - ${value.nome}` : value.nome }
+                primary={
+        
+                    isDisciplina(value) ? `${value.id} - ${value.nome}` : value.nome 
+                }
               />
             </ListItemButton>
           );
@@ -172,56 +190,60 @@ export default function Seletor() {
   );
 
   return (
-    <div>
-      <RadioGroup
-        row
-        value={selectedEntity}
-        onChange={handleToggleEntity}
-        sx={{ mb: 2, display: 'flex', justifyContent: 'center'}}
-      >
-        <FormControlLabel
-          value="docente"
-          control={<Radio />}
-          label="Docentes"
-        />
-        <FormControlLabel
-          value="disciplina"
-          control={<Radio />}
-          label="Disciplinas"
-        />
-      </RadioGroup>
-      <Grid
-        container
-        spacing={2}
-        sx={{ justifyContent: 'center', alignItems: 'center' }}
-      >
-        <Grid>{customList('Ativos', left)}</Grid>
-        <Grid>
-          <Grid container direction="column" sx={{ alignItems: 'center' }}>
-            <Button
-              sx={{ my: 0.5 }}
-              variant="contained"
-              size="small"
-              onClick={handleCheckedRight}
-              disabled={leftChecked.length === 0}
-              aria-label="move selected right"
-            >
-              <ChevronRightIcon />
-            </Button>
-            <Button
-              sx={{ my: 0.5 }}
-              variant="contained"
-              size="small"
-              onClick={handleCheckedLeft}
-              disabled={rightChecked.length === 0}
-              aria-label="move selected left"
-            >
-              <ChevronLeftIcon />
-            </Button>
+    <>
+      {docentes.length > 0 && disciplinas.length > 0 && (
+        <div>
+          <RadioGroup
+            row
+            value={selectedEntity}
+            onChange={handleToggleEntity}
+            sx={{ mb: 2, display: "flex", justifyContent: "center" }}
+          >
+            <FormControlLabel
+              value="docente"
+              control={<Radio />}
+              label="Docentes"
+            />
+            <FormControlLabel
+              value="disciplina"
+              control={<Radio />}
+              label="Disciplinas"
+            />
+          </RadioGroup>
+          <Grid
+            container
+            spacing={2}
+            sx={{ justifyContent: "center", alignItems: "center" }}
+          >
+            <Grid>{customList("Ativos", left)}</Grid>
+            <Grid>
+              <Grid container direction="column" sx={{ alignItems: "center" }}>
+                <Button
+                  sx={{ my: 0.5 }}
+                  variant="contained"
+                  size="small"
+                  onClick={handleCheckedRight}
+                  disabled={leftChecked.length === 0}
+                  aria-label="move selected right"
+                >
+                  <ChevronRightIcon />
+                </Button>
+                <Button
+                  sx={{ my: 0.5 }}
+                  variant="contained"
+                  size="small"
+                  onClick={handleCheckedLeft}
+                  disabled={rightChecked.length === 0}
+                  aria-label="move selected left"
+                >
+                  <ChevronLeftIcon />
+                </Button>
+              </Grid>
+            </Grid>
+            <Grid>{customList("Inativos", right)}</Grid>
           </Grid>
-        </Grid>
-        <Grid>{customList('Inativos', right)}</Grid>
-      </Grid>
-    </div>
+        </div>
+      )}
+    </>
   );
 }
