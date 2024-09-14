@@ -8,6 +8,7 @@ import Collapse from "@mui/material/Collapse";
 import CloseIcon from "@mui/icons-material/Close";
 
 export interface IAlertProps {
+  id: number;
   type: "success" | "info" | "warning" | "error";
   message: string;
   setFatherState?: () => void;
@@ -27,6 +28,7 @@ export default function CustomAlert(props: IAlertProps) {
     <Box sx={{ width: "100%" }}>
       <Collapse in={open} onExited={handleExited}>
         <Alert
+          key={props.id}
           severity={props.type}
           variant="filled"
           action={
@@ -39,7 +41,6 @@ export default function CustomAlert(props: IAlertProps) {
               <CloseIcon fontSize="inherit" />
             </IconButton>
           }
-          sx={{ mb: 2 }}
         >
           {props.message}
         </Alert>

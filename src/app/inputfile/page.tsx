@@ -5,6 +5,7 @@ import {
   Box,
   Typography,
   CircularProgress,
+  Stack,
 } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
@@ -19,58 +20,51 @@ import {
 import { useGlobalContext } from "@/context/Global";
 import CustomAlert, { IAlertProps } from "@/components/CustomAlert";
 
-export default function Teste() {
+export default function InputFileUpload() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [alert, setAlert] = useState<IAlertProps|null>(null);
+  const [alerts, setAlerts] = useState<IAlertProps[]>([]); // Agora é um array de alertas
   const { setAtribuicoes, setDisciplinas, setDocentes, setFormularios } =
     useGlobalContext();
 
+  /**
+   * Função responsável por validar se um arquivo foi selecionado e se é do tipo permitido.
+   * @param files Arquivo enviado pelo usuário.
+   */
   const handleFileSelect = (files: FileList | null) => {
-    // Verifica se realmente existe um arquivo
     if (files && files.length > 0) {
       const file = files[0];
-      // Verifica se o arquivo é do tipo JSON
       if (file.type === "application/json") {
         setSelectedFile(file);
       } else {
-        // Apresentar mensagem de erro na tela
-        //console.log("Por favor, selecione um arquivo JSON.");
-        setAlert({type: "warning", message: "Por favor, selecione um arquivo JSON."})
+        addAlert({
+          id: alerts.length + 1,
+          type: "warning",
+          message: "Por favor, selecione um arquivo JSON.",
+        });
       }
     }
   };
 
-  /**
-   *  Carrega o arquivo JSON no state global
-   * @param json Informações contidas no arquivo anteriormente lido
-   */
   const loadContext = (json) => {
-    // Processa e atualiza o estado de "docentes"
     processAndUpdateState(
       json,
       ["docentes", "saldos"],
       processDocentes,
       setDocentes
     );
-
-    // Processa e atualiza o estado de "disciplinas"
     processAndUpdateState(
       json,
       "disciplinas",
       processDisciplinas,
       setDisciplinas
     );
-
-    // Processa e atualiza o estado de "atribuicoes"
     processAndUpdateState(
       json,
       "atribuicao",
       processAtribuicoes,
       setAtribuicoes
     );
-
-    // Processa e atualiza o estado de "formulários"
     processAndUpdateState(
       json,
       "formularios",
@@ -79,7 +73,6 @@ export default function Teste() {
     );
   };
 
-  // Importa os dados do arquivo para o state global
   const handleFileUpload = () => {
     if (selectedFile) {
       setUploading(true);
@@ -89,14 +82,39 @@ export default function Teste() {
           const json = JSON.parse(event.target?.result as string);
           loadContext(json);
           setSelectedFile(null);
+          addAlert({
+            id: alerts.length + 1,
+            type: "success",
+            message: "Arquivo carregado com sucesso.",
+          });
         } catch (error) {
-          setAlert({type: "error", message: "Erro ao processar o arquivo JSON."})
+          addAlert({
+            id: alerts.length + 1,
+            type: "error",
+            message: "Erro ao processar o arquivo JSON.",
+          });
         }
+        setUploading(false);
       };
       reader.readAsText(selectedFile);
     }
-    setUploading(false);
-    setAlert({type:"success", message: "Arquivo carregado com sucesso."})
+  };
+
+  /**
+   * Função que adiciona um novo alerta no state.
+   * @param newAlert Novo objeto a ser inserido no state de alertas.
+   */
+  const addAlert = (newAlert: IAlertProps) => {
+    setAlerts([...alerts, newAlert]); // Adiciona novo alerta ao array
+  };
+
+  /**
+   * Remove um objeto do state de alertas.
+   * @param index Index do objeto dentro do state.
+   */
+  const removeAlert = (index: number) => {
+    const newAlerts = alerts.filter((alert) => alert.id !== index);
+    setAlerts([...newAlerts]);
   };
 
   return (
@@ -126,7 +144,7 @@ export default function Teste() {
       />
       <label htmlFor="file-input">
         <Button
-          variant="outlined"
+          variant={!selectedFile ? "contained" : "outlined"}
           color="primary"
           component="span"
           startIcon={<UploadFileIcon />}
@@ -150,17 +168,31 @@ export default function Teste() {
           uploading ? <CircularProgress size={24} /> : <CloudUploadIcon />
         }
         onClick={handleFileUpload}
-        disabled={!selectedFile} // Caso não tenha sido carregado um arquivo, o botão de carregar deve ser mantido desabilitado
+        disabled={!selectedFile} // Desabilita o botão caso nenhum arquivo tenha sido selecionado
         fullWidth
       >
         {uploading ? "Carregando..." : "Carregar Arquivo"}
       </Button>
 
-      {/* Posicionando o CustomAlert na parte inferior direita */}
-      {alert && (
-        <Box position="fixed" bottom={16} right={16} zIndex={9999}>
-          <CustomAlert type={alert.type} message={alert.message} setFatherState={() => setAlert(null)} />
-        </Box>
+      {/* Exibindo os alertas na parte inferior direita */}
+      {alerts.length > 0 && (
+        <Stack
+          position="fixed"
+          bottom={16}
+          right={16}
+          zIndex={9999}
+          spacing={1}
+        >
+          {alerts.map((alert) => (
+            <CustomAlert
+              key={alert.id}
+              type={alert.type}
+              message={alert.message}
+              id={alert.id}
+              setFatherState={() => removeAlert(alert.id)} // Remove o alerta quando for fechado
+            />
+          ))}
+        </Stack>
       )}
     </Box>
   );
