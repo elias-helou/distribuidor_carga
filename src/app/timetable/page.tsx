@@ -1,10 +1,11 @@
 "use client";
 
-import { TipoTrava, Celula, useGlobalContext } from "@/context/Global";
+import { useGlobalContext } from "@/context/Global";
 import {
   Button,
   ButtonGroup,
   createTheme,
+  Stack,
   ThemeProvider,
   Typography,
 } from "@mui/material";
@@ -17,6 +18,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
+import { getPriorityColor } from ".";
+import { Celula, TipoTrava } from "@/context/Global/utils";
 
 // Customizar todos os TableCell
 const customTheme = createTheme({
@@ -56,7 +59,7 @@ export default function Timetable() {
 
     for (const docente of docentes) {
       // Se o docente não estiver ativo o loop deve ir para a próxima interação
-      if(!docente.ativo) {
+      if (!docente.ativo) {
         continue;
       }
       const newDocente: {
@@ -71,7 +74,8 @@ export default function Timetable() {
         if (
           docenteDisciplinas
             .map((dd) => dd.id_disciplina)
-            .indexOf(disciplina.id) != -1 && disciplina.ativo
+            .indexOf(disciplina.id) != -1 &&
+          disciplina.ativo
         ) {
           const prioridade = docenteDisciplinas.filter(
             (dd) => dd.id_disciplina == disciplina.id
@@ -97,37 +101,8 @@ export default function Timetable() {
     return newRows;
   };
 
-  // Função que define a colocação da célula na tabela
-  const getPriorityColor = (priority: number): string => {
-    // Se a prioridade for null ou undefined, não altera a cor
-    if (priority === null || priority === undefined) {
-      return "inherit"; // 'inherit' mantém a cor original do elemento
-    }
-
-    // Define os componentes RGB da cor base (rgb(118, 196, 188))
-    const baseRed = 118;
-    const baseGreen = 196;
-    const baseBlue = 188;
-
-    // Variação mínima e máxima para intensificar ou clarear a cor
-    const minFactor = 0.6; // Fator de escurecimento máximo (mais escuro)
-    const maxFactor = 1.8; // Fator de clareamento máximo (mais claro)
-
-    // Calcula o fator de ajuste da cor com base na prioridade
-    const factor =
-      maxFactor -
-      ((priority - 1) / (maxPriority - 1)) * (maxFactor - minFactor);
-
-    // Aplica o fator de ajuste aos componentes RGB
-    const red = Math.floor(baseRed * factor);
-    const green = Math.floor(baseGreen * factor);
-    const blue = Math.floor(baseBlue * factor);
-
-    // Retorna a cor ajustada em RGB
-    return `rgb(${red}, ${green}, ${blue})`;
-  };
-
   const setCellColor = (prioridade: number, trava: Celula) => {
+    // Verifica se a célula está travada, caso contrário verifica se está atribuida. Caso nenhuma das anteriores seja verdadeia, atribuí a coloração baseada na prioridade.
     if (
       travas.some(
         (obj) =>
@@ -135,7 +110,7 @@ export default function Timetable() {
           obj.nome_docente === trava.nome_docente
       )
     ) {
-      return `rgba(224, 224, 224, 1)`;
+      return `rgba(224, 224, 224, 0.6)`;
     } else if (
       atribuicoes.some(
         (obj) =>
@@ -143,9 +118,9 @@ export default function Timetable() {
           obj.docentes.some((docente) => docente == trava.nome_docente)
       )
     ) {
-      return `red`;
+      return `rgba(255, 0, 0, 0.4)`;
     } else {
-      return getPriorityColor(prioridade);
+      return getPriorityColor(prioridade, maxPriority);
     }
   };
 
@@ -249,7 +224,7 @@ export default function Timetable() {
     <ThemeProvider theme={customTheme}>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         {docentes.length > 0 && disciplinas.length > 0 && (
-          <TableContainer sx={{ maxHeight: 600 }}>
+          <TableContainer sx={{ maxHeight: 620 }}>
             <Table
               sx={{ minWidth: 650 }}
               aria-label="sticky table"
@@ -259,15 +234,16 @@ export default function Timetable() {
                 <TableRow>
                   <TableCell
                     sx={{
-                      minWidth: "15rem",
+                      maxWidth: "13rem",
                       position: "sticky",
                       left: 0, // Fixando a célula à esquerda
                       backgroundColor: "white", // Evitando que o fundo fique transparente ao fixar
-                      zIndex: 1, // Assegurando que o cabeçalho da célula esteja sobreposto
+                      zIndex: 3, // Assegurando que o cabeçalho da célula esteja sobreposto
+                      /* display: "flex", justifyContent: "center"*/
+                     textAlign: 'center'
                     }}
-                    style={{ display: "flex", justifyContent: "center" }}
                   >
-                    <ButtonGroup variant="outlined" aria-label="Button group">
+                    <ButtonGroup variant="outlined" aria-label="Button group" >
                       <Button
                         onClick={() => {
                           console.log("Executar processo");
@@ -284,78 +260,130 @@ export default function Timetable() {
                       </Button>
                     </ButtonGroup>
                   </TableCell>
-                  {disciplinas.map((disciplina) => ( 
-                    disciplina.ativo &&
-                    <TableCell
-                      key={disciplina.id}
-                      align="center"
-                      onClick={(event) =>
-                        handleColumnClick(event, {
-                          id_disciplina: disciplina.id,
-                          tipo_trava: TipoTrava.Column,
-                        })
-                      }
-                      style={{
-                        backgroundColor: setCellColor(null, {
-                          id_disciplina: disciplina.id,
-                        }),
-                      }}
-                    >
-                      {disciplina.id}
-                    </TableCell>
-                  ))}
+                  {disciplinas.map(
+                    (disciplina) =>
+                      disciplina.ativo && (
+                        <TableCell
+                          key={disciplina.id}
+                          //align="center"
+                          onClick={(event) =>
+                            handleColumnClick(event, {
+                              id_disciplina: disciplina.id,
+                              tipo_trava: TipoTrava.Column,
+                            })
+                          }
+                          sx={{ padding: "2px" }}
+                          style={{
+                            backgroundColor: setCellColor(null, {
+                              id_disciplina: disciplina.id,
+                            }),
+                            textOverflow: "ellipsis",
+                            margin: "0",
+                          }}
+                        >
+                          <Stack spacing={1} sx={{ width: "9rem", height:'7rem' }}>
+                            <Typography
+                              align="left"
+                              variant="body1"
+                              style={{ fontWeight: "bold", fontSize: "12px" }}
+                              noWrap
+                              /*TODO: fazer uma fução para isso*/
+                              dangerouslySetInnerHTML={{
+                                __html: disciplina.cursos
+                                  .replace(/^[^;]*;/, "")
+                                  .replace(/<br\s*\/?>/gi, "")
+                                  .replace(/&emsp;/gi, " "),
+                              }}
+                            />
+                            <Typography
+                              align="left"
+                              variant="body1"
+                              style={{ fontWeight: "bold", fontSize: "13px" }}
+                              noWrap
+                            >
+                              {disciplina.codigo + " " + disciplina.nome}
+                            </Typography>
+                            <Typography
+                              align="left"
+                              variant="body1"
+                              style={{
+                                fontSize: "small" /*minHeight: '5rem'*/,
+                              }}
+                              noWrap
+                              dangerouslySetInnerHTML={{
+                                __html: disciplina.horario,
+                              }}
+                            />
+                          </Stack>
+                        </TableCell>
+                      )
+                  )}
                 </TableRow>
               </TableHead>
               <TableBody>
                 {rows().map((atribuicao) => (
-                  <TableRow key={atribuicao.nome}>
+                  <TableRow key={atribuicao.nome} style={{ maxHeight: "2rem" }}>
                     <TableCell
                       component="th"
                       scope="row"
                       sx={{
-                        minWidth: "15rem",
+                        maxWidth: "11rem",
                         position: "sticky",
                         left: 0, // Fixando a célula à esquerda
                         backgroundColor: "white", // Evitando que o fundo fique transparente ao fixar
-                        zIndex: 1, // Para manter sobre as demais células
+                        zIndex: 1, // Para manter sobre as demais células,
+                        textOverflow: "ellipsis",
+                        padding: "5px",
                       }}
                     >
                       <Typography
                         align="left"
                         variant="body2"
                         style={{ fontWeight: "bold" }}
+                        noWrap
                       >
                         {atribuicao.nome}
                       </Typography>
                     </TableCell>
-                    {atribuicao.prioridades.map((prioridade) => (
-                      <TableCell
-                        key={
-                          atribuicao.nome +
-                          "_" +
-                          prioridade +
-                          "_" +
-                          prioridade.id_disciplina
-                        }
-                        align="center"
-                        style={{
-                          backgroundColor: setCellColor(prioridade.prioridade, {
-                            nome_docente: atribuicao.nome,
-                            id_disciplina: prioridade.id_disciplina,
-                            tipo_trava: TipoTrava.Cell,
-                          }),
-                        }}
-                        onClick={(event) =>
-                          handleCellClick(event, {
-                            nome_docente: atribuicao.nome,
-                            id_disciplina: prioridade.id_disciplina,
-                            tipo_trava: TipoTrava.Cell,
-                          })
-                        }
-                      >
-                        {prioridade.prioridade}
-                      </TableCell>
-                    ))}
+                    {atribuicao.prioridades.map(
+                      (prioridade) =>
+                        disciplinas.find(
+                          (disciplina) =>
+                            disciplina.id == prioridade.id_disciplina &&
+                            disciplina.ativo
+                        ) && (
+                          <TableCell
+                            key={
+                              atribuicao.nome +
+                              "_" +
+                              prioridade +
+                              "_" +
+                              prioridade.id_disciplina
+                            }
+                            align="center"
+                            style={{
+                              backgroundColor: setCellColor(
+                                prioridade.prioridade,
+                                {
+                                  nome_docente: atribuicao.nome,
+                                  id_disciplina: prioridade.id_disciplina,
+                                  tipo_trava: TipoTrava.Cell,
+                                }
+                              ),
+                              padding: "2px",
+                            }}
+                            onClick={(event) =>
+                              handleCellClick(event, {
+                                nome_docente: atribuicao.nome,
+                                id_disciplina: prioridade.id_disciplina,
+                                tipo_trava: TipoTrava.Cell,
+                              })
+                            }
+                          >
+                            {prioridade.prioridade}
+                          </TableCell>
+                        )
+                    )}
                   </TableRow>
                 ))}
               </TableBody>
