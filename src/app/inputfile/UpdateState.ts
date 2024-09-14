@@ -1,4 +1,5 @@
-import { Atribuicao, Disciplina, Docente, Formulario } from "@/context/Global";
+import { Atribuicao, Disciplina, Docente, Formulario } from "@/context/Global/utils";
+
 
 type UpdateStateFunction<T> = (data: T[]) => void;
 

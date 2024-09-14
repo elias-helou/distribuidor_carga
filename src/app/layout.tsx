@@ -1,6 +1,6 @@
 "use client";
 
-import MyNavbar from "@/components/Navbar";
+import Navbar from "@/components/Navbar";
 import { GlobalWrapper } from "@/context/Global";
 
 export default function RootLayout({
@@ -11,7 +11,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body>
-        <MyNavbar />
+        <Navbar />
         <GlobalWrapper>
           <div style={{ padding: "15px" }}>{children}</div>
         </GlobalWrapper>
