@@ -97,7 +97,7 @@ export default function InputFileUpload() {
           addAlert({
             id: alerts.length + 1,
             type: "success",
-            message: "Arquivo carregado com sucesso.",
+            message: "Arquivo " + selectedFile.name + " carregado com sucesso.",
           });
         } catch (error) {
           addAlert({
