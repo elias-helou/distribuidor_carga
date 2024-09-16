@@ -19,7 +19,8 @@ import TableRow from "@mui/material/TableRow";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
 import { getPriorityColor } from ".";
-import { Celula, TipoTrava } from "@/context/Global/utils";
+import { Atribuicao, Celula, cloneDeep, TipoTrava } from "@/context/Global/utils";
+import { buscaTabu } from "@/algorithms";
 
 // Customizar todos os TableCell
 const customTheme = createTheme({
@@ -124,18 +125,50 @@ export default function Timetable() {
     }
   };
 
-  // Adiciona um novo docente a uma disciplina no state de atribuições
-  const adicionarDocente = (id_disciplina: string, novo_docente: string) => {
-    setAtribuicoes((prevAtribuicoes) =>
-      prevAtribuicoes.map((atribuicao) =>
-        atribuicao.id_disciplina === id_disciplina
-          ? {
-              ...atribuicao,
-              docentes: [...atribuicao.docentes, novo_docente], // Adiciona o novo docente de forma imutável
-            }
-          : atribuicao
-      )
-    );
+  /**
+   * Adiciona um novo docente a uma disciplina no state de atribuições
+   * @param id_disciplina Identificador da disciplina a ser atribuída.
+   * @param novo_docente Nome do docente que será atribuído a disciplina.
+   */
+  const adicionarDocente = (id_disciplina: string, nome_docente: string) => {
+    // // Verifica se o estado `atribuicoes` não está vazio
+    // if (atribuicoes.length == 0) {
+    //   const newAtribuicao: Atribuicao = {
+    //     id_disciplina: id_disciplina,
+    //     docentes: [nome_docente],
+    //   };
+    //   setAtribuicoes([...atribuicoes, newAtribuicao]);
+    // } else {
+    //   setAtribuicoes((prevAtribuicoes) =>
+    //     prevAtribuicoes.map((atribuicao) =>
+    //       atribuicao.id_disciplina === id_disciplina
+    //         ? {
+    //             ...atribuicao,
+    //             docentes: [...atribuicao.docentes, nome_docente], // Adiciona o novo docente de forma imutável
+    //           }
+    //         : atribuicao
+    //     )
+    //   );
+    // }
+
+  // Verifica se a disciplina já existe no state
+  const disciplina: Atribuicao = atribuicoes.filter(atribuicao => atribuicao.id_disciplina == id_disciplina)[0]
+    if(disciplina) {
+      setAtribuicoes((prevAtribuicoes) =>
+        prevAtribuicoes.map((atribuicao) =>
+          atribuicao.id_disciplina === id_disciplina
+            ? {
+                ...atribuicao,
+                docentes: [...atribuicao.docentes, nome_docente], // Adiciona o novo docente de forma imutável
+              }
+            : atribuicao
+        )
+      );
+    } else {
+      // Caso a disciplina ainda não exista no state
+      const newAtribuicao: Atribuicao = {id_disciplina: id_disciplina, docentes: [nome_docente]}
+      setAtribuicoes([...atribuicoes, newAtribuicao])
+    }
   };
 
   // Remove um docente de uma disciplina no state de atribuições
@@ -174,12 +207,16 @@ export default function Timetable() {
       const newAtribuicao = atribuicoes.find(
         (atribuicao) => atribuicao.id_disciplina == celula.id_disciplina
       );
+
       // Se o docente ainda não atribuido a disciplina, realizar a inserção, caso contrário remover.
       if (
-        !newAtribuicao.docentes.some(
-          (docente) => docente == celula.nome_docente
-        )
+        !newAtribuicao ||
+        (newAtribuicao &&
+          !newAtribuicao.docentes.some(
+            (docente) => docente == celula.nome_docente
+          ))
       ) {
+
         adicionarDocente(celula.id_disciplina, celula.nome_docente);
       } else {
         removerDocente(celula.id_disciplina, celula.nome_docente);
@@ -220,6 +257,14 @@ export default function Timetable() {
     }
   };
 
+  const teste = () => {
+    // TODO: 15/09/2024 Inserir as atribuições previamente estabelecidas
+    const solucao = buscaTabu(cloneDeep(disciplinas), docentes, formularios, travas, 2000, maxPriority+1);
+    console.log("Final ---");
+    
+    console.log(solucao);
+  };
+
   return (
     <ThemeProvider theme={customTheme}>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -240,15 +285,11 @@ export default function Timetable() {
                       backgroundColor: "white", // Evitando que o fundo fique transparente ao fixar
                       zIndex: 3, // Assegurando que o cabeçalho da célula esteja sobreposto
                       /* display: "flex", justifyContent: "center"*/
-                     textAlign: 'center'
+                      textAlign: "center",
                     }}
                   >
-                    <ButtonGroup variant="outlined" aria-label="Button group" >
-                      <Button
-                        onClick={() => {
-                          console.log("Executar processo");
-                        }}
-                      >
+                    <ButtonGroup variant="outlined" aria-label="Button group">
+                      <Button onClick={teste}>
                         <PlayArrowIcon />
                       </Button>
                       <Button
@@ -281,7 +322,10 @@ export default function Timetable() {
                             margin: "0",
                           }}
                         >
-                          <Stack spacing={1} sx={{ width: "9rem", height:'7rem' }}>
+                          <Stack
+                            spacing={1}
+                            sx={{ width: "9rem", height: "7rem" }}
+                          >
                             <Typography
                               align="left"
                               variant="body1"
