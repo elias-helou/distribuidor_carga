@@ -19,11 +19,12 @@ import {
 } from "../inputfile/UpdateState";
 import { useGlobalContext } from "@/context/Global";
 import CustomAlert, { IAlertProps } from "@/components/CustomAlert";
+import { Atribuicao, Disciplina } from "@/context/Global/utils";
 
 export default function InputFileUpload() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [alerts, setAlerts] = useState<IAlertProps[]>([]); // Agora é um array de alertas
+  const [alerts, setAlerts] = useState<IAlertProps[]>([]);
   const { setAtribuicoes, setDisciplinas, setDocentes, setFormularios } =
     useGlobalContext();
 
@@ -53,13 +54,13 @@ export default function InputFileUpload() {
       processDocentes,
       setDocentes
     );
-    processAndUpdateState(
+    const disciplinas: Disciplina[] = processAndUpdateState(
       json,
       "disciplinas",
       processDisciplinas,
       setDisciplinas
     );
-    processAndUpdateState(
+    const atribuicoes: Atribuicao[] = processAndUpdateState(
       json,
       "atribuicao",
       processAtribuicoes,
@@ -71,6 +72,17 @@ export default function InputFileUpload() {
       processFormularios,
       setFormularios
     );
+
+    // Criar todas as disciplinas no state de atribuições
+    if (atribuicoes.length != disciplinas.length) {
+      for(const disciplina of disciplinas) {
+        if(!atribuicoes.find(atribuicao => atribuicao.id_disciplina == disciplina.id)) {
+          atribuicoes.push({id_disciplina: disciplina.id, docentes: []})
+        }
+      }
+
+      setAtribuicoes([...atribuicoes])
+    }
   };
 
   const handleFileUpload = () => {

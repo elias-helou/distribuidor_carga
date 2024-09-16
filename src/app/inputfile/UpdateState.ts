@@ -33,7 +33,10 @@ export const processAndUpdateState = <T>(
   if (data) {
     const processedData = processor(data);
     updateState(processedData);
+    return processedData;
   }
+
+  return []
 };
 
 export const processDocentes = (data: any): Docente[] => {
