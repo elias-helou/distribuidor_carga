@@ -1,5 +1,10 @@
 import { Atribuicao, Disciplina, Horario } from "@/context/Global/utils";
 
+export interface Solucao {
+  atribuicoes: Atribuicao[];
+  avaliacao: number;
+}
+
 /**
  * Função que transforma a `string` horário em um objeto.
  * @param horario `String` original representando os horários de aula.

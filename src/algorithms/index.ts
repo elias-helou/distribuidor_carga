@@ -4,20 +4,17 @@ import {
   Docente,
   Atribuicao,
   Formulario,
+  isHorario,
 } from "@/context/Global/utils";
 import {
   ajustaHorarioDisciplinas,
   atualizarListaTabu,
   estaNaListaTabu,
   horariosSobrepoem,
+  Solucao,
 } from "./utils";
 
-interface Solucao {
-  atribuicoes: Atribuicao[];
-  avaliacao: number;
-}
-
-// Função para checar se um docente pode ser alocado a uma disciplina
+// Função para checar se um docente pode ser alocado a uma disciplina (incluindo atribuições do usuário)
 function podeAtribuir(
   docente: Docente,
   disciplina: Disciplina,
@@ -25,7 +22,7 @@ function podeAtribuir(
   atribuicoes: Atribuicao[],
   disciplinas: Disciplina[]
 ): boolean {
-  // Verificar se o docente está ativo
+  // Verificar se o docente e a disciplina estão ativos
   if (!docente.ativo || !disciplina.ativo) return false;
 
   // Verificar se o docente está na lista de travas para a disciplina
@@ -34,7 +31,7 @@ function podeAtribuir(
       trava.id_disciplina === disciplina.id &&
       trava.nome_docente === docente.nome
     ) {
-      return false;
+      return false; // Docente está travado para essa disciplina
     }
   }
 
@@ -50,27 +47,15 @@ function podeAtribuir(
   for (const docenteDisciplina of docenteDisciplinas) {
     for (const horarioDisciplina of docenteDisciplina.horario) {
       for (const horarioAtual of disciplina.horario) {
-        if (horariosSobrepoem(horarioAtual, horarioDisciplina)) {
-          return false;
+        // Verifica se os dois são da interface horário e também verifica se eles se sobrepoem
+        if (isHorario(horarioAtual) && isHorario(horarioDisciplina) && horariosSobrepoem(horarioAtual, horarioDisciplina)) {
+          return false; // Horários sobrepostos
         }
       }
     }
   }
 
-  // Verifica se o docente já não está atribuido a disciplina
-  if (docenteDisciplinasAtribuidas.includes(disciplina.id)) {
-    return false;
-  }
-
-  // Verifica se a disciplina já apresenta um docente atribuído
-  const discAtribuicao: Atribuicao = atribuicoes.filter(
-    (atribuicao) => atribuicao.id_disciplina == disciplina.id
-  )[0];
-  if (discAtribuicao.docentes.length > 0) {
-    return false;
-  }
-
-  return true;
+  return true; // Docente pode ser atribuído
 }
 
 // Função para avaliar uma solução
@@ -86,21 +71,39 @@ function avaliarSolucao(
   // Aumentar a pontuação se os docentes foram atribuídos de acordo com as prioridades do formulário
   // O aumento será baseado no valor da maior prioridade - valor da prioridade do docente, punindo menos as soluções com as "maiores prioridades"
   // Caso um docente seja atribuído sem prioridade definida, será aplicada uma penalidade de  maior prioridade + 1
-  for (const formulario of formularios) {
-    const atribuicao = atribuicoes.find(
-      (a) => a.id_disciplina === formulario.id_disciplina
-    );
-    if (atribuicao && atribuicao.docentes.includes(formulario.nome_professor)) {
-      avaliacao += maiorPrioridade - formulario.prioridade;
+  for (const atribuicao of atribuicoes) {
+    const atribuicaoFormulariosDocentes = formularios
+      .filter(
+        (formulario) => formulario.id_disciplina == atribuicao.id_disciplina
+      )
+      .map((a) => a.nome_professor);
+    let docenteInFormularios: string = null;
+
+    // Verifica se o docente apresenta um formulário para a disciplina.
+    for (const docente of atribuicao.docentes) {
+      if (atribuicaoFormulariosDocentes.includes(docente)) {
+        docenteInFormularios = docente;
+        break;
+      }
+    }
+
+    // Docente não apresenta formulário
+    if (!docenteInFormularios) {
+      avaliacao -= maiorPrioridade + 1; // Docente atrubuído sem prioridade definida
     } else {
-      avaliacao - +maiorPrioridade + 1; // Docente atrubuído sem prioridade definida
+      const formulario = formularios.find(
+        (formulario) =>
+          formulario.nome_professor == docenteInFormularios &&
+          formulario.id_disciplina == atribuicao.id_disciplina
+      );
+      avaliacao += maiorPrioridade - formulario.prioridade;
     }
   }
 
   // Penalizar por disciplinas sem professor ou com mais de um professor
   for (const atribuicao of atribuicoes) {
-    if (atribuicao.docentes.length === 0 || atribuicao.docentes.length > 1) {
-      avaliacao -= 10; // Penalidade por disciplina sem professor
+    if (atribuicao.docentes.length == 0 || atribuicao.docentes.length > 1) {
+      avaliacao -= 10 + atribuicao.docentes.length * 10; // Penalidade por disciplina sem professor
     }
   }
 
@@ -133,7 +136,10 @@ function gerarVizinhos(
         )
       ) {
         const novaSolucao = JSON.parse(JSON.stringify(solucao));
-        novaSolucao.atribuicoes[i].docentes.push(docente.nome);
+        // Remover o docente anterior, caso já tenha sido atribuído, e adicionar o novo docente
+        novaSolucao.atribuicoes[i].docentes = [docente.nome]; // Substituir o docente atual pela nova atribuição
+
+        // Reavaliar a nova solução após a mudança
         novaSolucao.avaliacao = avaliarSolucao(
           novaSolucao.atribuicoes,
           formularios,
@@ -149,23 +155,30 @@ function gerarVizinhos(
   return vizinhos;
 }
 
+/**
+ * Função utilizada para aplciar uma pausa no processo.
+ * @param {number} ms Valor em milissegundos.
+ */
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 // Algoritmo de Busca Tabu
-export function buscaTabu(
+export async function buscaTabu(
   disciplinas: Disciplina[],
   docentes: Docente[],
   formularios: Formulario[],
   travas: Trava[],
+  atribuicoes: Atribuicao[],
   maxIteracoes: number,
-  maiorPrioridade: number
-): Solucao {
-  const atribuicoes: Atribuicao[] = disciplinas.map((d) => ({
-    id_disciplina: d.id,
-    docentes: [],
-  }));
+  maiorPrioridade: number,
+  interrompe: () => boolean
+): Promise<Solucao> {
   // Chamar a função que irá ajustar o formato do atributo horario
   const disciplinasAjustadas: Disciplina[] =
     ajustaHorarioDisciplinas(disciplinas);
 
+  // Solução inicial inclui as atribuições fornecidas pelo usuário
   let solucaoAtual: Solucao = {
     atribuicoes,
     avaliacao: avaliarSolucao(
@@ -176,12 +189,13 @@ export function buscaTabu(
       maiorPrioridade
     ),
   };
-  let melhorSolucao: Solucao = solucaoAtual;
 
+  let melhorSolucao: Solucao = solucaoAtual;
   const listaTabu: Atribuicao[][] = []; // Lista tabu para evitar ciclos
   let iteracoes = 0;
 
   while (iteracoes < maxIteracoes) {
+    await delay(0); // Pausa
     iteracoes++;
 
     // Gerar vizinhos e selecionar o melhor não tabu
@@ -217,6 +231,11 @@ export function buscaTabu(
         melhorSolucao = solucaoAtual;
       }
     }
+
+    if (interrompe()) {
+      break;
+    }
   }
+  
   return melhorSolucao;
 }
