@@ -5,6 +5,12 @@ import {
   Button,
   ButtonGroup,
   createTheme,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
   Stack,
   ThemeProvider,
   Typography,
@@ -17,10 +23,19 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import StopIcon from "@mui/icons-material/Stop";
+import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
 import { getPriorityColor } from ".";
-import { Atribuicao, Celula, cloneDeep, TipoTrava } from "@/context/Global/utils";
+import {
+  Atribuicao,
+  Celula,
+  processData,
+  TipoTrava,
+} from "@/context/Global/utils";
 import { buscaTabu } from "@/algorithms";
+import { useEffect, useRef, useState } from "react";
+import { LoadingButton } from "@mui/lab";
+import CloseIcon from "@mui/icons-material/Close";
+import { Solucao } from "@/algorithms/utils";
 
 // Customizar todos os TableCell
 const customTheme = createTheme({
@@ -151,9 +166,11 @@ export default function Timetable() {
     //   );
     // }
 
-  // Verifica se a disciplina já existe no state
-  const disciplina: Atribuicao = atribuicoes.filter(atribuicao => atribuicao.id_disciplina == id_disciplina)[0]
-    if(disciplina) {
+    // Verifica se a disciplina já existe no state
+    const disciplina: Atribuicao = atribuicoes.filter(
+      (atribuicao) => atribuicao.id_disciplina == id_disciplina
+    )[0];
+    if (disciplina) {
       setAtribuicoes((prevAtribuicoes) =>
         prevAtribuicoes.map((atribuicao) =>
           atribuicao.id_disciplina === id_disciplina
@@ -166,8 +183,11 @@ export default function Timetable() {
       );
     } else {
       // Caso a disciplina ainda não exista no state
-      const newAtribuicao: Atribuicao = {id_disciplina: id_disciplina, docentes: [nome_docente]}
-      setAtribuicoes([...atribuicoes, newAtribuicao])
+      const newAtribuicao: Atribuicao = {
+        id_disciplina: id_disciplina,
+        docentes: [nome_docente],
+      };
+      setAtribuicoes([...atribuicoes, newAtribuicao]);
     }
   };
 
@@ -216,7 +236,6 @@ export default function Timetable() {
             (docente) => docente == celula.nome_docente
           ))
       ) {
-
         adicionarDocente(celula.id_disciplina, celula.nome_docente);
       } else {
         removerDocente(celula.id_disciplina, celula.nome_docente);
@@ -257,12 +276,88 @@ export default function Timetable() {
     }
   };
 
-  const teste = () => {
-    // TODO: 15/09/2024 Inserir as atribuições previamente estabelecidas
-    const solucao = buscaTabu(cloneDeep(disciplinas), docentes, formularios, travas, 2000, maxPriority+1);
-    console.log("Final ---");
+  /**
+   * Limpa o state `atribuicoes`, deixando-o vazio.
+   */
+  const cleanStateAtribuicoes = () => {
+    // Varre todo o array e limpa o campo docentes
+    const atribuicoesLimpa = atribuicoes.map((atribuicao) => ({
+      ...atribuicao, // Mantém os outros campos iguais
+      docentes: [], // Limpa o campo docentes
+    }));
+
+    // Atualiza o estado com a nova lista de atribuições
+    setAtribuicoes(atribuicoesLimpa);
+  };
+
+  /**
+   * Dialog - Play Button
+   */
+  const [openDialog, setOpenDialog] = useState(false);
+  const [processing, setProcessing] = useState(false);
+  const [interrompe, setInterrompe] = useState(false);
+  // Usamos useRef para manter uma referência ao valor mais atualizado de "interrompe"
+  const interrompeRef = useRef(interrompe);
+  const [solucao, setSolucao] = useState<Solucao>({
+    avaliacao: 0,
+    atribuicoes: [],
+  });
+
+  // Atualizamos o valor de "interrompe" sempre que ele mudar
+  useEffect(() => {
+    interrompeRef.current = interrompe;
+  }, [interrompe]);
+
+  /**
+   * Executa o algorítmo Busca Tabu
+   */
+  const executeProcess = async () => {
+    handleClickOpenDialog(); // Abre a modal imediatamente
+    setProcessing(true); // Aciona o botão de loading
     
-    console.log(solucao);
+    // p -> Processados
+    const { pDisciplinas, pDocentes, pFormularios, pTravas, pAtribuicoes } =
+      processData(disciplinas, docentes, formularios, travas, atribuicoes);
+
+    const solucaoObtida = await buscaTabu(
+      pDisciplinas,
+      pDocentes,
+      pFormularios,
+      pTravas,
+      pAtribuicoes,
+      100,
+      maxPriority + 1,
+      () => interrompeRef.current
+      
+    ); // Executa a busca tabu
+        console.log(solucaoObtida);
+    setSolucao(solucaoObtida); // Atribui a solução encontrada no state local.
+
+    setProcessing(false); // Encerra o processamento
+    setInterrompe(false); // Altera o state da flag de interupção para falso
+  };
+
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  /**
+   * Aplica a solução encontrada pelo algorítmo no state global `atribuicoes`.
+   */
+  const applySolutionToState = () => {
+    setAtribuicoes([...solucao.atribuicoes]);
+  };
+
+  /**
+   * Processos referentes a aplicação da solução obtida pelo algoritmo ao state global.
+   */
+  const applySolution = () => {
+    applySolutionToState();
+    handleCloseDialog();
   };
 
   return (
@@ -289,15 +384,11 @@ export default function Timetable() {
                     }}
                   >
                     <ButtonGroup variant="outlined" aria-label="Button group">
-                      <Button onClick={teste}>
+                      <Button onClick={executeProcess}>
                         <PlayArrowIcon />
                       </Button>
-                      <Button
-                        onClick={() => {
-                          console.log("Pausar processo");
-                        }}
-                      >
-                        <StopIcon />
+                      <Button onClick={cleanStateAtribuicoes}>
+                        <CleaningServicesIcon />
                       </Button>
                     </ButtonGroup>
                   </TableCell>
@@ -435,6 +526,59 @@ export default function Timetable() {
           </TableContainer>
         )}
       </Paper>
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Execução do algoritmo"}
+        </DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={handleCloseDialog}
+          sx={(theme) => ({
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: theme.palette.grey[500],
+          })}
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            O processo está sendo executado e logo será possível voltar a
+            utilizar o sistema.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => setInterrompe(true)}
+            variant="contained"
+            disabled={!processing}
+            color="error"
+          >
+            Parar
+          </Button>
+          {/* <Button
+            onClick={() => setInterrompe(true)}
+            variant={processing ? "outlined" : "contained"}
+            disabled={processing}
+            color="success"
+          >
+            Aplicar
+          </Button> */}
+          <LoadingButton
+            variant={processing ? "outlined" : "contained"}
+            loading={processing}
+            onClick={applySolution}
+          >
+            Aplicar
+          </LoadingButton>
+        </DialogActions>
+      </Dialog>
     </ThemeProvider>
   );
 }
