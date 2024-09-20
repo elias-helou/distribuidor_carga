@@ -5,12 +5,6 @@ import {
   Button,
   ButtonGroup,
   createTheme,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  IconButton,
   Stack,
   ThemeProvider,
   Typography,
@@ -34,10 +28,8 @@ import {
 } from "@/context/Global/utils";
 import { buscaTabu } from "@/algorithms";
 import { useEffect, useRef, useState } from "react";
-import { LoadingButton } from "@mui/lab";
-import CloseIcon from "@mui/icons-material/Close";
 import { Solucao } from "@/algorithms/utils";
-import "react";
+import AlgoritmoDialog from "@/components/AlgorithmDialog";
 
 // Customizar todos os TableCell
 const customTheme = createTheme({
@@ -136,8 +128,10 @@ export default function Timetable() {
       )
     ) {
       return `rgba(255, 0, 0, 0.4)`;
-    } else {
+    } else if(prioridade){
       return getPriorityColor(prioridade, maxPriority+1);
+    }else {
+      `rgba(255, 255, 255, 1)`
     }
   };
 
@@ -277,6 +271,10 @@ export default function Timetable() {
   const [openDialog, setOpenDialog] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [interrompe, setInterrompe] = useState(false);
+
+  // Contador de interações
+  const [iteracoes, setIteracoes] = useState(0);
+  const iteracoesRef = useRef(iteracoes);
   // Usamos useRef para manter uma referência ao valor mais atualizado de "interrompe"
   const interrompeRef = useRef(interrompe);
   const [solucao, setSolucao] = useState<Solucao>({
@@ -287,12 +285,14 @@ export default function Timetable() {
   // Atualizamos o valor de "interrompe" sempre que ele mudar
   useEffect(() => {
     interrompeRef.current = interrompe;
-  }, [interrompe]);
+    iteracoesRef.current = iteracoes
+  }, [interrompe, iteracoes]);
 
   /**
    * Executa o algorítmo Busca Tabu
    */
   const executeProcess = async () => {
+    //setIteracoes(0);
     handleClickOpenDialog(); // Abre a modal imediatamente
     setProcessing(true); // Aciona o botão de loading
 
@@ -308,13 +308,15 @@ export default function Timetable() {
       pAtribuicoes,
       150,
       maxPriority + 1,
-      () => interrompeRef.current
+      () => interrompeRef.current,
+      setIteracoes
     ); // Executa a busca tabu
     console.log(solucaoObtida);
     setSolucao(solucaoObtida); // Atribui a solução encontrada no state local.
 
     setProcessing(false); // Encerra o processamento
     setInterrompe(false); // Altera o state da flag de interupção para falso
+    setIteracoes(0);
   };
 
   const handleClickOpenDialog = () => {
@@ -452,11 +454,13 @@ export default function Timetable() {
                             }),
                             textOverflow: "ellipsis",
                             margin: "0",
+                            minWidth: "12rem",
+                            maxWidth: "12rem"
                           }}
                         >
                           <Stack
                             spacing={1}
-                            sx={{ maxWidth: "9rem", height: "7rem" }}
+                            sx={{ /*maxWidth: "9rem",*/ height: "7rem" }}
                           >
                             <Typography
                               align="left"
@@ -557,51 +561,14 @@ export default function Timetable() {
           </TableContainer>
         )}
       </Paper>
-      <Dialog
+      <AlgoritmoDialog
         open={openDialog}
         onClose={handleCloseDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Execução do algoritmo"}
-        </DialogTitle>
-        <IconButton
-          aria-label="close"
-          onClick={handleCloseDialog}
-          sx={(theme) => ({
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: theme.palette.grey[500],
-          })}
-        >
-          <CloseIcon />
-        </IconButton>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            O processo está sendo executado e logo será possível voltar a
-            utilizar o sistema.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => setInterrompe(true)}
-            variant="contained"
-            disabled={!processing}
-            color="error"
-          >
-            Parar
-          </Button>
-          <LoadingButton
-            variant={processing ? "outlined" : "contained"}
-            loading={processing}
-            onClick={applySolution}
-          >
-            Aplicar
-          </LoadingButton>
-        </DialogActions>
-      </Dialog>
+        onApply={applySolution}
+        onStop={() => setInterrompe(true)}
+        processing={processing}
+        itearions={iteracoesRef.current }
+      />
     </ThemeProvider>
   );
 }
