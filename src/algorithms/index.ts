@@ -7,7 +7,6 @@ import {
   isHorario,
 } from "@/context/Global/utils";
 import {
-  ajustaHorarioDisciplinas,
   atualizarListaTabu,
   estaNaListaTabu,
   horariosSobrepoem,
@@ -45,10 +44,14 @@ function podeAtribuir(
 
   // Verificar se o docente já foi atribuído a alguma disciplina no mesmo horário
   for (const docenteDisciplina of docenteDisciplinas) {
-    for (const horarioDisciplina of docenteDisciplina.horario) {
-      for (const horarioAtual of disciplina.horario) {
+    for (const horarioDisciplina of docenteDisciplina.horarios) {
+      for (const horarioAtual of disciplina.horarios) {
         // Verifica se os dois são da interface horário e também verifica se eles se sobrepoem
-        if (isHorario(horarioAtual) && isHorario(horarioDisciplina) && horariosSobrepoem(horarioAtual, horarioDisciplina)) {
+        if (
+          isHorario(horarioAtual) &&
+          isHorario(horarioDisciplina) &&
+          horariosSobrepoem(horarioAtual, horarioDisciplina)
+        ) {
           return false; // Horários sobrepostos
         }
       }
@@ -174,9 +177,6 @@ export async function buscaTabu(
   maiorPrioridade: number,
   interrompe: () => boolean
 ): Promise<Solucao> {
-  // Chamar a função que irá ajustar o formato do atributo horario
-  const disciplinasAjustadas: Disciplina[] =
-    ajustaHorarioDisciplinas(disciplinas);
 
   // Solução inicial inclui as atribuições fornecidas pelo usuário
   let solucaoAtual: Solucao = {
@@ -185,7 +185,7 @@ export async function buscaTabu(
       atribuicoes,
       formularios,
       docentes,
-      disciplinasAjustadas,
+      disciplinas,
       maiorPrioridade
     ),
   };
@@ -194,7 +194,10 @@ export async function buscaTabu(
   const listaTabu: Atribuicao[][] = []; // Lista tabu para evitar ciclos
   let iteracoes = 0;
 
-  while (iteracoes < maxIteracoes) {
+  let iteracoesSemModificacao = 0
+
+  while (/* iteracoes < maxIteracoes */ true) {
+    console.log("Iterações: ", iteracoes);
     await delay(0); // Pausa
     iteracoes++;
 
@@ -202,7 +205,7 @@ export async function buscaTabu(
     const vizinhos = gerarVizinhos(
       solucaoAtual,
       docentes,
-      disciplinasAjustadas,
+      disciplinas,
       travas,
       formularios,
       maiorPrioridade
@@ -229,13 +232,16 @@ export async function buscaTabu(
       solucaoAtual = melhorVizinho;
       if (solucaoAtual.avaliacao > melhorSolucao.avaliacao) {
         melhorSolucao = solucaoAtual;
+        iteracoesSemModificacao = 0; // Reseta as iterações sem modificação
+      } else {
+        iteracoesSemModificacao++;  // Acrescenta mais um em iteração sem modificação
       }
     }
 
-    if (interrompe()) {
+    if (interrompe() || iteracoesSemModificacao == 10) {
       break;
     }
   }
-  
+
   return melhorSolucao;
 }
