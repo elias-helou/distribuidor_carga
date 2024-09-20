@@ -1,4 +1,5 @@
-import { Atribuicao, Disciplina, Docente, Formulario } from "@/context/Global/utils";
+import { ajustaHorarioDisciplinas } from "@/algorithms/utils";
+import { Atribuicao, Disciplina, DisciplinaETL, Docente, Formulario } from "@/context/Global/utils";
 
 
 type UpdateStateFunction<T> = (data: T[]) => void;
@@ -59,9 +60,9 @@ export const processDocentes = (data: any): Docente[] => {
   return newDocentes;
 };
 
-export const processDisciplinas = (data: Disciplina[]): Disciplina[] => {
-  const disciplinasJson: Disciplina[] = data;
-  const newDisciplinas: Disciplina[] = [];
+export const processDisciplinas = (data: DisciplinaETL[]): Disciplina[] => {
+  const disciplinasJson: DisciplinaETL[] = data;
+  const newDisciplinas: DisciplinaETL[] = [];
 
   for (const disciplina of Object.values(disciplinasJson)) {
     newDisciplinas.push({
@@ -81,7 +82,7 @@ export const processDisciplinas = (data: Disciplina[]): Disciplina[] => {
     });
   }
 
-  return newDisciplinas;
+  return ajustaHorarioDisciplinas(newDisciplinas);
 };
 
 export const processAtribuicoes = (data: Record<string, string[]>): Atribuicao[] => {
