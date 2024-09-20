@@ -12,6 +12,7 @@ import {
   horariosSobrepoem,
   Solucao,
 } from "./utils";
+import { Dispatch, SetStateAction } from "react";
 
 // Função para checar se um docente pode ser alocado a uma disciplina (incluindo atribuições do usuário)
 function podeAtribuir(
@@ -175,7 +176,8 @@ export async function buscaTabu(
   atribuicoes: Atribuicao[],
   maxIteracoes: number,
   maiorPrioridade: number,
-  interrompe: () => boolean
+  interrompe: () => boolean,
+  setIteracoes: Dispatch<SetStateAction<number>>
 ): Promise<Solucao> {
 
   // Solução inicial inclui as atribuições fornecidas pelo usuário
@@ -199,6 +201,7 @@ export async function buscaTabu(
   while (/* iteracoes < maxIteracoes */ true) {
     console.log("Iterações: ", iteracoes);
     await delay(0); // Pausa
+    setIteracoes(iteracoes+1)
     iteracoes++;
 
     // Gerar vizinhos e selecionar o melhor não tabu
