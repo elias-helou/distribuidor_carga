@@ -1,4 +1,9 @@
-import { Atribuicao, Disciplina, Horario } from "@/context/Global/utils";
+import {
+  Atribuicao,
+  Disciplina,
+  DisciplinaETL,
+  Horario,
+} from "@/context/Global/utils";
 
 export interface Solucao {
   atribuicoes: Atribuicao[];
@@ -18,7 +23,7 @@ function parseHorario(horario: string): Horario[] {
 
   horariosLimpos.forEach((horario) => {
     // Verifica se a string contém dia e horário
-    const regex = /(\w{3,4}\.)\s(\d{2}:\d{2})\/(\d{2}:\d{2})/;
+    const regex = /([\wÀ-ÿ]{3,4}\.)\s(\d{2}:\d{2})\/(\d{2}:\d{2})/;
     const match = horario.match(regex);
 
     if (match) {
@@ -32,23 +37,32 @@ function parseHorario(horario: string): Horario[] {
 
 /**
  * Função que executará a formatação dos horários de aulas das disciplinas.
- * @param disciplinas Lista do tipo `Disciplina` contendo todas as disciplinas que serão informadas no algoritmo.
+ * @param disciplinas Lista do tipo `DisciplinaETL` contendo todas as disciplinas que serão informadas no algoritmo.
  * @returns Uma lista do tipo `Disciplina` contendo todos os ajustes nos horários.
  */
 export function ajustaHorarioDisciplinas(
-  disciplinas: Disciplina[]
+  disciplinas: DisciplinaETL[]
 ): Disciplina[] {
-  // Para cada disciplina, verificar se o horário já está definido, se estiver, transformar a string no objeto da interface Horario
+  const newDisciplinas: Disciplina[] = [];
+
+  // Para cada disciplina, verificar se o horário já está definido; se estiver, transformar a string no objeto da interface Horario
   for (const disciplina of disciplinas) {
-    if (disciplina.horario != "Horário:<br>&emsp;A definir") {
-      if (typeof disciplina.horario == "string") {
-        const horarios = parseHorario(disciplina.horario);
-        disciplina.horario = horarios;
-      }
+    if (typeof disciplina.horario === "string") {
+      // Converte a string de horários para o objeto esperado
+      const horarios = parseHorario(disciplina.horario);
+
+      // Desestrutura o objeto e substitui o campo 'horarios'
+      const newDisciplina: Disciplina = {
+        ...disciplina,
+        horarios: horarios, // Atribui o novo valor de horários
+      };
+
+      // Adiciona a nova disciplina à lista
+      newDisciplinas.push(newDisciplina);
     }
   }
 
-  return disciplinas;
+  return newDisciplinas;
 }
 
 /**
@@ -57,14 +71,15 @@ export function ajustaHorarioDisciplinas(
  * @param horario2 Horário referente a disciplina 2
  * @returns Booleano que indica se existe um conflito de horários entre as duas disciplinas.
  */
-export function horariosSobrepoem(horario1: Horario, horario2: Horario): boolean {
+export function horariosSobrepoem(
+  horario1: Horario,
+  horario2: Horario
+): boolean {
   return (
     horario1.dia === horario2.dia && // Mesmo dia
-    (
-      (horario1.inicio < horario2.fim && horario1.fim > horario2.inicio) || // Sobreposição parcial ou total
+    ((horario1.inicio < horario2.fim && horario1.fim > horario2.inicio) || // Sobreposição parcial ou total
       horario1.inicio === horario2.fim || // Horários coincidentes (fim de uma é o início da outra)
-      horario1.fim === horario2.inicio
-    )
+      horario1.fim === horario2.inicio)
   );
 }
 
@@ -82,14 +97,16 @@ function atribuicoesIguais(atr1: Atribuicao, atr2: Atribuicao): boolean {
   );
 }
 
-
 /**
  * Função para verificar se as atribuições do vizinho estão na lista tabu
  * @param listaTabu Lista com os N últimos conjuntos de atribuições realizadas.
  * @param atribuicoes Conjunto de novas atribuições geradas.
  * @returns Booleano que representa se o conjunto de atribuições já está na lista tabu.
  */
-export function estaNaListaTabu(listaTabu: Atribuicao[][], atribuicoes: Atribuicao[]): boolean {
+export function estaNaListaTabu(
+  listaTabu: Atribuicao[][],
+  atribuicoes: Atribuicao[]
+): boolean {
   return listaTabu.some((tabuSet) =>
     // Verifica se todas as atribuições do conjunto estão na lista tabu
     atribuicoes.every((atr) =>
@@ -103,7 +120,10 @@ export function estaNaListaTabu(listaTabu: Atribuicao[][], atribuicoes: Atribuic
  * @param {Atribuicao[][]} listaTabu Lista com os N últimos conjuntos de atribuições realizadas.
  * @param {Atribuicao[]} atribuicoes Novo conjunto de atribuições realizadas.
  */
-export function atualizarListaTabu(listaTabu: Atribuicao[][], atribuicoes: Atribuicao[]): void {
+export function atualizarListaTabu(
+  listaTabu: Atribuicao[][],
+  atribuicoes: Atribuicao[]
+): void {
   listaTabu.push(atribuicoes); // Adiciona o novo conjunto de atribuições à lista tabu
 
   // Verifica o limite da lista tabu e remove o conjunto mais antigo, se necessário
