@@ -4,11 +4,27 @@ export interface Docente {
   ativo: boolean;
 }
 
+export interface DisciplinaETL {
+  codigo: string;
+  turma: number;
+  nome: string;
+  horario: string;
+  cursos: string;
+  ementa: string;
+  id: string;
+  nivel: string;
+  prioridade: number;
+  noturna: boolean;
+  ingles: boolean;
+  docentes?: string[];
+  ativo: boolean;
+}
+
 export interface Disciplina {
   codigo: string;
   turma: number;
   nome: string;
-  horario: Horario[] | string;
+  horarios: Horario[];
   cursos: string;
   ementa: string;
   id: string;
