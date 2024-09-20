@@ -28,6 +28,7 @@ import { getPriorityColor } from ".";
 import {
   Atribuicao,
   Celula,
+  Disciplina,
   processData,
   TipoTrava,
 } from "@/context/Global/utils";
@@ -36,6 +37,7 @@ import { useEffect, useRef, useState } from "react";
 import { LoadingButton } from "@mui/lab";
 import CloseIcon from "@mui/icons-material/Close";
 import { Solucao } from "@/algorithms/utils";
+import "react";
 
 // Customizar todos os TableCell
 const customTheme = createTheme({
@@ -62,7 +64,6 @@ export default function Timetable() {
   } = useGlobalContext();
 
   let maxPriority = 0;
-
   // TODO: Arrumar tipagens
   const rows = (): {
     nome: string;
@@ -136,7 +137,7 @@ export default function Timetable() {
     ) {
       return `rgba(255, 0, 0, 0.4)`;
     } else {
-      return getPriorityColor(prioridade, maxPriority);
+      return getPriorityColor(prioridade, maxPriority+1);
     }
   };
 
@@ -146,26 +147,6 @@ export default function Timetable() {
    * @param novo_docente Nome do docente que será atribuído a disciplina.
    */
   const adicionarDocente = (id_disciplina: string, nome_docente: string) => {
-    // // Verifica se o estado `atribuicoes` não está vazio
-    // if (atribuicoes.length == 0) {
-    //   const newAtribuicao: Atribuicao = {
-    //     id_disciplina: id_disciplina,
-    //     docentes: [nome_docente],
-    //   };
-    //   setAtribuicoes([...atribuicoes, newAtribuicao]);
-    // } else {
-    //   setAtribuicoes((prevAtribuicoes) =>
-    //     prevAtribuicoes.map((atribuicao) =>
-    //       atribuicao.id_disciplina === id_disciplina
-    //         ? {
-    //             ...atribuicao,
-    //             docentes: [...atribuicao.docentes, nome_docente], // Adiciona o novo docente de forma imutável
-    //           }
-    //         : atribuicao
-    //     )
-    //   );
-    // }
-
     // Verifica se a disciplina já existe no state
     const disciplina: Atribuicao = atribuicoes.filter(
       (atribuicao) => atribuicao.id_disciplina == id_disciplina
@@ -195,11 +176,11 @@ export default function Timetable() {
   const removerDocente = (idDisciplina, docenteARemover) => {
     setAtribuicoes((prevAtribuicoes) =>
       prevAtribuicoes.map((atribuicao) =>
-        atribuicao.id_disciplina === idDisciplina
+        atribuicao.id_disciplina == idDisciplina
           ? {
               ...atribuicao,
               docentes: atribuicao.docentes.filter(
-                (docente) => docente !== docenteARemover
+                (docente) => docente != docenteARemover
               ), // Remove o docente
             }
           : atribuicao
@@ -314,7 +295,7 @@ export default function Timetable() {
   const executeProcess = async () => {
     handleClickOpenDialog(); // Abre a modal imediatamente
     setProcessing(true); // Aciona o botão de loading
-    
+
     // p -> Processados
     const { pDisciplinas, pDocentes, pFormularios, pTravas, pAtribuicoes } =
       processData(disciplinas, docentes, formularios, travas, atribuicoes);
@@ -325,12 +306,11 @@ export default function Timetable() {
       pFormularios,
       pTravas,
       pAtribuicoes,
-      100,
+      150,
       maxPriority + 1,
       () => interrompeRef.current
-      
     ); // Executa a busca tabu
-        console.log(solucaoObtida);
+    console.log(solucaoObtida);
     setSolucao(solucaoObtida); // Atribui a solução encontrada no state local.
 
     setProcessing(false); // Encerra o processamento
@@ -349,7 +329,22 @@ export default function Timetable() {
    * Aplica a solução encontrada pelo algorítmo no state global `atribuicoes`.
    */
   const applySolutionToState = () => {
-    setAtribuicoes([...solucao.atribuicoes]);
+    if (atribuicoes.length == solucao.atribuicoes.length) {
+      setAtribuicoes([...solucao.atribuicoes]);
+    } else {
+      for (const newAtribuicao of solucao.atribuicoes) {
+        setAtribuicoes((prevAtribuicoes) =>
+          prevAtribuicoes.map((atribuicao) =>
+            atribuicao.id_disciplina === newAtribuicao.id_disciplina
+              ? {
+                  ...atribuicao,
+                  docentes: [...atribuicao.docentes, ...newAtribuicao.docentes], // Adiciona os novos docentes corretamente
+                }
+              : atribuicao
+          )
+        );
+      }
+    }
   };
 
   /**
@@ -358,6 +353,52 @@ export default function Timetable() {
   const applySolution = () => {
     applySolutionToState();
     handleCloseDialog();
+  };
+
+  /**
+   * Cria o bloco referente aos horários de um adisicplina
+   * @param disciplina Disciplina contendo os horários
+   * @returns Componente React com os horários.
+   */
+  const createHorariosblock = (disciplina: Disciplina): React.ReactNode => {
+    // Verifica se há horários definidos para a disciplina
+    if (disciplina.horarios.length > 0) {
+      return (
+        <Typography
+          align="left"
+          variant="body1"
+          style={{
+            fontSize: "small",
+            whiteSpace: "pre-wrap", // Permite quebra de linha para o layout
+          }}
+        >
+          Horário:
+          {disciplina.horarios.map((horario, index) =>
+            horario ? (
+              <span key={`${disciplina.nome}-${index}`}>
+                <br />
+                &emsp;{horario.dia} {horario.inicio}/{horario.fim}
+              </span>
+            ) : null
+          )}
+        </Typography>
+      );
+    }
+
+    // Caso não haja horários definidos, exibe "A definir"
+    return (
+      <Typography
+        align="left"
+        variant="body1"
+        style={{
+          fontSize: "small",
+        }}
+      >
+        Horário:
+        <br />
+        &emsp;A definir
+      </Typography>
+    );
   };
 
   return (
@@ -415,7 +456,7 @@ export default function Timetable() {
                         >
                           <Stack
                             spacing={1}
-                            sx={{ width: "9rem", height: "7rem" }}
+                            sx={{ maxWidth: "9rem", height: "7rem" }}
                           >
                             <Typography
                               align="left"
@@ -438,17 +479,7 @@ export default function Timetable() {
                             >
                               {disciplina.codigo + " " + disciplina.nome}
                             </Typography>
-                            <Typography
-                              align="left"
-                              variant="body1"
-                              style={{
-                                fontSize: "small" /*minHeight: '5rem'*/,
-                              }}
-                              noWrap
-                              dangerouslySetInnerHTML={{
-                                __html: disciplina.horario,
-                              }}
-                            />
+                            {createHorariosblock(disciplina)}
                           </Stack>
                         </TableCell>
                       )
@@ -562,14 +593,6 @@ export default function Timetable() {
           >
             Parar
           </Button>
-          {/* <Button
-            onClick={() => setInterrompe(true)}
-            variant={processing ? "outlined" : "contained"}
-            disabled={processing}
-            color="success"
-          >
-            Aplicar
-          </Button> */}
           <LoadingButton
             variant={processing ? "outlined" : "contained"}
             loading={processing}
