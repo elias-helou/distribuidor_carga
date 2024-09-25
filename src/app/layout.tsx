@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
+import { AlertsWrapper } from "@/context/Alerts";
 import { GlobalWrapper } from "@/context/Global";
 
 export default function RootLayout({
@@ -13,7 +14,9 @@ export default function RootLayout({
       <body>
         <Navbar />
         <GlobalWrapper>
-          <div style={{ padding: "15px" }}>{children}</div>
+          <AlertsWrapper>
+            <div style={{ padding: "15px" }}>{children}</div>
+          </AlertsWrapper>
         </GlobalWrapper>
       </body>
     </html>
