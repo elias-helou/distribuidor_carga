@@ -11,18 +11,31 @@ export interface IAlertProps {
   id: number;
   type: "success" | "info" | "warning" | "error";
   message: string;
-  setFatherState?: () => void;
+  handleClose?: () => void;
+  closeTime: number;
 }
 
 export default function CustomAlert(props: IAlertProps) {
   const [open, setOpen] = React.useState(true);
 
+  /**
+   * Função que executa a função passada pelo componente 'pai' com o principal intúito de fechar o alerta.
+   */
   const handleExited = () => {
     // Executa quando a animação de colapso termina
-    if (props.setFatherState) {
-      props.setFatherState(); // Executa a função passada após o fechamento
+    if (props.handleClose) {
+      props.handleClose(); // Executa a função passada após o fechamento
     }
   };
+
+  /**
+   * ``useEffect`` utilizado para adicionar o comportamento de fechar o alerta em X segundos.
+   */
+  React.useEffect(() => {
+    setTimeout(() => {
+      handleExited();
+    }, 3000);
+  });
 
   return (
     <Box sx={{ width: "100%" }}>
