@@ -5,7 +5,6 @@ import {
   Box,
   Typography,
   CircularProgress,
-  Stack,
 } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
@@ -18,13 +17,13 @@ import {
   processFormularios,
 } from "../inputfile/UpdateState";
 import { useGlobalContext } from "@/context/Global";
-import CustomAlert, { IAlertProps } from "@/components/CustomAlert";
 import { Atribuicao, Disciplina } from "@/context/Global/utils";
+import { Alerta, useAlertsContext } from "@/context/Alerts";
 
 export default function InputFileUpload() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [alerts, setAlerts] = useState<IAlertProps[]>([]);
+  const {alertas, setAlertas} = useAlertsContext();
   const { setAtribuicoes, setDisciplinas, setDocentes, setFormularios } =
     useGlobalContext();
 
@@ -39,7 +38,7 @@ export default function InputFileUpload() {
         setSelectedFile(file);
       } else {
         addAlert({
-          id: alerts.length + 1,
+          id: alertas.length + 1,
           type: "warning",
           message: "Por favor, selecione um arquivo JSON.",
         });
@@ -47,6 +46,10 @@ export default function InputFileUpload() {
     }
   };
 
+  /**
+   * Função responsável por executar o processo de carregar as informações do arquivo para o state da aplicação.
+   * @param json - Dados lidos do arquivo seletionado.
+   */
   const loadContext = (json) => {
     processAndUpdateState(
       json,
@@ -85,6 +88,9 @@ export default function InputFileUpload() {
     }
   };
 
+  /**
+   * Função que lê o arquivo enviado pelo usuário.
+   */
   const handleFileUpload = () => {
     if (selectedFile) {
       setUploading(true);
@@ -95,13 +101,13 @@ export default function InputFileUpload() {
           loadContext(json);
           setSelectedFile(null);
           addAlert({
-            id: alerts.length + 1,
+            id: alertas.length,
             type: "success",
             message: "Arquivo " + selectedFile.name + " carregado com sucesso.",
           });
         } catch (error) {
           addAlert({
-            id: alerts.length + 1,
+            id: alertas.length,
             type: "error",
             message: "Erro ao processar o arquivo JSON.",
           });
@@ -116,18 +122,18 @@ export default function InputFileUpload() {
    * Função que adiciona um novo alerta no state.
    * @param newAlert Novo objeto a ser inserido no state de alertas.
    */
-  const addAlert = (newAlert: IAlertProps) => {
-    setAlerts([...alerts, newAlert]); // Adiciona novo alerta ao array
+  const addAlert = (newAlert: Alerta) => {
+    setAlertas([...alertas, newAlert]); // Adiciona novo alerta ao array
   };
 
-  /**
-   * Remove um objeto do state de alertas.
-   * @param index Index do objeto dentro do state.
-   */
-  const removeAlert = (index: number) => {
-    const newAlerts = alerts.filter((alert) => alert.id !== index);
-    setAlerts([...newAlerts]);
-  };
+  // /**
+  //  * Remove um objeto do state de alertas.
+  //  * @param index Index do objeto dentro do state.
+  //  */
+  // const removeAlert = (index: number) => {
+  //   const newAlerts = alerts.filter((alert) => alert.id !== index);
+  //   setAlerts([...newAlerts]);
+  // };
 
   return (
     <Box
@@ -187,7 +193,7 @@ export default function InputFileUpload() {
       </Button>
 
       {/* Exibindo os alertas na parte inferior direita */}
-      {alerts.length > 0 && (
+      {/* {alerts.length > 0 && (
         <Stack
           position="fixed"
           bottom={16}
@@ -205,7 +211,7 @@ export default function InputFileUpload() {
             />
           ))}
         </Stack>
-      )}
+      )} */}
     </Box>
   );
 }
