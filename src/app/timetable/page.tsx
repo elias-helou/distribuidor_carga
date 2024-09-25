@@ -30,6 +30,7 @@ import { buscaTabu } from "@/algorithms";
 import { useEffect, useRef, useState } from "react";
 import { Solucao } from "@/algorithms/utils";
 import AlgoritmoDialog from "@/components/AlgorithmDialog";
+import { useAlertsContext } from "@/context/Alerts";
 
 // Customizar todos os TableCell
 const customTheme = createTheme({
@@ -56,7 +57,38 @@ export default function Timetable() {
   } = useGlobalContext();
 
   let maxPriority = 0;
-  // TODO: Arrumar tipagens
+
+  /**
+   * Dialog - Play Button
+   */
+  const [openDialog, setOpenDialog] = useState(false);
+  const [processing, setProcessing] = useState(false);
+  const [interrompe, setInterrompe] = useState(false);
+
+  // Contador de interações
+  const [iteracoes, setIteracoes] = useState(0);
+  const iteracoesRef = useRef(iteracoes);
+  // Usamos useRef para manter uma referência ao valor mais atualizado de "interrompe"
+  const interrompeRef = useRef(interrompe);
+  const [solucao, setSolucao] = useState<Solucao>({
+    avaliacao: 0,
+    atribuicoes: [],
+  });
+
+  /**
+   * Alertas
+   */
+  const { alertas, setAlertas } = useAlertsContext();
+
+  // Atualizamos o valor de "interrompe" sempre que ele mudar
+  useEffect(() => {
+    interrompeRef.current = interrompe;
+    iteracoesRef.current = iteracoes;
+  }, [interrompe, iteracoes]);
+
+  /**
+   * Função responsável por gerar as linhas da tabela, criando X espaços de disciplina para cada docente.
+   */
   const rows = (): {
     nome: string;
     prioridades: { id_disciplina: string; prioridade: number }[];
@@ -110,28 +142,34 @@ export default function Timetable() {
     return newRows;
   };
 
-  const setCellColor = (prioridade: number, trava: Celula) => {
+  /**
+   * Função que define qual será a cor aplicada para cada célula da tabela.
+   * @param {number|null} prioridade - Prioridade dada pelo docente a disciplina, ou nulo em caso de ser o cabeçalho.
+   * @param {Celula} celula - Refere-se a célula que está sendo carregada.
+   * @returns {string} Retorna um rgba para ser aplicado a propriedade css `background-color`.
+   */
+  const setCellColor = (prioridade: number | null, celula: Celula) => {
     // Verifica se a célula está travada, caso contrário verifica se está atribuida. Caso nenhuma das anteriores seja verdadeia, atribuí a coloração baseada na prioridade.
     if (
       travas.some(
         (obj) =>
-          obj.id_disciplina === trava.id_disciplina &&
-          obj.nome_docente === trava.nome_docente
+          obj.id_disciplina === celula.id_disciplina &&
+          obj.nome_docente === celula.nome_docente
       )
     ) {
       return `rgba(224, 224, 224, 0.6)`;
     } else if (
       atribuicoes.some(
         (obj) =>
-          obj.id_disciplina == trava.id_disciplina &&
-          obj.docentes.some((docente) => docente == trava.nome_docente)
+          obj.id_disciplina == celula.id_disciplina &&
+          obj.docentes.some((docente) => docente == celula.nome_docente)
       )
     ) {
       return `rgba(255, 0, 0, 0.4)`;
-    } else if(prioridade){
-      return getPriorityColor(prioridade, maxPriority+1);
-    }else {
-      `rgba(255, 255, 255, 1)`
+    } else if (prioridade) {
+      return getPriorityColor(prioridade, maxPriority + 1);
+    } else {
+      `rgba(255, 255, 255, 1)`;
     }
   };
 
@@ -166,8 +204,12 @@ export default function Timetable() {
     }
   };
 
-  // Remove um docente de uma disciplina no state de atribuições
-  const removerDocente = (idDisciplina, docenteARemover) => {
+  /**
+   * Função que remove um docente de uma disciplina no state de atribuições
+   * @param {string} idDisciplina - Identificador da disciplina a qual terá o docente removido.
+   * @param {string} docenteARemover- Nome do docente a ser removido da disciplina.
+   */
+  const removerDocente = (idDisciplina: string, docenteARemover: string) => {
     setAtribuicoes((prevAtribuicoes) =>
       prevAtribuicoes.map((atribuicao) =>
         atribuicao.id_disciplina == idDisciplina
@@ -182,6 +224,11 @@ export default function Timetable() {
     );
   };
 
+  /**
+   * Função para gerenciar e aplicar corretamente os comportamentos ao clicar em uma célula da tabela.
+   * @param event - Evento referente ao clique.
+   * @param {Celula} celula - Célula que foi clicada e poderá ter algum comportamento aplicado a ela.
+   */
   const handleCellClick = (event, celula: Celula) => {
     if (event.ctrlKey) {
       if (
@@ -218,6 +265,11 @@ export default function Timetable() {
     }
   };
 
+  /**
+   * Função que gerencia os comportamentos das colunas ao serem clicadas.
+   * @param event - Evento referente ao clique.
+   * @param {Celula} trava - Coluna que terá o comportamento aplicado.
+   */
   const handleColumnClick = (event, trava: Celula) => {
     if (event.ctrlKey) {
       if (
@@ -263,30 +315,30 @@ export default function Timetable() {
 
     // Atualiza o estado com a nova lista de atribuições
     setAtribuicoes(atribuicoesLimpa);
+    setAlertas([
+      ...alertas,
+      {
+        id: alertas.length,
+        message: "A solução foi limpa com sucesso!",
+        type: "success",
+      },
+    ]);
   };
 
   /**
-   * Dialog - Play Button
+   * Função que altera o state e interrompe a execução do algoritmo e adiciona um alerta na fila.
    */
-  const [openDialog, setOpenDialog] = useState(false);
-  const [processing, setProcessing] = useState(false);
-  const [interrompe, setInterrompe] = useState(false);
-
-  // Contador de interações
-  const [iteracoes, setIteracoes] = useState(0);
-  const iteracoesRef = useRef(iteracoes);
-  // Usamos useRef para manter uma referência ao valor mais atualizado de "interrompe"
-  const interrompeRef = useRef(interrompe);
-  const [solucao, setSolucao] = useState<Solucao>({
-    avaliacao: 0,
-    atribuicoes: [],
-  });
-
-  // Atualizamos o valor de "interrompe" sempre que ele mudar
-  useEffect(() => {
-    interrompeRef.current = interrompe;
-    iteracoesRef.current = iteracoes
-  }, [interrompe, iteracoes]);
+  const interruptExecution = () => {
+    setInterrompe(true);
+    setAlertas([
+      ...alertas,
+      {
+        id: alertas.length,
+        message: "A execução do algoritmo foi interrompida!",
+        type: "warning",
+      },
+    ]);
+  };
 
   /**
    * Executa o algorítmo Busca Tabu
@@ -311,6 +363,12 @@ export default function Timetable() {
       () => interrompeRef.current,
       setIteracoes
     ); // Executa a busca tabu
+    if (!interrompeRef.current) {
+      setAlertas([
+        ...alertas,
+        { id: alertas.length, message: "Execução finalizada.", type: "info" },
+      ]);
+    }
     console.log(solucaoObtida);
     setSolucao(solucaoObtida); // Atribui a solução encontrada no state local.
 
@@ -319,10 +377,16 @@ export default function Timetable() {
     setIteracoes(0);
   };
 
+  /**
+   * Função que agrupa processos ao abrir o `Dialog`
+   */
   const handleClickOpenDialog = () => {
     setOpenDialog(true);
   };
 
+  /**
+   * Função que agrupa processos ao fechar o `Dialog`
+   */
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
@@ -354,6 +418,14 @@ export default function Timetable() {
    */
   const applySolution = () => {
     applySolutionToState();
+    setAlertas([
+      ...alertas,
+      {
+        id: alertas.length,
+        message: "A solução foi aplicada com sucesso!",
+        type: "success",
+      },
+    ]);
     handleCloseDialog();
   };
 
@@ -455,7 +527,7 @@ export default function Timetable() {
                             textOverflow: "ellipsis",
                             margin: "0",
                             minWidth: "12rem",
-                            maxWidth: "12rem"
+                            maxWidth: "12rem",
                           }}
                         >
                           <Stack
@@ -565,9 +637,9 @@ export default function Timetable() {
         open={openDialog}
         onClose={handleCloseDialog}
         onApply={applySolution}
-        onStop={() => setInterrompe(true)}
+        onStop={() => interruptExecution()}
         processing={processing}
-        itearions={iteracoesRef.current }
+        itearions={iteracoesRef.current}
       />
     </ThemeProvider>
   );
