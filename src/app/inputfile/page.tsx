@@ -17,7 +17,7 @@ import {
   processFormularios,
 } from "../inputfile/UpdateState";
 import { useGlobalContext } from "@/context/Global";
-import { Atribuicao, Disciplina } from "@/context/Global/utils";
+import { Atribuicao, Disciplina, Docente, Formulario, horariosSobrepoem } from "@/context/Global/utils";
 import { Alerta, useAlertsContext } from "@/context/Alerts";
 
 export default function InputFileUpload() {
@@ -51,7 +51,7 @@ export default function InputFileUpload() {
    * @param json - Dados lidos do arquivo seletionado.
    */
   const loadContext = (json) => {
-    processAndUpdateState(
+    const docentes: Docente[] = processAndUpdateState(
       json,
       ["docentes", "saldos"],
       processDocentes,
@@ -69,7 +69,7 @@ export default function InputFileUpload() {
       processAtribuicoes,
       setAtribuicoes
     );
-    processAndUpdateState(
+    const formularios: Formulario[] =  processAndUpdateState(
       json,
       "formularios",
       processFormularios,
@@ -85,6 +85,31 @@ export default function InputFileUpload() {
       }
 
       setAtribuicoes([...atribuicoes])
+    }
+
+    // Preenche a lista de conflitos por disciplina
+    // Vale ressaltar que, Horário de A e B conflitam, adicionar B em A e A em B, assim pode-se utilizar o j sendo i + 1 (próximo)
+    for(let i = 0; i < disciplinas.length; i++) {
+      for(let j = i + 1; j < disciplinas.length; j++) {
+        for(const horarioPivo of disciplinas[i].horarios) {
+          for(const horarioAtual of disciplinas[j].horarios) {
+            if(horariosSobrepoem(horarioPivo, horarioAtual)) {
+              disciplinas[i].conflitos.add(disciplinas[j].id)
+              disciplinas[j].conflitos.add(disciplinas[i].id)
+            }
+          }
+        }
+      }
+    }
+
+    // Preenche a lista(Map) de formularios por docente.
+    // O key e o value são os mesmo pois neste caso o importante é apenas a velocidade para acessar a informação em um Map
+    for(const docente of docentes) {
+      const docenteFormularios = formularios.filter(formulario => formulario.nome_docente === docente.nome)
+                                              /*.map(formulario => formulario.id_disciplina)*/
+      for(const docenteFormulario of docenteFormularios) {
+        docente.formularios.set(docenteFormulario.id_disciplina, docenteFormulario.prioridade)
+      }
     }
   };
 
