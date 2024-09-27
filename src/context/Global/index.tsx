@@ -10,7 +10,7 @@ interface GlobalContextInterface {
   setDisciplinas: React.Dispatch<React.SetStateAction<Disciplina[]>>;
   atribuicoes: Atribuicao[];
   setAtribuicoes: React.Dispatch<React.SetStateAction<Atribuicao[]>>;
-  formularios: Formulario[];
+  formularios: Formulario[]; // Tocar para um hashMap
   setFormularios: React.Dispatch<React.SetStateAction<Formulario[]>>;
   travas: Celula[];
   setTravas: React.Dispatch<React.SetStateAction<Celula[]>>;
