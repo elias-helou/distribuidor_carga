@@ -24,7 +24,10 @@ export default function CustomAlert(props: IAlertProps) {
   const handleExited = () => {
     // Executa quando a animação de colapso termina
     if (props.handleClose) {
-      props.handleClose(); // Executa a função passada após o fechamento
+      setOpen(false) // Fecha alerta
+      setTimeout(() => {
+        props.handleClose(); // Chama a função no elemento pai que remove o alerta da fila
+      }, 1000) // Adiciona um delay para remover o arleta da fila do estado visando deixa-lo executar a animação de "fechar"
     }
   };
 
@@ -34,7 +37,7 @@ export default function CustomAlert(props: IAlertProps) {
   React.useEffect(() => {
     setTimeout(() => {
       handleExited();
-    }, 3000);
+    }, props.closeTime * 1000);
   });
 
   return (
