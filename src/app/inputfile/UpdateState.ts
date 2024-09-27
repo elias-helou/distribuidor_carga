@@ -1,5 +1,4 @@
-import { ajustaHorarioDisciplinas } from "@/algorithms/utils";
-import { Atribuicao, Disciplina, DisciplinaETL, Docente, Formulario } from "@/context/Global/utils";
+import { ajustaHorarioDisciplinas, Atribuicao, Disciplina, DisciplinaETL, Docente, Formulario } from "@/context/Global/utils";
 
 
 type UpdateStateFunction<T> = (data: T[]) => void;
@@ -48,12 +47,12 @@ export const processDocentes = (data: any): Docente[] => {
 
   if (saldos) {
     for (const [nome, saldo] of Object.entries(saldos)) {
-      newDocentes.push({ nome:nome, saldo:saldo, ativo: true });
+      newDocentes.push({ nome:nome, saldo:saldo, ativo: true, formularios: new Map<string, number>() });
     }
   } else if (docentesJson) {
     for (const docente of docentesJson) {
       // Verificar depois com o Elias de adicionarmos o campo Ativo no arquivo exportado pelo nosso sistema
-      newDocentes.push({ nome: docente, ativo: true });
+      newDocentes.push({ nome: docente, ativo: true, formularios: new Map<string, number>()});
     }
   }
 
@@ -102,9 +101,9 @@ export const processFormularios = (data: Record<string, Disciplina[]>): Formular
   const formulariosJson: Record<string, Disciplina[]> = data;
   const newFormularios: Formulario[] = [];
 
-  for (const [nome_professor, disciplinas] of Object.entries(formulariosJson) ) {
+  for (const [nome_docente, disciplinas] of Object.entries(formulariosJson) ) {
     for(const disciplina of Object.values(disciplinas)) {
-      newFormularios.push({nome_professor: nome_professor, id_disciplina: disciplina.id, prioridade: disciplina.prioridade})
+      newFormularios.push({nome_docente: nome_docente, id_disciplina: disciplina.id, prioridade: disciplina.prioridade})
     }
   }
 
