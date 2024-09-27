@@ -31,6 +31,7 @@ import { useEffect, useRef, useState } from "react";
 import { Solucao } from "@/algorithms/utils";
 import AlgoritmoDialog from "@/components/AlgorithmDialog";
 import { useAlertsContext } from "@/context/Alerts";
+import { buscaTabuRefactor } from "@/algorithms/buscaTabu";
 
 // Customizar todos os TableCell
 const customTheme = createTheme({
@@ -80,6 +81,14 @@ export default function Timetable() {
    */
   const { alertas, setAlertas } = useAlertsContext();
 
+  /**
+   * Colorir linha e coluna ao passar o mouse pela célula
+   */
+  const [hover, setHover] = useState<{
+    id_disciplina: string;
+    docente: string;
+  }>({ docente: "", id_disciplina: "" });
+
   // Atualizamos o valor de "interrompe" sempre que ele mudar
   useEffect(() => {
     interrompeRef.current = interrompe;
@@ -108,7 +117,7 @@ export default function Timetable() {
         prioridades: { id_disciplina: string; prioridade: number }[];
       } = { nome: docente.nome, prioridades: [] };
       const docenteDisciplinas = formularios.filter(
-        (formulario) => formulario.nome_professor == docente.nome
+        (formulario) => formulario.nome_docente == docente.nome
       );
 
       for (const disciplina of disciplinas) {
@@ -143,6 +152,34 @@ export default function Timetable() {
   };
 
   /**
+   * Função utilizada para alterar a cor de fundo das disciplinas ou dos docentes quando o mouse passar por uma célula
+   * @param docente
+   * @returns
+   */
+  const isHover = (docente: string) => {
+    return hover.docente === docente ? `rgba(25, 118, 210, 0.12)` : "white";
+  };
+
+
+  const setHeaderCollor = (id_disciplina: string) => {
+    // Verifica se está travado
+    if (
+      travas.some((obj) => obj.id_disciplina === id_disciplina)
+    ) {
+      // Verifica se a trava está com hover
+      if (id_disciplina === hover.id_disciplina) {
+        return `rgba(132, 118, 210, 0.12)`;
+      }
+      // Caso seja apenas a trava
+      return `rgba(224, 224, 224, 0.6)`;
+    }else if (id_disciplina === hover.id_disciplina) { // Verifica se está no hover
+      return `rgba(25, 118, 210, 0.12)`;
+    }  else {
+      return "white";
+    }
+  };
+
+  /**
    * Função que define qual será a cor aplicada para cada célula da tabela.
    * @param {number|null} prioridade - Prioridade dada pelo docente a disciplina, ou nulo em caso de ser o cabeçalho.
    * @param {Celula} celula - Refere-se a célula que está sendo carregada.
@@ -169,7 +206,7 @@ export default function Timetable() {
     } else if (prioridade) {
       return getPriorityColor(prioridade, maxPriority + 1);
     } else {
-      `rgba(255, 255, 255, 1)`;
+      return `rgba(255, 255, 255, 1)`;
     }
   };
 
@@ -377,6 +414,13 @@ export default function Timetable() {
     setIteracoes(0);
   };
 
+  const executeProcess2 = async () => {
+    // p -> Processados
+      const solucaoRefactor = await buscaTabuRefactor(docentes, disciplinas, atribuicoes, 10, 5, maxPriority + 1)
+
+      console.log(solucaoRefactor)
+  }
+
   /**
    * Função que agrupa processos ao abrir o `Dialog`
    */
@@ -396,7 +440,7 @@ export default function Timetable() {
    */
   const applySolutionToState = () => {
     if (atribuicoes.length == solucao.atribuicoes.length) {
-      setAtribuicoes([...solucao.atribuicoes]);
+      setAtribuicoes(solucao.atribuicoes);
     } else {
       for (const newAtribuicao of solucao.atribuicoes) {
         setAtribuicoes((prevAtribuicoes) =>
@@ -406,7 +450,7 @@ export default function Timetable() {
                   ...atribuicao,
                   docentes: [...atribuicao.docentes, ...newAtribuicao.docentes], // Adiciona os novos docentes corretamente
                 }
-              : atribuicao
+              : { ...atribuicao, docentes: [] }
           )
         );
       }
@@ -499,7 +543,7 @@ export default function Timetable() {
                     }}
                   >
                     <ButtonGroup variant="outlined" aria-label="Button group">
-                      <Button onClick={executeProcess}>
+                      <Button onClick={executeProcess2}>
                         <PlayArrowIcon />
                       </Button>
                       <Button onClick={cleanStateAtribuicoes}>
@@ -519,11 +563,11 @@ export default function Timetable() {
                               tipo_trava: TipoTrava.Column,
                             })
                           }
-                          sx={{ padding: "2px" }}
+                          sx={{
+                            padding: "2px",
+                          }}
                           style={{
-                            backgroundColor: setCellColor(null, {
-                              id_disciplina: disciplina.id,
-                            }),
+                            backgroundColor: setHeaderCollor(disciplina.id),
                             textOverflow: "ellipsis",
                             margin: "0",
                             minWidth: "12rem",
@@ -572,7 +616,7 @@ export default function Timetable() {
                         maxWidth: "11rem",
                         position: "sticky",
                         left: 0, // Fixando a célula à esquerda
-                        backgroundColor: "white", // Evitando que o fundo fique transparente ao fixar
+                        backgroundColor: isHover(atribuicao.nome), // Evitando que o fundo fique transparente ao fixar
                         zIndex: 1, // Para manter sobre as demais células,
                         textOverflow: "ellipsis",
                         padding: "5px",
@@ -620,6 +664,15 @@ export default function Timetable() {
                                 id_disciplina: prioridade.id_disciplina,
                                 tipo_trava: TipoTrava.Cell,
                               })
+                            }
+                            onMouseEnter={() =>
+                              setHover({
+                                docente: atribuicao.nome,
+                                id_disciplina: prioridade.id_disciplina,
+                              })
+                            }
+                            onMouseLeave={() =>
+                              setHover({ docente: "", id_disciplina: "" })
                             }
                           >
                             {prioridade.prioridade}
