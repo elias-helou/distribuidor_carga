@@ -2,6 +2,7 @@ export interface Docente {
   nome: string;
   saldo?: number;
   ativo: boolean;
+  formularios: Map<string, number>; // id_disciplina, prioridade
 }
 
 export interface DisciplinaETL {
@@ -34,6 +35,7 @@ export interface Disciplina {
   ingles: boolean;
   docentes?: string[];
   ativo: boolean;
+  conflitos: Set<string>; // Ids das disciplinas que apresentam choque de horário
 }
 
 export interface Atribuicao {
@@ -43,7 +45,7 @@ export interface Atribuicao {
 
 export interface Formulario {
   id_disciplina: string;
-  nome_professor: string;
+  nome_docente: string;
   prioridade: number;
 }
 
@@ -88,6 +90,80 @@ export function isHorario(obj: string | Horario): obj is Horario {
          'dia' in obj &&
          'inicio' in obj &&
          'fim' in obj;
+}
+
+/**
+ * Função que transforma a `string` horário em um objeto.
+ * @param horario `String` original representando os horários de aula.
+ * @returns Uma lista da interface `Horario` contendo o(s) dia(s) de aula com horário de início e fim.
+ */
+function parseHorario(horario: string): Horario[] {
+  // Remove os caracteres de escape HTML e separa por <br>
+  const horariosLimpos = horario.replace(/<\/?[^>]+(>|$)/g, "").split("&emsp;");
+
+  const horarios: Horario[] = [];
+
+  horariosLimpos.forEach((horario) => {
+    // Verifica se a string contém dia e horário
+    const regex = /([\wÀ-ÿ]{3,4}\.)\s(\d{2}:\d{2})\/(\d{2}:\d{2})/;
+    const match = horario.match(regex);
+
+    if (match) {
+      const [, dia, inicio, fim] = match; // Extrai dia, horário de início e fim
+      horarios.push({ dia: dia as Horario["dia"], inicio, fim });
+    }
+  });
+
+  return horarios;
+}
+
+/**
+ * Função que executará a formatação dos horários de aulas das disciplinas.
+ * @param disciplinas Lista do tipo `DisciplinaETL` contendo todas as disciplinas que serão informadas no algoritmo.
+ * @returns Uma lista do tipo `Disciplina` contendo todos os ajustes nos horários.
+ */
+export function ajustaHorarioDisciplinas(
+  disciplinas: DisciplinaETL[]
+): Disciplina[] {
+  const newDisciplinas: Disciplina[] = [];
+
+  // Para cada disciplina, verificar se o horário já está definido; se estiver, transformar a string no objeto da interface Horario
+  for (const disciplina of disciplinas) {
+    if (typeof disciplina.horario === "string") {
+      // Converte a string de horários para o objeto esperado
+      const horarios = parseHorario(disciplina.horario);
+
+      // Desestrutura o objeto e substitui o campo 'horarios'
+      const newDisciplina: Disciplina = {
+        ...disciplina,
+        horarios: horarios, // Atribui o novo valor de horários
+        conflitos: new Set()
+      };
+
+      // Adiciona a nova disciplina à lista
+      newDisciplinas.push(newDisciplina);
+    }
+  }
+
+  return newDisciplinas;
+}
+
+/**
+ * Função auxiliar para verificar se dois horários se sobrepõem
+ * @param horario1 Horário referente a disciplina 1
+ * @param horario2 Horário referente a disciplina 2
+ * @returns Booleano que indica se existe um conflito de horários entre as duas disciplinas.
+ */
+export function horariosSobrepoem(
+  horario1: Horario,
+  horario2: Horario
+): boolean {
+  return (
+    horario1.dia === horario2.dia && // Mesmo dia
+    ((horario1.inicio < horario2.fim && horario1.fim > horario2.inicio) || // Sobreposição parcial ou total
+      horario1.inicio === horario2.fim || // Horários coincidentes (fim de uma é o início da outra)
+      horario1.fim === horario2.inicio)
+  );
 }
 
 /**
@@ -164,7 +240,7 @@ export function processData(
   const processedFormularios: Formulario[] = formularios.filter(
     (formulario) =>
       disciplinasAtivas.has(formulario.id_disciplina) &&
-      docentesAtivos.has(formulario.nome_professor)
+      docentesAtivos.has(formulario.nome_docente)
   );
 
   // Filtrar as travas com base nas disciplinas e docentes ativos
