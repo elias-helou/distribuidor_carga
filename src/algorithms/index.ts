@@ -5,11 +5,11 @@ import {
   Atribuicao,
   Formulario,
   isHorario,
+  horariosSobrepoem,
 } from "@/context/Global/utils";
 import {
   atualizarListaTabu,
   estaNaListaTabu,
-  horariosSobrepoem,
   Solucao,
 } from "./utils";
 import { Dispatch, SetStateAction } from "react";
@@ -20,10 +20,11 @@ function podeAtribuir(
   disciplina: Disciplina,
   travas: Trava[],
   atribuicoes: Atribuicao[],
-  disciplinas: Disciplina[]
+  disciplinas: Disciplina[],
+  formularios: Formulario[]
 ): boolean {
   // Verificar se o docente e a disciplina estão ativos
-  if (!docente.ativo || !disciplina.ativo) return false;
+  if (!docente.ativo || !disciplina.ativo) return false; // Remover essa linha pois a função recebe apenas os dados ativos.
 
   // Verificar se o docente está na lista de travas para a disciplina
   for (const trava of travas) {
@@ -33,6 +34,12 @@ function podeAtribuir(
     ) {
       return false; // Docente está travado para essa disciplina
     }
+  }
+
+  /** Um docente só pode ser atribuído a uma disciplina em que ele preencheu o formulário */
+  const docenteFormularioDisc: Formulario[] = formularios.filter(formulario => formulario.nome_docente === docente.nome && formulario.id_disciplina === disciplina.id)
+  if(docenteFormularioDisc.length === 0) {
+    return false
   }
 
   const docenteDisciplinasAtribuidas: string[] = atribuicoes
@@ -80,7 +87,7 @@ function avaliarSolucao(
       .filter(
         (formulario) => formulario.id_disciplina == atribuicao.id_disciplina
       )
-      .map((a) => a.nome_professor);
+      .map((a) => a.nome_docente);
     let docenteInFormularios: string = null;
 
     // Verifica se o docente apresenta um formulário para a disciplina.
@@ -91,27 +98,112 @@ function avaliarSolucao(
       }
     }
 
-    // Docente não apresenta formulário
-    if (!docenteInFormularios) {
-      avaliacao -= maiorPrioridade + 1; // Docente atrubuído sem prioridade definida
-    } else {
+    // Docente não apresenta formulário /** Remover pois está sendo tratado como restrição */
+    if (docenteInFormularios) {
       const formulario = formularios.find(
         (formulario) =>
-          formulario.nome_professor == docenteInFormularios &&
+          formulario.nome_docente == docenteInFormularios &&
           formulario.id_disciplina == atribuicao.id_disciplina
       );
       avaliacao += maiorPrioridade - formulario.prioridade;
-    }
+    } 
+    // else {
+    //   //avaliacao -= maiorPrioridade; // Docente atrubuído sem prioridade definida
+    // }
   }
 
   // Penalizar por disciplinas sem professor ou com mais de um professor
-  for (const atribuicao of atribuicoes) {
-    if (atribuicao.docentes.length == 0 || atribuicao.docentes.length > 1) {
-      avaliacao -= 10 + atribuicao.docentes.length * 10; // Penalidade por disciplina sem professor
-    }
-  }
+  // for (const atribuicao of atribuicoes) {
+  //   if (atribuicao.docentes.length == 0 || atribuicao.docentes.length > 1) {
+  //     avaliacao -= 10 + atribuicao.docentes.length * 10; // Penalidade por disciplina sem professor
+  //   }
+  // }
 
   return avaliacao;
+}
+
+// // Função para gerar vizinhos (movimentos)
+// function gerarVizinhos(
+//   solucao: Solucao,
+//   docentes: Docente[],
+//   disciplinas: Disciplina[],
+//   travas: Trava[],
+//   formularios: Formulario[],
+//   maiorPrioridade: number
+// ): Solucao[] {
+//   const vizinhos: Solucao[] = [];
+
+//   // Tentar mudar a alocação de um docente de uma disciplina para outra
+//   for (let i = 0; i < solucao.atribuicoes.length; i++) {
+//     //const atribuicao = solucao.atribuicoes[i];
+
+//     for (const docente of docentes) {
+//       if (
+//         podeAtribuir(
+//           docente,
+//           disciplinas[i],
+//           travas,
+//           solucao.atribuicoes,
+//           disciplinas
+//         )
+//       ) {
+//         const novaSolucao = JSON.parse(JSON.stringify(solucao));
+//         // Remover o docente anterior, caso já tenha sido atribuído, e adicionar o novo docente
+//         novaSolucao.atribuicoes[i].docentes = [docente.nome]; // Substituir o docente atual pela nova atribuição
+
+//         // Reavaliar a nova solução após a mudança
+//         novaSolucao.avaliacao = avaliarSolucao(
+//           novaSolucao.atribuicoes,
+//           formularios,
+//           docentes,
+//           disciplinas,
+//           maiorPrioridade
+//         );
+//         vizinhos.push(novaSolucao);
+//       }else {
+//         const novaSolucao = JSON.parse(JSON.stringify(solucao));
+//         // Remover o docente anterior, caso já tenha sido atribuído, e adicionar o novo docente
+//         novaSolucao.atribuicoes[i].docentes = []; // Substituir o docente atual por nenhum
+
+//         // Reavaliar a nova solução após a mudança
+//         novaSolucao.avaliacao = avaliarSolucao(
+//           novaSolucao.atribuicoes,
+//           formularios,
+//           docentes,
+//           disciplinas,
+//           maiorPrioridade
+//         );
+//         vizinhos.push(novaSolucao);
+//       }
+//     }
+//   }
+
+//   return vizinhos;
+// }
+
+// Função auxiliar para gerar uma nova solução baseada em uma mudança de docentes
+function criarNovaSolucao(
+  solucaoBase: Solucao,
+  indiceAtribuicao: number,
+  novosDocentes: string[],
+  formularios: Formulario[],
+  docentes: Docente[],
+  disciplinas: Disciplina[],
+  maiorPrioridade: number
+): Solucao {
+  const novaSolucao = structuredClone(solucaoBase); // Melhor maneira de clonar objetos (se disponível)
+  novaSolucao.atribuicoes[indiceAtribuicao].docentes = novosDocentes;
+
+  // Reavaliar a nova solução após a mudança
+  novaSolucao.avaliacao = avaliarSolucao(
+    novaSolucao.atribuicoes,
+    formularios,
+    docentes,
+    disciplinas,
+    maiorPrioridade
+  );
+
+  return novaSolucao;
 }
 
 // Função para gerar vizinhos (movimentos)
@@ -124,28 +216,19 @@ function gerarVizinhos(
   maiorPrioridade: number
 ): Solucao[] {
   const vizinhos: Solucao[] = [];
-
+  
   // Tentar mudar a alocação de um docente de uma disciplina para outra
   for (let i = 0; i < solucao.atribuicoes.length; i++) {
-    //const atribuicao = solucao.atribuicoes[i];
+    const disciplina = disciplinas[i];
 
     for (const docente of docentes) {
-      if (
-        podeAtribuir(
-          docente,
-          disciplinas[i],
-          travas,
-          solucao.atribuicoes,
-          disciplinas
-        )
-      ) {
-        const novaSolucao = JSON.parse(JSON.stringify(solucao));
-        // Remover o docente anterior, caso já tenha sido atribuído, e adicionar o novo docente
-        novaSolucao.atribuicoes[i].docentes = [docente.nome]; // Substituir o docente atual pela nova atribuição
-
-        // Reavaliar a nova solução após a mudança
-        novaSolucao.avaliacao = avaliarSolucao(
-          novaSolucao.atribuicoes,
+      // Verificar se o docente pode ser atribuído à disciplina
+      if (podeAtribuir(docente, disciplina, travas, solucao.atribuicoes, disciplinas, formularios)) {
+        // Criar nova solução com o docente atual atribuído
+        const novaSolucao = criarNovaSolucao(
+          solucao,
+          i,
+          [docente.nome],
           formularios,
           docentes,
           disciplinas,
@@ -153,11 +236,24 @@ function gerarVizinhos(
         );
         vizinhos.push(novaSolucao);
       }
+        // Criar uma solução sem o docente atribuído (remover docente)
+        const solucaoSemDocente = criarNovaSolucao(
+          solucao,
+          i,
+          [],
+          formularios,
+          docentes,
+          disciplinas,
+          maiorPrioridade
+        );
+        vizinhos.push(solucaoSemDocente);
+
     }
   }
 
   return vizinhos;
 }
+
 
 /**
  * Função utilizada para aplciar uma pausa no processo.
@@ -213,7 +309,12 @@ export async function buscaTabu(
       formularios,
       maiorPrioridade
     );
+
     let melhorVizinho = vizinhos[0];
+    // if(iteracoesSemModificacao >= 10) {
+    //   melhorVizinho = vizinhos[1];
+    // }
+
 
     // Loop para encontrar o melhor vizinho que não está na lista tabu
     for (const vizinho of vizinhos) {
@@ -236,12 +337,17 @@ export async function buscaTabu(
       if (solucaoAtual.avaliacao > melhorSolucao.avaliacao) {
         melhorSolucao = solucaoAtual;
         iteracoesSemModificacao = 0; // Reseta as iterações sem modificação
+        console.log("Atualizou solução para: ", melhorSolucao.avaliacao)
       } else {
         iteracoesSemModificacao++;  // Acrescenta mais um em iteração sem modificação
       }
     }
 
-    if (interrompe() || iteracoesSemModificacao == 10) {
+    const disciplinasSemDocente = melhorSolucao.atribuicoes.filter(atribuicao => atribuicao.docentes.length !== 0).map(atribuicao => atribuicao.id_disciplina)
+    const formulariosDisciplinasPendentes = formularios.filter(formulario =>  disciplinasSemDocente.includes(formulario.id_disciplina))
+
+    if (interrompe() || 
+      (iteracoesSemModificacao === 10 && formulariosDisciplinasPendentes.length === 0 && disciplinasSemDocente.length === 0)) {
       break;
     }
   }
