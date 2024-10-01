@@ -405,7 +405,6 @@ export async function buscaTabuRefactor(
       if (solucaoAtual.avaliacao > melhorSolucao.avaliacao) {
         melhorSolucao = solucaoAtual;
         iteracoesSemModificacao = 0; // Reseta as iterações sem modificação
-        console.log('mudou')
       } else {
         iteracoesSemModificacao++;  // Acrescenta mais um em iteração sem modificação
       }

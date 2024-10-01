@@ -354,7 +354,7 @@ export function processarAtribuicaoInicial(atribuicoes: Atribuicao[], docentes: 
     // Verifica se a disciplina está "válida"
     if(disciplinaInvalida(disciplia, travas)) {
       // Remove a disciplina das atribuições
-      atribuicoes = atribuicoes.filter(atrib => atrib.id_disciplina !== disciplia.id)
+      //atribuicoes = atribuicoes.filter(atrib => atrib.id_disciplina !== disciplia.id)
       continue;
     }
 
@@ -366,11 +366,11 @@ export function processarAtribuicaoInicial(atribuicoes: Atribuicao[], docentes: 
     }
 
     // TODO 30/09/2024 - Verificar se está correto
-    for(const docente of docentesAtribuidos) {
-      if(docenteInvalido(docente, disciplia, travas)) {
-        atribuicoes = atribuicoes.filter(atrib => atrib.docentes.filter(doc => doc !== docente.nome)) 
-      }
-    }
+    // for(const docente of docentesAtribuidos) {
+    //   if(docenteInvalido(docente, disciplia, travas)) {
+    //     atribuicoes = atribuicoes.filter(atrib => atrib.docentes.filter(doc => doc !== docente.nome)) 
+    //   }
+    // }
 
     // Alterar a lista de atribuições caso um docente tenha sido atribuído sem formulário
     const newDocentes: string[] = []

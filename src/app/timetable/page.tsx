@@ -164,7 +164,7 @@ export default function Timetable() {
   const setHeaderCollor = (id_disciplina: string) => {
     // Verifica se está travado
     if (
-      travas.some((obj) => obj.id_disciplina === id_disciplina)
+      travas.some((obj) => obj.id_disciplina === id_disciplina && obj.tipo_trava === TipoTrava.Column)
     ) {
       // Verifica se a trava está com hover
       if (id_disciplina === hover.id_disciplina) {
@@ -420,6 +420,7 @@ export default function Timetable() {
     // p -> Processados
       const solucaoRefactor = await buscaTabuRefactor(disciplinas, docentes, formularios, travas, atribuicoes, 10, maxPriority + 1, () => interrompeRef.current)
 
+      console.log("Solução:")
       console.log(solucaoRefactor)
       setSolucao(solucaoRefactor); // Atribui a solução encontrada no state local.
 
