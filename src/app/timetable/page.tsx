@@ -344,11 +344,21 @@ export default function Timetable() {
    * Limpa o state `atribuicoes`, deixando-o vazio.
    */
   const cleanStateAtribuicoes = () => {
-    // Varre todo o array e limpa o campo docentes
-    const atribuicoesLimpa = atribuicoes.map((atribuicao) => ({
-      ...atribuicao, // Mantém os outros campos iguais
-      docentes: [], // Limpa o campo docentes
-    }));
+
+    // Varre todo o array e limpa o campo docentes caso não esteja travdo
+    const atribuicoesLimpa = atribuicoes.map(atribuicao => {
+      if(travas.find(trava => trava.id_disciplina === atribuicao.id_disciplina && atribuicao.docentes.includes(trava.nome_docente)) 
+        || !disciplinas.find(disciplina => disciplina.id === atribuicao.id_disciplina)?.ativo
+        || !docentes.find(docente => atribuicao.docentes.includes(docente.nome))?.ativo 
+    ) {
+        return atribuicao
+      }
+      return {
+          ...atribuicao, // Mantém os outros campos iguais
+          docentes: [], // Limpa o campo docentes
+        }
+      
+    })
 
     // Atualiza o estado com a nova lista de atribuições
     setAtribuicoes(atribuicoesLimpa);
