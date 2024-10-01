@@ -191,7 +191,7 @@ function criarNovaSolucao(
   disciplinas: Disciplina[],
   maiorPrioridade: number
 ): Solucao {
-  const novaSolucao = structuredClone(solucaoBase); // Melhor maneira de clonar objetos (se disponível)
+  const novaSolucao = structuredClone(solucaoBase); // Clonar o objeto -  deep clone - nativo
   novaSolucao.atribuicoes[indiceAtribuicao].docentes = novosDocentes;
 
   // Reavaliar a nova solução após a mudança

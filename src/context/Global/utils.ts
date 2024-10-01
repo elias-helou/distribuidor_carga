@@ -3,6 +3,7 @@ export interface Docente {
   saldo?: number;
   ativo: boolean;
   formularios: Map<string, number>; // id_disciplina, prioridade
+  // Adicionar uma flag Travada: boolean, que será alterada quando uma linha inteira for travada.
 }
 
 export interface DisciplinaETL {
@@ -36,6 +37,7 @@ export interface Disciplina {
   docentes?: string[];
   ativo: boolean;
   conflitos: Set<string>; // Ids das disciplinas que apresentam choque de horário
+  // Adicionar uma flag Travada: boolean, que será alterada quando uma coluna inteira for travada.
 }
 
 export interface Atribuicao {

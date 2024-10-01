@@ -415,10 +415,17 @@ export default function Timetable() {
   };
 
   const executeProcess2 = async () => {
+    handleClickOpenDialog(); // Abre a modal imediatamente
+    setProcessing(true); // Aciona o botão de loading
     // p -> Processados
-      const solucaoRefactor = await buscaTabuRefactor(docentes, disciplinas, atribuicoes, 10, 5, maxPriority + 1)
+      const solucaoRefactor = await buscaTabuRefactor(disciplinas, docentes, formularios, travas, atribuicoes, 10, maxPriority + 1, () => interrompeRef.current)
 
       console.log(solucaoRefactor)
+      setSolucao(solucaoRefactor); // Atribui a solução encontrada no state local.
+
+      setProcessing(false); // Encerra o processamento
+      setInterrompe(false); // Altera o state da flag de interupção para falso
+      setIteracoes(0);
   }
 
   /**
