@@ -38,7 +38,7 @@ export default function InputFileUpload() {
         setSelectedFile(file);
       } else {
         addAlert({
-          id: alertas.length + 1,
+          id: new Date().getTime(),
           type: "warning",
           message: "Por favor, selecione um arquivo JSON.",
         });
@@ -126,13 +126,13 @@ export default function InputFileUpload() {
           loadContext(json);
           setSelectedFile(null);
           addAlert({
-            id: alertas.length,
+            id: new Date().getTime(),
             type: "success",
             message: "Arquivo " + selectedFile.name + " carregado com sucesso.",
           });
         } catch (error) {
           addAlert({
-            id: alertas.length,
+            id: new Date().getTime(),
             type: "error",
             message: "Erro ao processar o arquivo JSON.",
           });

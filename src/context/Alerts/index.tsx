@@ -23,13 +23,13 @@ const AlertsContext = createContext<AlertasInterface>({
 export function AlertsWrapper({ children }: { children: React.ReactNode }) {
   const [alertas, setAlertas] = useState<Alerta[]>([]);
 
-//   /**
-//    * Função que adiciona um novo alerta no state.
-//    * @param newAlert Novo objeto a ser inserido no state de alertas.
-//    */
-//   const addAlert = (newAlert: Alertas) => {
-//     setAlertas([...alertas, newAlert]); // Adiciona novo alerta ao array
-//   };
+  // /**
+  //  * Função que adiciona um novo alerta no state.
+  //  * @param newAlert Novo objeto a ser inserido no state de alertas.
+  //  */
+  // const addAlert = (type: "success" | "info" | "warning" | "error", message: string, closeTime: number = 3) => {
+  //   setAlertas([...alertas, {id: new Date().getTime(), type: type, message: message, closeTime: closeTime}]); // Adiciona novo alerta ao array
+  // };
 
   /**
    * Remove um objeto do state de alertas.

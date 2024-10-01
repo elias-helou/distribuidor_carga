@@ -365,7 +365,7 @@ export default function Timetable() {
     setAlertas([
       ...alertas,
       {
-        id: alertas.length,
+        id: new Date().getTime(),
         message: "A solução foi limpa com sucesso!",
         type: "success",
       },
@@ -380,7 +380,7 @@ export default function Timetable() {
     setAlertas([
       ...alertas,
       {
-        id: alertas.length,
+        id: new Date().getTime(),
         message: "A execução do algoritmo foi interrompida!",
         type: "warning",
       },
@@ -413,7 +413,7 @@ export default function Timetable() {
     if (!interrompeRef.current) {
       setAlertas([
         ...alertas,
-        { id: alertas.length, message: "Execução finalizada.", type: "info" },
+        { id: new Date().getTime(), message: "Execução finalizada.", type: "info" },
       ]);
     }
     console.log(solucaoObtida);
@@ -483,7 +483,7 @@ export default function Timetable() {
     setAlertas([
       ...alertas,
       {
-        id: alertas.length,
+        id: new Date().getTime(),
         message: "A solução foi aplicada com sucesso!",
         type: "success",
       },
