@@ -295,7 +295,6 @@ export async function buscaTabu(
   let iteracoesSemModificacao = 0
 
   while (/* iteracoes < maxIteracoes */ true) {
-    console.log("Iterações: ", iteracoes);
     await delay(0); // Pausa
     setIteracoes(iteracoes+1)
     iteracoes++;
@@ -337,7 +336,6 @@ export async function buscaTabu(
       if (solucaoAtual.avaliacao > melhorSolucao.avaliacao) {
         melhorSolucao = solucaoAtual;
         iteracoesSemModificacao = 0; // Reseta as iterações sem modificação
-        console.log("Atualizou solução para: ", melhorSolucao.avaliacao)
       } else {
         iteracoesSemModificacao++;  // Acrescenta mais um em iteração sem modificação
       }

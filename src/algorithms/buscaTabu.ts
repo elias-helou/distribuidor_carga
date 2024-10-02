@@ -63,7 +63,7 @@ import {
   Formulario,
 } from "@/context/Global/utils";
 import { atualizarListaTabu, disciplinaInvalida, gerarTrocasDeDocentes, gerarVizinhoComDocente, gerarVizinhoComRemocao, processarAtribuicaoInicial, Solucao } from "./utils";
-import { Dispatch, SetStateAction } from "react";
+//import { Dispatch, SetStateAction } from "react";
 
 /**
  * Função para avaliar uma solução
@@ -90,9 +90,7 @@ function avaliarSolucao(
       // Validação para caso o usuário tenha feito uma atribuição em que o docente não tenha um formulário preenchido
       if(docente.formularios.get(atribuicao.id_disciplina)) {
         avaliacao += maiorPrioridade - docente.formularios.get(atribuicao.id_disciplina);
-      }// } else {
-      //   avaliacao -= 100
-      // }
+      }
     }
   }
 
@@ -132,9 +130,6 @@ function criarNovaSolucao(
   maiorPrioridade: number
 ): Solucao {
   const novaSolucao: Solucao = {atribuicoes: atribuicoes, avaliacao: 0}
-  // const novaSolucao = structuredClone(solucaoBase); // Clonar o objeto -  deep clone - nativo
-  // novaSolucao.atribuicoes[indiceAtribuicao].docentes = novosDocentes;
-
   // Reavaliar a nova solução após a mudança
   novaSolucao.avaliacao = avaliarSolucao(
     novaSolucao.atribuicoes,
@@ -165,133 +160,6 @@ export function gerarSolucoes(vizinhos: Atribuicao[][], docentes: Docente[], dis
   return solucoesAtuais.sort((a, b) => b.avaliacao - a.avaliacao) // Ordenar o array (decrescente)
 }
 
-// /**
-//  * Função responsável por gerar os vizinhos para a busca Tabu
-//  * @param {Solucao} solucaoAtual Variável que representa a melhor soçução até o momento.
-//  * @param {Docente[]} docentes Lista com todos os docentes.
-//  * @param {Disciplina[]} disciplinas  Lista com todas as disciplinas.
-//  * @param {Trava[]} travas Litas com as travas existentes para docentes em disciplinas.
-//  * @returns {Atribuicao[][]} Uma matriz contendo as vizinhanças geradas.
-//  */
-// function gerarVizinhos(
-//   solucaoAtual: Atribuicao[]/*Solucao*/,
-//   docentes: Docente[],
-//   disciplinas: Disciplina[],
-//   travas: Trava[],
-//   listaTabu: Atribuicao[][]
-// ): Atribuicao[][]/*Solucao[][]*/ {
-//   // Passar por todas as disciplinas e docentes verificando a possibilidade de atribuição.
-//   const vizinhanca: Atribuicao[][] = []
-
-//   for(let i = 0; i < disciplinas.length; i++){
-//     const disciplinaPivo = disciplinas[i];
-
-//     if(!disciplinaPivo.ativo || travas.some(obj => obj.id_disciplina === disciplinaPivo.id && obj.tipo_trava === TipoTrava.Column)) {
-//       continue;
-//     }
-
-//     for(const docente of docentes) {
-//       if(!docente.ativo) {
-//         continue;
-//       }
-
-//       if(podeAtribuir(docente, disciplinaPivo, travas)) {
-//         const vizinho = structuredClone(solucaoAtual);
-//         const atrib = vizinho.find(obj => obj.id_disciplina === disciplinaPivo.id)
-//         atrib.docentes = [docente.nome]
-
-//         // Verificar se a vizinhança não está na lista tabu
-//         if(!estaNaListaTabu(listaTabu, vizinho)) {
-//           vizinhanca.push(vizinho)
-//         }
-//       }
-//     }
-
-    
-//     // Verificar a possíbilidade de atribuições vazias.
-//     const atribAtual = solucaoAtual.find(obj => obj.id_disciplina === disciplinaPivo.id)
-    
-//     if(atribAtual.docentes.length > 0) {
-//       const vizinho = structuredClone(solucaoAtual);
-//       const atrib = vizinho.find(obj => obj.id_disciplina === disciplinaPivo.id)
-//       atrib.docentes = []
-//         // Verificar se a vizinhança não está na lista tabu
-//       if(!estaNaListaTabu(listaTabu, vizinho)) {
-//         vizinhanca.push(vizinho)
-//       }
-//     }
-    
-
-//     // Trocar docentes
-
-//     // Buscar o docente atualmente atribuido a disciplina Pivo
-//     const atribDocentePivo = solucaoAtual.find(obj => obj.id_disciplina === disciplinaPivo.id)
-//     const docentePivot = docentes.find(obj => obj.nome === atribDocentePivo.docentes[0])
-
-
-//     if(docentePivot && (!docentePivot.ativo || travas.some(obj => obj.nome_docente === docentePivot.nome && obj.tipo_trava === TipoTrava.Row))) {
-//       continue;
-//     }
-
-//     if(!docentePivot) {
-//       continue
-//     }
-
-//     if(atribDocentePivo.docentes.length === 0) {
-//       continue
-//     }
-
-//     // Eu troco A com B depois eu troco B com A. utilizar index partindo de i
-//     // Ajustar para mais de um docente atribuido
-//     for(let j = i + 1; j < disciplinas.length; j++) {
-//       const disciplinaAtual = disciplinas[j]
-//       if(disciplinaPivo.id === disciplinaAtual.id) {
-//         continue;
-//       }
-
-//       if(!disciplinaAtual.ativo 
-//         || travas.some(obj => obj.id_disciplina === disciplinaAtual.id && obj.tipo_trava === TipoTrava.Column)
-//         || travas.some(obj => obj.id_disciplina === disciplinaAtual.id && obj.nome_docente && obj.nome_docente === docentePivot.nome)) {
-//         continue;
-//       }
-
-//       const atribDocenteAtual = solucaoAtual.find(obj => obj.id_disciplina === disciplinaAtual.id)
-//         if(atribAtual.docentes.length === 0) {
-//           continue;
-//         }
-
-//       const docenteAtual = docentes.find(obj => obj.nome === atribDocenteAtual.docentes[0])
-
-//       if(!docenteAtual && (!docenteAtual.ativo  || travas.some(obj => obj.id_disciplina === disciplinaAtual.id && obj.nome_docente && obj.nome_docente === docenteAtual.nome))) {
-//         continue;
-//       }
-
-//        if(!docenteAtual) {
-//       continue
-//     }
-
-//       // DOcente A pode disciplia B e se DOcente B pode Disciplina A
-//       if(podeAtribuir(docentePivot, disciplinaAtual, travas) && podeAtribuir(docenteAtual, disciplinaPivo, travas)) {
-//         const vizinho = structuredClone(solucaoAtual);
-
-//         const atrib1 = vizinho.find(obj => obj.id_disciplina === disciplinaPivo.id)
-//         const atrib2 = vizinho.find(obj => obj.id_disciplina === disciplinaAtual.id)
-
-//         // Atrib Doc B na Disc A e Atrib Doc A na Disc B
-//         atrib1.docentes = [docenteAtual.nome]
-//         atrib2.docentes = [docentePivot.nome]
-
-//         // Verificar se não estão no tabu
-//         if(!estaNaListaTabu(listaTabu, vizinho)) {
-//           vizinhanca.push(vizinho)
-//         }
-//       }
-//     }
-//   }
-
-//   return vizinhanca
-// }
-
 /**
  * Função responsável por gerar os vizinhos para a busca Tabu.
  * @param {Atribuicao[]} solucaoAtual A solução atual com as atribuições feitas até o momento.
@@ -310,34 +178,23 @@ function gerarVizinhos(
 ): Atribuicao[][] {
   let vizinhanca: Atribuicao[][] = [];
 
-  /*for (const disciplina of disciplinas)*/ 
   for(let i = 0; i < disciplinas.length; i++) {
     const disciplina = disciplinas[i];
     if (disciplinaInvalida(disciplina, travas)) continue;
 
     // Gera vizinhos com docentes
-    // vizinhanca = vizinhanca.concat(
-    //   gerarVizinhoComDocente(solucaoAtual, docentes, disciplina, travas, listaTabu)
-    // );
-
     const vizinhancaDocentes = gerarVizinhoComDocente(solucaoAtual, docentes, disciplina, travas, listaTabu)
     if(vizinhancaDocentes.length > 0) {
       vizinhanca = vizinhanca.concat(vizinhancaDocentes)
     }
 
     // Gera vizinho com remoção de docentes
-    // vizinhanca = vizinhanca.concat(
-    //   gerarVizinhoComRemocao(solucaoAtual, disciplina, listaTabu)
-    // );
     const vizinhancaRemover = gerarVizinhoComRemocao(solucaoAtual, disciplina, listaTabu)
     if(vizinhancaRemover.length > 0) {
       vizinhanca = vizinhanca.concat(vizinhancaRemover)
     }
 
     // Gera vizinhos trocando docentes entre disciplinas
-    // vizinhanca = vizinhanca.concat(
-    //   gerarTrocasDeDocentes(solucaoAtual, disciplina, i, disciplinas, docentes, travas, listaTabu)
-    // );
     const vizinhancaTroca = gerarTrocasDeDocentes(solucaoAtual, disciplina, i, disciplinas, docentes, travas, listaTabu);
     if(vizinhancaTroca.length > 0) {
       vizinhanca = vizinhanca.concat(vizinhancaTroca)
@@ -371,13 +228,13 @@ export async function buscaTabuRefactor(
   const listaTabu: Atribuicao[][] = [];
 
   // Variável para controlar a quantidade de iterações sem modifiação
-  let iteracoesSemModificacao = 0
+  // let iteracoesSemModificacao = 0
   
   // Solução inicial inclui as atribuições fornecidas pelo usuário
   let solucaoAtual: Solucao = {
     atribuicoes: processarAtribuicaoInicial(structuredClone(atribuicoes), docentes, disciplinas, travas),
     avaliacao: avaliarSolucao(
-      atribuicoes,
+      atribuicoes, // Verificar se aqui não seria melhor já passar as atribuições processadas
       docentes,
       disciplinas,
       MaiorPrioridade
@@ -385,7 +242,7 @@ export async function buscaTabuRefactor(
   };
 
   let melhorSolucao: Solucao = solucaoAtual;
-
+  
   // Criar uma função que faça toda a validação do while
   while(true) {
     await delay(0);
@@ -404,22 +261,49 @@ export async function buscaTabuRefactor(
       solucaoAtual = melhorVizinho;
       if (solucaoAtual.avaliacao > melhorSolucao.avaliacao) {
         melhorSolucao = solucaoAtual;
-        iteracoesSemModificacao = 0; // Reseta as iterações sem modificação
-      } else {
-        iteracoesSemModificacao++;  // Acrescenta mais um em iteração sem modificação
-      }
-    } else {
-      iteracoesSemModificacao++;  // Acrescenta mais um em iteração sem modificação
-    }
+        // iteracoesSemModificacao = 0; // Reseta as iterações sem modificação
+      } 
+      // else {
+      //   iteracoesSemModificacao++;  // Acrescenta mais um em iteração sem modificação
+      // }
+    } 
+    // else {
+    //   iteracoesSemModificacao++;  // Acrescenta mais um em iteração sem modificação
+    // }
 
-    if(iteracoesSemModificacao === NumIterNotChange || interrompe()) {
+    if(/*iteracoesSemModificacao === NumIterNotChange ||*/ interrompe() || !existeDisciplinasQueAindaPodemSerAtribuidas(melhorSolucao, docentes)) {
       break;
     }
   }
 
+  
   return melhorSolucao;
 }
 
+function existeDisciplinasQueAindaPodemSerAtribuidas(solucao: Solucao, docentes: Docente[]) {
+  const atribuicoesSemDocentes = solucao.atribuicoes.filter(atrib => atrib.docentes.length === 0)
 
+  // Não existem disciplinas sem docentes alocados
+  if(atribuicoesSemDocentes.length === 0) {
+    return false
+  }
 
+  let contadorDePossiveisAtribuicoes = 0
+  // Algum docente tem um formulário para as disciplinas não atribuídas ?
+  atribuicoesSemDocentes.map(obj => {
+    for(const docente of docentes) {
+      if(docente.formularios.has(obj.id_disciplina)) {
+        contadorDePossiveisAtribuicoes++;
+      }
+    }
+  })
+ 
+  // Não existem mais possibilidades de atribuições para as disciplinas sem docentes
+  if(contadorDePossiveisAtribuicoes === 0) {
+    return false
+  }
+
+  // Ainda existe possibilidade
+  return true
+}
 
