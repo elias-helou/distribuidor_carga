@@ -9,11 +9,16 @@ import {
   IconButton,
   Box,
   Typography,
+  Tooltip,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import CloseIcon from '@mui/icons-material/Close';
 import LinearProgress, { LinearProgressProps } from '@mui/material/LinearProgress';
-import { useGlobalContext } from '@/context/Global';
+
+export interface IProgressBar {
+  total: number,
+  current: number
+}
 
 interface AlgoritmoDialogProps {
   open: boolean;
@@ -21,24 +26,27 @@ interface AlgoritmoDialogProps {
   onApply: () => void;
   onStop: () => void;
   processing: boolean;
-  itearions: number;
+  progress: IProgressBar
 }
 
-function LinearProgressWithLabel(props: LinearProgressProps & { value: number }) {
+function LinearProgressWithLabel(props: LinearProgressProps & { value: number, progress:IProgressBar}) {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <Box sx={{ width: '100%', mr: 1 }}>
         <LinearProgress variant="determinate" {...props} />
       </Box>
       <Box sx={{ minWidth: 35 }}>
-        <Typography
-          variant="body2"
-          sx={{ color: 'text.secondary' }}
-        >{`${Math.round(props.value)}%`}</Typography>
+        <Tooltip title={`Alocações: ${props.progress.current} de ${props.progress.total}`}>
+          <Typography
+            variant="body2"
+            sx={{ color: 'text.secondary' }}
+          >{`${Math.round(props.value)}%`}</Typography>
+        </Tooltip>
       </Box>
     </Box>
   );
 }
+
 
 export default function AlgoritmoDialog({
   open,
@@ -46,15 +54,14 @@ export default function AlgoritmoDialog({
   onApply,
   onStop,
   processing,
-  itearions
+  progress
 }: AlgoritmoDialogProps) {
-  const {disciplinas} = useGlobalContext()
 
-  const progress = (): number => {
+  const progressPercentage = (): number => {
     if(!processing) {
       return 100
     }
-    const value = Math.ceil(100 * itearions / (disciplinas.length + 10)) // 10 representa as não mudanças da melhor solução para a interrupção
+    const value = Math.ceil(100 * progress.current / progress.total)
     
     return value >= 100 ? 100 : value
   }
@@ -86,7 +93,7 @@ export default function AlgoritmoDialog({
           O processo está sendo executado e logo será possível aplicar a solução encontrada.
         </DialogContentText>
         <Box sx={{ width: '100%' }}>
-      <LinearProgressWithLabel value={progress()} />
+      <LinearProgressWithLabel value={progressPercentage()} progress={progress}/>
     </Box></>
         }
         {!processing && <DialogContentText id="alert-dialog-description">
