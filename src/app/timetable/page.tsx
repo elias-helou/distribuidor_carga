@@ -32,6 +32,9 @@ import { Solucao } from "@/algorithms/utils";
 import AlgoritmoDialog from "@/components/AlgorithmDialog";
 import { useAlertsContext } from "@/context/Alerts";
 import { buscaTabuRefactor } from "@/algorithms/buscaTabu";
+import ButtonGroupHeader from "./components/ButtonGroupHeader";
+import HeaderCell from "./components/HeaderCell";
+import ColumnCell from "./components/ColumnCell";
 
 // Customizar todos os TableCell
 const customTheme = createTheme({
@@ -66,9 +69,10 @@ export default function Timetable() {
   const [processing, setProcessing] = useState(false);
   const [interrompe, setInterrompe] = useState(false);
 
-  // Contador de interações
-  const [iteracoes, setIteracoes] = useState(0);
-  const iteracoesRef = useRef(iteracoes);
+  // Disciplinas atribuidas na execução do algoritmo
+  const [disciplinasAlocadas, setDisciplinasAlocadas] = useState(0);
+  const disciplinasAlocadasRef = useRef(disciplinasAlocadas);
+  
   // Usamos useRef para manter uma referência ao valor mais atualizado de "interrompe"
   const interrompeRef = useRef(interrompe);
   const [solucao, setSolucao] = useState<Solucao>({
@@ -92,8 +96,8 @@ export default function Timetable() {
   // Atualizamos o valor de "interrompe" sempre que ele mudar
   useEffect(() => {
     interrompeRef.current = interrompe;
-    iteracoesRef.current = iteracoes;
-  }, [interrompe, iteracoes]);
+    disciplinasAlocadasRef.current = disciplinasAlocadas;
+  }, [interrompe, disciplinasAlocadas]);
 
   /**
    * Função responsável por gerar as linhas da tabela, criando X espaços de disciplina para cada docente.
@@ -408,7 +412,7 @@ export default function Timetable() {
       150,
       maxPriority + 1,
       () => interrompeRef.current,
-      setIteracoes
+      setDisciplinasAlocadas
     ); // Executa a busca tabu
     if (!interrompeRef.current) {
       setAlertas([
@@ -421,14 +425,17 @@ export default function Timetable() {
 
     setProcessing(false); // Encerra o processamento
     setInterrompe(false); // Altera o state da flag de interupção para falso
-    setIteracoes(0);
+    setDisciplinasAlocadas(0);
   };
 
   const executeProcess2 = async () => {
     handleClickOpenDialog(); // Abre a modal imediatamente
     setProcessing(true); // Aciona o botão de loading
     // p -> Processados
-      const solucaoRefactor = await buscaTabuRefactor(disciplinas, docentes, formularios, travas, atribuicoes, 10, maxPriority + 1, () => interrompeRef.current)
+    // p -> Processados
+      const { pDisciplinas, pDocentes, pFormularios, pTravas, pAtribuicoes } =
+      processData(disciplinas, docentes, formularios, travas, atribuicoes);
+      const solucaoRefactor = await buscaTabuRefactor(pDisciplinas, pDocentes, pFormularios, pTravas, pAtribuicoes, 10, maxPriority + 1, () => interrompeRef.current, setDisciplinasAlocadas)
 
       console.log("Solução:")
       console.log(solucaoRefactor)
@@ -436,7 +443,7 @@ export default function Timetable() {
 
       setProcessing(false); // Encerra o processamento
       setInterrompe(false); // Altera o state da flag de interupção para falso
-      setIteracoes(0);
+      setDisciplinasAlocadas(0);
   }
 
   /**
@@ -491,57 +498,11 @@ export default function Timetable() {
     handleCloseDialog();
   };
 
-  /**
-   * Cria o bloco referente aos horários de um adisicplina
-   * @param disciplina Disciplina contendo os horários
-   * @returns Componente React com os horários.
-   */
-  const createHorariosblock = (disciplina: Disciplina): React.ReactNode => {
-    // Verifica se há horários definidos para a disciplina
-    if (disciplina.horarios.length > 0) {
-      return (
-        <Typography
-          align="left"
-          variant="body1"
-          style={{
-            fontSize: "small",
-            whiteSpace: "pre-wrap", // Permite quebra de linha para o layout
-          }}
-        >
-          Horário:
-          {disciplina.horarios.map((horario, index) =>
-            horario ? (
-              <span key={`${disciplina.nome}-${index}`}>
-                <br />
-                &emsp;{horario.dia} {horario.inicio}/{horario.fim}
-              </span>
-            ) : null
-          )}
-        </Typography>
-      );
-    }
-
-    // Caso não haja horários definidos, exibe "A definir"
-    return (
-      <Typography
-        align="left"
-        variant="body1"
-        style={{
-          fontSize: "small",
-        }}
-      >
-        Horário:
-        <br />
-        &emsp;A definir
-      </Typography>
-    );
-  };
-
   return (
     <ThemeProvider theme={customTheme}>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         {docentes.length > 0 && disciplinas.length > 0 && (
-          <TableContainer sx={{ maxHeight: 620 }}>
+          <TableContainer sx={{ maxHeight: '50rem' }}>
             <Table
               sx={{ minWidth: 650 }}
               aria-label="sticky table"
@@ -556,70 +517,20 @@ export default function Timetable() {
                       left: 0, // Fixando a célula à esquerda
                       backgroundColor: "white", // Evitando que o fundo fique transparente ao fixar
                       zIndex: 3, // Assegurando que o cabeçalho da célula esteja sobreposto
-                      /* display: "flex", justifyContent: "center"*/
                       textAlign: "center",
                     }}
                   >
-                    <ButtonGroup variant="outlined" aria-label="Button group">
-                      <Button onClick={executeProcess2}>
-                        <PlayArrowIcon />
-                      </Button>
-                      <Button onClick={cleanStateAtribuicoes}>
-                        <CleaningServicesIcon />
-                      </Button>
-                    </ButtonGroup>
+                    <ButtonGroupHeader key="button_group_timetabling" onExecute={executeProcess2} onClean={cleanStateAtribuicoes}/>
                   </TableCell>
                   {disciplinas.map(
                     (disciplina) =>
                       disciplina.ativo && (
-                        <TableCell
-                          key={disciplina.id}
-                          //align="center"
-                          onClick={(event) =>
-                            handleColumnClick(event, {
-                              id_disciplina: disciplina.id,
-                              tipo_trava: TipoTrava.Column,
-                            })
-                          }
-                          sx={{
-                            padding: "2px",
-                          }}
-                          style={{
-                            backgroundColor: setHeaderCollor(disciplina.id),
-                            textOverflow: "ellipsis",
-                            margin: "0",
-                            minWidth: "12rem",
-                            maxWidth: "12rem",
-                          }}
-                        >
-                          <Stack
-                            spacing={1}
-                            sx={{ /*maxWidth: "9rem",*/ height: "7rem" }}
-                          >
-                            <Typography
-                              align="left"
-                              variant="body1"
-                              style={{ fontWeight: "bold", fontSize: "12px" }}
-                              noWrap
-                              /*TODO: fazer uma fução para isso*/
-                              dangerouslySetInnerHTML={{
-                                __html: disciplina.cursos
-                                  .replace(/^[^;]*;/, "")
-                                  .replace(/<br\s*\/?>/gi, "")
-                                  .replace(/&emsp;/gi, " "),
-                              }}
-                            />
-                            <Typography
-                              align="left"
-                              variant="body1"
-                              style={{ fontWeight: "bold", fontSize: "13px" }}
-                              noWrap
-                            >
-                              {disciplina.codigo + " " + disciplina.nome}
-                            </Typography>
-                            {createHorariosblock(disciplina)}
-                          </Stack>
-                        </TableCell>
+                        <HeaderCell 
+                          key={disciplina.id} 
+                          disciplina={disciplina} 
+                          onHeaderClick={(e) => handleColumnClick(e, {id_disciplina: disciplina.id, tipo_trava: TipoTrava.Column})} 
+                          setHeaderCollor={setHeaderCollor}
+                        />
                       )
                   )}
                 </TableRow>
@@ -699,6 +610,22 @@ export default function Timetable() {
                     )}
                   </TableRow>
                 ))}
+                {/* {docentes.map(docente => ( docente.ativo &&
+                  (
+                    <ColumnCell 
+                      key={docente.nome}
+                      atribuicoes={atribuicoes}
+                      disciplinas={disciplinas.filter(disciplina => disciplina.ativo)}
+                      docente={docente}
+                      travas={travas}
+                      setHover={setHover}
+                      setColumnCollor={isHover}
+                      onColumnClick={() => console.log('Travar')}
+                      handleCellClick={handleCellClick}
+                      maxPriority={maxPriority + 1}
+                    />
+                  )
+                ))} */}
               </TableBody>
             </Table>
           </TableContainer>
@@ -710,7 +637,7 @@ export default function Timetable() {
         onApply={applySolution}
         onStop={() => interruptExecution()}
         processing={processing}
-        itearions={iteracoesRef.current}
+        progress={{current: disciplinasAlocadasRef.current, total: disciplinas.filter(disciplina => disciplina.ativo).length}}
       />
     </ThemeProvider>
   );

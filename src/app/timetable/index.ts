@@ -1,3 +1,4 @@
+import { Celula } from "@/context/Global/utils";
 
 /**
  * Função que define a colocação da célula na tabela
@@ -34,4 +35,32 @@ export function getPriorityColor(
 
   // Retorna a cor ajustada em RGB
   return `rgba(${red}, ${green}, ${blue}, 0.8)`;
+}
+
+
+ /**
+   * Função que define qual será a cor aplicada para cada célula da tabela.
+   * @param {number|null|undefined} prioridade - Prioridade dada pelo docente a disciplina, ou nulo em caso de ser o cabeçalho.
+   * @param {Celula} celula - Refere-se a célula que está sendo carregada.
+   * @returns {string} Retorna um rgba para ser aplicado a propriedade css `background-color`.
+   */
+export function setCellColor(prioridade: number, celula: Celula, atribuido: boolean, maxPriority: number) {
+
+  // Célula travada
+  if(celula.trava) {
+    return `rgba(224, 224, 224, 0.6)`; 
+  }
+
+  // Docente atribuido a Disciplina
+  if(atribuido) {
+    return `rgba(255, 0, 0, 0.4)`;
+  }
+
+
+  // O Docente apresentou uma prioridade para a Disciplina
+  if(prioridade) {
+    return getPriorityColor(prioridade, maxPriority);
+  }
+
+  return `rgba(255, 255, 255, 1)`;
 }

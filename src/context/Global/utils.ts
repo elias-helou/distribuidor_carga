@@ -62,6 +62,7 @@ export interface Celula {
   id_disciplina?: string;
   nome_docente?: string;
   tipo_trava?: TipoTrava;
+  trava?: boolean
 }
 
 // Ver se o melhor lugar para essa interface é aqui
@@ -225,7 +226,7 @@ export function processData(
   travas: Celula[],
   atribuicoes: Atribuicao[]
 ) {
-  const processedDisciplinas: Disciplina[] = cloneDeep(getActives(disciplinas));
+  const processedDisciplinas: Disciplina[] = structuredClone(getActives(disciplinas));
   const processedDocentes: Docente[] = getActives(docentes);
 
   // Pré-processar as disciplinas e docentes ativos em um mapa para acesso rápido
