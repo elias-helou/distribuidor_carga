@@ -63,7 +63,7 @@ import {
   Formulario,
 } from "@/context/Global/utils";
 import { atualizarListaTabu, disciplinaInvalida, gerarTrocasDeDocentes, gerarVizinhoComDocente, gerarVizinhoComRemocao, processarAtribuicaoInicial, Solucao } from "./utils";
-//import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 /**
  * Função para avaliar uma solução
@@ -222,7 +222,7 @@ export async function buscaTabuRefactor(
   NumIterNotChange: number, /*Constante vinda da chamada*/
   MaiorPrioridade: number, /*Constante vinda da chamada*/
   interrompe: () => boolean,
-  //setIteracoes: Dispatch<SetStateAction<number>>
+  setDisciplinasAlocadas: Dispatch<SetStateAction<number>>
 ): Promise<Solucao> {
   // Inicializa a lista tabu
   const listaTabu: Atribuicao[][] = [];
@@ -260,6 +260,10 @@ export async function buscaTabuRefactor(
       // Atualizar a solução atual e a melhor solução
       solucaoAtual = melhorVizinho;
       if (solucaoAtual.avaliacao > melhorSolucao.avaliacao) {
+        // Atualiza a maior quantidade de disciplinas alocadas
+        if(solucaoAtual.atribuicoes.filter(obj => obj.docentes.length !== 0).length > melhorSolucao.atribuicoes.filter(obj => obj.docentes.length !== 0).length) {
+          setDisciplinasAlocadas(solucaoAtual.atribuicoes.filter(obj => obj.docentes.length !== 0).length)
+        }
         melhorSolucao = solucaoAtual;
         // iteracoesSemModificacao = 0; // Reseta as iterações sem modificação
       } 
