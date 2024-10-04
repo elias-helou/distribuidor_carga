@@ -598,17 +598,17 @@ export default function Timetable() {
                         maxWidth: "11rem",
                         position: "sticky",
                         left: 0, // Fixando a célula à esquerda
-                        backgroundColor: setColumnCollor(atribuicao.nome), // Evitando que o fundo fique transparente ao fixar
+                        backgroundColor: 'white', // Evitando que o fundo fique transparente ao fixar
                         zIndex: 1, // Para manter sobre as demais células,
                         textOverflow: "ellipsis",
-                        padding: "5px",
+                        padding: 0,
                       }}
                       onClick={(e) => handleRowClick(e, {nome_docente: atribuicao.nome, tipo_trava: TipoTrava.Row})}
                     >
                       <Typography
                         align="left"
                         variant="body2"
-                        style={{ fontWeight: "bold" }}
+                        sx={{ fontWeight: "bold",  backgroundColor: setColumnCollor(atribuicao.nome), padding: '3px'}}
                         noWrap
                       >
                         {atribuicao.nome}
