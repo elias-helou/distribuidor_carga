@@ -47,12 +47,12 @@ export const processDocentes = (data: any): Docente[] => {
 
   if (saldos) {
     for (const [nome, saldo] of Object.entries(saldos)) {
-      newDocentes.push({ nome:nome, saldo:saldo, ativo: true, formularios: new Map<string, number>() });
+      newDocentes.push({ nome:nome, saldo:saldo, ativo: true, formularios: new Map<string, number>(), trava: false });
     }
   } else if (docentesJson) {
     for (const docente of docentesJson) {
       // Verificar depois com o Elias de adicionarmos o campo Ativo no arquivo exportado pelo nosso sistema
-      newDocentes.push({ nome: docente, ativo: true, formularios: new Map<string, number>()});
+      newDocentes.push({ nome: docente, ativo: true, formularios: new Map<string, number>(), trava: false});
     }
   }
 

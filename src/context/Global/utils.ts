@@ -3,7 +3,8 @@ export interface Docente {
   saldo?: number;
   ativo: boolean;
   formularios: Map<string, number>; // id_disciplina, prioridade
-  // Adicionar uma flag Travada: boolean, que será alterada quando uma linha inteira for travada.
+  trava: boolean; //flag trava: boolean, que será alterada quando uma linha inteira for travada.
+  // Pensar se faz sentido colocar um Set com as Disciplinas que o docente foi alocado
 }
 
 export interface DisciplinaETL {
@@ -23,13 +24,13 @@ export interface DisciplinaETL {
 }
 
 export interface Disciplina {
+  id: string;
   codigo: string;
   turma: number;
   nome: string;
   horarios: Horario[];
   cursos: string;
   ementa: string;
-  id: string;
   nivel: string;
   prioridade: number;
   noturna: boolean;
@@ -37,7 +38,8 @@ export interface Disciplina {
   docentes?: string[];
   ativo: boolean;
   conflitos: Set<string>; // Ids das disciplinas que apresentam choque de horário
-  // Adicionar uma flag Travada: boolean, que será alterada quando uma coluna inteira for travada.
+  trava: boolean; // flag trava: boolean, que será alterada quando uma coluna inteira for travada.
+  // Pensar se faz sentido colocar um Set com os Docentes alocados para a Disciplina
 }
 
 export interface Atribuicao {
@@ -52,10 +54,12 @@ export interface Formulario {
 }
 
 export enum TipoTrava {
+  NotTrava, //
   Column,
   Row,
   Cell,
   ColumnCell, // Identificar se, após a coluna ser destravada, a célula deve continuar travada
+  RowCell, // Identificar se, após a linha ser destravada, a célula deve continuar travada
 }
 
 export interface Celula {
@@ -140,7 +144,8 @@ export function ajustaHorarioDisciplinas(
       const newDisciplina: Disciplina = {
         ...disciplina,
         horarios: horarios, // Atribui o novo valor de horários
-        conflitos: new Set()
+        conflitos: new Set(),
+        trava: false
       };
 
       // Adiciona a nova disciplina à lista

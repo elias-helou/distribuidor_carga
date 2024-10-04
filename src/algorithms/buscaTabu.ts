@@ -62,7 +62,7 @@ import {
   Atribuicao,
   Formulario,
 } from "@/context/Global/utils";
-import { atualizarListaTabu, disciplinaInvalida, gerarTrocasDeDocentes, gerarVizinhoComDocente, gerarVizinhoComRemocao, processarAtribuicaoInicial, Solucao } from "./utils";
+import { atualizarListaTabu, checaTravaCelula, disciplinaInvalida, gerarTrocasDeDocentes, gerarVizinhoComDocente, gerarVizinhoComRemocao, processarAtribuicaoInicial, Solucao } from "./utils";
 import { Dispatch, SetStateAction } from "react";
 
 /**
@@ -181,6 +181,11 @@ function gerarVizinhos(
   for(let i = 0; i < disciplinas.length; i++) {
     const disciplina = disciplinas[i];
     if (disciplinaInvalida(disciplina, travas)) continue;
+  
+    const atribuicao = solucaoAtual.find(obj => obj.id_disciplina === disciplina.id);
+    if(atribuicao.docentes.some(nome => checaTravaCelula(nome, disciplina.id, travas))){
+      continue;
+    }
 
     // Gera vizinhos com docentes
     const vizinhancaDocentes = gerarVizinhoComDocente(solucaoAtual, docentes, disciplina, travas, listaTabu)
@@ -189,7 +194,7 @@ function gerarVizinhos(
     }
 
     // Gera vizinho com remoção de docentes
-    const vizinhancaRemover = gerarVizinhoComRemocao(solucaoAtual, disciplina, listaTabu)
+    const vizinhancaRemover = gerarVizinhoComRemocao(solucaoAtual, disciplina, listaTabu, travas)
     if(vizinhancaRemover.length > 0) {
       vizinhanca = vizinhanca.concat(vizinhancaRemover)
     }
@@ -245,7 +250,7 @@ export async function buscaTabuRefactor(
   
   // Criar uma função que faça toda a validação do while
   while(true) {
-    await delay(0);
+    await delay(1);
     // Gerar vizinhos e selecionar o melhor não tabu
     const vizinhos: Atribuicao[][] = gerarVizinhos(solucaoAtual.atribuicoes, docentes, disciplinas, travas, listaTabu);
 
@@ -259,12 +264,14 @@ export async function buscaTabuRefactor(
 
       // Atualizar a solução atual e a melhor solução
       solucaoAtual = melhorVizinho;
-      if (solucaoAtual.avaliacao > melhorSolucao.avaliacao) {
+      if (solucaoAtual.avaliacao >= melhorSolucao.avaliacao) {
         // Atualiza a maior quantidade de disciplinas alocadas
-        if(solucaoAtual.atribuicoes.filter(obj => obj.docentes.length !== 0).length > melhorSolucao.atribuicoes.filter(obj => obj.docentes.length !== 0).length) {
+        console.log('Na função: ', solucaoAtual.atribuicoes.filter(obj => obj.docentes.length !== 0).length)
+        if(solucaoAtual.atribuicoes.filter(obj => obj.docentes.length !== 0).length >= melhorSolucao.atribuicoes.filter(obj => obj.docentes.length !== 0).length) {
           setDisciplinasAlocadas(solucaoAtual.atribuicoes.filter(obj => obj.docentes.length !== 0).length)
         }
         melhorSolucao = solucaoAtual;
+        
         // iteracoesSemModificacao = 0; // Reseta as iterações sem modificação
       } 
       // else {

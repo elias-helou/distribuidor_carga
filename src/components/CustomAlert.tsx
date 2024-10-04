@@ -4,8 +4,8 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
-import Collapse from "@mui/material/Collapse";
-import CloseIcon from "@mui/icons-material/Close";
+import { Grow, Snackbar } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 
 export interface IAlertProps {
   id: number;
@@ -25,24 +25,26 @@ export default function CustomAlert(props: IAlertProps) {
     // Executa quando a animação de colapso termina
     if (props.handleClose) {
       setOpen(false) // Fecha alerta
-      setTimeout(() => {
-        props.handleClose(); // Chama a função no elemento pai que remove o alerta da fila
-      }, 1000) // Adiciona um delay para remover o arleta da fila do estado visando deixa-lo executar a animação de "fechar"
+      props.handleClose(); // Chama a função no elemento pai que remove o alerta da fila // Adiciona um delay para remover o arleta da fila do estado visando deixa-lo executar a animação de "fechar"
     }
   };
 
-  /**
-   * ``useEffect`` utilizado para adicionar o comportamento de fechar o alerta em X segundos.
+    /**
+   * Função para definir a transição do alerta.
    */
-  React.useEffect(() => {
-    setTimeout(() => {
-      handleExited();
-    }, props.closeTime * 1000);
-  });
+  const GrowTransition = (props: any) => {
+    return <Grow {...props} />;
+  };
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Collapse in={open} onExited={handleExited}>
+      <Snackbar 
+        open={open} 
+        onClose={handleExited} 
+        autoHideDuration={props.closeTime * 1000} 
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        TransitionComponent={GrowTransition}
+      >
         <Alert
           key={props.id}
           severity={props.type}
@@ -52,7 +54,7 @@ export default function CustomAlert(props: IAlertProps) {
               aria-label="close"
               color="inherit"
               size="small"
-              onClick={() => setOpen(false)}
+              onClick={handleExited}
             >
               <CloseIcon fontSize="inherit" />
             </IconButton>
@@ -60,7 +62,7 @@ export default function CustomAlert(props: IAlertProps) {
         >
           {props.message}
         </Alert>
-      </Collapse>
+      </Snackbar>
     </Box>
   );
 }

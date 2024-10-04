@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -56,6 +56,10 @@ export default function AlgoritmoDialog({
   processing,
   progress
 }: AlgoritmoDialogProps) {
+
+  useEffect(() => {
+    console.log(progress)
+  }, [progress])
 
   const progressPercentage = (): number => {
     if(!processing) {

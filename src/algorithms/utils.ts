@@ -190,6 +190,17 @@ export function docenteInvalido(docente: Docente, disciplina: Disciplina, travas
 }
 
 /**
+ * 
+ * @param docente 
+ * @param disciplina 
+ * @param travas 
+ * @returns 
+ */
+export function checaTravaCelula(docente: string, disciplina: string, travas: Trava[]) {
+  return travas.filter(trava => trava.id_disciplina === disciplina && trava.nome_docente === docente).length > 0
+}
+
+/**
  * Gera vizinhos ao atribuir docentes a uma disciplina.
  * @param {Atribuicao[]} solucaoAtual A solução atual.
  * @param {Docente[]} docentes Lista de docentes disponíveis.
@@ -209,6 +220,12 @@ export function gerarVizinhoComDocente(
 
   for (const docente of docentes) {
     if (!podeAtribuir(docente, disciplina, travas)) continue;
+    //const atribuicao = solucaoAtual.find(a => a.id_disciplina === disciplina.id);
+    
+    // Generalizar
+    // if(checaTravaCelula(docente.nome, disciplina.id, travas)) {
+    //   continue;
+    // }
 
     const vizinho = structuredClone(solucaoAtual);
     const atrib = vizinho.find(a => a.id_disciplina === disciplina.id);
@@ -232,12 +249,18 @@ export function gerarVizinhoComDocente(
 export function gerarVizinhoComRemocao(
   solucaoAtual: Atribuicao[],
   disciplina: Disciplina,
-  listaTabu: Atribuicao[][]
+  listaTabu: Atribuicao[][],
+  travas: Trava[] // Adionado
 ): Atribuicao[][] {
   const novosVizinhos: Atribuicao[][] = [];
   const atribAtual = solucaoAtual.find(a => a.id_disciplina === disciplina.id);
 
   if (atribAtual?.docentes.length > 0) {
+    // Generalizar
+    // if(atribAtual.docentes.some(nome => checaTravaCelula(nome, atribAtual.id_disciplina, travas))) {
+    //   return novosVizinhos;;
+    // }
+      
     const vizinho = structuredClone(solucaoAtual);
     const atrib = vizinho.find(a => a.id_disciplina === disciplina.id);
     atrib.docentes = [];
@@ -279,6 +302,11 @@ export function gerarTrocasDeDocentes(
   const docentesPivo = atribDocentePivo.docentes.map(nome => docentes.find(d => d.nome === nome)).filter(Boolean) as Docente[];
   if (docentesPivo.some(docente => docenteInvalido(docente, disciplinaPivo, travas))) return novosVizinhos;
 
+  // Ver as travas, se tiver trava continuar
+  // if(docentesPivo.some(docente => checaTravaCelula(docente.nome, disciplinaPivo.id, travas))) {
+  //   return novosVizinhos;
+  // }
+
   // Percorrer todas as disciplinas e tentar realizar a troca de docentes
   /*for (const disciplinaAtual of disciplinas)*/
   for(let j = index + 1; j < disciplinas.length; j++) {
@@ -295,6 +323,7 @@ export function gerarTrocasDeDocentes(
     const trocaValida = docentesPivo.every(docente => podeAtribuir(docente, disciplinaAtual, travas)) && 
                         docentesAtual.every(docente => podeAtribuir(docente, disciplinaPivo, travas) &&
                         !compareArrays(docentesPivo, docentesAtual));
+
 
     if (trocaValida) {
       const vizinho = structuredClone(solucaoAtual);

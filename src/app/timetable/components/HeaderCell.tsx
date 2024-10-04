@@ -8,6 +8,14 @@ interface HeaderCellProps {
   setHeaderCollor: (id_disciplina: string) => string;
 }
 
+function HeaderHighliter(ativo: boolean) {
+  return (
+    <div style={{}} >
+
+    </div>
+  )
+}
+
 /**
  * Componente para cada disciplina no cabeçalho da tabela.
  */
@@ -54,38 +62,45 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
     <TableCell
       key={disciplina.id}
       onClick={(event) => onHeaderClick(event, disciplina)}
-      sx={{ padding: "2px" }}
+      
       style={{
-        backgroundColor: setHeaderCollor(disciplina.id),
+        backgroundColor: 'white',
         textOverflow: "ellipsis",
         margin: "0",
         minWidth: "12rem",
         maxWidth: "12rem",
-      }}
+        padding: 0
+      }} 
     >
-      <Stack spacing={1} sx={{ height: "7rem" }}>
-        <Typography
-          align="left"
-          variant="body1"
-          style={{ fontWeight: "bold", fontSize: "12px" }}
-          noWrap
-          dangerouslySetInnerHTML={{
-            __html: disciplina.cursos
-              .replace(/^[^;]*;/, "")
-              .replace(/<br\s*\/?>/gi, "")
-              .replace(/&emsp;/gi, " "),
-          }}
-        />
-        <Typography
-          align="left"
-          variant="body1"
-          style={{ fontWeight: "bold", fontSize: "13px" }}
-          noWrap
-        >
-          {disciplina.codigo + " " + disciplina.nome}
-        </Typography>
-        {createHorariosblock(disciplina)}
-      </Stack>
+      <div style={{
+        padding: 0,
+        border: 0,
+        backgroundColor: setHeaderCollor(disciplina.id),
+      }}>
+        <Stack spacing={1} sx={{ height: "7rem", padding:'2px' }}>
+          <Typography
+            align="left"
+            variant="body1"
+            style={{ fontWeight: "bold", fontSize: "12px" }}
+            noWrap
+            dangerouslySetInnerHTML={{
+              __html: disciplina.cursos
+                .replace(/^[^;]*;/, "")
+                .replace(/<br\s*\/?>/gi, "")
+                .replace(/&emsp;/gi, " "),
+            }}
+          />
+          <Typography
+            align="left"
+            variant="body1"
+            style={{ fontWeight: "bold", fontSize: "13px" }}
+            noWrap
+          >
+            {disciplina.codigo + " " + disciplina.nome}
+          </Typography>
+          {createHorariosblock(disciplina)}
+        </Stack>
+      </div>
     </TableCell>
   );
 };

@@ -2,10 +2,7 @@
 
 import { useGlobalContext } from "@/context/Global";
 import {
-  Button,
-  ButtonGroup,
   createTheme,
-  Stack,
   ThemeProvider,
   Typography,
 } from "@mui/material";
@@ -16,13 +13,10 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
 import { getPriorityColor } from ".";
 import {
   Atribuicao,
   Celula,
-  Disciplina,
   processData,
   TipoTrava,
 } from "@/context/Global/utils";
@@ -34,7 +28,6 @@ import { useAlertsContext } from "@/context/Alerts";
 import { buscaTabuRefactor } from "@/algorithms/buscaTabu";
 import ButtonGroupHeader from "./components/ButtonGroupHeader";
 import HeaderCell from "./components/HeaderCell";
-import ColumnCell from "./components/ColumnCell";
 
 // Customizar todos os TableCell
 const customTheme = createTheme({
@@ -155,14 +148,14 @@ export default function Timetable() {
     return newRows;
   };
 
-  /**
-   * Função utilizada para alterar a cor de fundo das disciplinas ou dos docentes quando o mouse passar por uma célula
-   * @param docente
-   * @returns
-   */
-  const isHover = (docente: string) => {
-    return hover.docente === docente ? `rgba(25, 118, 210, 0.12)` : "white";
-  };
+  // /**
+  //  * Função utilizada para alterar a cor de fundo das disciplinas ou dos docentes quando o mouse passar por uma célula
+  //  * @param docente
+  //  * @returns
+  //  */
+  // const isHover = (docente: string) => {
+  //   return hover.docente === docente ? `rgba(25, 118, 210, 0.12)` : "white";
+  // };
 
 
   const setHeaderCollor = (id_disciplina: string) => {
@@ -177,6 +170,24 @@ export default function Timetable() {
       // Caso seja apenas a trava
       return `rgba(224, 224, 224, 0.6)`;
     }else if (id_disciplina === hover.id_disciplina) { // Verifica se está no hover
+      return `rgba(25, 118, 210, 0.12)`;
+    }  else {
+      return "white";
+    }
+  };
+
+  const setColumnCollor = (nome_docente: string) => {
+    // Verifica se está travado
+    if (
+      travas.some((obj) => obj.nome_docente === nome_docente && obj.tipo_trava === TipoTrava.Row)
+    ) {
+      // Verifica se a trava está com hover
+      if (nome_docente === hover.docente) {
+        return `rgba(132, 118, 210, 0.12)`;
+      }
+      // Caso seja apenas a trava
+      return `rgba(224, 224, 224, 0.6)`;
+    }else if (nome_docente === hover.docente) { // Verifica se está no hover
       return `rgba(25, 118, 210, 0.12)`;
     }  else {
       return "white";
@@ -198,6 +209,14 @@ export default function Timetable() {
           obj.nome_docente === celula.nome_docente
       )
     ) {
+
+      if(atribuicoes.some(
+        (obj) =>
+          obj.id_disciplina == celula.id_disciplina &&
+          obj.docentes.some((docente) => docente == celula.nome_docente)
+      )) {
+        return `rgba(182, 44, 44, 0.4)`
+      }
       return `rgba(224, 224, 224, 0.6)`;
     } else if (
       atribuicoes.some(
@@ -344,6 +363,39 @@ export default function Timetable() {
     }
   };
 
+    const handleRowClick = (event, trava: Celula) => {
+    if (event.ctrlKey) {      
+      if (
+        !travas.some((obj) => JSON.stringify(obj) === JSON.stringify(trava))
+      ) {
+        // Se a trava for do Tipo Coluna, todas as células devem ser travadas
+        if (trava.tipo_trava == TipoTrava.Row) {
+          const travar: Celula[] = disciplinas.map((disciplina) => ({
+            id_disciplina: disciplina.id,
+            nome_docente: trava.nome_docente,
+            tipo_trava: TipoTrava.RowCell,
+          }));
+          // Adiciona a trava "mãe" no array
+          travar.push(trava);
+
+          setTravas([...travas, ...travar]);
+        }
+      } else {
+        // Verifica o tipo da trava sendo removida, se for a de coluna as células também serão destravadas. Caso a célula tenho sido travada, ela permanescerá travada.
+        if (trava.tipo_trava == TipoTrava.Row) {
+          const newTravas = travas.filter(
+            (obj) =>
+              (obj.tipo_trava !== TipoTrava.RowCell &&
+                obj.tipo_trava !== TipoTrava.Row) ||
+              obj.nome_docente != trava.nome_docente
+          );
+
+          setTravas(newTravas);
+        }
+      }
+    }
+  };
+
   /**
    * Limpa o state `atribuicoes`, deixando-o vazio.
    */
@@ -435,6 +487,7 @@ export default function Timetable() {
     // p -> Processados
       const { pDisciplinas, pDocentes, pFormularios, pTravas, pAtribuicoes } =
       processData(disciplinas, docentes, formularios, travas, atribuicoes);
+      
       const solucaoRefactor = await buscaTabuRefactor(pDisciplinas, pDocentes, pFormularios, pTravas, pAtribuicoes, 10, maxPriority + 1, () => interrompeRef.current, setDisciplinasAlocadas)
 
       console.log("Solução:")
@@ -502,7 +555,7 @@ export default function Timetable() {
     <ThemeProvider theme={customTheme}>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         {docentes.length > 0 && disciplinas.length > 0 && (
-          <TableContainer sx={{ maxHeight: '50rem' }}>
+          <TableContainer sx={{ maxHeight: '38rem' }}>
             <Table
               sx={{ minWidth: 650 }}
               aria-label="sticky table"
@@ -545,11 +598,12 @@ export default function Timetable() {
                         maxWidth: "11rem",
                         position: "sticky",
                         left: 0, // Fixando a célula à esquerda
-                        backgroundColor: isHover(atribuicao.nome), // Evitando que o fundo fique transparente ao fixar
+                        backgroundColor: setColumnCollor(atribuicao.nome), // Evitando que o fundo fique transparente ao fixar
                         zIndex: 1, // Para manter sobre as demais células,
                         textOverflow: "ellipsis",
                         padding: "5px",
                       }}
+                      onClick={(e) => handleRowClick(e, {nome_docente: atribuicao.nome, tipo_trava: TipoTrava.Row})}
                     >
                       <Typography
                         align="left"
@@ -631,14 +685,14 @@ export default function Timetable() {
           </TableContainer>
         )}
       </Paper>
-      <AlgoritmoDialog
+      {openDialog && <AlgoritmoDialog
         open={openDialog}
         onClose={handleCloseDialog}
         onApply={applySolution}
         onStop={() => interruptExecution()}
         processing={processing}
         progress={{current: disciplinasAlocadasRef.current, total: disciplinas.filter(disciplina => disciplina.ativo).length}}
-      />
+      />}
     </ThemeProvider>
   );
 }
