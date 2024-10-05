@@ -8,14 +8,6 @@ interface HeaderCellProps {
   setHeaderCollor: (id_disciplina: string) => string;
 }
 
-function HeaderHighliter(ativo: boolean) {
-  return (
-    <div style={{}} >
-
-    </div>
-  )
-}
-
 /**
  * Componente para cada disciplina no cabeçalho da tabela.
  */
@@ -66,18 +58,13 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
       style={{
         backgroundColor: 'white',
         textOverflow: "ellipsis",
-        margin: "0",
+        margin: 0,
         minWidth: "12rem",
         maxWidth: "12rem",
-        padding: 0
+        padding: 0,
       }} 
     >
-      <div style={{
-        padding: 0,
-        border: 0,
-        backgroundColor: setHeaderCollor(disciplina.id),
-      }}>
-        <Stack spacing={1} sx={{ height: "7rem", padding:'2px' }}>
+        <Stack spacing={1} sx={{ height: "7rem", padding:'2px', backgroundColor: setHeaderCollor(disciplina.id) }}>
           <Typography
             align="left"
             variant="body1"
@@ -100,7 +87,6 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
           </Typography>
           {createHorariosblock(disciplina)}
         </Stack>
-      </div>
     </TableCell>
   );
 };
