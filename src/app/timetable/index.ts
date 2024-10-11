@@ -1,4 +1,4 @@
-import { Atribuicao, Celula, Disciplina, Docente, Formulario } from "@/context/Global/utils";
+import { Atribuicao, Celula, Disciplina, Docente } from "@/context/Global/utils";
 
 /**
  * Função que define a colocação da célula na tabela
@@ -69,8 +69,8 @@ export function setCellColor(prioridade: number, celula: Celula, atribuido: bool
 /**
  * Função para gerar o nome do json que será exportado
  */
-export function getFormattedDate(): string {
-    const now = new Date();
+export function getFormattedDate(date?: Date): string {
+    const now = date ? date : new Date();
     
     // Obtendo os valores individuais de ano, mês, dia, hora, minuto e segundo
     const year = now.getFullYear();
@@ -81,7 +81,7 @@ export function getFormattedDate(): string {
     const seconds = String(now.getSeconds()).padStart(2, '0');
     
     // Montando a string no formato YYYYMMDD_hh:mm:s.json
-    return `${year}${month}${day}_${hours}:${minutes}:${seconds}.json`;
+    return `${year}${month}${day}_${hours}_${minutes}_${seconds}`;
   }
 
 /**

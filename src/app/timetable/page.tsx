@@ -22,12 +22,12 @@ import {
 } from "@/context/Global/utils";
 //import { buscaTabu } from "@/algorithms";
 import { useEffect, useRef, useState } from "react";
-import { Solucao } from "@/algorithms/utils";
 import AlgoritmoDialog from "@/components/AlgorithmDialog";
 import { useAlertsContext } from "@/context/Alerts";
 import { buscaTabuRefactor } from "@/algorithms/buscaTabu";
 import ButtonGroupHeader from "./components/ButtonGroupHeader";
 import HeaderCell from "./components/HeaderCell";
+import { addNewSolutionToHistory, updateSolutionId } from "@/context/SolutionHistory/utils";
 
 // Customizar todos os TableCell
 const customTheme = createTheme({
@@ -51,6 +51,10 @@ export default function Timetable() {
     setAtribuicoes,
     travas,
     setTravas,
+    solucaoAtual,
+    setSolucaoAtual,
+    historicoSolucoes,
+    setHistoricoSolucoes
   } = useGlobalContext();
 
   let maxPriority = 0;
@@ -68,10 +72,6 @@ export default function Timetable() {
   
   // Usamos useRef para manter uma referência ao valor mais atualizado de "interrompe"
   const interrompeRef = useRef(interrompe);
-  const [solucao, setSolucao] = useState<Solucao>({
-    avaliacao: 0,
-    atribuicoes: [],
-  });
 
   /**
    * Alertas
@@ -495,7 +495,7 @@ export default function Timetable() {
 
       console.log("Solução:")
       console.log(solucaoRefactor)
-      setSolucao(solucaoRefactor); // Atribui a solução encontrada no state local.
+      setSolucaoAtual(solucaoRefactor); // Atribui a solução encontrada no state local.
 
       setProcessing(false); // Encerra o processamento
       setInterrompe(false); // Altera o state da flag de interupção para falso
@@ -520,10 +520,17 @@ export default function Timetable() {
    * Aplica a solução encontrada pelo algorítmo no state global `atribuicoes`.
    */
   const applySolutionToState = () => {
-    if (atribuicoes.length == solucao.atribuicoes.length) {
-      setAtribuicoes(solucao.atribuicoes);
+    /**
+     * Adiciona ao histórico de soluções
+     */
+    const idSolucao: string = addNewSolutionToHistory(solucaoAtual, setHistoricoSolucoes, historicoSolucoes);
+    updateSolutionId(setSolucaoAtual, idSolucao)
+
+    /** Alterar para ver o state solucaoAtual */
+    if (atribuicoes.length == solucaoAtual.atribuicoes.length) {
+      setAtribuicoes(solucaoAtual.atribuicoes);
     } else {
-      for (const newAtribuicao of solucao.atribuicoes) {
+      for (const newAtribuicao of solucaoAtual.atribuicoes) {
         setAtribuicoes((prevAtribuicoes) =>
           prevAtribuicoes.map((atribuicao) =>
             atribuicao.id_disciplina === newAtribuicao.id_disciplina
@@ -536,7 +543,7 @@ export default function Timetable() {
         );
       }
     }
-  };
+   };
 
   /**
    * Processos referentes a aplicação da solução obtida pelo algoritmo ao state global.
@@ -570,9 +577,9 @@ export default function Timetable() {
         },
       ]);
     }
-    const filename = getFormattedDate()
+    const filename = getFormattedDate() + '.json'
 
-    exportJson(filename,docentes, disciplinas, atribuicoes)
+    exportJson(filename, docentes, disciplinas, atribuicoes)
   }
 
   return (
