@@ -28,6 +28,7 @@ export interface Disciplina {
   codigo: string;
   turma: number;
   nome: string;
+  horario: string;
   horarios: Horario[];
   cursos: string;
   ementa: string;

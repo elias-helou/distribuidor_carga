@@ -13,14 +13,14 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { getPriorityColor } from ".";
+import { exportJson, getFormattedDate, getPriorityColor } from ".";
 import {
   Atribuicao,
   Celula,
   processData,
   TipoTrava,
 } from "@/context/Global/utils";
-import { buscaTabu } from "@/algorithms";
+//import { buscaTabu } from "@/algorithms";
 import { useEffect, useRef, useState } from "react";
 import { Solucao } from "@/algorithms/utils";
 import AlgoritmoDialog from "@/components/AlgorithmDialog";
@@ -446,40 +446,43 @@ export default function Timetable() {
   /**
    * Executa o algorítmo Busca Tabu
    */
-  const executeProcess = async () => {
-    //setIteracoes(0);
-    handleClickOpenDialog(); // Abre a modal imediatamente
-    setProcessing(true); // Aciona o botão de loading
+  // const executeProcess = async () => {
+  //   //setIteracoes(0);
+  //   handleClickOpenDialog(); // Abre a modal imediatamente
+  //   setProcessing(true); // Aciona o botão de loading
 
-    // p -> Processados
-    const { pDisciplinas, pDocentes, pFormularios, pTravas, pAtribuicoes } =
-      processData(disciplinas, docentes, formularios, travas, atribuicoes);
+  //   // p -> Processados
+  //   const { pDisciplinas, pDocentes, pFormularios, pTravas, pAtribuicoes } =
+  //     processData(disciplinas, docentes, formularios, travas, atribuicoes);
 
-    const solucaoObtida = await buscaTabu(
-      pDisciplinas,
-      pDocentes,
-      pFormularios,
-      pTravas,
-      pAtribuicoes,
-      150,
-      maxPriority + 1,
-      () => interrompeRef.current,
-      setDisciplinasAlocadas
-    ); // Executa a busca tabu
-    if (!interrompeRef.current) {
-      setAlertas([
-        ...alertas,
-        { id: new Date().getTime(), message: "Execução finalizada.", type: "info" },
-      ]);
-    }
-    console.log(solucaoObtida);
-    setSolucao(solucaoObtida); // Atribui a solução encontrada no state local.
+  //   const solucaoObtida = await buscaTabu(
+  //     pDisciplinas,
+  //     pDocentes,
+  //     pFormularios,
+  //     pTravas,
+  //     pAtribuicoes,
+  //     150,
+  //     maxPriority + 1,
+  //     () => interrompeRef.current,
+  //     setDisciplinasAlocadas
+  //   ); // Executa a busca tabu
+  //   if (!interrompeRef.current) {
+  //     setAlertas([
+  //       ...alertas,
+  //       { id: new Date().getTime(), message: "Execução finalizada.", type: "info" },
+  //     ]);
+  //   }
+  //   console.log(solucaoObtida);
+  //   setSolucao(solucaoObtida); // Atribui a solução encontrada no state local.
 
-    setProcessing(false); // Encerra o processamento
-    setInterrompe(false); // Altera o state da flag de interupção para falso
-    setDisciplinasAlocadas(0);
-  };
+  //   setProcessing(false); // Encerra o processamento
+  //   setInterrompe(false); // Altera o state da flag de interupção para falso
+  //   setDisciplinasAlocadas(0);
+  // };
 
+  /**
+   * Executa o algorítmo Busca Tabu
+   */
   const executeProcess2 = async () => {
     handleClickOpenDialog(); // Abre a modal imediatamente
     setProcessing(true); // Aciona o botão de loading
@@ -551,6 +554,27 @@ export default function Timetable() {
     handleCloseDialog();
   };
 
+  /**
+   * Remover depois que for feita a tela de Histórico de execuções
+   */
+
+  
+  const downalodJson = () => {
+    if(!atribuicoes.some(atribuicao => atribuicao.docentes.length > 0)) {
+        setAlertas([
+        ...alertas,
+        {
+          id: new Date().getTime(),
+          message: "Nenhuma atribuição foi realizada!",
+          type: "warning",
+        },
+      ]);
+    }
+    const filename = getFormattedDate()
+
+    exportJson(filename,docentes, disciplinas, atribuicoes)
+  }
+
   return (
     <ThemeProvider theme={customTheme}>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -573,7 +597,7 @@ export default function Timetable() {
                       textAlign: "center",
                     }}
                   >
-                    <ButtonGroupHeader key="button_group_timetabling" onExecute={executeProcess2} onClean={cleanStateAtribuicoes}/>
+                    <ButtonGroupHeader key="button_group_timetabling" onExecute={executeProcess2} onClean={cleanStateAtribuicoes} download={downalodJson}/>
                   </TableCell>
                   {disciplinas.map(
                     (disciplina) =>
