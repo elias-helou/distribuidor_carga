@@ -169,7 +169,7 @@ export default function InputFileUpload() {
       p={4}
       border="1px solid #ccc"
       borderRadius={2}
-      maxWidth={400}
+      maxWidth={450}
       mx="auto"
       boxShadow={2}
     >
@@ -216,27 +216,6 @@ export default function InputFileUpload() {
       >
         {uploading ? "Carregando..." : "Carregar Arquivo"}
       </Button>
-
-      {/* Exibindo os alertas na parte inferior direita */}
-      {/* {alerts.length > 0 && (
-        <Stack
-          position="fixed"
-          bottom={16}
-          right={16}
-          zIndex={9999}
-          spacing={1}
-        >
-          {alerts.map((alert) => (
-            <CustomAlert
-              key={alert.id}
-              type={alert.type}
-              message={alert.message}
-              id={alert.id}
-              setFatherState={() => removeAlert(alert.id)} // Remove o alerta quando for fechado
-            />
-          ))}
-        </Stack>
-      )} */}
     </Box>
   );
 }
