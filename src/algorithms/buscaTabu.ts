@@ -194,7 +194,7 @@ function gerarVizinhos(
     }
 
     // Gera vizinho com remoção de docentes
-    const vizinhancaRemover = gerarVizinhoComRemocao(solucaoAtual, disciplina, listaTabu, travas)
+    const vizinhancaRemover = gerarVizinhoComRemocao(solucaoAtual, disciplina, listaTabu)
     if(vizinhancaRemover.length > 0) {
       vizinhanca = vizinhanca.concat(vizinhancaRemover)
     }

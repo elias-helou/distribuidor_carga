@@ -6,11 +6,6 @@ import {
   Docente,
 } from "@/context/Global/utils";
 
-export interface Solucao {
-  atribuicoes: Atribuicao[];
-  avaliacao: number;
-}
-
 // /**
 //  * Função que transforma a `string` horário em um objeto.
 //  * @param horario `String` original representando os horários de aula.
@@ -250,7 +245,6 @@ export function gerarVizinhoComRemocao(
   solucaoAtual: Atribuicao[],
   disciplina: Disciplina,
   listaTabu: Atribuicao[][],
-  travas: Trava[] // Adionado
 ): Atribuicao[][] {
   const novosVizinhos: Atribuicao[][] = [];
   const atribAtual = solucaoAtual.find(a => a.id_disciplina === disciplina.id);
