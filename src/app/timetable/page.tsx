@@ -13,7 +13,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { exportJson, getFormattedDate, getPriorityColor } from ".";
+import { exportJson, getFormattedDate, getPriorityColor, saveAtribuicoesInHistoryState } from ".";
 import {
   Atribuicao,
   Celula,
@@ -24,7 +24,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import AlgoritmoDialog from "@/components/AlgorithmDialog";
 import { useAlertsContext } from "@/context/Alerts";
-import { buscaTabuRefactor } from "@/algorithms/buscaTabu";
+import { avaliarSolucao, buscaTabuRefactor } from "@/algorithms/buscaTabu";
 import ButtonGroupHeader from "./components/ButtonGroupHeader";
 import HeaderCell from "./components/HeaderCell";
 import { addNewSolutionToHistory, updateSolutionId } from "@/context/SolutionHistory/utils";
@@ -561,6 +561,23 @@ export default function Timetable() {
     handleCloseDialog();
   };
 
+  const saveAlterations = () => {
+    const { pDisciplinas, pDocentes, pAtribuicoes } =
+      processData(disciplinas, docentes, formularios, travas, atribuicoes);
+
+    const avaliacao = avaliarSolucao(pAtribuicoes, pDocentes, pDisciplinas ,maxPriority+1);
+    saveAtribuicoesInHistoryState(atribuicoes, avaliacao, historicoSolucoes, setHistoricoSolucoes, setSolucaoAtual)
+
+    setAlertas([
+      ...alertas,
+      {
+        id: new Date().getTime(),
+        message: "As atribuições foram adicionadas ao histórico!",
+        type: "success",
+      },
+    ]);
+  }
+
   /**
    * Remover depois que for feita a tela de Histórico de execuções
    */
@@ -604,7 +621,7 @@ export default function Timetable() {
                       textAlign: "center",
                     }}
                   >
-                    <ButtonGroupHeader key="button_group_timetabling" onExecute={executeProcess2} onClean={cleanStateAtribuicoes} download={downalodJson}/>
+                    <ButtonGroupHeader key="button_group_timetabling" onExecute={executeProcess2} onClean={cleanStateAtribuicoes} download={downalodJson} saveAlterations={saveAlterations}/>
                   </TableCell>
                   {disciplinas.map(
                     (disciplina) =>

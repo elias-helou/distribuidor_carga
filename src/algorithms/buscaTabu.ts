@@ -61,8 +61,9 @@ import {
   Docente,
   Atribuicao,
   Formulario,
+  Solucao,
 } from "@/context/Global/utils";
-import { atualizarListaTabu, checaTravaCelula, disciplinaInvalida, gerarTrocasDeDocentes, gerarVizinhoComDocente, gerarVizinhoComRemocao, processarAtribuicaoInicial, Solucao } from "./utils";
+import { atualizarListaTabu, checaTravaCelula, disciplinaInvalida, gerarTrocasDeDocentes, gerarVizinhoComDocente, gerarVizinhoComRemocao, processarAtribuicaoInicial } from "./utils";
 import { Dispatch, SetStateAction } from "react";
 
 /**
@@ -73,7 +74,7 @@ import { Dispatch, SetStateAction } from "react";
  * @param {number} maiorPrioridade Maior prioridade encontrada nos formulários.
  * @returns {number} Valor avaliado para as atribuições apresentadas.
  */
-function avaliarSolucao(
+export function avaliarSolucao(
   atribuicoes: Atribuicao[],
   docentes: Docente[],
   disciplinas: Disciplina[],

@@ -20,7 +20,6 @@ export function addNewSolutionToHistory(novaSolucao: Solucao,
     newHistoricoSolucoesMap.set(id, {id: id, solucao: novaSolucao, datetime: date.toLocaleString()})
 
     setHistoricoSolucoes(newHistoricoSolucoesMap)
-
     return id;
 }
 
