@@ -77,6 +77,18 @@ export interface Horario {
   fim: string;
 }
 
+export interface Solucao {
+  atribuicoes: Atribuicao[];
+  avaliacao: number;
+  idHistorico?: string
+}
+
+export interface HistoricoSolucao {
+  id: string;
+  datetime: string;
+  solucao: Solucao;
+}
+
 /**
  * Verifica se um objeto é do tipo Disciplina
  * @param obj Objeto a ser verificado

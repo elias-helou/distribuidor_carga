@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { Atribuicao, Celula, Disciplina, Docente, Formulario } from "./utils";
+import { Atribuicao, Celula, Disciplina, Docente, Formulario, HistoricoSolucao, Solucao } from "./utils";
 
 
 
@@ -14,6 +14,14 @@ interface GlobalContextInterface {
   setFormularios: React.Dispatch<React.SetStateAction<Formulario[]>>;
   travas: Celula[];
   setTravas: React.Dispatch<React.SetStateAction<Celula[]>>;
+
+  /**
+   * Histórico de soluções
+   */
+  historicoSolucoes: Map<string, HistoricoSolucao>;
+  setHistoricoSolucoes: React.Dispatch<React.SetStateAction<Map<string, HistoricoSolucao>>>;
+  solucaoAtual: Solucao;
+  setSolucaoAtual: React.Dispatch<React.SetStateAction<Solucao>>;
 }
 
 const GlobalContext = createContext<GlobalContextInterface>({
@@ -27,6 +35,10 @@ const GlobalContext = createContext<GlobalContextInterface>({
   setFormularios: () => {},
   travas: [],
   setTravas: () => {},
+  historicoSolucoes: new Map<string, HistoricoSolucao>(),
+  setHistoricoSolucoes: () => {},
+  solucaoAtual: {atribuicoes: [], avaliacao: undefined},
+  setSolucaoAtual: () => {}
 });
 
 export function GlobalWrapper({ children }: { children: React.ReactNode }) {
@@ -35,6 +47,12 @@ export function GlobalWrapper({ children }: { children: React.ReactNode }) {
   const [atribuicoes, setAtribuicoes] = useState<Atribuicao[]>([]);
   const [formularios, setFormularios] = useState<Formulario[]>([]);
   const [travas, setTravas] = useState<Celula[]>([]);
+
+  /**
+   * Histórico de soluções
+   */
+  const [historicoSolucoes, setHistoricoSolucoes] = useState<Map<string, HistoricoSolucao>>(new Map<string, HistoricoSolucao>());
+  const [solucaoAtual, setSolucaoAtual] = useState<Solucao>({atribuicoes: [], avaliacao: undefined});
 
   return (
     <GlobalContext.Provider
@@ -48,7 +66,11 @@ export function GlobalWrapper({ children }: { children: React.ReactNode }) {
         formularios,
         setFormularios,
         travas,
-        setTravas
+        setTravas,
+        historicoSolucoes,
+        setHistoricoSolucoes,
+        setSolucaoAtual,
+        solucaoAtual
       }}
     >
       {children}
