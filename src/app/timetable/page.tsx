@@ -18,6 +18,7 @@ import {
   Atribuicao,
   Celula,
   processData,
+  TipoInsercao,
   TipoTrava,
 } from "@/context/Global/utils";
 //import { buscaTabu } from "@/algorithms";
@@ -54,7 +55,8 @@ export default function Timetable() {
     solucaoAtual,
     setSolucaoAtual,
     historicoSolucoes,
-    setHistoricoSolucoes
+    setHistoricoSolucoes,
+    updateAtribuicoes
   } = useGlobalContext();
 
   let maxPriority = 0;
@@ -147,16 +149,6 @@ export default function Timetable() {
 
     return newRows;
   };
-
-  // /**
-  //  * Função utilizada para alterar a cor de fundo das disciplinas ou dos docentes quando o mouse passar por uma célula
-  //  * @param docente
-  //  * @returns
-  //  */
-  // const isHover = (docente: string) => {
-  //   return hover.docente === docente ? `rgba(25, 118, 210, 0.12)` : "white";
-  // };
-
 
   const setHeaderCollor = (id_disciplina: string) => {
     // Verifica se está travado
@@ -322,6 +314,14 @@ export default function Timetable() {
       } else {
         removerDocente(celula.id_disciplina, celula.nome_docente);
       }
+
+      /**
+       * Caso alguma atribuição for alterada e esse contunto já fizer parte do histórico de soluções,
+       * o identificador da solução deve ser removido.
+       */
+      if(solucaoAtual.idHistorico !== undefined) {
+        setSolucaoAtual((prev) => ({...prev, idHistorico: undefined}))
+      }
     }
   };
 
@@ -446,43 +446,6 @@ export default function Timetable() {
   /**
    * Executa o algorítmo Busca Tabu
    */
-  // const executeProcess = async () => {
-  //   //setIteracoes(0);
-  //   handleClickOpenDialog(); // Abre a modal imediatamente
-  //   setProcessing(true); // Aciona o botão de loading
-
-  //   // p -> Processados
-  //   const { pDisciplinas, pDocentes, pFormularios, pTravas, pAtribuicoes } =
-  //     processData(disciplinas, docentes, formularios, travas, atribuicoes);
-
-  //   const solucaoObtida = await buscaTabu(
-  //     pDisciplinas,
-  //     pDocentes,
-  //     pFormularios,
-  //     pTravas,
-  //     pAtribuicoes,
-  //     150,
-  //     maxPriority + 1,
-  //     () => interrompeRef.current,
-  //     setDisciplinasAlocadas
-  //   ); // Executa a busca tabu
-  //   if (!interrompeRef.current) {
-  //     setAlertas([
-  //       ...alertas,
-  //       { id: new Date().getTime(), message: "Execução finalizada.", type: "info" },
-  //     ]);
-  //   }
-  //   console.log(solucaoObtida);
-  //   setSolucao(solucaoObtida); // Atribui a solução encontrada no state local.
-
-  //   setProcessing(false); // Encerra o processamento
-  //   setInterrompe(false); // Altera o state da flag de interupção para falso
-  //   setDisciplinasAlocadas(0);
-  // };
-
-  /**
-   * Executa o algorítmo Busca Tabu
-   */
   const executeProcess2 = async () => {
     handleClickOpenDialog(); // Abre a modal imediatamente
     setProcessing(true); // Aciona o botão de loading
@@ -519,37 +482,23 @@ export default function Timetable() {
   /**
    * Aplica a solução encontrada pelo algorítmo no state global `atribuicoes`.
    */
-  const applySolutionToState = () => {
-    /**
-     * Adiciona ao histórico de soluções
-     */
-    const idSolucao: string = addNewSolutionToHistory(solucaoAtual, setHistoricoSolucoes, historicoSolucoes);
-    updateSolutionId(setSolucaoAtual, idSolucao)
-
-    /** Alterar para ver o state solucaoAtual */
-    if (atribuicoes.length == solucaoAtual.atribuicoes.length) {
-      setAtribuicoes(solucaoAtual.atribuicoes);
-    } else {
-      for (const newAtribuicao of solucaoAtual.atribuicoes) {
-        setAtribuicoes((prevAtribuicoes) =>
-          prevAtribuicoes.map((atribuicao) =>
-            atribuicao.id_disciplina === newAtribuicao.id_disciplina
-              ? {
-                  ...atribuicao,
-                  docentes: [...atribuicao.docentes, ...newAtribuicao.docentes], // Adiciona os novos docentes corretamente
-                }
-              : { ...atribuicao, docentes: [] }
-          )
-        );
-      }
-    }
+  const ApplySolutionToState = () => {
+      /**
+       * Adiciona ao histórico de soluções
+       */
+      const idSolucao: string = addNewSolutionToHistory(solucaoAtual, setHistoricoSolucoes, historicoSolucoes, TipoInsercao.Algoritmo);
+      updateSolutionId(setSolucaoAtual, idSolucao)
+      /**
+       * Atualiza as atribuições
+       */
+      updateAtribuicoes(solucaoAtual.atribuicoes)
    };
 
   /**
    * Processos referentes a aplicação da solução obtida pelo algoritmo ao state global.
    */
   const applySolution = () => {
-    applySolutionToState();
+    ApplySolutionToState();
     setAlertas([
       ...alertas,
       {
@@ -581,8 +530,6 @@ export default function Timetable() {
   /**
    * Remover depois que for feita a tela de Histórico de execuções
    */
-
-  
   const downalodJson = () => {
     if(!atribuicoes.some(atribuicao => atribuicao.docentes.length > 0)) {
         setAlertas([

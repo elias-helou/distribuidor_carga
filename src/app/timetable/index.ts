@@ -4,6 +4,7 @@ import {
   Disciplina,
   Docente,
   Solucao,
+  TipoInsercao,
 } from "@/context/Global/utils";
 import { addNewSolutionToHistory } from "@/context/SolutionHistory/utils";
 
@@ -191,26 +192,31 @@ export function exportJson(
 
 /**
  * Salvar as atribuições no state do histórico em casos em que o usuário tenha feito alterações manuais.
- * @param atribuicoes 
- * @param avaliacao 
- * @param historicoSolucoes 
- * @param setSolucaoAtual 
- * @param setHistoricoSolucoes 
- * @param addNewSolutionToHistory 
+ * @param atribuicoes
+ * @param avaliacao
+ * @param historicoSolucoes
+ * @param setSolucaoAtual
+ * @param setHistoricoSolucoes
+ * @param addNewSolutionToHistory
  */
 export function saveAtribuicoesInHistoryState(
   atribuicoes: Atribuicao[],
   avaliacao: number,
   historicoSolucoes,
   setHistoricoSolucoes,
-  setSolucaoAtual,
+  setSolucaoAtual
 ) {
   const novaSolucao: Solucao = {
     atribuicoes: atribuicoes,
     avaliacao: avaliacao,
   };
 
-  const id = addNewSolutionToHistory(novaSolucao, setHistoricoSolucoes, historicoSolucoes);
+  const id = addNewSolutionToHistory(
+    novaSolucao,
+    setHistoricoSolucoes,
+    historicoSolucoes,
+    TipoInsercao.Manual
+  );
 
   novaSolucao.idHistorico = id;
 

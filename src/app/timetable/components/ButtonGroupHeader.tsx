@@ -38,12 +38,13 @@ const ButtonGroupHeader: React.FC<ButtonGroupHeaderProps> = ({
                 {
                   name: "offset",
                   options: {
-                    offset: [0, -13],
+                    offset: [0, -5],
                   },
                 },
               ],
             },
           }}
+          arrow
         >
           <Button variant="outlined" onClick={onExecute}>
             <PlayArrowIcon />
@@ -60,12 +61,13 @@ const ButtonGroupHeader: React.FC<ButtonGroupHeaderProps> = ({
                 {
                   name: "offset",
                   options: {
-                    offset: [0, -13],
+                    offset: [0, -5],
                   },
                 },
               ],
             },
           }}
+          arrow
         >
           <Button variant="outlined" onClick={onClean}>
             <CleaningServicesIcon />
@@ -82,12 +84,13 @@ const ButtonGroupHeader: React.FC<ButtonGroupHeaderProps> = ({
                 {
                   name: "offset",
                   options: {
-                    offset: [0, -13],
+                    offset: [0, -5],
                   },
                 },
               ],
             },
           }}
+          arrow
         >
           <Button variant="outlined" onClick={download}>
             <DownloadIcon />
@@ -104,12 +107,13 @@ const ButtonGroupHeader: React.FC<ButtonGroupHeaderProps> = ({
                 {
                   name: "offset",
                   options: {
-                    offset: [0, -13],
+                    offset: [0, -5],
                   },
                 },
               ],
             },
           }}
+          arrow
         >
           <Button variant="outlined" onClick={saveAlterations}>
             <SaveAltIcon />

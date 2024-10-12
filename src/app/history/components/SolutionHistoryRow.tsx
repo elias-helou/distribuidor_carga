@@ -11,6 +11,9 @@ import { Fragment, useState } from "react";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import SolutionHistoryButtonGroup from "./SolutionHistoryButtonGroup";
+import { useSolutionHistory } from "@/context/SolutionHistory/hooks";
+import { useAlertsContext } from "@/context/Alerts";
 
 interface SolutionHistoryRowProps {
   id: string;
@@ -19,12 +22,34 @@ interface SolutionHistoryRowProps {
 
 const SolutionHistoryRow: React.FC<SolutionHistoryRowProps> = ({
   id,
-  solucao,
+  solucao
 }) => {
   const [open, setOpen] = useState(false);
+  const { removeSolutionFromHistory, restoreHistoryToSolution, solucaoAtual } = useSolutionHistory();
+  const { setAlertas } = useAlertsContext();
+
+  /**
+   * Função a ser passada para o componente filho a fim de remover uma solução do histórico e apresentar
+   * um feedback na tela.
+   */
+  const handleRemoveSolutionFromHistory = (id: string) => {
+    removeSolutionFromHistory(id)
+    setAlertas((prev) => ([...prev, {id: new Date().getTime(), message: "A solução foi removida do histórico!", type: "warning"}]))
+  }
+
+  /**
+   * Função a ser passada para o componente filho a fim de atualizar a solução atual e apresentar
+   * um feedback na tela.
+   */
+  const handleRestoreHistoryToSolution = (id: string) => {
+    restoreHistoryToSolution(id);
+
+    setAlertas((prev) => ([...prev, {id: new Date().getTime(), message: `A solução ${solucao.datetime} foi aplicada!`, type: "success"}]));
+  }
+
   return (
     <Fragment key={`fragment_${id}`}>
-      <TableRow key={`row_principal_${id}`}>
+      <TableRow key={`row_principal_${id}`} sx={{backgroundColor: solucaoAtual.idHistorico === id ? 'rgba(25, 118, 210, 0.12)' : 'white'}}>
         <TableCell key={`icon_${id}`}>
           <IconButton
             aria-label="expand row"
@@ -43,17 +68,18 @@ const SolutionHistoryRow: React.FC<SolutionHistoryRowProps> = ({
           scope="row"
           align="center"
           key={`identificador_${id}`}
+          // sx={{fontWeight: solucaoAtual.idHistorico === id ? 'bold' : 'normal'}}
         >
-          {solucao.id}
+          {solucao.datetime}
         </TableCell>
         <TableCell align="center" key={`avaliacao_${id}`}>
           {solucao.solucao.avaliacao}
         </TableCell>
         <TableCell align="center" key={`insercao_${id}`}>
-          Processo
+          {solucao.tipoInsercao}
         </TableCell>
         <TableCell align="center" key={`botoes_${id}`}>
-          Botões
+          <SolutionHistoryButtonGroup key={`SolutionHistoryButtonGroup_${id}`} id={id} remove={handleRemoveSolutionFromHistory} restore={handleRestoreHistoryToSolution}/>
         </TableCell>
       </TableRow>
       <TableRow key={`row_collapse_${id}`}>

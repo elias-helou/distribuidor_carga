@@ -83,10 +83,16 @@ export interface Solucao {
   idHistorico?: string
 }
 
+export enum TipoInsercao {
+  Algoritmo = "Algoritmo",
+  Manual = "Manual"
+}
+
 export interface HistoricoSolucao {
   id: string;
   datetime: string;
   solucao: Solucao;
+  tipoInsercao: TipoInsercao
 }
 
 /**
