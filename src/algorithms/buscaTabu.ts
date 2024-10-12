@@ -230,6 +230,17 @@ export async function buscaTabuRefactor(
   interrompe: () => boolean,
   setDisciplinasAlocadas: Dispatch<SetStateAction<number>>
 ): Promise<Solucao> {
+  /**
+   * Variáveis para as estatísticas
+   */
+  
+  let iteracoes = 0;
+  const avaliacaoPorIteracao: Map<number, number> = new Map<number, number>();
+  const tempoPorIteracao: Map<number, number> = new Map<number, number>();
+  let tempoInicial: number; // Por iteração
+  let tempoFinal: number; // Por iteração
+  /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+
   // Inicializa a lista tabu
   const listaTabu: Atribuicao[][] = [];
 
@@ -247,11 +258,22 @@ export async function buscaTabuRefactor(
     ),
   };
 
+  // Adição da avaliação das atribuições de entrada do algoritmo
+  //avaliacaoPorIteracao.set(iteracoes, solucaoAtual.avaliacao)
+
   let melhorSolucao: Solucao = solucaoAtual;
-  
+
+  // Inicia o tempo inicial total
+  const tempoInicialTotal = performance.now();
+
   // Criar uma função que faça toda a validação do while
   while(true) {
     await delay(1);
+    // Tempo de início da iteração
+    tempoInicial = performance.now()
+    iteracoes += 1;
+    avaliacaoPorIteracao.set(iteracoes, melhorSolucao.avaliacao)
+
     // Gerar vizinhos e selecionar o melhor não tabu
     const vizinhos: Atribuicao[][] = gerarVizinhos(solucaoAtual.atribuicoes, docentes, disciplinas, travas, listaTabu);
 
@@ -283,13 +305,27 @@ export async function buscaTabuRefactor(
     //   iteracoesSemModificacao++;  // Acrescenta mais um em iteração sem modificação
     // }
 
+    // Tempo final da iteração
+    tempoFinal = performance.now()
+    tempoPorIteracao.set(iteracoes, tempoFinal - tempoInicial)
+
+
     if(/*iteracoesSemModificacao === NumIterNotChange ||*/ interrompe() || !existeDisciplinasQueAindaPodemSerAtribuidas(melhorSolucao, docentes)) {
       break;
     }
   }
 
+  // Tempo final, sendo o tempo inicial fora do loop e o último tempo medido.
+  const tempoTotal = tempoFinal - tempoInicialTotal;
+
   
-  return melhorSolucao;
+  return {...melhorSolucao, estatisticas: {
+    avaliacaoPorIteracao: avaliacaoPorIteracao,
+    interrupcao: interrompe(),
+    iteracoes: iteracoes,
+    tempoExecucao: tempoTotal,
+    tempoPorIteracao: tempoPorIteracao
+  }};
 }
 
 function existeDisciplinasQueAindaPodemSerAtribuidas(solucao: Solucao, docentes: Docente[]) {

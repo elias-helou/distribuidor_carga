@@ -4,6 +4,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import CleaningServicesIcon from "@mui/icons-material/CleaningServices";
 import DownloadIcon from "@mui/icons-material/Download";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
+import { useSolutionHistory } from "@/context/SolutionHistory/hooks";
 
 interface ButtonGroupHeaderProps {
   onExecute: () => void;
@@ -21,6 +22,8 @@ const ButtonGroupHeader: React.FC<ButtonGroupHeaderProps> = ({
   download,
   saveAlterations,
 }) => {
+  const {solucaoAtual} = useSolutionHistory();
+
   return (
     <Grid2
       container
@@ -107,7 +110,7 @@ const ButtonGroupHeader: React.FC<ButtonGroupHeaderProps> = ({
                 {
                   name: "offset",
                   options: {
-                    offset: [0, -5],
+                    offset: [0, 5],
                   },
                 },
               ],
@@ -115,9 +118,11 @@ const ButtonGroupHeader: React.FC<ButtonGroupHeaderProps> = ({
           }}
           arrow
         >
-          <Button variant="outlined" onClick={saveAlterations}>
-            <SaveAltIcon />
-          </Button>
+          <span>
+            <Button variant="outlined" onClick={saveAlterations} disabled={solucaoAtual.idHistorico !== undefined}>
+              <SaveAltIcon />
+            </Button>
+          </span>
         </Tooltip>
       </Grid2>
     </Grid2>

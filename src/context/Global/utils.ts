@@ -77,10 +77,19 @@ export interface Horario {
   fim: string;
 }
 
+export interface Estatisticas {
+  tempoExecucao: number;
+  iteracoes: number;
+  interrupcao: boolean;
+  avaliacaoPorIteracao: Map<number, number>;
+  tempoPorIteracao: Map<number, number>;
+}
+
 export interface Solucao {
   atribuicoes: Atribuicao[];
   avaliacao: number;
-  idHistorico?: string
+  idHistorico?: string;
+  estatisticas?: Estatisticas
 }
 
 export enum TipoInsercao {

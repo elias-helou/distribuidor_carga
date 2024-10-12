@@ -14,6 +14,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import SolutionHistoryButtonGroup from "./SolutionHistoryButtonGroup";
 import { useSolutionHistory } from "@/context/SolutionHistory/hooks";
 import { useAlertsContext } from "@/context/Alerts";
+import { LineChart } from "@mui/x-charts";
 
 interface SolutionHistoryRowProps {
   id: string;
@@ -22,20 +23,28 @@ interface SolutionHistoryRowProps {
 
 const SolutionHistoryRow: React.FC<SolutionHistoryRowProps> = ({
   id,
-  solucao
+  solucao,
 }) => {
   const [open, setOpen] = useState(false);
-  const { removeSolutionFromHistory, restoreHistoryToSolution, solucaoAtual } = useSolutionHistory();
-  const { setAlertas } = useAlertsContext();
+  const { removeSolutionFromHistory, restoreHistoryToSolution, solucaoAtual } =
+    useSolutionHistory();
+  const { alertas, setAlertas } = useAlertsContext();
 
   /**
    * Função a ser passada para o componente filho a fim de remover uma solução do histórico e apresentar
    * um feedback na tela.
    */
   const handleRemoveSolutionFromHistory = (id: string) => {
-    removeSolutionFromHistory(id)
-    setAlertas((prev) => ([...prev, {id: new Date().getTime(), message: "A solução foi removida do histórico!", type: "warning"}]))
-  }
+    removeSolutionFromHistory(id);
+    setAlertas([
+      ...alertas,
+      {
+        id: new Date().getTime(),
+        message: "A solução foi removida do histórico!",
+        type: "warning",
+      },
+    ]);
+  };
 
   /**
    * Função a ser passada para o componente filho a fim de atualizar a solução atual e apresentar
@@ -44,12 +53,27 @@ const SolutionHistoryRow: React.FC<SolutionHistoryRowProps> = ({
   const handleRestoreHistoryToSolution = (id: string) => {
     restoreHistoryToSolution(id);
 
-    setAlertas((prev) => ([...prev, {id: new Date().getTime(), message: `A solução ${solucao.datetime} foi aplicada!`, type: "success"}]));
-  }
+    setAlertas([
+      ...alertas,
+      {
+        id: new Date().getTime(),
+        message: `A solução ${solucao.datetime} foi aplicada!`,
+        type: "success",
+      },
+    ]);
+  };
 
   return (
     <Fragment key={`fragment_${id}`}>
-      <TableRow key={`row_principal_${id}`} sx={{backgroundColor: solucaoAtual.idHistorico === id ? 'rgba(25, 118, 210, 0.12)' : 'white'}}>
+      <TableRow
+        key={`row_principal_${id}`}
+        sx={{
+          backgroundColor:
+            solucaoAtual.idHistorico === id
+              ? "rgba(25, 118, 210, 0.12)"
+              : "white",
+        }}
+      >
         <TableCell key={`icon_${id}`}>
           <IconButton
             aria-label="expand row"
@@ -79,7 +103,12 @@ const SolutionHistoryRow: React.FC<SolutionHistoryRowProps> = ({
           {solucao.tipoInsercao}
         </TableCell>
         <TableCell align="center" key={`botoes_${id}`}>
-          <SolutionHistoryButtonGroup key={`SolutionHistoryButtonGroup_${id}`} id={id} remove={handleRemoveSolutionFromHistory} restore={handleRestoreHistoryToSolution}/>
+          <SolutionHistoryButtonGroup
+            key={`SolutionHistoryButtonGroup_${id}`}
+            id={id}
+            remove={handleRemoveSolutionFromHistory}
+            restore={handleRestoreHistoryToSolution}
+          />
         </TableCell>
       </TableRow>
       <TableRow key={`row_collapse_${id}`}>
@@ -103,6 +132,19 @@ const SolutionHistoryRow: React.FC<SolutionHistoryRowProps> = ({
               >
                 Detalhes
               </Typography>
+              {solucao.solucao.estatisticas !== undefined && 
+                <LineChart
+                  xAxis={[{ label: 'Iterações', data: solucao.solucao.estatisticas.avaliacaoPorIteracao.keys().toArray() }]}
+                  yAxis={[{label: 'Avaliação'}]}
+                  series={[
+                    {
+                      data: solucao.solucao.estatisticas.avaliacaoPorIteracao.values().toArray(),
+                    },
+                  ]}
+                  width={500}
+                  height={300}
+                />
+              }
             </Box>
           </Collapse>
         </TableCell>
