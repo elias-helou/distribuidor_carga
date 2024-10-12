@@ -11,7 +11,7 @@ import {
   atualizarListaTabu,
   estaNaListaTabu,
   Solucao,
-} from "./utils";
+} from "@/algorithms/utils";
 import { Dispatch, SetStateAction } from "react";
 
 // Função para checar se um docente pode ser alocado a uma disciplina (incluindo atribuições do usuário)

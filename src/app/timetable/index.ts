@@ -156,7 +156,7 @@ export function exportJson(
     const docenteFormularios = {};
 
     for (const formulario of docente.formularios.entries()) {
-      const { docentes, ...disciplina } = disciplinasDTO[formulario[0]];
+      const { ...disciplina } = disciplinasDTO[formulario[0]];
       docenteFormularios[disciplina.id] = {
         ...disciplina,
         prioridade: formulario[1],
