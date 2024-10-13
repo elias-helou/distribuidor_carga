@@ -45,7 +45,7 @@ const GlobalContext = createContext<GlobalContextInterface>({
   setTravas: () => {},
   historicoSolucoes: new Map<string, HistoricoSolucao>(),
   setHistoricoSolucoes: () => {},
-  solucaoAtual: { atribuicoes: [], avaliacao: undefined },
+  solucaoAtual: { atribuicoes: [], avaliacao: undefined, idHistorico: undefined },
   setSolucaoAtual: () => {},
 });
 

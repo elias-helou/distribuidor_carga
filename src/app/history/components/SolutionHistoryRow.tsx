@@ -14,7 +14,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import SolutionHistoryButtonGroup from "./SolutionHistoryButtonGroup";
 import { useSolutionHistory } from "@/context/SolutionHistory/hooks";
 import { useAlertsContext } from "@/context/Alerts";
-import { LineChart } from "@mui/x-charts";
+import SolutionHistoryStatistics from "./SolutionHistoryStatistics";
 
 interface SolutionHistoryRowProps {
   id: string;
@@ -132,19 +132,7 @@ const SolutionHistoryRow: React.FC<SolutionHistoryRowProps> = ({
               >
                 Detalhes
               </Typography>
-              {solucao.solucao.estatisticas !== undefined && 
-                <LineChart
-                  xAxis={[{ label: 'Iterações', data: solucao.solucao.estatisticas.avaliacaoPorIteracao.keys().toArray() }]}
-                  yAxis={[{label: 'Avaliação'}]}
-                  series={[
-                    {
-                      data: solucao.solucao.estatisticas.avaliacaoPorIteracao.values().toArray(),
-                    },
-                  ]}
-                  width={500}
-                  height={300}
-                />
-              }
+              <SolutionHistoryStatistics key={`componente_estatisticas_${id}`} id={id} solucao={solucao}/>
             </Box>
           </Collapse>
         </TableCell>
