@@ -52,6 +52,7 @@ const SolutionHistoryRow: React.FC<SolutionHistoryRowProps> = ({
    */
   const handleRestoreHistoryToSolution = (id: string) => {
     restoreHistoryToSolution(id);
+    console.log('id: ', id)
 
     setAlertas([
       ...alertas,
