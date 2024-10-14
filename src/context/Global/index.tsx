@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import {
   Atribuicao,
   Celula,
@@ -8,6 +8,8 @@ import {
   HistoricoSolucao,
   Solucao,
 } from "./utils";
+
+import _ from "lodash"; // Comparação entre objetos de forma otimizada
 
 interface GlobalContextInterface {
   docentes: Docente[];
@@ -69,7 +71,88 @@ export function GlobalWrapper({ children }: { children: React.ReactNode }) {
   const [solucaoAtual, setSolucaoAtual] = useState<Solucao>({
     atribuicoes: [],
     avaliacao: undefined,
+    idHistorico: undefined,
   });
+
+  /**
+   * Caso ocorra alguma modificação nos states globais, o id da solução deve ser alterado para undefined, permitindo salvar essas
+   * novas modificações
+   */
+  // useRef para armazenar os valores anteriores
+  const prevDocentesRef = useRef(docentes);
+  const prevDisciplinasRef = useRef(disciplinas);
+  const prevTravasRef = useRef(travas);
+  const prevAtribuicoesRef = useRef(atribuicoes);
+  const prevSolucaoAtualRef = useRef(solucaoAtual);
+  const prevHistoricoSolucoes = useRef(historicoSolucoes);
+
+  const [somethingChanged, setSomethingChanged] = useState(false);
+
+  useEffect(() => {
+    console.log('a')
+    if(solucaoAtual.idHistorico !== undefined) {
+      const hasChanges = () => {
+      return (
+        !_.isEqual(prevDocentesRef.current, docentes) ||
+        !_.isEqual(prevDisciplinasRef.current, disciplinas) ||
+        !_.isEqual(prevTravasRef.current, travas) ||
+        !_.isEqual(prevAtribuicoesRef.current, atribuicoes)
+      );
+    };
+
+    const restoring = () => {
+      return (
+        prevSolucaoAtualRef.current.idHistorico !== undefined &&
+        solucaoAtual.idHistorico !== undefined &&
+        prevSolucaoAtualRef.current.idHistorico !== solucaoAtual.idHistorico &&
+        prevHistoricoSolucoes.current.has(
+          prevSolucaoAtualRef.current.idHistorico
+        ) &&
+        prevHistoricoSolucoes.current.has(solucaoAtual.idHistorico)
+      );
+    };
+
+    /**
+     * Uma coisa está sendo adicionada quando a anteior não tinha e a atual tem
+     */
+    const adding = () => {
+      return(!prevHistoricoSolucoes.current.has(solucaoAtual.idHistorico) && historicoSolucoes.has(solucaoAtual.idHistorico))
+    }
+
+    // Verifica se houve mudanças
+    if (!somethingChanged && hasChanges() && !restoring() && !adding()) {
+      setSomethingChanged(true);
+    }
+
+    // Aqui, verifica se estamos em um estado alterado
+    if (somethingChanged) {
+      // Se não estamos restaurando, mudamos o idHistorico para undefined
+      if (!restoring() && !adding()) {
+        setSolucaoAtual({
+          ...solucaoAtual,
+          idHistorico: undefined,
+        });
+      }
+      setSomethingChanged(false); // Reseta a flag de mudança
+    }
+
+    // Atualiza as referências com os valores atuais
+    prevDocentesRef.current = docentes;
+    prevDisciplinasRef.current = disciplinas;
+    prevTravasRef.current = travas;
+    prevAtribuicoesRef.current = atribuicoes;
+    prevSolucaoAtualRef.current = solucaoAtual; // Atualizando a referência atual
+    prevHistoricoSolucoes.current = historicoSolucoes;
+    }
+  }, [
+    docentes,
+    disciplinas,
+    travas,
+    atribuicoes,
+    somethingChanged,
+    solucaoAtual,
+    historicoSolucoes,
+  ]);
 
   return (
     <GlobalContext.Provider

@@ -32,9 +32,11 @@ const SolutionHistoryButtonGroup: React.FC<SolutionHistoryButtonGroupProps> = ({
         }}
         arrow
       >
-        <IconButton key={`deleteButton_${id}`} color="error" onClick={() => remove(id)}>
-          <DeleteIcon key={`deleteIcon_${id}`} />
-        </IconButton>
+        <span>
+          <IconButton key={`deleteButton_${id}`} color="error" onClick={() => remove(id)} disabled={solucaoAtual.idHistorico === id}>
+            <DeleteIcon key={`deleteIcon_${id}`} />
+          </IconButton>
+        </span>
       </Tooltip>
       
       <Tooltip

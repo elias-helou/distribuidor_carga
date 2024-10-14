@@ -316,13 +316,13 @@ export default function Timetable() {
         removerDocente(celula.id_disciplina, celula.nome_docente);
       }
 
-      /**
-       * Caso alguma atribuição for alterada e esse contunto já fizer parte do histórico de soluções,
-       * o identificador da solução deve ser removido.
-       */
-      if(solucaoAtual.idHistorico !== undefined) {
-        setSolucaoAtual((prev) => ({...prev, idHistorico: undefined}))
-      }
+      // /**
+      //  * Caso alguma atribuição for alterada e esse contunto já fizer parte do histórico de soluções,
+      //  * o identificador da solução deve ser removido.
+      //  */
+      // if(solucaoAtual.idHistorico !== undefined) {
+      //   setSolucaoAtual((prev) => ({...prev, idHistorico: undefined}))
+      // }
     }
   };
 
@@ -417,13 +417,13 @@ export default function Timetable() {
       
     })
 
-    /**
-       * Caso alguma atribuição for alterada e esse contunto já fizer parte do histórico de soluções,
-       * o identificador da solução deve ser removido.
-       */
-      if(solucaoAtual.idHistorico !== undefined) {
-        setSolucaoAtual((prev) => ({...prev, idHistorico: undefined}))
-      }
+    // /**
+    //    * Caso alguma atribuição for alterada e esse contunto já fizer parte do histórico de soluções,
+    //    * o identificador da solução deve ser removido.
+    //    */
+    //   if(solucaoAtual.idHistorico !== undefined) {
+    //     setSolucaoAtual((prev) => ({...prev, idHistorico: undefined}))
+    //   }
 
     // Atualiza o estado com a nova lista de atribuições
     setAtribuicoes(atribuicoesLimpa);
