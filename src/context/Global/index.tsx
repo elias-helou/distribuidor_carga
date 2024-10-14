@@ -89,7 +89,6 @@ export function GlobalWrapper({ children }: { children: React.ReactNode }) {
   const [somethingChanged, setSomethingChanged] = useState(false);
 
   useEffect(() => {
-    console.log('a')
     if(solucaoAtual.idHistorico !== undefined) {
       const hasChanges = () => {
       return (

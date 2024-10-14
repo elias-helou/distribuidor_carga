@@ -53,7 +53,7 @@ export default function LineChartsSelector({
     }
     if (selectedCharts.has("Tempo")) {
       const tempoData = Array.from(estatisticas.tempoPorIteracao.values());
-      series.push({ label: "Tempo", data: tempoData });
+      series.push({ label: "Tempo (ms)", data: tempoData  });
     }
 
     return (
