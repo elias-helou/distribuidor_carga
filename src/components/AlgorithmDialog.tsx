@@ -58,7 +58,7 @@ export default function AlgoritmoDialog({
 }: AlgoritmoDialogProps) {
 
   useEffect(() => {
-    console.log(progress)
+    
   }, [progress])
 
   const progressPercentage = (): number => {

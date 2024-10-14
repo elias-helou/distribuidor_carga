@@ -289,7 +289,6 @@ export async function buscaTabuRefactor(
       solucaoAtual = melhorVizinho;
       if (solucaoAtual.avaliacao >= melhorSolucao.avaliacao) {
         // Atualiza a maior quantidade de disciplinas alocadas
-        console.log('Na função: ', solucaoAtual.atribuicoes.filter(obj => obj.docentes.length !== 0).length)
         if(solucaoAtual.atribuicoes.filter(obj => obj.docentes.length !== 0).length >= melhorSolucao.atribuicoes.filter(obj => obj.docentes.length !== 0).length) {
           setDisciplinasAlocadas(solucaoAtual.atribuicoes.filter(obj => obj.docentes.length !== 0).length)
         }
