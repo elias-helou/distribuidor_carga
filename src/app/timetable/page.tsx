@@ -560,9 +560,9 @@ export default function Timetable() {
     <ThemeProvider theme={customTheme}>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         {docentes.length > 0 && disciplinas.length > 0 && (
-          <TableContainer sx={{ maxHeight: '48rem' }}>
+          <TableContainer sx={{ maxHeight: '90vh', overflow: 'scroll' }}>
             <Table
-              sx={{ minWidth: 650 }}
+              sx={{ width: 'fit-content', height: 'fit-content' }}
               aria-label="sticky table"
               stickyHeader
             >
