@@ -1,8 +1,10 @@
 import {
   Atribuicao,
   Celula,
+  ContextoExecucao,
   Disciplina,
   Docente,
+  HistoricoSolucao,
   Solucao,
   TipoInsercao,
 } from "@/context/Global/utils";
@@ -202,9 +204,10 @@ export function exportJson(
 export function saveAtribuicoesInHistoryState(
   atribuicoes: Atribuicao[],
   avaliacao: number,
-  historicoSolucoes,
+  historicoSolucoes: Map<string, HistoricoSolucao>,
   setHistoricoSolucoes,
-  setSolucaoAtual
+  setSolucaoAtual,
+  contextoExecucao: ContextoExecucao
 ) {
   const novaSolucao: Solucao = {
     atribuicoes: atribuicoes,
@@ -215,7 +218,8 @@ export function saveAtribuicoesInHistoryState(
     novaSolucao,
     setHistoricoSolucoes,
     historicoSolucoes,
-    TipoInsercao.Manual
+    TipoInsercao.Manual,
+    contextoExecucao
   );
 
   novaSolucao.idHistorico = id;

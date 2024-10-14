@@ -17,6 +17,7 @@ import { exportJson, getFormattedDate, getPriorityColor, saveAtribuicoesInHistor
 import {
   Atribuicao,
   Celula,
+  ContextoExecucao,
   processData,
   TipoInsercao,
   TipoTrava,
@@ -416,6 +417,14 @@ export default function Timetable() {
       
     })
 
+    /**
+       * Caso alguma atribuição for alterada e esse contunto já fizer parte do histórico de soluções,
+       * o identificador da solução deve ser removido.
+       */
+      if(solucaoAtual.idHistorico !== undefined) {
+        setSolucaoAtual((prev) => ({...prev, idHistorico: undefined}))
+      }
+
     // Atualiza o estado com a nova lista de atribuições
     setAtribuicoes(atribuicoesLimpa);
     setAlertas([
@@ -449,7 +458,6 @@ export default function Timetable() {
   const executeProcess2 = async () => {
     handleClickOpenDialog(); // Abre a modal imediatamente
     setProcessing(true); // Aciona o botão de loading
-    // p -> Processados
     // p -> Processados
       const { pDisciplinas, pDocentes, pFormularios, pTravas, pAtribuicoes } =
       processData(disciplinas, docentes, formularios, travas, atribuicoes);
@@ -486,7 +494,8 @@ export default function Timetable() {
       /**
        * Adiciona ao histórico de soluções
        */
-      const idSolucao: string = addNewSolutionToHistory(solucaoAtual, setHistoricoSolucoes, historicoSolucoes, TipoInsercao.Algoritmo);
+      const contextoExecucao: ContextoExecucao = {disciplinas: [...disciplinas], docentes: [...docentes], travas: [...travas]}
+      const idSolucao: string = addNewSolutionToHistory(solucaoAtual, setHistoricoSolucoes, historicoSolucoes, TipoInsercao.Algoritmo, contextoExecucao);
       updateSolutionId(setSolucaoAtual, idSolucao)
       /**
        * Atualiza as atribuições
@@ -515,7 +524,8 @@ export default function Timetable() {
       processData(disciplinas, docentes, formularios, travas, atribuicoes);
 
     const avaliacao = avaliarSolucao(pAtribuicoes, pDocentes, pDisciplinas ,maxPriority+1);
-    saveAtribuicoesInHistoryState(atribuicoes, avaliacao, historicoSolucoes, setHistoricoSolucoes, setSolucaoAtual)
+    const contextoExecucao: ContextoExecucao = {disciplinas: [...disciplinas], docentes: [...docentes], travas: [...travas]}
+    saveAtribuicoesInHistoryState(atribuicoes, avaliacao, historicoSolucoes, setHistoricoSolucoes, setSolucaoAtual, contextoExecucao)
 
     setAlertas([
       ...alertas,
@@ -550,7 +560,7 @@ export default function Timetable() {
     <ThemeProvider theme={customTheme}>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         {docentes.length > 0 && disciplinas.length > 0 && (
-          <TableContainer sx={{ maxHeight: '38rem' }}>
+          <TableContainer sx={{ maxHeight: '48rem' }}>
             <Table
               sx={{ minWidth: 650 }}
               aria-label="sticky table"

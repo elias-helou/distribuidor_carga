@@ -1,4 +1,4 @@
-import { Atribuicao, Docente } from "@/context/Global/utils";
+import { Atribuicao, Disciplina, Docente } from "@/context/Global/utils";
 
 /**
  * Função para contra quantas atribuições um docente ativo teve.
@@ -25,7 +25,7 @@ export function getDocentesQtdAtribuicoes(docentes: Docente[], atribuicoes: Atri
 }
 
 export function getDocentesAtribuicoes(docentes: Docente[], atribuicoes: Atribuicao[]): Map<string, string[]> {
-    const docentesAtribuicoes = new Map<string, string[]>(); // nome, qtd
+    const docentesAtribuicoes = new Map<string, string[]>(); // nome, disciplinas
 
     for(const docente of docentes) {
         const docenteAtribuicoes = [];
@@ -40,4 +40,16 @@ export function getDocentesAtribuicoes(docentes: Docente[], atribuicoes: Atribui
     }
 
     return docentesAtribuicoes
+}
+
+export function getDisciplinasAtribuicoes(disciplinas: Disciplina[], atribuicoes: Atribuicao[]): Map<string, string[]> {
+    const disciplinasAtribuicoes = new Map<string, string[]>(); // id, docentes
+
+    for(const disciplina of disciplinas) {
+        const disciplinaAtribuicoes = atribuicoes.find(atribuicao => atribuicao.id_disciplina === disciplina.id)
+        
+        disciplinasAtribuicoes.set(disciplina.id, disciplinaAtribuicoes.docentes)
+    }
+
+    return disciplinasAtribuicoes
 }

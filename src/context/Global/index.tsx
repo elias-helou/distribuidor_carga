@@ -45,7 +45,11 @@ const GlobalContext = createContext<GlobalContextInterface>({
   setTravas: () => {},
   historicoSolucoes: new Map<string, HistoricoSolucao>(),
   setHistoricoSolucoes: () => {},
-  solucaoAtual: { atribuicoes: [], avaliacao: undefined, idHistorico: undefined },
+  solucaoAtual: {
+    atribuicoes: [],
+    avaliacao: undefined,
+    idHistorico: undefined,
+  },
   setSolucaoAtual: () => {},
 });
 
@@ -106,18 +110,31 @@ export function useGlobalContext() {
     if (context.atribuicoes.length == novasAtribuicoes.length) {
       context.setAtribuicoes(novasAtribuicoes);
     } else {
+      const newAtribuicoes = [...context.atribuicoes]; // Cria uma cópia do array original
+
       for (const newAtribuicao of novasAtribuicoes) {
-        context.setAtribuicoes((prevAtribuicoes) =>
-          prevAtribuicoes.map((atribuicao) =>
+        // Encontra a atribuição correspondente no array copiado
+        const index = newAtribuicoes.findIndex(
+          (atribuicao) =>
             atribuicao.id_disciplina === newAtribuicao.id_disciplina
-              ? {
-                  ...atribuicao,
-                  docentes: [...atribuicao.docentes, ...newAtribuicao.docentes], // Adiciona os novos docentes corretamente
-                }
-              : { ...atribuicao, docentes: [] }
-          )
         );
+
+        if (index !== -1) {
+          // Atualiza os docentes da atribuição encontrada, evitando duplicações
+          newAtribuicoes[index] = {
+            ...newAtribuicoes[index],
+            docentes: [
+              ...newAtribuicoes[index].docentes.filter(
+                (docente) => !newAtribuicao.docentes.includes(docente)
+              ),
+              ...newAtribuicao.docentes,
+            ],
+          };
+        }
       }
+
+      // Atualiza o estado com o novo array de atribuições modificado
+      context.setAtribuicoes(newAtribuicoes);
     }
   }
   return { ...context, updateAtribuicoes };

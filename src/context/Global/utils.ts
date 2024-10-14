@@ -77,6 +77,12 @@ export interface Horario {
   fim: string;
 }
 
+export interface ContextoExecucao {
+  docentes: Docente[],
+  disciplinas: Disciplina[],
+  travas: Celula[]
+}
+
 export interface Estatisticas {
   tempoExecucao: number;
   iteracoes: number;
@@ -102,6 +108,7 @@ export interface HistoricoSolucao {
   datetime: string;
   solucao: Solucao;
   tipoInsercao: TipoInsercao
+  contexto: ContextoExecucao
 }
 
 /**

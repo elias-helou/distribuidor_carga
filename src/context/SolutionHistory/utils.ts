@@ -1,5 +1,5 @@
 import { getFormattedDate } from "@/app/timetable";
-import { HistoricoSolucao, Solucao, TipoInsercao } from "../Global/utils";
+import { ContextoExecucao, HistoricoSolucao, Solucao, TipoInsercao } from "../Global/utils";
 
 /**
  * Função que adiciona uma nova solução ao histórico
@@ -11,14 +11,14 @@ import { HistoricoSolucao, Solucao, TipoInsercao } from "../Global/utils";
 export function addNewSolutionToHistory(novaSolucao: Solucao, 
     setHistoricoSolucoes: (historicoSolucoes: Map<string, HistoricoSolucao>) => void,
     historicoSolucoes: Map<string, HistoricoSolucao>,
-    tipoInsercao: TipoInsercao
+    tipoInsercao: TipoInsercao,
+    contextoExecucao: ContextoExecucao
 ): string {
     // Por conta do React, a inserção de um novo item em um Map deve ser feita da maneira a seguir.
     const newHistoricoSolucoesMap: Map<string, HistoricoSolucao> = new Map<string, HistoricoSolucao>(historicoSolucoes)
-    
     const date = new Date()
     const id = getFormattedDate(date)
-    newHistoricoSolucoesMap.set(id, {id: id, solucao: novaSolucao, datetime: date.toLocaleString(), tipoInsercao: tipoInsercao})
+    newHistoricoSolucoesMap.set(id, {id: id, solucao: novaSolucao, datetime: date.toLocaleString(), tipoInsercao: tipoInsercao, contexto: contextoExecucao})
 
     setHistoricoSolucoes(newHistoricoSolucoesMap)
     return id;
