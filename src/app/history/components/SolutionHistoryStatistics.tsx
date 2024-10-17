@@ -35,15 +35,8 @@ const SolutionHistoryStatistics: React.FC<SolutionHistoryStatisticsProps> = ({
 
   return (
   <Grid2 container spacing={2} key={`grid2_container_${id}`}>
-    {/* Renderizar o LineChartsSelector se as estatísticas estiverem disponíveis */}
-    {solucao.solucao.estatisticas !== undefined && (
-      <Grid2 size={{xs: 8}}>
-        <LineChartsSelector solucao={solucao} />
-      </Grid2>
-    )}
-
     {/* Componente DataTreeView com as informações dos docentes e atribuições */}
-    <Grid2>
+    <Grid2 size={{xs: 12}}>
       <DataTreeView
         docentes={docentesAtribuicoes}
         //atribuicoes={solucao.solucao.atribuicoes}
@@ -84,6 +77,13 @@ const SolutionHistoryStatistics: React.FC<SolutionHistoryStatisticsProps> = ({
         </Paper>
       </Grid2>
     </Grid2>
+
+    {/* Renderizar o LineChartsSelector se as estatísticas estiverem disponíveis */}
+    {solucao.solucao.estatisticas !== undefined && (
+      <Grid2 size={{xs: 12}}>
+        <LineChartsSelector solucao={solucao} />
+      </Grid2>
+    )}
   </Grid2>
 );
 };
