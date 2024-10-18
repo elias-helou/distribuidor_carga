@@ -62,60 +62,55 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
   };
 
   // StyledTableCell com estilos dinâmicos baseado no hover
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    transition: theme.transitions.create(['transform', 'width', 'height'], {
-      duration: theme.transitions.duration.standard,
-    }),
-    position: 'relative',
+  const StyledStack = styled(Stack)<{ id: string }>(({ id }) => ({
+    position: "relative",
     zIndex: 1,
-    overflow: 'hidden', // Inicialmente corta o texto
-    textOverflow: 'ellipsis', // Aplica o ellipsis no texto longo
-    whiteSpace: 'nowrap', // Força o texto a ficar em uma linha
-    minWidth: '12rem', // Define o tamanho inicial
-    maxWidth: '12rem', // Define o tamanho inicial
+    overflow: "hidden", // Inicialmente corta o texto
+    textOverflow: "ellipsis", // Aplica o ellipsis no texto longo
+    whiteSpace: "nowrap", // Força o texto a ficar em uma linha
+    minWidth: "12rem", // Define o tamanho inicial
+    maxWidth: "12rem", // Define o tamanho inicial
+    height: "8rem", // Altura padrão
+    backgroundColor: setHeaderCollor(id),
+    transition: "max-width 0.3s ease, height 0.3s ease", // Transições suaves de largura e altura
+    padding: 0, margin: 0,
+
+    // Estilos no estado de hover
     "&:hover": {
-      transform: "scale3d(1.1, 1.1, 1)", // Aplica o efeito de escala
-      zIndex: 10, // Traz o componente à frente dos outros
-      overflow: 'visible', // Permite que o conteúdo seja exibido
-      whiteSpace: 'normal', // Permite o texto quebrar em várias linhas
-      minWidth: '22rem', // Expande a largura mínima no hover
-      maxWidth: '22rem', // Expande a largura máxima no hover
-      transition: theme.transitions.duration.standard,
+      overflow: "visible", // Permite que o conteúdo seja exibido
+      whiteSpace: "normal", // Permite o texto quebrar em várias linhas
+      maxWidth: "50rem", // Expande a largura máxima no hover
+      //height: "auto", // Permite que a altura se ajuste conforme necessário
+      transition: "max-width 0.3s ease, height 0.3s ease", // Transições suaves
     },
   }));
 
-  // Estilos dinâmicos baseados no hover para Stack e Typography
-  const getStackStyle = (id: string) => ({
-    height: hoveredCellId === id ? "10rem" : "7rem", // Expande apenas o item em hover
-    backgroundColor: setHeaderCollor(id),
-    transition: "height 0.3s ease", // Transição suave de altura
-  });
-
   const getTypographyStyle = (id: string) => ({
-    whiteSpace: hoveredCellId === id ? 'normal' : 'nowrap', // Quebra a linha apenas no hover
-    overflow: hoveredCellId === id ? 'visible' : 'hidden', // Mostra o texto completo no hover
-    textOverflow: hoveredCellId === id ? 'unset' : 'ellipsis', // Remove o ellipsis no hover
-    fontSize: hoveredCellId === id ? '16px' : '12px', // Aumenta a fonte no hover
+    whiteSpace: "nowrap", // Quebra a linha apenas no hover
+    overflow: "hidden", // Mostra o texto completo no hover
+    textOverflow: "ellipsis", // Remove o ellipsis no hover
+    fontSize: hoveredCellId === id ? "14px" : "12px", // Aumenta a fonte no hover
     transition: "all 0.3s ease", // Transição suave
-    paddingTop: hoveredCellId === id ? '4px' : '0px', // Adiciona padding-top quando hover
+    paddingTop: "2px", // Adiciona padding-top quando hover
   });
 
   return (
-    <StyledTableCell
+    <TableCell
       key={disciplina.id}
       onClick={(event) => onHeaderClick(event, disciplina)}
       onMouseEnter={() => handleMouseEnter(disciplina.id)} // Ativa o hover
       onMouseLeave={handleMouseLeave} // Desativa o hover
       style={{
-        backgroundColor: 'white',
+        backgroundColor: "white",
         margin: 0,
         padding: 0,
       }}
     >
-      <Stack
+      <StyledStack
+        id={disciplina.id}
         spacing={1}
         className="stack-style"
-        sx={getStackStyle(disciplina.id)} // Aplica os estilos dinâmicos ao Stack
+        //sx={{...getStackStyle(disciplina.id)}} // Aplica os estilos dinâmicos ao Stack
       >
         <Typography
           align="left"
@@ -131,13 +126,17 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
         <Typography
           align="left"
           variant="body1"
-          style={{ fontWeight: "bold", fontSize: "13px", ...getTypographyStyle(disciplina.id) }} // Estilos dinâmicos
+          style={{
+            fontWeight: "bold",
+            fontSize: "13px",
+            ...getTypographyStyle(disciplina.id),
+          }} // Estilos dinâmicos
         >
           {disciplina.codigo + " " + disciplina.nome}
         </Typography>
         {createHorariosblock(disciplina)}
-      </Stack>
-    </StyledTableCell>
+      </StyledStack>
+    </TableCell>
   );
 };
 
