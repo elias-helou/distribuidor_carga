@@ -41,6 +41,7 @@ const SolutionHistoryStatistics: React.FC<SolutionHistoryStatisticsProps> = ({
         docentes={docentesAtribuicoes}
         //atribuicoes={solucao.solucao.atribuicoes}
         disciplinas={disciplinasAtribuicoes}
+        solucao={solucao}
       />
     </Grid2>
 

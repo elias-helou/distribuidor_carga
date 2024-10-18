@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { TableCell, Typography, Stack, styled } from "@mui/material";
+import { Typography, Stack, styled } from "@mui/material";
 import { Disciplina } from "@/context/Global/utils";
 interface HeaderCellProps {
   disciplina: Disciplina;
-  onHeaderClick: (event: React.MouseEvent, disciplina: Disciplina) => void;
+  //onHeaderClick: (event: React.MouseEvent, disciplina: Disciplina) => void;
   setHeaderCollor: (id_disciplina: string) => string;
 }
 
@@ -12,7 +12,6 @@ interface HeaderCellProps {
  */
 const HeaderCell: React.FC<HeaderCellProps> = ({
   disciplina,
-  onHeaderClick,
   setHeaderCollor,
 }) => {
   /**
@@ -95,21 +94,23 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
   });
 
   return (
-    <TableCell
-      key={disciplina.id}
-      onClick={(event) => onHeaderClick(event, disciplina)}
-      onMouseEnter={() => handleMouseEnter(disciplina.id)} // Ativa o hover
-      onMouseLeave={handleMouseLeave} // Desativa o hover
-      style={{
-        backgroundColor: "white",
-        margin: 0,
-        padding: 0,
-      }}
-    >
+    // <TableCell
+    //   key={disciplina.id}
+    //   onClick={(event) => onHeaderClick(event, disciplina)}
+    //   //onMouseEnter={() => handleMouseEnter(disciplina.id)} // Ativa o hover
+    //   //onMouseLeave={handleMouseLeave} // Desativa o hover
+    //   style={{
+    //     backgroundColor: "white",
+    //     margin: 0,
+    //     padding: 0,
+    //   }}
+    // >
       <StyledStack
         id={disciplina.id}
         spacing={1}
         className="stack-style"
+        onMouseEnter={() => handleMouseEnter(disciplina.id)} // Ativa o hover
+        onMouseLeave={handleMouseLeave} // Desativa o hover
         //sx={{...getStackStyle(disciplina.id)}} // Aplica os estilos dinâmicos ao Stack
       >
         <Typography
@@ -136,7 +137,7 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
         </Typography>
         {createHorariosblock(disciplina)}
       </StyledStack>
-    </TableCell>
+    // </TableCell>
   );
 };
 

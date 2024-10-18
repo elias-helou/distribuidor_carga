@@ -4,6 +4,7 @@ import { SimpleTreeView, TreeItem } from "@mui/x-tree-view";
 import DocentesTreeView from "./DocentesTreeView";
 import DisciplinasTreeView from "./DisciplinasTreeView";
 import TreeViewAssignments from "./TreeViewAssignments";
+import { HistoricoSolucao } from "@/context/Global/utils";
 
 // Props do DataTreeView
 interface DataTreeViewProps {
@@ -13,11 +14,13 @@ interface DataTreeViewProps {
   //   docentes: string[];
   // }[]; // Array de atribuições (disciplinas e seus docentes)
   disciplinas: Map<string, string[]>;
+  solucao: HistoricoSolucao
 }
 
 const DataTreeView: React.FC<DataTreeViewProps> = ({
   docentes,
   disciplinas,
+  solucao
 }) => {
   const [lastClickedItem, setLastClickedItem] = React.useState<{tipo: string, id: string} | null>(
     null
@@ -67,7 +70,7 @@ const DataTreeView: React.FC<DataTreeViewProps> = ({
         </Paper>
       </Grid2>
       <Grid2 size={8}>
-        <TreeViewAssignments item={lastClickedItem} />
+        <TreeViewAssignments item={lastClickedItem} maxPriority={solucao.contexto.maxPriority}/>
       </Grid2>
     </Grid2>
   );

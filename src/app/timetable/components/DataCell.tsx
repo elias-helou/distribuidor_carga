@@ -1,5 +1,5 @@
 import React from 'react';
-import { TableCell } from '@mui/material';
+import { Box } from '@mui/material';
 import { Celula, TipoTrava } from '@/context/Global/utils';
 import { setCellColor } from '..';
 
@@ -13,18 +13,19 @@ interface DataCellProps {
 }
 
 const DataCell: React.FC<DataCellProps> = ({ prioridade, cell, handleClick, setHover, atribuido, maxPriority }) => (
-  <TableCell
-    align="center"
-    style={{
+  <Box
+    //align="center"
+    sx={{
       backgroundColor: setCellColor(prioridade, cell, atribuido, maxPriority),
       padding: "2px",
+      textAlign: 'center'
     }}
     onClick={(event) => handleClick(event, { nome_docente: cell.nome_docente, id_disciplina: cell.id_disciplina, tipo_trava: TipoTrava.Cell })}
     onMouseEnter={() => setHover({ docente: cell.nome_docente, id_disciplina: cell.id_disciplina })}
     onMouseLeave={() => setHover({ docente: "", id_disciplina: "" })}
   >
     {prioridade ? prioridade : ''}
-  </TableCell>
+  </Box>
 );
 
 export default DataCell;

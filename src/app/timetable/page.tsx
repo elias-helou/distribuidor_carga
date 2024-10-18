@@ -494,7 +494,7 @@ export default function Timetable() {
       /**
        * Adiciona ao histórico de soluções
        */
-      const contextoExecucao: ContextoExecucao = {disciplinas: [...disciplinas], docentes: [...docentes], travas: [...travas]}
+      const contextoExecucao: ContextoExecucao = {disciplinas: [...disciplinas], docentes: [...docentes], travas: [...travas], maxPriority: maxPriority}
       const idSolucao: string = addNewSolutionToHistory(solucaoAtual, setHistoricoSolucoes, historicoSolucoes, TipoInsercao.Algoritmo, contextoExecucao);
       updateSolutionId(setSolucaoAtual, idSolucao)
       /**
@@ -524,7 +524,7 @@ export default function Timetable() {
       processData(disciplinas, docentes, formularios, travas, atribuicoes);
 
     const avaliacao = avaliarSolucao(pAtribuicoes, pDocentes, pDisciplinas ,maxPriority+1);
-    const contextoExecucao: ContextoExecucao = {disciplinas: [...disciplinas], docentes: [...docentes], travas: [...travas]}
+    const contextoExecucao: ContextoExecucao = {disciplinas: [...disciplinas], docentes: [...docentes], travas: [...travas], maxPriority: maxPriority}
     saveAtribuicoesInHistoryState(atribuicoes, avaliacao, historicoSolucoes, setHistoricoSolucoes, setSolucaoAtual, contextoExecucao)
 
     setAlertas([
@@ -583,12 +583,22 @@ export default function Timetable() {
                   {disciplinas.map(
                     (disciplina) =>
                       disciplina.ativo && (
-                        <HeaderCell 
-                          key={disciplina.id} 
-                          disciplina={disciplina} 
-                          onHeaderClick={(e) => handleColumnClick(e, {id_disciplina: disciplina.id, tipo_trava: TipoTrava.Column})} 
-                          setHeaderCollor={setHeaderCollor}
-                        />
+                        <TableCell
+                          key={disciplina.id}
+                          onClick={(e) => handleColumnClick(e, {id_disciplina: disciplina.id, tipo_trava: TipoTrava.Column})}
+                          style={{
+                            backgroundColor: "white",
+                            margin: 0,
+                            padding: 0,
+                          }}
+                        >
+                          <HeaderCell 
+                            key={disciplina.id} 
+                            disciplina={disciplina} 
+                            //onHeaderClick={(e) => handleColumnClick(e, {id_disciplina: disciplina.id, tipo_trava: TipoTrava.Column})} 
+                            setHeaderCollor={setHeaderCollor}
+                          />
+                        </TableCell>
                       )
                   )}
                 </TableRow>

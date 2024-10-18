@@ -80,7 +80,8 @@ export interface Horario {
 export interface ContextoExecucao {
   docentes: Docente[],
   disciplinas: Disciplina[],
-  travas: Celula[]
+  travas: Celula[],
+  maxPriority: number
 }
 
 export interface Estatisticas {
