@@ -22,6 +22,7 @@ const AlertsContext = createContext<AlertasInterface>({
 
 export function AlertsWrapper({ children }: { children: React.ReactNode }) {
   const [alertas, setAlertas] = useState<Alerta[]>([]);
+  // {id: 1, message: 'teste 1', type: "info", closeTime: 100}, {id: 2, message: 'teste 2', type: "info", closeTime: 100}
 
   // /**
   //  * Função que adiciona um novo alerta no state.
@@ -48,7 +49,7 @@ export function AlertsWrapper({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-      <Stack position="fixed" bottom={16} right={16} zIndex={9999} spacing={1}>
+      <Stack position="fixed" bottom={16} right={16} zIndex={10} spacing={1}>
         {alertas.map((alerta) => (
             <CustomAlert
               key={alerta.id}
