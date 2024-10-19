@@ -1,11 +1,7 @@
 "use client";
 
 import { useGlobalContext } from "@/context/Global";
-import {
-  createTheme,
-  ThemeProvider,
-  Typography,
-} from "@mui/material";
+import { createTheme, ThemeProvider, Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -13,23 +9,32 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { exportJson, getFormattedDate, getPriorityColor, saveAtribuicoesInHistoryState } from ".";
+import {
+  exportJson,
+  getFormattedDate,
+  getPriorityColor,
+  saveAtribuicoesInHistoryState,
+} from ".";
 import {
   Atribuicao,
   Celula,
   ContextoExecucao,
+  Disciplina,
   processData,
   TipoInsercao,
   TipoTrava,
 } from "@/context/Global/utils";
-//import { buscaTabu } from "@/algorithms";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import AlgoritmoDialog from "@/components/AlgorithmDialog";
 import { useAlertsContext } from "@/context/Alerts";
 import { avaliarSolucao, buscaTabuRefactor } from "@/algorithms/buscaTabu";
 import ButtonGroupHeader from "./components/ButtonGroupHeader";
 import HeaderCell from "./components/HeaderCell";
-import { addNewSolutionToHistory, updateSolutionId } from "@/context/SolutionHistory/utils";
+import {
+  addNewSolutionToHistory,
+  updateSolutionId,
+} from "@/context/SolutionHistory/utils";
+import HoveredCourse from "./components/HoveredCourse";
 
 // Customizar todos os TableCell
 const customTheme = createTheme({
@@ -57,7 +62,7 @@ export default function Timetable() {
     setSolucaoAtual,
     historicoSolucoes,
     setHistoricoSolucoes,
-    updateAtribuicoes
+    updateAtribuicoes,
   } = useGlobalContext();
 
   let maxPriority = 0;
@@ -72,7 +77,7 @@ export default function Timetable() {
   // Disciplinas atribuidas na execução do algoritmo
   const [disciplinasAlocadas, setDisciplinasAlocadas] = useState(0);
   const disciplinasAlocadasRef = useRef(disciplinasAlocadas);
-  
+
   // Usamos useRef para manter uma referência ao valor mais atualizado de "interrompe"
   const interrompeRef = useRef(interrompe);
 
@@ -88,6 +93,11 @@ export default function Timetable() {
     id_disciplina: string;
     docente: string;
   }>({ docente: "", id_disciplina: "" });
+
+  /**
+   * State para controlar o hover nos filhos do table header a fim de exibir o componenete HoveredCourese
+   */
+  const [hoveredCourese, setHoveredCourese] = useState<Disciplina | null>(null);
 
   // Atualizamos o valor de "interrompe" sempre que ele mudar
   useEffect(() => {
@@ -154,7 +164,11 @@ export default function Timetable() {
   const setHeaderCollor = (id_disciplina: string) => {
     // Verifica se está travado
     if (
-      travas.some((obj) => obj.id_disciplina === id_disciplina && obj.tipo_trava === TipoTrava.Column)
+      travas.some(
+        (obj) =>
+          obj.id_disciplina === id_disciplina &&
+          obj.tipo_trava === TipoTrava.Column
+      )
     ) {
       // Verifica se a trava está com hover
       if (id_disciplina === hover.id_disciplina) {
@@ -162,9 +176,10 @@ export default function Timetable() {
       }
       // Caso seja apenas a trava
       return `rgba(224, 224, 224, 0.6)`;
-    }else if (id_disciplina === hover.id_disciplina) { // Verifica se está no hover
+    } else if (id_disciplina === hover.id_disciplina) {
+      // Verifica se está no hover
       return `rgba(25, 118, 210, 0.12)`;
-    }  else {
+    } else {
       return "white";
     }
   };
@@ -172,7 +187,10 @@ export default function Timetable() {
   const setColumnCollor = (nome_docente: string) => {
     // Verifica se está travado
     if (
-      travas.some((obj) => obj.nome_docente === nome_docente && obj.tipo_trava === TipoTrava.Row)
+      travas.some(
+        (obj) =>
+          obj.nome_docente === nome_docente && obj.tipo_trava === TipoTrava.Row
+      )
     ) {
       // Verifica se a trava está com hover
       if (nome_docente === hover.docente) {
@@ -180,9 +198,10 @@ export default function Timetable() {
       }
       // Caso seja apenas a trava
       return `rgba(224, 224, 224, 0.6)`;
-    }else if (nome_docente === hover.docente) { // Verifica se está no hover
+    } else if (nome_docente === hover.docente) {
+      // Verifica se está no hover
       return `rgba(25, 118, 210, 0.12)`;
-    }  else {
+    } else {
       return "white";
     }
   };
@@ -202,13 +221,14 @@ export default function Timetable() {
           obj.nome_docente === celula.nome_docente
       )
     ) {
-
-      if(atribuicoes.some(
-        (obj) =>
-          obj.id_disciplina == celula.id_disciplina &&
-          obj.docentes.some((docente) => docente == celula.nome_docente)
-      )) {
-        return `rgba(182, 44, 44, 0.4)`
+      if (
+        atribuicoes.some(
+          (obj) =>
+            obj.id_disciplina == celula.id_disciplina &&
+            obj.docentes.some((docente) => docente == celula.nome_docente)
+        )
+      ) {
+        return `rgba(182, 44, 44, 0.4)`;
       }
       return `rgba(224, 224, 224, 0.6)`;
     } else if (
@@ -231,51 +251,57 @@ export default function Timetable() {
    * @param id_disciplina Identificador da disciplina a ser atribuída.
    * @param novo_docente Nome do docente que será atribuído a disciplina.
    */
-  const adicionarDocente = (id_disciplina: string, nome_docente: string) => {
-    // Verifica se a disciplina já existe no state
-    const disciplina: Atribuicao = atribuicoes.filter(
-      (atribuicao) => atribuicao.id_disciplina == id_disciplina
-    )[0];
-    if (disciplina) {
-      setAtribuicoes((prevAtribuicoes) =>
-        prevAtribuicoes.map((atribuicao) =>
-          atribuicao.id_disciplina === id_disciplina
-            ? {
-                ...atribuicao,
-                docentes: [...atribuicao.docentes, nome_docente], // Adiciona o novo docente de forma imutável
-              }
-            : atribuicao
-        )
-      );
-    } else {
-      // Caso a disciplina ainda não exista no state
-      const newAtribuicao: Atribuicao = {
-        id_disciplina: id_disciplina,
-        docentes: [nome_docente],
-      };
-      setAtribuicoes([...atribuicoes, newAtribuicao]);
-    }
-  };
+  const adicionarDocente = useCallback(
+    (id_disciplina: string, nome_docente: string) => {
+      // Verifica se a disciplina já existe no state
+      const disciplina: Atribuicao = atribuicoes.filter(
+        (atribuicao) => atribuicao.id_disciplina == id_disciplina
+      )[0];
+      if (disciplina) {
+        setAtribuicoes((prevAtribuicoes) =>
+          prevAtribuicoes.map((atribuicao) =>
+            atribuicao.id_disciplina === id_disciplina
+              ? {
+                  ...atribuicao,
+                  docentes: [...atribuicao.docentes, nome_docente], // Adiciona o novo docente de forma imutável
+                }
+              : atribuicao
+          )
+        );
+      } else {
+        // Caso a disciplina ainda não exista no state
+        const newAtribuicao: Atribuicao = {
+          id_disciplina: id_disciplina,
+          docentes: [nome_docente],
+        };
+        setAtribuicoes([...atribuicoes, newAtribuicao]);
+      }
+    },
+    [atribuicoes, setAtribuicoes]
+  );
 
   /**
    * Função que remove um docente de uma disciplina no state de atribuições
    * @param {string} idDisciplina - Identificador da disciplina a qual terá o docente removido.
    * @param {string} docenteARemover- Nome do docente a ser removido da disciplina.
    */
-  const removerDocente = (idDisciplina: string, docenteARemover: string) => {
-    setAtribuicoes((prevAtribuicoes) =>
-      prevAtribuicoes.map((atribuicao) =>
-        atribuicao.id_disciplina == idDisciplina
-          ? {
-              ...atribuicao,
-              docentes: atribuicao.docentes.filter(
-                (docente) => docente != docenteARemover
-              ), // Remove o docente
-            }
-          : atribuicao
-      )
-    );
-  };
+  const removerDocente = useCallback(
+    (idDisciplina: string, docenteARemover: string) => {
+      setAtribuicoes((prevAtribuicoes) =>
+        prevAtribuicoes.map((atribuicao) =>
+          atribuicao.id_disciplina == idDisciplina
+            ? {
+                ...atribuicao,
+                docentes: atribuicao.docentes.filter(
+                  (docente) => docente != docenteARemover
+                ), // Remove o docente
+              }
+            : atribuicao
+        )
+      );
+    },
+    [setAtribuicoes]
+  );
 
   /**
    * Função para gerenciar e aplicar corretamente os comportamentos ao clicar em uma célula da tabela.
@@ -315,14 +341,6 @@ export default function Timetable() {
       } else {
         removerDocente(celula.id_disciplina, celula.nome_docente);
       }
-
-      // /**
-      //  * Caso alguma atribuição for alterada e esse contunto já fizer parte do histórico de soluções,
-      //  * o identificador da solução deve ser removido.
-      //  */
-      // if(solucaoAtual.idHistorico !== undefined) {
-      //   setSolucaoAtual((prev) => ({...prev, idHistorico: undefined}))
-      // }
     }
   };
 
@@ -364,8 +382,8 @@ export default function Timetable() {
     }
   };
 
-    const handleRowClick = (event, trava: Celula) => {
-    if (event.ctrlKey) {      
+  const handleRowClick = (event, trava: Celula) => {
+    if (event.ctrlKey) {
       if (
         !travas.some((obj) => JSON.stringify(obj) === JSON.stringify(trava))
       ) {
@@ -401,29 +419,27 @@ export default function Timetable() {
    * Limpa o state `atribuicoes`, deixando-o vazio.
    */
   const cleanStateAtribuicoes = () => {
-
     // Varre todo o array e limpa o campo docentes caso não esteja travdo
-    const atribuicoesLimpa = atribuicoes.map(atribuicao => {
-      if(travas.find(trava => trava.id_disciplina === atribuicao.id_disciplina && atribuicao.docentes.includes(trava.nome_docente)) 
-        || !disciplinas.find(disciplina => disciplina.id === atribuicao.id_disciplina)?.ativo
-        || !docentes.find(docente => atribuicao.docentes.includes(docente.nome))?.ativo 
-    ) {
-        return atribuicao
+    const atribuicoesLimpa = atribuicoes.map((atribuicao) => {
+      if (
+        travas.find(
+          (trava) =>
+            trava.id_disciplina === atribuicao.id_disciplina &&
+            atribuicao.docentes.includes(trava.nome_docente)
+        ) ||
+        !disciplinas.find(
+          (disciplina) => disciplina.id === atribuicao.id_disciplina
+        )?.ativo ||
+        !docentes.find((docente) => atribuicao.docentes.includes(docente.nome))
+          ?.ativo
+      ) {
+        return atribuicao;
       }
       return {
-          ...atribuicao, // Mantém os outros campos iguais
-          docentes: [], // Limpa o campo docentes
-        }
-      
-    })
-
-    // /**
-    //    * Caso alguma atribuição for alterada e esse contunto já fizer parte do histórico de soluções,
-    //    * o identificador da solução deve ser removido.
-    //    */
-    //   if(solucaoAtual.idHistorico !== undefined) {
-    //     setSolucaoAtual((prev) => ({...prev, idHistorico: undefined}))
-    //   }
+        ...atribuicao, // Mantém os outros campos iguais
+        docentes: [], // Limpa o campo docentes
+      };
+    });
 
     // Atualiza o estado com a nova lista de atribuições
     setAtribuicoes(atribuicoesLimpa);
@@ -459,19 +475,29 @@ export default function Timetable() {
     handleClickOpenDialog(); // Abre a modal imediatamente
     setProcessing(true); // Aciona o botão de loading
     // p -> Processados
-      const { pDisciplinas, pDocentes, pFormularios, pTravas, pAtribuicoes } =
+    const { pDisciplinas, pDocentes, pFormularios, pTravas, pAtribuicoes } =
       processData(disciplinas, docentes, formularios, travas, atribuicoes);
-      
-      const solucaoRefactor = await buscaTabuRefactor(pDisciplinas, pDocentes, pFormularios, pTravas, pAtribuicoes, 10, maxPriority + 1, () => interrompeRef.current, setDisciplinasAlocadas)
 
-      console.log("Solução:")
-      console.log(solucaoRefactor)
-      setSolucaoAtual(solucaoRefactor); // Atribui a solução encontrada no state local.
+    const solucaoRefactor = await buscaTabuRefactor(
+      pDisciplinas,
+      pDocentes,
+      pFormularios,
+      pTravas,
+      pAtribuicoes,
+      10,
+      maxPriority + 1,
+      () => interrompeRef.current,
+      setDisciplinasAlocadas
+    );
 
-      setProcessing(false); // Encerra o processamento
-      setInterrompe(false); // Altera o state da flag de interupção para falso
-      setDisciplinasAlocadas(0);
-  }
+    console.log("Solução:");
+    console.log(solucaoRefactor);
+    setSolucaoAtual(solucaoRefactor); // Atribui a solução encontrada no state local.
+
+    setProcessing(false); // Encerra o processamento
+    setInterrompe(false); // Altera o state da flag de interupção para falso
+    setDisciplinasAlocadas(0);
+  };
 
   /**
    * Função que agrupa processos ao abrir o `Dialog`
@@ -491,17 +517,28 @@ export default function Timetable() {
    * Aplica a solução encontrada pelo algorítmo no state global `atribuicoes`.
    */
   const ApplySolutionToState = () => {
-      /**
-       * Adiciona ao histórico de soluções
-       */
-      const contextoExecucao: ContextoExecucao = {disciplinas: [...disciplinas], docentes: [...docentes], travas: [...travas], maxPriority: maxPriority}
-      const idSolucao: string = addNewSolutionToHistory(solucaoAtual, setHistoricoSolucoes, historicoSolucoes, TipoInsercao.Algoritmo, contextoExecucao);
-      updateSolutionId(setSolucaoAtual, idSolucao)
-      /**
-       * Atualiza as atribuições
-       */
-      updateAtribuicoes(solucaoAtual.atribuicoes)
-   };
+    /**
+     * Adiciona ao histórico de soluções
+     */
+    const contextoExecucao: ContextoExecucao = {
+      disciplinas: [...disciplinas],
+      docentes: [...docentes],
+      travas: [...travas],
+      maxPriority: maxPriority,
+    };
+    const idSolucao: string = addNewSolutionToHistory(
+      solucaoAtual,
+      setHistoricoSolucoes,
+      historicoSolucoes,
+      TipoInsercao.Algoritmo,
+      contextoExecucao
+    );
+    updateSolutionId(setSolucaoAtual, idSolucao);
+    /**
+     * Atualiza as atribuições
+     */
+    updateAtribuicoes(solucaoAtual.atribuicoes);
+  };
 
   /**
    * Processos referentes a aplicação da solução obtida pelo algoritmo ao state global.
@@ -520,12 +557,34 @@ export default function Timetable() {
   };
 
   const saveAlterations = () => {
-    const { pDisciplinas, pDocentes, pAtribuicoes } =
-      processData(disciplinas, docentes, formularios, travas, atribuicoes);
+    const { pDisciplinas, pDocentes, pAtribuicoes } = processData(
+      disciplinas,
+      docentes,
+      formularios,
+      travas,
+      atribuicoes
+    );
 
-    const avaliacao = avaliarSolucao(pAtribuicoes, pDocentes, pDisciplinas ,maxPriority+1);
-    const contextoExecucao: ContextoExecucao = {disciplinas: [...disciplinas], docentes: [...docentes], travas: [...travas], maxPriority: maxPriority}
-    saveAtribuicoesInHistoryState(atribuicoes, avaliacao, historicoSolucoes, setHistoricoSolucoes, setSolucaoAtual, contextoExecucao)
+    const avaliacao = avaliarSolucao(
+      pAtribuicoes,
+      pDocentes,
+      pDisciplinas,
+      maxPriority + 1
+    );
+    const contextoExecucao: ContextoExecucao = {
+      disciplinas: [...disciplinas],
+      docentes: [...docentes],
+      travas: [...travas],
+      maxPriority: maxPriority,
+    };
+    saveAtribuicoesInHistoryState(
+      atribuicoes,
+      avaliacao,
+      historicoSolucoes,
+      setHistoricoSolucoes,
+      setSolucaoAtual,
+      contextoExecucao
+    );
 
     setAlertas([
       ...alertas,
@@ -535,14 +594,14 @@ export default function Timetable() {
         type: "success",
       },
     ]);
-  }
+  };
 
   /**
    * Remover depois que for feita a tela de Histórico de execuções
    */
   const downalodJson = () => {
-    if(!atribuicoes.some(atribuicao => atribuicao.docentes.length > 0)) {
-        setAlertas([
+    if (!atribuicoes.some((atribuicao) => atribuicao.docentes.length > 0)) {
+      setAlertas([
         ...alertas,
         {
           id: new Date().getTime(),
@@ -551,18 +610,30 @@ export default function Timetable() {
         },
       ]);
     }
-    const filename = getFormattedDate() + '.json'
+    const filename = getFormattedDate() + ".json";
 
-    exportJson(filename, docentes, disciplinas, atribuicoes)
-  }
+    exportJson(filename, docentes, disciplinas, atribuicoes);
+  };
+
+  const handleOnMouseEnter = useCallback(
+    (nome: string, id_disciplina: string) => {
+      setHover({
+        docente: nome,
+        id_disciplina: id_disciplina,
+      });
+
+      setHoveredCourese(null);
+    },
+    []
+  );
 
   return (
     <ThemeProvider theme={customTheme}>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         {docentes.length > 0 && disciplinas.length > 0 && (
-          <TableContainer sx={{ maxHeight: '90vh', overflow: 'scroll' }}>
+          <TableContainer sx={{ maxHeight: "90vh", overflow: "scroll" }}>
             <Table
-              sx={{ width: 'fit-content', height: 'fit-content' }}
+              sx={{ width: "fit-content", height: "fit-content" }}
               aria-label="sticky table"
               stickyHeader
             >
@@ -578,25 +649,37 @@ export default function Timetable() {
                       textAlign: "center",
                     }}
                   >
-                    <ButtonGroupHeader key="button_group_timetabling" onExecute={executeProcess2} onClean={cleanStateAtribuicoes} download={downalodJson} saveAlterations={saveAlterations}/>
+                    <ButtonGroupHeader
+                      key="button_group_timetabling"
+                      onExecute={executeProcess2}
+                      onClean={cleanStateAtribuicoes}
+                      download={downalodJson}
+                      saveAlterations={saveAlterations}
+                    />
                   </TableCell>
                   {disciplinas.map(
                     (disciplina) =>
                       disciplina.ativo && (
                         <TableCell
                           key={disciplina.id}
-                          onClick={(e) => handleColumnClick(e, {id_disciplina: disciplina.id, tipo_trava: TipoTrava.Column})}
+                          onClick={(e) =>
+                            handleColumnClick(e, {
+                              id_disciplina: disciplina.id,
+                              tipo_trava: TipoTrava.Column,
+                            })
+                          }
                           style={{
                             backgroundColor: "white",
                             margin: 0,
                             padding: 0,
                           }}
                         >
-                          <HeaderCell 
-                            key={disciplina.id} 
-                            disciplina={disciplina} 
-                            //onHeaderClick={(e) => handleColumnClick(e, {id_disciplina: disciplina.id, tipo_trava: TipoTrava.Column})} 
+                          <HeaderCell
+                            key={disciplina.id}
+                            disciplina={disciplina}
+                            //onHeaderClick={(e) => handleColumnClick(e, {id_disciplina: disciplina.id, tipo_trava: TipoTrava.Column})}
                             setHeaderCollor={setHeaderCollor}
+                            setParentHoveredCourse={setHoveredCourese}
                           />
                         </TableCell>
                       )
@@ -613,17 +696,26 @@ export default function Timetable() {
                         maxWidth: "11rem",
                         position: "sticky",
                         left: 0, // Fixando a célula à esquerda
-                        backgroundColor: 'white', // Evitando que o fundo fique transparente ao fixar
+                        backgroundColor: "white", // Evitando que o fundo fique transparente ao fixar
                         zIndex: 1, // Para manter sobre as demais células,
                         textOverflow: "ellipsis",
                         padding: 0,
                       }}
-                      onClick={(e) => handleRowClick(e, {nome_docente: atribuicao.nome, tipo_trava: TipoTrava.Row})}
+                      onClick={(e) =>
+                        handleRowClick(e, {
+                          nome_docente: atribuicao.nome,
+                          tipo_trava: TipoTrava.Row,
+                        })
+                      }
                     >
                       <Typography
                         align="left"
                         variant="body2"
-                        sx={{ fontWeight: "bold",  backgroundColor: setColumnCollor(atribuicao.nome), padding: '3px'}}
+                        sx={{
+                          fontWeight: "bold",
+                          backgroundColor: setColumnCollor(atribuicao.nome),
+                          padding: "3px",
+                        }}
                         noWrap
                       >
                         {atribuicao.nome}
@@ -663,12 +755,7 @@ export default function Timetable() {
                                 tipo_trava: TipoTrava.Cell,
                               })
                             }
-                            onMouseEnter={() =>
-                              setHover({
-                                docente: atribuicao.nome,
-                                id_disciplina: prioridade.id_disciplina,
-                              })
-                            }
+                            onMouseEnter={() => handleOnMouseEnter(atribuicao.nome, prioridade.id_disciplina)}
                             onMouseLeave={() =>
                               setHover({ docente: "", id_disciplina: "" })
                             }
@@ -679,35 +766,26 @@ export default function Timetable() {
                     )}
                   </TableRow>
                 ))}
-                {/* {docentes.map(docente => ( docente.ativo &&
-                  (
-                    <ColumnCell 
-                      key={docente.nome}
-                      atribuicoes={atribuicoes}
-                      disciplinas={disciplinas.filter(disciplina => disciplina.ativo)}
-                      docente={docente}
-                      travas={travas}
-                      setHover={setHover}
-                      setColumnCollor={isHover}
-                      onColumnClick={() => console.log('Travar')}
-                      handleCellClick={handleCellClick}
-                      maxPriority={maxPriority + 1}
-                    />
-                  )
-                ))} */}
               </TableBody>
             </Table>
           </TableContainer>
         )}
       </Paper>
-      {openDialog && <AlgoritmoDialog
-        open={openDialog}
-        onClose={handleCloseDialog}
-        onApply={applySolution}
-        onStop={() => interruptExecution()}
-        processing={processing}
-        progress={{current: disciplinasAlocadasRef.current, total: disciplinas.filter(disciplina => disciplina.ativo).length}}
-      />}
+      {openDialog && (
+        <AlgoritmoDialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          onApply={applySolution}
+          onStop={() => interruptExecution()}
+          processing={processing}
+          progress={{
+            current: disciplinasAlocadasRef.current,
+            total: disciplinas.filter((disciplina) => disciplina.ativo).length,
+          }}
+        />
+      )}
+
+      {hoveredCourese && <HoveredCourse disciplina={hoveredCourese} />}
     </ThemeProvider>
   );
 }
