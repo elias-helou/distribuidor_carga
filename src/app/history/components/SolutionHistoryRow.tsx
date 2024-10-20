@@ -7,7 +7,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { Fragment, useState } from "react";
+import { Fragment, useCallback, useState } from "react";
 
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -15,6 +15,7 @@ import SolutionHistoryButtonGroup from "./SolutionHistoryButtonGroup";
 import { useSolutionHistory } from "@/context/SolutionHistory/hooks";
 import { useAlertsContext } from "@/context/Alerts";
 import SolutionHistoryStatistics from "./SolutionHistoryStatistics";
+import { exportJson, getFormattedDate } from "@/app/timetable";
 
 interface SolutionHistoryRowProps {
   id: string;
@@ -26,7 +27,7 @@ const SolutionHistoryRow: React.FC<SolutionHistoryRowProps> = ({
   solucao,
 }) => {
   const [open, setOpen] = useState(false);
-  const { removeSolutionFromHistory, restoreHistoryToSolution, solucaoAtual } =
+  const { removeSolutionFromHistory, restoreHistoryToSolution, solucaoAtual, historicoSolucoes } =
     useSolutionHistory();
   const { alertas, setAlertas } = useAlertsContext();
 
@@ -62,6 +63,35 @@ const SolutionHistoryRow: React.FC<SolutionHistoryRowProps> = ({
       },
     ]);
   };
+
+  const handleDownloadSolutionFromHistory = useCallback((id: string) => {
+    const filename = getFormattedDate() + ".json";
+    exportJson(
+      filename,
+      solucao.contexto.docentes,
+      solucao.contexto.disciplinas,
+      solucao.solucao.atribuicoes,
+      solucao.contexto.travas,
+      historicoSolucoes.get(id)
+    );
+
+    // setAlertas([
+    //   ...alertas,
+    //   {
+    //     id: new Date().getTime(),
+    //     message: `A solução ${solucao.datetime} foi baixada!`,
+    //     type: "success",
+    //   },
+    // ]);
+    setAlertas((prevAlertas) => [
+      ...prevAlertas,
+      {
+        id: new Date().getTime(),
+        message: `A solução ${solucao.datetime} foi baixada!`,
+        type: "success",
+      },
+    ]);
+  }, [historicoSolucoes, setAlertas, solucao.contexto.disciplinas, solucao.contexto.docentes, solucao.contexto.travas, solucao.datetime, solucao.solucao.atribuicoes]);
 
   return (
     <Fragment key={`fragment_${id}`}>
@@ -108,6 +138,7 @@ const SolutionHistoryRow: React.FC<SolutionHistoryRowProps> = ({
             id={id}
             remove={handleRemoveSolutionFromHistory}
             restore={handleRestoreHistoryToSolution}
+            download={handleDownloadSolutionFromHistory}
           />
         </TableCell>
       </TableRow>
@@ -132,7 +163,11 @@ const SolutionHistoryRow: React.FC<SolutionHistoryRowProps> = ({
               >
                 Detalhes
               </Typography>
-              <SolutionHistoryStatistics key={`componente_estatisticas_${id}`} id={id} solucao={solucao}/>
+              <SolutionHistoryStatistics
+                key={`componente_estatisticas_${id}`}
+                id={id}
+                solucao={solucao}
+              />
             </Box>
           </Collapse>
         </TableCell>
