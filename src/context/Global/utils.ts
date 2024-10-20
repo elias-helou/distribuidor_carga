@@ -101,7 +101,8 @@ export interface Solucao {
 
 export enum TipoInsercao {
   Algoritmo = "Algoritmo",
-  Manual = "Manual"
+  Manual = "Manual",
+  Importação = "Importação"
 }
 
 export interface HistoricoSolucao {

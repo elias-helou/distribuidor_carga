@@ -15,16 +15,18 @@ import {
   processDisciplinas,
   processDocentes,
   processFormularios,
+  processSolucao,
+  processTravas,
 } from "../inputfile/UpdateState";
 import { useGlobalContext } from "@/context/Global";
-import { Atribuicao, Disciplina, Docente, Formulario, horariosSobrepoem } from "@/context/Global/utils";
+import { Atribuicao, Celula, Disciplina, Docente, Formulario, horariosSobrepoem } from "@/context/Global/utils";
 import { Alerta, useAlertsContext } from "@/context/Alerts";
 
 export default function InputFileUpload() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const {alertas, setAlertas} = useAlertsContext();
-  const { setAtribuicoes, setDisciplinas, setDocentes, setFormularios } =
+  const { setAtribuicoes, setDisciplinas, setDocentes, setFormularios, setTravas, setSolucaoAtual, setHistoricoSolucoes, historicoSolucoes } =
     useGlobalContext();
 
   /**
@@ -76,6 +78,13 @@ export default function InputFileUpload() {
       setFormularios
     );
 
+    const travas: Celula[] = processAndUpdateState(
+      json,
+      "travas",
+      processTravas,
+      setTravas
+    );
+
     // Criar todas as disciplinas no state de atribuições
     if (atribuicoes.length != disciplinas.length) {
       for(const disciplina of disciplinas) {
@@ -111,7 +120,16 @@ export default function InputFileUpload() {
         docente.formularios.set(docenteFormulario.id_disciplina, docenteFormulario.prioridade)
       }
     }
+
+    /**
+     * Processa solução e insere no histórico
+     */
+    if(json['solucao']) {
+      processSolucao(json['solucao'], atribuicoes, disciplinas, docentes, travas, historicoSolucoes, setHistoricoSolucoes, setSolucaoAtual);
+    }
+    
   };
+
 
   /**
    * Função que lê o arquivo enviado pelo usuário.
