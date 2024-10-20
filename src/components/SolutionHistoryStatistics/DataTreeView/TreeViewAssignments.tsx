@@ -40,11 +40,12 @@ const TreeViewAssignments: React.FC<TreeViewAssignmentsProps> = ({
             formulario.nome_docente === item.id
         );
         render.push(
-          <Grid2>
+          <Grid2 key={`TreeViewAssignments_child_grid_${disciplina.id}`}>
             <HeaderCell
               disciplina={disciplina}
               //onHeaderClick={() => null}
               setHeaderCollor={() => "white"}
+              key={`TreeViewAssignments_child_grid_${disciplina.id}_child`}
             />
             <Box
               sx={{
@@ -84,9 +85,10 @@ const TreeViewAssignments: React.FC<TreeViewAssignmentsProps> = ({
         alignItems="center"
         justifyContent="center"
         sx={{ width: "100%" }}
+        key={'TreeViewAssignments_container_grid'}
       >
         {!item && (
-          <Grid2 alignItems="center" justifyContent="center">
+          <Grid2 alignItems="center" justifyContent="center" key={'TreeViewAssignments_no_info_grid'}>
             <Typography variant="h6" color="error" align="center">
               Nenhuma informação selecionada!
             </Typography>
