@@ -55,5 +55,5 @@ export const useSolutionHistory = () => {
   };
 
   // Retorna a função de remoção, que pode ser usada em componentes
-  return { removeSolutionFromHistory, restoreHistoryToSolution, solucaoAtual };
+  return { removeSolutionFromHistory, restoreHistoryToSolution, solucaoAtual, historicoSolucoes };
 };
