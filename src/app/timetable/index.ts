@@ -120,7 +120,9 @@ export function exportJson(
   filename: string,
   docentes: Docente[],
   disciplinas: Disciplina[],
-  atribuicoes: Atribuicao[]
+  atribuicoes: Atribuicao[],
+  travas: Celula[],
+  solucaoHistorico?: HistoricoSolucao
 ) {
   /**
    * Ajustar as disciplinas
@@ -141,6 +143,7 @@ export function exportJson(
       noturna: disciplina.noturna,
       ingles: disciplina.ingles,
       docentes: disciplina.docentes,
+      ativo: disciplina.ativo,
     };
     disciplinasDTO[disciplina.id] = disc;
   }
@@ -153,7 +156,7 @@ export function exportJson(
   const saldosDTO = {};
 
   for (const docente of docentes) {
-    docentesDTO.push(docente.nome);
+    docentesDTO.push({ nome: docente.nome, ativo: docente.ativo });
     saldosDTO[docente.nome] = docente.saldo;
     const docenteFormularios = {};
 
@@ -187,6 +190,46 @@ export function exportJson(
 
   if (Object.keys(atribuicoesDTO).length != 0) {
     dados["atribuicao"] = atribuicoesDTO;
+  }
+
+  if (travas.length > 0) {
+    dados["travas"] = travas;
+  }
+
+  if (solucaoHistorico) {
+    const { contexto, solucao, ...solucaoDTO } = solucaoHistorico;
+
+    if (solucao.estatisticas) {
+      const tempoPorIteracao = Array.from(
+        solucao.estatisticas.tempoPorIteracao
+      );
+      const avaliacaoPorIteracao = Array.from(
+        solucao.estatisticas.avaliacaoPorIteracao
+      );
+
+      dados["solucao"] = {
+        ...solucaoDTO,
+        solucao: {
+          avaliacao: solucao.avaliacao,
+          estatisticas: {
+            tempoPorIteracao: tempoPorIteracao,
+            avaliacaoPorIteracao: avaliacaoPorIteracao,
+            tempoExecucao: solucao.estatisticas.tempoExecucao,
+            iteracoes: solucao.estatisticas.iteracoes,
+            interrupcao: solucao.estatisticas.iteracoes,
+          },
+        },
+        maxPriority: contexto.maxPriority,
+      };
+    } else {
+      dados["solucao"] = {
+        ...solucaoDTO,
+        solucao: {
+          avaliacao: solucao.avaliacao,
+        },
+        maxPriority: contexto.maxPriority,
+      };
+    }
   }
 
   exportarJsonBrowser(dados, filename);

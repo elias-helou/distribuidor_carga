@@ -610,9 +610,16 @@ export default function Timetable() {
         },
       ]);
     }
-    const filename = getFormattedDate() + ".json";
 
-    exportJson(filename, docentes, disciplinas, atribuicoes);
+    let filename: string;
+
+    if(solucaoAtual.idHistorico) {
+      filename = solucaoAtual.idHistorico + ".json"
+      exportJson(filename, docentes, disciplinas, atribuicoes, travas, historicoSolucoes.get(solucaoAtual.idHistorico));
+    } else {
+      filename = getFormattedDate() + ".json";
+      exportJson(filename, docentes, disciplinas, atribuicoes, travas);
+    } 
   };
 
   const handleOnMouseEnter = useCallback(
