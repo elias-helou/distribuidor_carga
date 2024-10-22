@@ -1,4 +1,4 @@
-import { getFormattedDate } from "@/app/timetable";
+import { getFormattedDate } from "@/app/atribuicoes";
 import { ContextoExecucao, HistoricoSolucao, Solucao, TipoInsercao } from "../Global/utils";
 
 /**

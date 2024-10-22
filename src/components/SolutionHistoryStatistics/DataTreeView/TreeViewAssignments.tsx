@@ -1,5 +1,5 @@
-import { setCellColor } from "@/app/timetable";
-import HeaderCell from "@/app/timetable/components/HeaderCell";
+import { setCellColor } from "@/app/atribuicoes";
+import HeaderCell from "@/app/atribuicoes/components/HeaderCell";
 import { useGlobalContext } from "@/context/Global";
 import { Disciplina } from "@/context/Global/utils";
 import { Box, Grid2, Paper, Typography } from "@mui/material";

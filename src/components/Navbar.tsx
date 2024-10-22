@@ -17,7 +17,7 @@ interface IPages {
 const navItems: IPages[] = [
   { name: "Home", link: "/" },
   { name: "Carregar dados", link: "/inputfile" },
-  { name: "Timetable", link: "/timetable" },
+  { name: "Atribuições", link: "/atribuicoes" },
   { name: "Seleção", link: "/select" },
   { name: "Histórico", link: "/history"}
 ];

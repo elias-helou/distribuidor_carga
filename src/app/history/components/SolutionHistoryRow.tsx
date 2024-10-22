@@ -15,7 +15,7 @@ import SolutionHistoryButtonGroup from "./SolutionHistoryButtonGroup";
 import { useSolutionHistory } from "@/context/SolutionHistory/hooks";
 import { useAlertsContext } from "@/context/Alerts";
 import SolutionHistoryStatistics from "./SolutionHistoryStatistics";
-import { exportJson, getFormattedDate } from "@/app/timetable";
+import { exportJson, getFormattedDate } from "@/app/atribuicoes";
 
 interface SolutionHistoryRowProps {
   id: string;
