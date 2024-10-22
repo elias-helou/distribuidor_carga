@@ -194,14 +194,32 @@ export default function Timetable() {
     ) {
       // Verifica se a trava está com hover
       if (nome_docente === hover.docente) {
+
+        // Travado Hover e Conflito
+        if (verificaConflitosDocente(nome_docente)) {
+          return `rgba(255, 118, 210, 0.30)`;
+        }
         return `rgba(132, 118, 210, 0.12)`;
+      }
+
+      // Travado e conflito
+      if (verificaConflitosDocente(nome_docente)) {
+        return `rgba(255, 200, 200, 1)`;
       }
       // Caso seja apenas a trava
       return `rgba(224, 224, 224, 0.6)`;
     } else if (nome_docente === hover.docente) {
+      // Hover Conflito
+      if (verificaConflitosDocente(nome_docente)) {
+        return `rgba(255, 110, 200, 0.60)`;
+      }
       // Verifica se está no hover
       return `rgba(25, 118, 210, 0.12)`;
     } else {
+      // Conflito
+      if (verificaConflitosDocente(nome_docente)) {
+        return `rgba(255, 0, 0, 0.5)`;
+      }
       return "white";
     }
   };
@@ -324,22 +342,31 @@ export default function Timetable() {
         ]);
       }
     } else {
-      // Procura pelo objeto Atribuição no state pelo id_disciplina
-      const newAtribuicao = atribuicoes.find(
-        (atribuicao) => atribuicao.id_disciplina == celula.id_disciplina
-      );
-
-      // Se o docente ainda não atribuido a disciplina, realizar a inserção, caso contrário remover.
+      // Se tiver trava não fazer nada
       if (
-        !newAtribuicao ||
-        (newAtribuicao &&
-          !newAtribuicao.docentes.some(
-            (docente) => docente == celula.nome_docente
-          ))
+        !travas.some(
+          (trava) =>
+            trava.id_disciplina === celula.id_disciplina &&
+            trava.nome_docente === celula.nome_docente
+        )
       ) {
-        adicionarDocente(celula.id_disciplina, celula.nome_docente);
-      } else {
-        removerDocente(celula.id_disciplina, celula.nome_docente);
+        // Procura pelo objeto Atribuição no state pelo id_disciplina
+        const newAtribuicao = atribuicoes.find(
+          (atribuicao) => atribuicao.id_disciplina == celula.id_disciplina
+        );
+
+        // Se o docente ainda não atribuido a disciplina, realizar a inserção, caso contrário remover.
+        if (
+          !newAtribuicao ||
+          (newAtribuicao &&
+            !newAtribuicao.docentes.some(
+              (docente) => docente == celula.nome_docente
+            ))
+        ) {
+          adicionarDocente(celula.id_disciplina, celula.nome_docente);
+        } else {
+          removerDocente(celula.id_disciplina, celula.nome_docente);
+        }
       }
     }
   };
@@ -644,35 +671,35 @@ export default function Timetable() {
   /**
    * Caso o docente apresente conflito de horários, a borda de sua célula deve ser vermelha
    */
-  // const setBorderStyle = (nome_docente: string): string => {
-  //   const docenteAtribuicoes = atribuicoes.filter((atribuicao) =>
-  //     atribuicao.docentes.includes(nome_docente)
-  //   );
+  const verificaConflitosDocente = (nome_docente: string): boolean => {
+    const docenteAtribuicoes = atribuicoes.filter((atribuicao) =>
+      atribuicao.docentes.includes(nome_docente)
+    );
 
-  //   if (docenteAtribuicoes.length > 0) {
-  //     const atribuicoesDocente: string[] = atribuicoes
-  //       .filter((atribuicao) => atribuicao.docentes.includes(nome_docente))
-  //       .map((atribuicao) => atribuicao.id_disciplina);
+    if (docenteAtribuicoes.length > 0) {
+      const atribuicoesDocente: string[] = atribuicoes
+        .filter((atribuicao) => atribuicao.docentes.includes(nome_docente))
+        .map((atribuicao) => atribuicao.id_disciplina);
 
-  //     // Comparar as atribuições para ver se a `Disciplia.conflitos` não incluem umas as outras
-  //     for (let i = 0; i < atribuicoesDocente.length; i++) {
-  //       const disciplinaPivo: Disciplina = disciplinas.find(
-  //         (disciplina) => disciplina.id === atribuicoesDocente[i]
-  //       );
+      // Comparar as atribuições para ver se a `Disciplia.conflitos` não incluem umas as outras
+      for (let i = 0; i < atribuicoesDocente.length; i++) {
+        const disciplinaPivo: Disciplina = disciplinas.find(
+          (disciplina) => disciplina.id === atribuicoesDocente[i]
+        );
 
-  //       for (let j = i + 1; j < atribuicoesDocente.length; j++) {
-  //         const disciplinaAtual: Disciplina = disciplinas.find(
-  //           (disciplina) => disciplina.id === atribuicoesDocente[j]
-  //         );
+        for (let j = i + 1; j < atribuicoesDocente.length; j++) {
+          const disciplinaAtual: Disciplina = disciplinas.find(
+            (disciplina) => disciplina.id === atribuicoesDocente[j]
+          );
 
-  //         if (disciplinaPivo.conflitos.has(disciplinaAtual.id)) {
-  //           return 'rgba(255, 0, 0, 0.3)';
-  //         }
-  //       }
-  //     }
-  //   }
-  //   // Não será retornado nada para ele não perder as configurações do material ui
-  // };
+          if (disciplinaPivo.conflitos.has(disciplinaAtual.id)) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  };
 
   return (
     <ThemeProvider theme={customTheme}>
@@ -762,6 +789,7 @@ export default function Timetable() {
                           fontWeight: "bold",
                           backgroundColor: setColumnCollor(atribuicao.nome),
                           padding: "3px",
+                          width: "100%",
                         }}
                         noWrap
                       >
