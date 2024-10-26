@@ -19,7 +19,8 @@ const navItems: IPages[] = [
   { name: "Carregar dados", link: "/inputfile" },
   { name: "Atribuições", link: "/atribuicoes" },
   { name: "Seleção", link: "/select" },
-  { name: "Histórico", link: "/history"}
+  { name: "Histórico", link: "/history"},
+  {name: "Parâmetros", link: "parameters"}
 ];
 
 export default function Navbar() {

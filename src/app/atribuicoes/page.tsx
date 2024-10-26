@@ -27,7 +27,7 @@ import {
 import { useCallback, useEffect, useRef, useState } from "react";
 import AlgoritmoDialog from "@/components/AlgorithmDialog";
 import { useAlertsContext } from "@/context/Alerts";
-import { avaliarSolucao, buscaTabuRefactor } from "@/algorithms/buscaTabu";
+import { avaliarSolucao, buscaTabu } from "@/algorithms/buscaTabu";
 import ButtonGroupHeader from "./components/ButtonGroupHeader";
 import HeaderCell from "./components/HeaderCell";
 import {
@@ -63,6 +63,7 @@ export default function Timetable() {
     historicoSolucoes,
     setHistoricoSolucoes,
     updateAtribuicoes,
+    parametros
   } = useGlobalContext();
 
   let maxPriority = 0;
@@ -505,7 +506,7 @@ export default function Timetable() {
     const { pDisciplinas, pDocentes, pFormularios, pTravas, pAtribuicoes } =
       processData(disciplinas, docentes, formularios, travas, atribuicoes);
 
-    const solucaoRefactor = await buscaTabuRefactor(
+    const solucaoRefactor = await buscaTabu(
       pDisciplinas,
       pDocentes,
       pFormularios,
@@ -514,7 +515,8 @@ export default function Timetable() {
       10,
       maxPriority + 1,
       () => interrompeRef.current,
-      setDisciplinasAlocadas
+      setDisciplinasAlocadas,
+      parametros
     );
 
     console.log("Solução:");
@@ -596,7 +598,8 @@ export default function Timetable() {
       pAtribuicoes,
       pDocentes,
       pDisciplinas,
-      maxPriority + 1
+      maxPriority + 1,
+      parametros
     );
     const contextoExecucao: ContextoExecucao = {
       disciplinas: [...disciplinas],

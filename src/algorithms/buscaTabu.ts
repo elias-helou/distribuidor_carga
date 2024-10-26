@@ -62,8 +62,9 @@ import {
   Atribuicao,
   Formulario,
   Solucao,
+  Parametros,
 } from "@/context/Global/utils";
-import { atualizarListaTabu, checaTravaCelula, disciplinaInvalida, gerarTrocasDeDocentes, gerarVizinhoComDocente, gerarVizinhoComRemocao, processarAtribuicaoInicial } from "./utils";
+import { atualizarListaTabu, checaTravaCelula, disciplinaInvalida, gerarTrocasDeDocentes, gerarVizinhoComDocente, gerarVizinhoComRemocao } from "./utils";
 import { Dispatch, SetStateAction } from "react";
 
 /**
@@ -78,7 +79,8 @@ export function avaliarSolucao(
   atribuicoes: Atribuicao[],
   docentes: Docente[],
   disciplinas: Disciplina[],
-  maiorPrioridade: number
+  maiorPrioridade: number,
+  parametros: Parametros
 ): number {
   let avaliacao = 0;
 
@@ -128,7 +130,8 @@ function criarNovaSolucao(
   atribuicoes: Atribuicao[],
   docentes: Docente[],
   disciplinas: Disciplina[],
-  maiorPrioridade: number
+  maiorPrioridade: number,
+  parametros: Parametros
 ): Solucao {
   const novaSolucao: Solucao = {atribuicoes: atribuicoes, avaliacao: 0}
   // Reavaliar a nova solução após a mudança
@@ -136,7 +139,8 @@ function criarNovaSolucao(
     novaSolucao.atribuicoes,
     docentes,
     disciplinas,
-    maiorPrioridade
+    maiorPrioridade,
+    parametros
   );
 
   return novaSolucao;
@@ -150,11 +154,11 @@ function criarNovaSolucao(
  * @param {number} maiorPrioridade Maior prioridade encontrada nos formulários.
  * @returns {Solucao} Uma lista com todas as soluções para cada conjunto de vizinhos, em ordem decrescente.
  */
-export function gerarSolucoes(vizinhos: Atribuicao[][], docentes: Docente[], disciplinas: Disciplina[], MaiorPrioridade: number): Solucao[] {
+export function gerarSolucoes(vizinhos: Atribuicao[][], docentes: Docente[], disciplinas: Disciplina[], MaiorPrioridade: number, parametros: Parametros): Solucao[] {
   const solucoesAtuais: Solucao[] = []
 
   for(const vizinho of vizinhos) {
-    const solucaoVizinho = criarNovaSolucao(vizinho, docentes, disciplinas, MaiorPrioridade);
+    const solucaoVizinho = criarNovaSolucao(vizinho, docentes, disciplinas, MaiorPrioridade, parametros);
     solucoesAtuais.push(solucaoVizinho)
   }
 
@@ -219,7 +223,7 @@ function delay(ms: number) {
 }
 
 // Algoritmo de Busca Tabu
-export async function buscaTabuRefactor(
+export async function buscaTabu(
   disciplinas: Disciplina[],
   docentes: Docente[],
   formularios: Formulario[],
@@ -228,12 +232,13 @@ export async function buscaTabuRefactor(
   NumIterNotChange: number, /*Constante vinda da chamada*/
   MaiorPrioridade: number, /*Constante vinda da chamada*/
   interrompe: () => boolean,
-  setDisciplinasAlocadas: Dispatch<SetStateAction<number>>
+  setDisciplinasAlocadas: Dispatch<SetStateAction<number>>,
+  parametros: Parametros
 ): Promise<Solucao> {
   /**
    * Variáveis para as estatísticas
    */
-  
+
   let iteracoes = 0;
   const avaliacaoPorIteracao: Map<number, number> = new Map<number, number>();
   const tempoPorIteracao: Map<number, number> = new Map<number, number>();
@@ -249,12 +254,13 @@ export async function buscaTabuRefactor(
   
   // Solução inicial inclui as atribuições fornecidas pelo usuário
   let solucaoAtual: Solucao = {
-    atribuicoes: processarAtribuicaoInicial(structuredClone(atribuicoes), docentes, disciplinas, travas),
+    atribuicoes: atribuicoes,
     avaliacao: avaliarSolucao(
       atribuicoes, // Verificar se aqui não seria melhor já passar as atribuições processadas
       docentes,
       disciplinas,
-      MaiorPrioridade
+      MaiorPrioridade,
+      parametros
     ),
   };
 
@@ -278,12 +284,12 @@ export async function buscaTabuRefactor(
     const vizinhos: Atribuicao[][] = gerarVizinhos(solucaoAtual.atribuicoes, docentes, disciplinas, travas, listaTabu);
 
     // Selecionar o vizinho com a maior avaliação
-    const melhorVizinho: Solucao = gerarSolucoes(vizinhos, docentes, disciplinas, MaiorPrioridade)[0];
+    const melhorVizinho: Solucao = gerarSolucoes(vizinhos, docentes, disciplinas, MaiorPrioridade, parametros)[0];
 
     // Verifica se o melhor vizinho existe
     if(melhorVizinho) {
       // Atualizar a lista tabu com o conjunto de atribuições do melhor vizinho
-      atualizarListaTabu(listaTabu, melhorVizinho.atribuicoes);
+      atualizarListaTabu(listaTabu, melhorVizinho.atribuicoes, 150);
 
       // Atualizar a solução atual e a melhor solução
       solucaoAtual = melhorVizinho;
@@ -309,7 +315,7 @@ export async function buscaTabuRefactor(
     tempoPorIteracao.set(iteracoes, tempoFinal - tempoInicial)
 
 
-    if(/*iteracoesSemModificacao === NumIterNotChange ||*/ interrompe() || !existeDisciplinasQueAindaPodemSerAtribuidas(melhorSolucao, docentes)) {
+    if(/*iteracoesSemModificacao === NumIterNotChange ||*/ interrompe() /*|| !existeDisciplinasQueAindaPodemSerAtribuidas(melhorSolucao, docentes)*/) {
       break;
     }
   }
@@ -327,7 +333,7 @@ export async function buscaTabuRefactor(
   }};
 }
 
-function existeDisciplinasQueAindaPodemSerAtribuidas(solucao: Solucao, docentes: Docente[]) {
+/*function existeDisciplinasQueAindaPodemSerAtribuidas(solucao: Solucao, docentes: Docente[]) {
   const atribuicoesSemDocentes = solucao.atribuicoes.filter(atrib => atrib.docentes.length === 0)
 
   // Não existem disciplinas sem docentes alocados
@@ -352,5 +358,5 @@ function existeDisciplinasQueAindaPodemSerAtribuidas(solucao: Solucao, docentes:
 
   // Ainda existe possibilidade
   return true
-}
+}*/
 

@@ -6,6 +6,7 @@ import {
   Docente,
   Formulario,
   HistoricoSolucao,
+  Parametros,
   Solucao,
 } from "./utils";
 
@@ -32,6 +33,12 @@ interface GlobalContextInterface {
   >;
   solucaoAtual: Solucao;
   setSolucaoAtual: React.Dispatch<React.SetStateAction<Solucao>>;
+
+  /**
+   * Mudar de local
+   */
+  parametros: Parametros;
+  setParametros: React.Dispatch<React.SetStateAction<Parametros>>;
 }
 
 const GlobalContext = createContext<GlobalContextInterface>({
@@ -53,6 +60,8 @@ const GlobalContext = createContext<GlobalContextInterface>({
     idHistorico: undefined,
   },
   setSolucaoAtual: () => {},
+  parametros: {k1: 0, k2: 0, k3: 0, k4: 0, k5: 0, k6: 0},
+  setParametros: () => {}
 });
 
 export function GlobalWrapper({ children }: { children: React.ReactNode }) {
@@ -73,6 +82,11 @@ export function GlobalWrapper({ children }: { children: React.ReactNode }) {
     avaliacao: undefined,
     idHistorico: undefined,
   });
+
+  /**
+   * Mudar de lugar
+   */
+  const [parametros, setParametros] = useState<Parametros>({k1: 0, k2: 0, k3: 0, k4: 0, k5: 0, k6: 0});
 
   /**
    * Caso ocorra alguma modificação nos states globais, o id da solução deve ser alterado para undefined, permitindo salvar essas
@@ -170,6 +184,8 @@ export function GlobalWrapper({ children }: { children: React.ReactNode }) {
         setHistoricoSolucoes,
         setSolucaoAtual,
         solucaoAtual,
+        parametros,
+        setParametros
       }}
     >
       {children}

@@ -120,15 +120,17 @@ export function estaNaListaTabu(
  * Função para adicionar o conjunto de atribuições do melhor vizinho à lista tabu e manter o limite.
  * @param {Atribuicao[][]} listaTabu Lista com os N últimos conjuntos de atribuições realizadas.
  * @param {Atribuicao[]} atribuicoes Novo conjunto de atribuições realizadas.
+ * @param {Number} sizeTabu Tamanho da lista Tabu.
  */
 export function atualizarListaTabu(
   listaTabu: Atribuicao[][],
-  atribuicoes: Atribuicao[]
+  atribuicoes: Atribuicao[],
+  sizeTabu: number
 ): void {
   listaTabu.push(atribuicoes); // Adiciona o novo conjunto de atribuições à lista tabu
 
   // Verifica o limite da lista tabu e remove o conjunto mais antigo, se necessário
-  if (listaTabu.length > 10) {
+  if (listaTabu.length > sizeTabu) {
     listaTabu.shift(); // Remove o conjunto mais antigo para manter o limite de 10
   }
 }
