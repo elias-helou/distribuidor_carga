@@ -35,6 +35,7 @@ import {
   updateSolutionId,
 } from "@/context/SolutionHistory/utils";
 import HoveredCourse from "./components/HoveredCourse";
+import { useSolutionHistory } from "@/context/SolutionHistory/hooks";
 
 // Customizar todos os TableCell
 const customTheme = createTheme({
@@ -65,6 +66,8 @@ export default function Timetable() {
     updateAtribuicoes,
     parametros
   } = useGlobalContext();
+
+  const {cleanSolucaoAtual} = useSolutionHistory();
 
   let maxPriority = 0;
 
@@ -370,6 +373,8 @@ export default function Timetable() {
         }
       }
     }
+
+    cleanSolucaoAtual(); // Limpa a solução atual
   };
 
   /**
@@ -407,6 +412,7 @@ export default function Timetable() {
           setTravas(newTravas);
         }
       }
+      cleanSolucaoAtual(); // Limpa a solução atual
     }
   };
 
@@ -440,6 +446,8 @@ export default function Timetable() {
           setTravas(newTravas);
         }
       }
+
+      cleanSolucaoAtual(); // Limpa a solução atual
     }
   };
 

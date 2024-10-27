@@ -25,9 +25,10 @@ const tableColumns = [
 
 export default function History() {
   const {
-    historicoSolucoes
+    historicoSolucoes, solucaoAtual
   } = useGlobalContext();
 
+  console.log('Solução Atual: ', solucaoAtual)
   /**
    * State para controlar o hover nos filhos do table header a fim de exibir o componenete HoveredCourese
    */

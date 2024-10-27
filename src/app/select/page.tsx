@@ -18,6 +18,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useGlobalContext } from "@/context/Global";
 import { Disciplina, Docente, isDisciplina } from "@/context/Global/utils";
+import { useSolutionHistory } from "@/context/SolutionHistory/hooks";
 
 function not<T>(a: readonly T[], b: readonly T[]) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -40,6 +41,8 @@ export default function Seletor() {
   const [selectedEntity, setSelectedEntity] = React.useState<
     "docente" | "disciplina"
   >("docente"); // Estado para selecionar a entidade atual
+
+  const {cleanSolucaoAtual} = useSolutionHistory();
 
   const handleToggleEntity = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked([]); // Limpa os itens selecionados ao mudar a entidade
@@ -102,6 +105,8 @@ export default function Seletor() {
       }));
       setDisciplinas(updatedDisciplinas);
     }
+
+    cleanSolucaoAtual(); // Limpa a solução atual
   };
 
   const handleCheckedRight = () => {

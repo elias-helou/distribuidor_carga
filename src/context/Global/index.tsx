@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import {
   Atribuicao,
   Celula,
@@ -10,7 +10,7 @@ import {
   Solucao,
 } from "./utils";
 
-import _ from "lodash"; // Comparação entre objetos de forma otimizada
+//import _ from "lodash"; // Comparação entre objetos de forma otimizada
 
 interface GlobalContextInterface {
   docentes: Docente[];
@@ -88,84 +88,98 @@ export function GlobalWrapper({ children }: { children: React.ReactNode }) {
    */
   const [parametros, setParametros] = useState<Parametros>({k1: 0, k2: 0, k3: 0, k4: 0, k5: 0, k6: 0});
 
-  /**
-   * Caso ocorra alguma modificação nos states globais, o id da solução deve ser alterado para undefined, permitindo salvar essas
-   * novas modificações
-   */
-  // useRef para armazenar os valores anteriores
-  const prevDocentesRef = useRef(docentes);
-  const prevDisciplinasRef = useRef(disciplinas);
-  const prevTravasRef = useRef(travas);
-  const prevAtribuicoesRef = useRef(atribuicoes);
-  const prevSolucaoAtualRef = useRef(solucaoAtual);
-  const prevHistoricoSolucoes = useRef(historicoSolucoes);
+//   /**
+//    * Caso ocorra alguma modificação nos states globais, o id da solução deve ser alterado para undefined, permitindo salvar essas
+//    * novas modificações
+//    */
+//   // useRef para armazenar os valores anteriores
+//   const prevDocentesRef = useRef(docentes);
+//   const prevDisciplinasRef = useRef(disciplinas);
+//   const prevTravasRef = useRef(travas);
+//   const prevAtribuicoesRef = useRef(atribuicoes);
+//   const prevSolucaoAtualRef = useRef(solucaoAtual);
+//   const prevHistoricoSolucoes = useRef(historicoSolucoes);
 
-  const [somethingChanged, setSomethingChanged] = useState(false);
+// // UseRef para rastrear o último estado definido de `solucaoAtual`
+// const lastSolucaoAtualRef = useRef(solucaoAtual);
 
-  useEffect(() => {
-    if(solucaoAtual.idHistorico !== undefined) {
-      const hasChanges = () => {
-      return (
-        !_.isEqual(prevDocentesRef.current, docentes) ||
-        !_.isEqual(prevDisciplinasRef.current, disciplinas) ||
-        !_.isEqual(prevTravasRef.current, travas) ||
-        !_.isEqual(prevAtribuicoesRef.current, atribuicoes)
-      );
-    };
+// useEffect(() => {
+//   // Só executa se há um idHistorico válido, ignorando estados indefinidos de `solucaoAtual`
+//   if (solucaoAtual.idHistorico !== undefined) {
+    
+//     // Função para verificar se houve mudanças nos estados observados
+//     const hasChanges = () => {
+//       return (
+//         !_.isEqual(prevDocentesRef.current, docentes) ||
+//         !_.isEqual(prevDisciplinasRef.current, disciplinas) ||
+//         !_.isEqual(prevTravasRef.current, travas) ||
+//         !_.isEqual(prevAtribuicoesRef.current, atribuicoes)
+//       );
+//     };
 
-    const restoring = () => {
-      return (
-        prevSolucaoAtualRef.current.idHistorico !== undefined &&
-        solucaoAtual.idHistorico !== undefined &&
-        prevSolucaoAtualRef.current.idHistorico !== solucaoAtual.idHistorico &&
-        prevHistoricoSolucoes.current.has(
-          prevSolucaoAtualRef.current.idHistorico
-        ) &&
-        prevHistoricoSolucoes.current.has(solucaoAtual.idHistorico)
-      );
-    };
+//     // Função de restauração: verifica se estamos restaurando um histórico existente
+//     const restoring = () => {
+//       return (
+//         prevSolucaoAtualRef.current.idHistorico !== undefined &&
+//         solucaoAtual.idHistorico !== undefined &&
+//         prevSolucaoAtualRef.current.idHistorico !== solucaoAtual.idHistorico &&
+//         prevHistoricoSolucoes.current.has(
+//           prevSolucaoAtualRef.current.idHistorico
+//         ) &&
+//         prevHistoricoSolucoes.current.has(solucaoAtual.idHistorico)
+//       );
+//     };
 
-    /**
-     * Uma coisa está sendo adicionada quando a anteior não tinha e a atual tem
-     */
-    const adding = () => {
-      return(!prevHistoricoSolucoes.current.has(solucaoAtual.idHistorico) && historicoSolucoes.has(solucaoAtual.idHistorico))
-    }
+//     // Função de adição: verifica se estamos adicionando um histórico novo
+//     const adding = () => {
+//       return (
+//         !prevHistoricoSolucoes.current.has(solucaoAtual.idHistorico) &&
+//         historicoSolucoes.has(solucaoAtual.idHistorico)
+//       );
+//     };
 
-    // Verifica se houve mudanças
-    if (!somethingChanged && hasChanges() && !restoring() && !adding()) {
-      setSomethingChanged(true);
-    }
+//     // Verifica se houve mudanças significativas e se não estamos restaurando ou adicionando
+//     if (hasChanges() && !restoring() && !adding()) {
+//       // Redefine `solucaoAtual` para o estado inicial apenas se ele realmente mudou
+//       setSolucaoAtual({
+//         atribuicoes: [],
+//         avaliacao: undefined,
+//         idHistorico: undefined,
+//         estatisticas: undefined,
+//       });
 
-    // Aqui, verifica se estamos em um estado alterado
-    if (somethingChanged) {
-      // Se não estamos restaurando, mudamos o idHistorico para undefined
-      if (!restoring() && !adding()) {
-        setSolucaoAtual({
-          ...solucaoAtual,
-          idHistorico: undefined,
-        });
-      }
-      setSomethingChanged(false); // Reseta a flag de mudança
-    }
+//       // Armazena o novo estado redefinido em `lastSolucaoAtualRef`
+//       lastSolucaoAtualRef.current = {
+//         atribuicoes: [],
+//         avaliacao: undefined,
+//         idHistorico: undefined,
+//         estatisticas: undefined,
+//       };
+//     } else if (restoring() || adding()) {
+//       // Em caso de restauração ou adição, atualizamos `prevSolucaoAtualRef` com `solucaoAtual`
+//       prevSolucaoAtualRef.current = solucaoAtual;
+//       lastSolucaoAtualRef.current = solucaoAtual; // Atualiza o estado conhecido
+//     }
 
-    // Atualiza as referências com os valores atuais
-    prevDocentesRef.current = docentes;
-    prevDisciplinasRef.current = disciplinas;
-    prevTravasRef.current = travas;
-    prevAtribuicoesRef.current = atribuicoes;
-    prevSolucaoAtualRef.current = solucaoAtual; // Atualizando a referência atual
-    prevHistoricoSolucoes.current = historicoSolucoes;
-    }
-  }, [
-    docentes,
-    disciplinas,
-    travas,
-    atribuicoes,
-    somethingChanged,
-    solucaoAtual,
-    historicoSolucoes,
-  ]);
+//     // Atualiza as referências de estado para o próximo ciclo
+//     prevDocentesRef.current = docentes;
+//     prevDisciplinasRef.current = disciplinas;
+//     prevTravasRef.current = travas;
+//     prevAtribuicoesRef.current = atribuicoes;
+//     prevHistoricoSolucoes.current = historicoSolucoes;
+
+//     console.log("Último estado conhecido de Solução:", lastSolucaoAtualRef.current);
+//     console.log("Solução Atual:", solucaoAtual);
+//     console.log("----------------------------------");
+//   }
+// }, [
+//   docentes,
+//   disciplinas,
+//   travas,
+//   atribuicoes,
+//   solucaoAtual,
+//   historicoSolucoes,
+// ]);
 
   return (
     <GlobalContext.Provider

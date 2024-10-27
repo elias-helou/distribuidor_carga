@@ -43,10 +43,11 @@ export const useSolutionHistory = () => {
      */
     const solutionToRestore = historicoSolucoes.get(id);
 
+    console.log('Resturando: ', solutionToRestore)
+
     // Adicionado o spred com a atribuição manual do id pois por algum motivo os casos em que possuem estatísticas a propriedade
     // idHistorico não estava sendo inserida no state
     setSolucaoAtual({...solutionToRestore.solucao, idHistorico: id});
-    
     setDisciplinas(solutionToRestore.contexto.disciplinas)
     setDocentes(solutionToRestore.contexto.docentes)
     setTravas(solutionToRestore.contexto.travas)
@@ -54,6 +55,15 @@ export const useSolutionHistory = () => {
     updateAtribuicoes(solutionToRestore.solucao.atribuicoes);
   };
 
+  const cleanSolucaoAtual = () => {
+    setSolucaoAtual({
+        atribuicoes: [],
+        avaliacao: undefined,
+        idHistorico: undefined,
+        estatisticas: undefined,
+      });
+  }
+
   // Retorna a função de remoção, que pode ser usada em componentes
-  return { removeSolutionFromHistory, restoreHistoryToSolution, solucaoAtual, historicoSolucoes };
+  return { removeSolutionFromHistory, restoreHistoryToSolution, cleanSolucaoAtual, solucaoAtual, historicoSolucoes };
 };
