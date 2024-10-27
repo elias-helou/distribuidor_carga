@@ -1,43 +1,43 @@
 import { setCellColor } from "@/app/atribuicoes";
 import HeaderCell from "@/app/atribuicoes/components/HeaderCell";
-import { useGlobalContext } from "@/context/Global";
-import { Disciplina } from "@/context/Global/utils";
+import { Disciplina, HistoricoSolucao } from "@/context/Global/utils";
 import { Box, Grid2, Paper, Typography } from "@mui/material";
 import React from "react";
 
 // Props do DataTreeView
 interface TreeViewAssignmentsProps {
   item: { tipo: string; id: string } | null; // Informação tratada {docente, nome_docente} ou {disciplina, id_disciplina}
-  maxPriority: number;
+  solucao: HistoricoSolucao;
+  setHoveredCourese: React.Dispatch<React.SetStateAction<Disciplina>>;
 }
 
 const TreeViewAssignments: React.FC<TreeViewAssignmentsProps> = ({
   item,
-  maxPriority,
+  solucao,
+  setHoveredCourese
 }) => {
-  const { formularios, atribuicoes, disciplinas } = useGlobalContext();
-
   const renderAssignments = () => {
     const render = [];
 
     if (item.tipo === "docente") {
-      const docenteAtribuicoes = atribuicoes.filter((atribuicao) =>
+      const docenteAtribuicoes = solucao.solucao.atribuicoes.filter((atribuicao) =>
         atribuicao.docentes.includes(item.id)
       );
       const docenteAtribuicoesDisciplinas: Disciplina[] = [];
 
       for (const atribuicao of docenteAtribuicoes) {
-        const disciplina = disciplinas.find(
+        const disciplina = solucao.contexto.disciplinas.find(
           (disc) => disc.id === atribuicao.id_disciplina
         );
         docenteAtribuicoesDisciplinas.push(disciplina);
       }
 
       for (const disciplina of docenteAtribuicoesDisciplinas) {
-        const formulario = formularios.find(
-          (formulario) =>
-            formulario.id_disciplina === disciplina.id &&
-            formulario.nome_docente === item.id
+        const docente = solucao.contexto.docentes.find(
+          (docente) =>
+            // formulario.id_disciplina === disciplina.id &&
+            // formulario.nome_docente === item.id
+            docente.formularios.has(disciplina.id) && item.id === docente.nome
         );
         render.push(
           <Grid2 key={`TreeViewAssignments_child_grid_${disciplina.id}`}>
@@ -46,20 +46,21 @@ const TreeViewAssignments: React.FC<TreeViewAssignmentsProps> = ({
               //onHeaderClick={() => null}
               setHeaderCollor={() => "white"}
               key={`TreeViewAssignments_child_grid_${disciplina.id}_child`}
+              setParentHoveredCourse={setHoveredCourese}
             />
             <Box
               sx={{
                 backgroundColor: setCellColor(
-                  formulario ? formulario.prioridade : null,
+                  docente ? docente.formularios.get(disciplina.id) : null,
                   { id_disciplina: disciplina.id, nome_docente: item.id },
                   false,
-                  maxPriority
+                  solucao.contexto.maxPriority
                 ),
                 //padding: "2px",
                 textAlign: "center",
               }}
             >
-              {formulario ? formulario.prioridade : ""}
+              {docente ? docente.formularios.get(disciplina.id) : ""}
             </Box>
           </Grid2>
         );

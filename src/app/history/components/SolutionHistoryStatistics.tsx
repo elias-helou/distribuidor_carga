@@ -1,5 +1,5 @@
 import LineChartsSelector from "@/components/SolutionHistoryStatistics/LineChartsSelector";
-import { HistoricoSolucao, TipoTrava } from "@/context/Global/utils";
+import { Disciplina, HistoricoSolucao, TipoTrava } from "@/context/Global/utils";
 import { Grid2, Paper, Typography } from "@mui/material";
 import { getDisciplinasAtribuicoes, getDocentesAtribuicoes } from "../utils";
 import DataTreeView from "@/components/SolutionHistoryStatistics/DataTreeView/DataTreeView";
@@ -8,11 +8,13 @@ import StatusPieChart from "@/components/SolutionHistoryStatistics/StatusPieChar
 interface SolutionHistoryStatisticsProps {
   id: string;
   solucao: HistoricoSolucao;
+  setHoveredCourese: React.Dispatch<React.SetStateAction<Disciplina>>;
 }
 
 const SolutionHistoryStatistics: React.FC<SolutionHistoryStatisticsProps> = ({
   id,
   solucao,
+  setHoveredCourese
 }) => {
   // Filtrando docentes ativos e obtendo suas atribuições
   const docentesAtribuicoes: Map<string, string[]> = getDocentesAtribuicoes(
@@ -42,6 +44,7 @@ const SolutionHistoryStatistics: React.FC<SolutionHistoryStatisticsProps> = ({
         //atribuicoes={solucao.solucao.atribuicoes}
         disciplinas={disciplinasAtribuicoes}
         solucao={solucao}
+        setHoveredCourese={setHoveredCourese}
       />
     </Grid2>
 

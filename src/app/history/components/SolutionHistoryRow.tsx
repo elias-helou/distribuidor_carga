@@ -1,4 +1,4 @@
-import { HistoricoSolucao } from "@/context/Global/utils";
+import { Disciplina, HistoricoSolucao } from "@/context/Global/utils";
 import {
   Box,
   Collapse,
@@ -20,11 +20,13 @@ import { exportJson, getFormattedDate } from "@/app/atribuicoes";
 interface SolutionHistoryRowProps {
   id: string;
   solucao: HistoricoSolucao;
+  setHoveredCourese: React.Dispatch<React.SetStateAction<Disciplina>>;
 }
 
 const SolutionHistoryRow: React.FC<SolutionHistoryRowProps> = ({
   id,
   solucao,
+  setHoveredCourese
 }) => {
   const [open, setOpen] = useState(false);
   const { removeSolutionFromHistory, restoreHistoryToSolution, solucaoAtual, historicoSolucoes } =
@@ -167,6 +169,7 @@ const SolutionHistoryRow: React.FC<SolutionHistoryRowProps> = ({
                 key={`componente_estatisticas_${id}`}
                 id={id}
                 solucao={solucao}
+                setHoveredCourese={setHoveredCourese}
               />
             </Box>
           </Collapse>

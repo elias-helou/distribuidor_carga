@@ -12,6 +12,9 @@ import {
   TableBody,
 } from "@mui/material";
 import SolutionHistoryRow from "./components/SolutionHistoryRow";
+import HoveredCourse from "../atribuicoes/components/HoveredCourse";
+import { useState } from "react";
+import { Disciplina } from "@/context/Global/utils";
 
 const tableColumns = [
   "Identificador",
@@ -24,6 +27,12 @@ export default function History() {
   const {
     historicoSolucoes
   } = useGlobalContext();
+
+  /**
+   * State para controlar o hover nos filhos do table header a fim de exibir o componenete HoveredCourese
+   */
+  const [hoveredCourese, setHoveredCourese] = useState<Disciplina | null>(null);
+
 
   const createHistoryColumns = () => {
     const historyColumns = [];
@@ -51,7 +60,7 @@ export default function History() {
 
     historicoSolucoes.forEach((value, key) => {
       historyComponents.push(
-        <SolutionHistoryRow key={`component_${key}`} id={key} solucao={value} />
+        <SolutionHistoryRow key={`component_${key}`} id={key} solucao={value} setHoveredCourese={setHoveredCourese}/>
       );
     });
 
@@ -71,6 +80,7 @@ export default function History() {
           <TableBody key="tableBody">{createHistoryComponents()}</TableBody>
         </Table>
       </TableContainer>
+      {hoveredCourese && <HoveredCourse disciplina={hoveredCourese} />}
     </Container>
   );
 }

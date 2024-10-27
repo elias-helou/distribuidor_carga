@@ -47,7 +47,7 @@ export default function HoveredCourse({ disciplina }: HoveredCourseProps) {
   return (
     <Paper
       elevation={8}
-      sx={{ position: "absolute", zIndex: 99, bottom: "10vh", right: "2vw" }}
+      sx={{ position: "fixed", zIndex: 99, bottom: "10vh", right: "2vw" }}
     >
       <Stack
         direction="column"
