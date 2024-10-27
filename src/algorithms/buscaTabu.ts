@@ -315,7 +315,7 @@ export async function buscaTabu(
     tempoPorIteracao.set(iteracoes, tempoFinal - tempoInicial)
 
 
-    if(/*iteracoesSemModificacao === NumIterNotChange ||*/ interrompe() /*|| !existeDisciplinasQueAindaPodemSerAtribuidas(melhorSolucao, docentes)*/) {
+    if(/*iteracoesSemModificacao === NumIterNotChange ||*/ interrompe() || !existeDisciplinasQueAindaPodemSerAtribuidas(melhorSolucao, docentes)) {
       break;
     }
   }
@@ -333,30 +333,31 @@ export async function buscaTabu(
   }};
 }
 
-/*function existeDisciplinasQueAindaPodemSerAtribuidas(solucao: Solucao, docentes: Docente[]) {
+function existeDisciplinasQueAindaPodemSerAtribuidas(solucao: Solucao, docentes: Docente[]) {
   const atribuicoesSemDocentes = solucao.atribuicoes.filter(atrib => atrib.docentes.length === 0)
 
-  // Não existem disciplinas sem docentes alocados
+  //Não existem disciplinas sem docentes alocados
   if(atribuicoesSemDocentes.length === 0) {
     return false
   }
 
-  let contadorDePossiveisAtribuicoes = 0
-  // Algum docente tem um formulário para as disciplinas não atribuídas ?
+  //let contadorDePossiveisAtribuicoes = 0
+  //Algum docente tem um formulário para as disciplinas não atribuídas ?
   atribuicoesSemDocentes.map(obj => {
     for(const docente of docentes) {
       if(docente.formularios.has(obj.id_disciplina)) {
-        contadorDePossiveisAtribuicoes++;
+        //contadorDePossiveisAtribuicoes++;
+        return true
       }
     }
   })
  
-  // Não existem mais possibilidades de atribuições para as disciplinas sem docentes
-  if(contadorDePossiveisAtribuicoes === 0) {
-    return false
-  }
+  //Não existem mais possibilidades de atribuições para as disciplinas sem docentes
+  // if(contadorDePossiveisAtribuicoes === 0) {
+  //   return false
+  // }
 
-  // Ainda existe possibilidade
+  //Ainda existe possibilidade
   return true
-}*/
+}
 
