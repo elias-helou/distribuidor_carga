@@ -6,6 +6,16 @@ import { Grid2, Paper, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 
 export default function Parameters() {
+
+  const parNames = {
+    'k1': 'Prioridades',
+    'k2': 'Conflitos',
+    'k3': 'Tamanho tabu',
+    'k4': 'Não atribuída',
+    'k5': 'Número de disciplinas',
+    'k6': 'K6'
+  };
+
   const { parametros, setParametros } = useGlobalContext();
 
   const [erros, setErros] = useState<{ [key in keyof Parametros]?: boolean }>(
@@ -58,7 +68,7 @@ export default function Parameters() {
             }}
           >
             <Typography variant="h6" gutterBottom>
-              Parâmetro {chave.toUpperCase()}
+              {parNames[ chave ]}
             </Typography>
             {/* <ParametroField chave={chave as keyof Parametros} /> */}
             <TextField

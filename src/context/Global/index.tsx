@@ -86,7 +86,7 @@ export function GlobalWrapper({ children }: { children: React.ReactNode }) {
   /**
    * Mudar de lugar
    */
-  const [parametros, setParametros] = useState<Parametros>({k1: 0, k2: 0, k3: 0, k4: 0, k5: 0, k6: 0});
+  const [parametros, setParametros] = useState<Parametros>({k1: 1000, k2: 100000, k3: 100, k4: 10000, k5: 1000, k6: 0});
 
 //   /**
 //    * Caso ocorra alguma modificação nos states globais, o id da solução deve ser alterado para undefined, permitindo salvar essas

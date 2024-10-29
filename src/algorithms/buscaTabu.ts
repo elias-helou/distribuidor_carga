@@ -84,23 +84,35 @@ export function avaliarSolucao(
 ): number {
   let avaliacao = 0;
 
-  // Tendo em vista que as atribuições são feitas apenas para docentes que apresentem formulários preenchidos.
+  console.log( atribuicoes );
+
+  // Percorre as disciplinas:
   for (const atribuicao of atribuicoes) {
-    // Mesmo tendo uma trava para apenas um docente alocado por disciplina, o código já foi elaborado para futuramente
-    // aceitar o comportamento de mais de um docente alocado.
-    for (const docenteAtribuido of atribuicao.docentes) {
-      const docente = docentes.find((obj) => obj.nome === docenteAtribuido);
-      // Validação para caso o usuário tenha feito uma atribuição em que o docente não tenha um formulário preenchido
-      if(docente.formularios.get(atribuicao.id_disciplina)) {
+    
+    // Penaliza disciplina não atribuída:
+    if ( atribuicao.docentes.length == 0 ) {
+      avaliacao -= parametros.k4;
+      continue;
+    }
+
+    // Percorre todos os docentes atribuídos:
+    for ( const docenteAtribuido of atribuicao.docentes ) {
+      const docente = docentes.find( (obj) => obj.nome === docenteAtribuido );
+
+      if( docente.formularios.get( atribuicao.id_disciplina ) ) {
         // k1 penaliza prioridades
         avaliacao += parametros.k1 * ( maiorPrioridade - docente.formularios.get(atribuicao.id_disciplina) );
+      }
+      else // Docente não escolheu a disciplina (pode ocorrer em atribuição manual)
+      {
+        avaliacao -= parametros.k1;
       }
     }
   }
 
 
   // Penalizar solução para cada choque de horários encontrados nas atribuições dos docentes
-  for(const docente of docentes) {
+  for( const docente of docentes ) {
     // Lista com os Ids das disciplinas
     const atribuicoesDocente: string[] = atribuicoes.filter(atribuicao => atribuicao.docentes.includes(docente.nome)).map(atribuicao => atribuicao.id_disciplina)
 
@@ -113,11 +125,36 @@ export function avaliarSolucao(
 
         if(disciplinaPivo.conflitos.has(disciplinaAtual.id)) {
           // k2 penaliza conflitos
-          avaliacao -= k2;
+          avaliacao -= parametros.k2;
         }
       }
     }
   }
+
+  // Aqui estamos penalizando o número de disciplinas, mas
+  // devemos penalizar o número de créditos. Esta informação
+  // deverá constar em dados para próximas versões.
+
+  // Conta número de disciplinas por docente:
+  const tmpDocentes = {};
+  for ( const docente of docentes ) {
+    tmpDocentes[ docente.nome ] = 0;
+  }
+  for ( const atribuicao of atribuicoes ) {
+    for ( const docName of atribuicao.docentes ) {
+      tmpDocentes[ docName ] += 1;
+    }
+  }
+  // Penaliza baseado no saldo:
+  for ( const docente of docentes ) {
+    if ( tmpDocentes[ docente.nome ] > 2 ) {
+      avaliacao -= parametros.k5 * ( docente.saldo < -1.0 ? 0.75 : 1.0 );
+    }
+    else if ( tmpDocentes[ docente.nome ] < 1 ) {
+      avaliacao -= parametros.k5 * ( docente.saldo > 1.0 ? 1.0 : 0.75 );
+    }
+  }
+
   return avaliacao;
 }
 
