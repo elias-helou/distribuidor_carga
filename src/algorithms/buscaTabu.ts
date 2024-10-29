@@ -62,7 +62,7 @@ import {
   Atribuicao,
   Formulario,
   Solucao,
-  Parametros,
+  Parametros
 } from "@/context/Global/utils";
 import { atualizarListaTabu, checaTravaCelula, disciplinaInvalida, gerarTrocasDeDocentes, gerarVizinhoComDocente, gerarVizinhoComRemocao } from "./utils";
 import { Dispatch, SetStateAction } from "react";
@@ -84,18 +84,20 @@ export function avaliarSolucao(
 ): number {
   let avaliacao = 0;
 
-  // Tendo em vista que as atribuições são feotas apenas para docentes que apresentem formulários preenchidos.
+  // Tendo em vista que as atribuições são feitas apenas para docentes que apresentem formulários preenchidos.
   for (const atribuicao of atribuicoes) {
-    // Mesmo tendo uma trava para apeas um docente alocado por disciplina, o código já foi elaborado para futuramente
+    // Mesmo tendo uma trava para apenas um docente alocado por disciplina, o código já foi elaborado para futuramente
     // aceitar o comportamento de mais de um docente alocado.
     for (const docenteAtribuido of atribuicao.docentes) {
       const docente = docentes.find((obj) => obj.nome === docenteAtribuido);
       // Validação para caso o usuário tenha feito uma atribuição em que o docente não tenha um formulário preenchido
       if(docente.formularios.get(atribuicao.id_disciplina)) {
-        avaliacao += maiorPrioridade - docente.formularios.get(atribuicao.id_disciplina);
+        // k1 penaliza prioridades
+        avaliacao += parametros.k1 * ( maiorPrioridade - docente.formularios.get(atribuicao.id_disciplina) );
       }
     }
   }
+
 
   // Penalizar solução para cada choque de horários encontrados nas atribuições dos docentes
   for(const docente of docentes) {
@@ -110,7 +112,8 @@ export function avaliarSolucao(
         const disciplinaAtual: Disciplina = disciplinas.find(disciplina => disciplina.id === atribuicoesDocente[j]) ;
 
         if(disciplinaPivo.conflitos.has(disciplinaAtual.id)) {
-          avaliacao -= 1000
+          // k2 penaliza conflitos
+          avaliacao -= k2;
         }
       }
     }
@@ -289,7 +292,7 @@ export async function buscaTabu(
     // Verifica se o melhor vizinho existe
     if(melhorVizinho) {
       // Atualizar a lista tabu com o conjunto de atribuições do melhor vizinho
-      atualizarListaTabu(listaTabu, melhorVizinho.atribuicoes, 150);
+      atualizarListaTabu(listaTabu, melhorVizinho.atribuicoes, parametros.k3);
 
       // Atualizar a solução atual e a melhor solução
       solucaoAtual = melhorVizinho;
