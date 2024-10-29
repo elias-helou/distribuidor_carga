@@ -43,8 +43,6 @@ export const useSolutionHistory = () => {
      */
     const solutionToRestore = historicoSolucoes.get(id);
 
-    console.log('Resturando: ', solutionToRestore)
-
     // Adicionado o spred com a atribuição manual do id pois por algum motivo os casos em que possuem estatísticas a propriedade
     // idHistorico não estava sendo inserida no state
     setSolucaoAtual({...solutionToRestore.solucao, idHistorico: id});

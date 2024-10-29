@@ -507,14 +507,14 @@ export default function Timetable() {
   /**
    * Executa o algorítmo Busca Tabu
    */
-  const executeProcess2 = async () => {
+  const executeProcess = async () => {
     handleClickOpenDialog(); // Abre a modal imediatamente
     setProcessing(true); // Aciona o botão de loading
     // p -> Processados
     const { pDisciplinas, pDocentes, pFormularios, pTravas, pAtribuicoes } =
       processData(disciplinas, docentes, formularios, travas, atribuicoes);
 
-    const solucaoRefactor = await buscaTabu(
+    const solucao = await buscaTabu(
       pDisciplinas,
       pDocentes,
       pFormularios,
@@ -528,8 +528,8 @@ export default function Timetable() {
     );
 
     console.log("Solução:");
-    console.log(solucaoRefactor);
-    setSolucaoAtual(solucaoRefactor); // Atribui a solução encontrada no state local.
+    console.log(solucao);
+    setSolucaoAtual(solucao); // Atribui a solução encontrada no state local.
 
     setProcessing(false); // Encerra o processamento
     setInterrompe(false); // Altera o state da flag de interupção para falso
@@ -562,6 +562,7 @@ export default function Timetable() {
       docentes: [...docentes],
       travas: [...travas],
       maxPriority: maxPriority,
+      formularios: formularios
     };
     const idSolucao: string = addNewSolutionToHistory(
       solucaoAtual,
@@ -614,6 +615,7 @@ export default function Timetable() {
       docentes: [...docentes],
       travas: [...travas],
       maxPriority: maxPriority,
+      formularios: formularios
     };
     saveAtribuicoesInHistoryState(
       atribuicoes,
@@ -736,7 +738,7 @@ export default function Timetable() {
                   >
                     <ButtonGroupHeader
                       key="button_group_timetabling"
-                      onExecute={executeProcess2}
+                      onExecute={executeProcess}
                       onClean={cleanStateAtribuicoes}
                       download={downalodJson}
                       saveAlterations={saveAlterations}

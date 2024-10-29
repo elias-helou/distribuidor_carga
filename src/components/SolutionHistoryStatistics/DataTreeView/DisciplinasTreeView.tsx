@@ -1,30 +1,70 @@
 import React from "react";
 import { TreeItem } from "@mui/x-tree-view";
+import { TreeDisciplina } from "@/app/history/components/SolutionHistoryStatistics";
+import { Box, Typography } from "@mui/material";
 
 interface DisciplinasTreeViewProps {
-  disciplinas: Map<string, string[]>,
+  disciplinas: Map<string, TreeDisciplina>,
   // atribuicoes: {
   //   id_disciplina: string;
   //   docentes: string[];
   // }[]; // Array de atribuições (disciplinas e seus docentes)
 }
 
+// Componente para exibir a contagem de disciplinas
+const DocenteCount: React.FC<{ count: number }> = ({ count }) => (
+  <Typography component="span" sx={{ marginLeft: 1}} textAlign="right">
+    ({count})
+  </Typography>
+);
+
 const DisciplinasTreeView: React.FC<DisciplinasTreeViewProps> = ({ disciplinas }) => {
+
+    const disciplinaChild = (disciplina: string, treeDisciplina: TreeDisciplina) => {
+    const renderChilds = []
+    for(const atribuicao of treeDisciplina.atribuicoes.keys()) {
+      const docente = treeDisciplina.atribuicoes.get(atribuicao);
+      renderChilds.push(
+        <TreeItem
+              key={`child_docente_${disciplina}_${docente.nome}`}
+              itemId={`child_docente_${disciplina}_${docente.nome}`}
+              title={docente.nome}
+              label={`${docente.nome} - ${docente.saldo} (${docente.atribuicoes.size})`}
+            />
+      )
+    }
+
+    return renderChilds;
+  }
   return (
     <>
-      {Array.from(disciplinas.entries()).map(([disciplina, docentes]) => (
+      {Array.from(disciplinas.entries()).map(([disciplina, treeDisciplina]) => (
         <TreeItem
-          key={`disciplona_${disciplina}`}
-          itemId={`disciplona_${disciplina}`}
-          label={`${disciplina} (${docentes.length})`}
+          key={`disciplina_${disciplina}`}
+          itemId={`disciplina_${disciplina}`}
+          //label={`${treeDisciplina._cursos} - ${treeDisciplina.nome} (${treeDisciplina.docentes.length})`}
+          label={
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography
+                component="span"
+                sx={{
+                //   maxWidth: '20em',
+                  //whiteSpace: "nowrap",
+                  //overflow: "hidden",
+                  //textOverflow: "ellipsis",
+                  width: "100%", // Para ocupar todo o espaço horizontal disponível
+                  flexGrow: 1, // Faz o nome do docente crescer e empurrar o contador para a direita
+                }}
+                title={`${treeDisciplina.id} - ${treeDisciplina.nome}`} // Tooltip para mostrar o nome completo ao passar o mouse
+              >
+                {`${treeDisciplina._cursos} - ${treeDisciplina.nome}`}
+              </Typography>
+              {/* Contador de disciplinas */}
+              <DocenteCount count={treeDisciplina.atribuicoes.size} />
+            </Box>
+          }
         >
-          {docentes.map((docente) => (
-            <TreeItem
-              key={`child_disciplina_${disciplina}_${docente}`}
-              itemId={`child_disciplina_${disciplina}_${docente}`}
-              label={docente}
-            />
-          ))}
+          {disciplinaChild(disciplina, treeDisciplina)}
         </TreeItem>
       ))}
     </>

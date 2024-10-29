@@ -84,6 +84,10 @@ export function avaliarSolucao(
 ): number {
   let avaliacao = 0;
 
+  parametros.k1; // @@
+
+  parametros.k1; // @@
+
   console.log( atribuicoes );
 
   // Percorre as disciplinas:

@@ -1,9 +1,24 @@
 import LineChartsSelector from "@/components/SolutionHistoryStatistics/LineChartsSelector";
-import { Disciplina, HistoricoSolucao, TipoTrava } from "@/context/Global/utils";
+import { Disciplina, HistoricoSolucao, TipoTrava, Docente, getActiveFormularios } from "@/context/Global/utils";
 import { Grid2, Paper, Typography } from "@mui/material";
-import { getDisciplinasAtribuicoes, getDocentesAtribuicoes } from "../utils";
+import { getDisciplinasAtribuicoes, getDocentesAtribuicoes, processAtribuicoesToTree } from "../utils";
 import DataTreeView from "@/components/SolutionHistoryStatistics/DataTreeView/DataTreeView";
 import StatusPieChart from "@/components/SolutionHistoryStatistics/StatusPieChart";
+
+/**
+ * Interfaces para a exibição dos Docentes e Disciplinas
+ */
+export interface TreeDocente extends Docente {
+  atribuicoes: Map<string, TreeDisciplina & {prioridade: number}>; // Id disciplina, TreeDisciplina
+}
+
+export interface TreeDisciplina extends Disciplina {
+  formularios: Map<string, TreeDocente & {prioridade: number}>; // Nome docente, TreeDocente
+  _cursos: string[]; // Será responsável por armazenar os nomes dos cursos sem os caracteres especiais
+  atribuicoes: Map<string, TreeDocente & {prioridade: number|null}>; // Nome docente, TreeDocente
+}
+
+
 
 interface SolutionHistoryStatisticsProps {
   id: string;
@@ -22,10 +37,22 @@ const SolutionHistoryStatistics: React.FC<SolutionHistoryStatisticsProps> = ({
     solucao.solucao.atribuicoes
   );
 
+
+  /**
+   * Disciplinas ainda não processadas
+   */
   const disciplinasAtribuicoes: Map<string, string[]> = getDisciplinasAtribuicoes(
     solucao.contexto.disciplinas.filter((disciplina) => disciplina.ativo),
     solucao.solucao.atribuicoes
   );
+
+  /**
+   * Processa as informações
+   */
+
+  const atribuicoesProcessadas = processAtribuicoesToTree(disciplinasAtribuicoes, docentesAtribuicoes, 
+    solucao.contexto.docentes, solucao.contexto.disciplinas, 
+    getActiveFormularios(solucao.contexto.formularios, solucao.contexto.disciplinas, solucao.contexto.docentes))
 
   //const qtdDisciplinasAtivas: number = solucao.contexto.disciplinas.filter(disciplina => disciplina.ativo).length
   const qtdDocentesTravados: number = solucao.contexto.travas.filter(trava => trava.tipo_trava === TipoTrava.Row
@@ -40,9 +67,9 @@ const SolutionHistoryStatistics: React.FC<SolutionHistoryStatisticsProps> = ({
     {/* Componente DataTreeView com as informações dos docentes e atribuições */}
     <Grid2 size={{xs: 12}}>
       <DataTreeView
-        docentes={docentesAtribuicoes}
+        docentes={atribuicoesProcessadas.treeDocentes}
         //atribuicoes={solucao.solucao.atribuicoes}
-        disciplinas={disciplinasAtribuicoes}
+        disciplinas={atribuicoesProcessadas.treeDisciplinas}
         solucao={solucao}
         setHoveredCourese={setHoveredCourese}
       />

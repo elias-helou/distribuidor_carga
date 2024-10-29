@@ -5,15 +5,16 @@ import DocentesTreeView from "./DocentesTreeView";
 import DisciplinasTreeView from "./DisciplinasTreeView";
 import TreeViewAssignments from "./TreeViewAssignments";
 import { Disciplina, HistoricoSolucao } from "@/context/Global/utils";
+import { TreeDisciplina, TreeDocente } from "@/app/history/components/SolutionHistoryStatistics";
 
 // Props do DataTreeView
 interface DataTreeViewProps {
-  docentes: Map<string, string[]>; // Map de docentes e suas disciplinas
+  docentes: Map<string, TreeDocente>; // Map de docentes e suas disciplinas
   // atribuicoes: {
   //   id_disciplina: string;
   //   docentes: string[];
   // }[]; // Array de atribuições (disciplinas e seus docentes)
-  disciplinas: Map<string, string[]>;
+  disciplinas: Map<string, TreeDisciplina>;
   solucao: HistoricoSolucao;
   setHoveredCourese: React.Dispatch<React.SetStateAction<Disciplina>>;
 }
@@ -43,17 +44,17 @@ const DataTreeView: React.FC<DataTreeViewProps> = ({
 
   return (
     <Grid2 container spacing={2}>
-      <Grid2 size={4}>
+      <Grid2 size={5}>
         <Paper
           sx={{
             height: "25em",
-            maxWidth: "23em",
+            //maxWidth: "23em",
             overflowY: "auto", // Habilita o scroll vertical
           }}
           elevation={2}
         >
           <SimpleTreeView
-            sx={{ width: "21em" }}
+            //  sx={{ width: "21em" }}
             onItemClick={(event, itemId) => handleLastClickedItem(itemId)}
           >
             <TreeItem
@@ -71,7 +72,7 @@ const DataTreeView: React.FC<DataTreeViewProps> = ({
           </SimpleTreeView>
         </Paper>
       </Grid2>
-      <Grid2 size={8}>
+      <Grid2 size={7}>
         <TreeViewAssignments item={lastClickedItem} solucao={solucao} setHoveredCourese={setHoveredCourese}/>
       </Grid2>
     </Grid2>

@@ -81,7 +81,8 @@ export interface ContextoExecucao {
   docentes: Docente[],
   disciplinas: Disciplina[],
   travas: Celula[],
-  maxPriority: number
+  maxPriority: number,
+  formularios: Formulario[]
 }
 
 export interface Estatisticas {
@@ -329,4 +330,12 @@ export function processData(
     pTravas: processedTravas,
     pAtribuicoes: processedAtribuicoes,
   };
+}
+
+
+export function getActiveFormularios(formularios: Formulario[], disciplinas: Disciplina[], docentes: Docente[]) {
+  const disciplinasAtivas = getActives(disciplinas).map(obj => obj.id);
+  const docentesAtivos = getActives(docentes).map(obj => obj.nome);
+
+  return formularios.filter(formulario => disciplinasAtivas.includes(formulario.id_disciplina) && docentesAtivos.includes(formulario.nome_docente));
 }
