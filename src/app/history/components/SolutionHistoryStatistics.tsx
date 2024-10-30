@@ -72,6 +72,17 @@ const SolutionHistoryStatistics: React.FC<SolutionHistoryStatisticsProps> = ({
         disciplinas={atribuicoesProcessadas.treeDisciplinas}
         solucao={solucao}
         setHoveredCourese={setHoveredCourese}
+        entidade="Docente"
+      />
+    </Grid2>
+    <Grid2 size={{xs: 12}}>
+      <DataTreeView
+        docentes={atribuicoesProcessadas.treeDocentes}
+        //atribuicoes={solucao.solucao.atribuicoes}
+        disciplinas={atribuicoesProcessadas.treeDisciplinas}
+        solucao={solucao}
+        setHoveredCourese={setHoveredCourese}
+        entidade="Disciplina"
       />
     </Grid2>
 
