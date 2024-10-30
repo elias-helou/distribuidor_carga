@@ -18,6 +18,13 @@ const DocenteCount: React.FC<{ count: number }> = ({ count }) => (
   </Typography>
 );
 
+function MyDocItem( props ) {
+  return <div style={{display: 'flex'}}>
+      <div style={{fontFamily: 'monospace'}}>({(props.saldo < 0 ? '' : '+') + props.saldo.toFixed( 1 ).toString().replace( '.', ',' )})&emsp;</div>{props.nome}
+      <div style={{flexGrow: 1}}></div>({props.discs})
+    </div>;
+}
+
 const DisciplinasTreeView: React.FC<DisciplinasTreeViewProps> = ({ disciplinas }) => {
 
     const disciplinaChild = (disciplina: string, treeDisciplina: TreeDisciplina) => {
@@ -29,7 +36,8 @@ const DisciplinasTreeView: React.FC<DisciplinasTreeViewProps> = ({ disciplinas }
               key={`child_docente_${disciplina}_${docente.nome}`}
               itemId={`child_docente_${disciplina}_${docente.nome}`}
               title={docente.nome}
-              label={`${docente.nome} - ${docente.saldo} (${docente.atribuicoes.size})`}
+              label=<MyDocItem nome={docente.nome} saldo={docente.saldo} discs={docente.atribuicoes.size} />
+              // label={`(${(docente.saldo < 0 ? '' : '+') + docente.saldo.toFixed( 1 ).toString().replace( '.', ',' )}) ${docente.nome} (${docente.atribuicoes.size})`}
             />
       )
     }
