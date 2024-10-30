@@ -125,7 +125,7 @@ export default function InputFileUpload() {
      * Processa solução e insere no histórico
      */
     if(json['solucao']) {
-      processSolucao(json['solucao'], atribuicoes, disciplinas, docentes, travas, historicoSolucoes, setHistoricoSolucoes, setSolucaoAtual);
+      processSolucao(json['solucao'], atribuicoes, disciplinas, docentes, travas, historicoSolucoes, setHistoricoSolucoes, setSolucaoAtual, formularios);
     }
     
   };

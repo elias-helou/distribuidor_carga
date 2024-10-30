@@ -157,6 +157,7 @@ export function processSolucao(
   historicoSolucoes: Map<string, HistoricoSolucao>, 
   setHistoricoSolucoes: Dispatch<SetStateAction<Map<string, HistoricoSolucao>>>, 
   setSolucaoAtual: Dispatch<SetStateAction<Solucao>>,
+  formularios: Formulario[]
 ) {
 
   if(!historicoSolucoes.has(solucaoImportacao.id)) {
@@ -168,7 +169,7 @@ export function processSolucao(
       datetime: solucaoImportacao.datetime,
       tipoInsercao: TipoInsercao.Importação,
       solucao: {idHistorico: solucaoImportacao.id, atribuicoes: atribuicoes, avaliacao: solucaoImportacao.solucao.avaliacao},
-      contexto: {disciplinas: disciplinas, docentes: docentes, travas: travas, maxPriority: solucaoImportacao.maxPriority}
+      contexto: {disciplinas: disciplinas, docentes: docentes, travas: travas, maxPriority: solucaoImportacao.maxPriority, formularios: formularios}
     }
 
     /**
