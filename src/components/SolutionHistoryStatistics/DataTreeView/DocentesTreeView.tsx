@@ -54,7 +54,10 @@ const DocentesTreeView: React.FC<DocentesTreeViewProps> = ({ docentesAtribuicoes
                 }}
                 title={docente} // Tooltip para mostrar o nome completo ao passar o mouse
               >
-                {docente} - {treeDocente.saldo}
+                <div style={{display: 'flex'}}>
+                  <div style={{fontFamily: 'monospace'}}>({(treeDocente.saldo < 0 ? '' : '+') + treeDocente.saldo.toFixed( 1 ).toString().replace( '.', ',' )})&emsp;</div>
+                  {docente}
+                </div>
               </Typography>
               {/* Contador de disciplinas */}
               <DisciplinaCount count={treeDocente.atribuicoes.size} />

@@ -92,7 +92,7 @@ const TreeViewAssignments: React.FC<TreeViewAssignmentsProps> = ({
           <Grid2 key={`TreeViewAssignments_child_grid_${disciplina.id}_${docente.nome}`}>
             <StyledStack spacing={1}>
               <Typography align="left" style={{whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontWeight: "bold", fontSize: '14px'}}>{docente.nome}</Typography>
-              <Typography align="left" style={{fontSize: '14px'}}>Saldo: {docente.saldo}</Typography>
+              <Typography align="left" style={{fontSize: '14px'}}>Saldo: {(docente.saldo < 0 ? '' : '+') + docente.saldo.toFixed( 1 ).toString().replace( '.', ',' )}</Typography>
             </StyledStack>
             <Box
               sx={{
