@@ -64,10 +64,10 @@ export default function Timetable() {
     historicoSolucoes,
     setHistoricoSolucoes,
     updateAtribuicoes,
-    parametros
+    parametros,
   } = useGlobalContext();
 
-  const {cleanSolucaoAtual} = useSolutionHistory();
+  const { cleanSolucaoAtual } = useSolutionHistory();
 
   let maxPriority = 0;
 
@@ -198,7 +198,6 @@ export default function Timetable() {
     ) {
       // Verifica se a trava está com hover
       if (nome_docente === hover.docente) {
-
         // Travado Hover e Conflito
         if (verificaConflitosDocente(nome_docente)) {
           return `rgba(255, 118, 210, 0.30)`;
@@ -562,7 +561,7 @@ export default function Timetable() {
       docentes: [...docentes],
       travas: [...travas],
       maxPriority: maxPriority,
-      formularios: formularios
+      formularios: formularios,
     };
     const idSolucao: string = addNewSolutionToHistory(
       solucaoAtual,
@@ -615,7 +614,7 @@ export default function Timetable() {
       docentes: [...docentes],
       travas: [...travas],
       maxPriority: maxPriority,
-      formularios: formularios
+      formularios: formularios,
     };
     saveAtribuicoesInHistoryState(
       atribuicoes,
@@ -669,7 +668,7 @@ export default function Timetable() {
     }
   };
 
-  const handleOnMouseEnter = useCallback(
+  const handleOnMouseEnter = 
     (nome: string, id_disciplina: string) => {
       setHover({
         docente: nome,
@@ -677,9 +676,7 @@ export default function Timetable() {
       });
 
       setHoveredCourese(null);
-    },
-    []
-  );
+    }
 
   /**
    * Caso o docente apresente conflito de horários, a borda de sua célula deve ser vermelha
@@ -712,6 +709,52 @@ export default function Timetable() {
       }
     }
     return false;
+  };
+
+  /**
+   * Altera borda dos elementos no hover
+   */
+  const setBorder = (
+    hover: { docente: string; id_disciplina: string },
+    atribuicao: {
+      docente: string, id_disciplina: string
+    },
+    tipo: "celula" | "coluna" | "linha"
+  ) => {
+    const style = {
+    borderTop: "1px solid rgba(224, 224, 224, 1)",
+    borderRight: "1px solid rgba(224, 224, 224, 1)",
+    borderBottom: "1px solid rgba(224, 224, 224, 1)",
+    borderLeft: "1px solid rgba(224, 224, 224, 1)"
+  };
+
+  if(tipo === "celula") {
+    if(hover.docente === atribuicao.docente) {
+      style.borderTop = "3px solid rgba(25, 118, 210, 1)"
+      style.borderBottom = "3px solid rgba(25, 118, 210, 1)"
+    }
+
+    if(hover.id_disciplina === atribuicao.id_disciplina) {
+      style.borderLeft = "3px solid rgba(25, 118, 210, 1)"
+      style.borderRight = "3px solid rgba(25, 118, 210, 1)"
+    }
+  }
+    
+  if(tipo === "coluna") {
+    if(hover.id_disciplina === atribuicao.id_disciplina) {
+      style.borderLeft = "3px solid rgba(25, 118, 210, 1)"
+      style.borderRight = "3px solid rgba(25, 118, 210, 1)"
+    }
+  }
+
+  if(tipo === "linha") {
+    if(hover.docente === atribuicao.docente) {
+      style.borderTop = "3px solid rgba(25, 118, 210, 1)"
+      style.borderBottom = "3px solid rgba(25, 118, 210, 1)"
+    }
+  }
+
+    return style
   };
 
   return (
@@ -759,6 +802,7 @@ export default function Timetable() {
                             backgroundColor: "white",
                             margin: 0,
                             padding: 0,
+                           ...setBorder(hover, {docente: null, id_disciplina: disciplina.id}, "coluna")
                           }}
                         >
                           <HeaderCell
@@ -775,7 +819,7 @@ export default function Timetable() {
               </TableHead>
               <TableBody>
                 {rows().map((atribuicao) => (
-                  <TableRow key={atribuicao.nome} sx={{ maxHeight: "2rem" }}>
+                  <TableRow key={atribuicao.nome} sx={{ maxHeight: "2rem"}}>
                     <TableCell
                       component="th"
                       scope="row"
@@ -803,6 +847,7 @@ export default function Timetable() {
                           backgroundColor: setColumnCollor(atribuicao.nome),
                           padding: "3px",
                           width: "100%",
+                            ...setBorder(hover, {docente: atribuicao.nome, id_disciplina: null}, "linha")
                         }}
                         noWrap
                       >
@@ -835,6 +880,7 @@ export default function Timetable() {
                                 }
                               ),
                               padding: "2px",
+                              ...setBorder(hover, {docente: atribuicao.nome, id_disciplina: prioridade.id_disciplina}, "celula"),
                             }}
                             onClick={(event) =>
                               handleCellClick(event, {
