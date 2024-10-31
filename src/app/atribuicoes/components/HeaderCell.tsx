@@ -193,7 +193,7 @@ const HeaderCell: React.FC<HeaderCellProps> = ({
       <Typography
         align="left"
         variant="body1"
-        style={{ fontSize: "small", whiteSpace: "pre-wrap" }}
+        style={{ fontSize: "small", whiteSpace: "pre-wrap", maxHeight: '6em', overflowY: "auto" }}
       >
         Horário:
         {horarios.length > 0 ? (
