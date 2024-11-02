@@ -36,6 +36,7 @@ import {
 } from "@/context/SolutionHistory/utils";
 import HoveredCourse from "./components/HoveredCourse";
 import { useSolutionHistory } from "@/context/SolutionHistory/hooks";
+import CleanAlertDialog from "./components/CleanAlertDialog";
 
 // Customizar todos os TableCell
 const customTheme = createTheme({
@@ -77,6 +78,7 @@ export default function Timetable() {
   const [openDialog, setOpenDialog] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [interrompe, setInterrompe] = useState(false);
+  const [openCleanDialog, setOpenCleanDialog] = useState(false);
 
   // Disciplinas atribuidas na execução do algoritmo
   const [disciplinasAlocadas, setDisciplinasAlocadas] = useState(0);
@@ -486,6 +488,8 @@ export default function Timetable() {
         type: "success",
       },
     ]);
+    
+    setOpenCleanDialog(false);
   };
 
   /**
@@ -782,7 +786,7 @@ export default function Timetable() {
                     <ButtonGroupHeader
                       key="button_group_timetabling"
                       onExecute={executeProcess}
-                      onClean={cleanStateAtribuicoes}
+                      onClean={() => setOpenCleanDialog(true)}
                       download={downalodJson}
                       saveAlterations={saveAlterations}
                     />
@@ -910,7 +914,7 @@ export default function Timetable() {
           </TableContainer>
         )}
       </Paper>
-      {openDialog && (
+      
         <AlgoritmoDialog
           open={openDialog}
           onClose={handleCloseDialog}
@@ -922,9 +926,11 @@ export default function Timetable() {
             total: disciplinas.filter((disciplina) => disciplina.ativo).length,
           }}
         />
-      )}
+    
 
       {hoveredCourese && <HoveredCourse disciplina={hoveredCourese} />}
+
+      <CleanAlertDialog openDialog={openCleanDialog}  cleanState={cleanStateAtribuicoes} onCloseDialog={() => setOpenCleanDialog(false)} />
     </ThemeProvider>
   );
 }
