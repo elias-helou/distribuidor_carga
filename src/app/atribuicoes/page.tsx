@@ -488,7 +488,7 @@ export default function Timetable() {
         type: "success",
       },
     ]);
-    
+
     setOpenCleanDialog(false);
   };
 
@@ -672,15 +672,14 @@ export default function Timetable() {
     }
   };
 
-  const handleOnMouseEnter = 
-    (nome: string, id_disciplina: string) => {
-      setHover({
-        docente: nome,
-        id_disciplina: id_disciplina,
-      });
+  const handleOnMouseEnter = (nome: string, id_disciplina: string) => {
+    setHover({
+      docente: nome,
+      id_disciplina: id_disciplina,
+    });
 
-      setHoveredCourese(null);
-    }
+    setHoveredCourese(null);
+  };
 
   /**
    * Caso o docente apresente conflito de horários, a borda de sua célula deve ser vermelha
@@ -721,51 +720,54 @@ export default function Timetable() {
   const setBorder = (
     hover: { docente: string; id_disciplina: string },
     atribuicao: {
-      docente: string, id_disciplina: string
+      docente: string;
+      id_disciplina: string;
     },
     tipo: "celula" | "coluna" | "linha"
   ) => {
     const style = {
-    borderTop: "1px solid rgba(224, 224, 224, 1)",
-    borderRight: "1px solid rgba(224, 224, 224, 1)",
-    borderBottom: "1px solid rgba(224, 224, 224, 1)",
-    borderLeft: "1px solid rgba(224, 224, 224, 1)"
-  };
+      borderTop: "1px solid rgba(224, 224, 224, 1)",
+      borderRight: "1px solid rgba(224, 224, 224, 1)",
+      borderBottom: "1px solid rgba(224, 224, 224, 1)",
+      borderLeft: "1px solid rgba(224, 224, 224, 1)",
+    };
 
-  if(tipo === "celula") {
-    if(hover.docente === atribuicao.docente) {
-      style.borderTop = "3px solid rgba(25, 118, 210, 1)"
-      style.borderBottom = "3px solid rgba(25, 118, 210, 1)"
+    if (tipo === "celula") {
+      if (hover.docente === atribuicao.docente) {
+        style.borderTop = "3px solid rgba(25, 118, 210, 1)";
+        style.borderBottom = "3px solid rgba(25, 118, 210, 1)";
+      }
+
+      if (hover.id_disciplina === atribuicao.id_disciplina) {
+        style.borderLeft = "3px solid rgba(25, 118, 210, 1)";
+        style.borderRight = "3px solid rgba(25, 118, 210, 1)";
+      }
     }
 
-    if(hover.id_disciplina === atribuicao.id_disciplina) {
-      style.borderLeft = "3px solid rgba(25, 118, 210, 1)"
-      style.borderRight = "3px solid rgba(25, 118, 210, 1)"
+    if (tipo === "coluna") {
+      if (hover.id_disciplina === atribuicao.id_disciplina) {
+        style.borderLeft = "3px solid rgba(25, 118, 210, 1)";
+        style.borderRight = "3px solid rgba(25, 118, 210, 1)";
+      }
     }
-  }
-    
-  if(tipo === "coluna") {
-    if(hover.id_disciplina === atribuicao.id_disciplina) {
-      style.borderLeft = "3px solid rgba(25, 118, 210, 1)"
-      style.borderRight = "3px solid rgba(25, 118, 210, 1)"
-    }
-  }
 
-  if(tipo === "linha") {
-    if(hover.docente === atribuicao.docente) {
-      style.borderTop = "3px solid rgba(25, 118, 210, 1)"
-      style.borderBottom = "3px solid rgba(25, 118, 210, 1)"
+    if (tipo === "linha") {
+      if (hover.docente === atribuicao.docente) {
+        style.borderTop = "3px solid rgba(25, 118, 210, 1)";
+        style.borderBottom = "3px solid rgba(25, 118, 210, 1)";
+      } else {
+        return { border: "initial" };
+      }
     }
-  }
 
-    return style
+    return style;
   };
 
   return (
     <ThemeProvider theme={customTheme}>
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
         {docentes.length > 0 && disciplinas.length > 0 && (
-          <TableContainer sx={{ maxHeight: "90vh", overflow: "scroll" }}>
+          <TableContainer sx={{ maxHeight: "88vh", overflow: "scroll" }}>
             <Table
               sx={{ width: "fit-content", height: "fit-content" }}
               aria-label="sticky table"
@@ -805,8 +807,12 @@ export default function Timetable() {
                           style={{
                             backgroundColor: "white",
                             margin: 0,
-                            padding: 0,
-                           ...setBorder(hover, {docente: null, id_disciplina: disciplina.id}, "coluna")
+                            padding: 1  ,
+                            ...setBorder(
+                              hover,
+                              { docente: null, id_disciplina: disciplina.id },
+                              "coluna"
+                            ),
                           }}
                         >
                           <HeaderCell
@@ -823,7 +829,7 @@ export default function Timetable() {
               </TableHead>
               <TableBody>
                 {rows().map((atribuicao) => (
-                  <TableRow key={atribuicao.nome} sx={{ maxHeight: "2rem"}}>
+                  <TableRow key={atribuicao.nome} sx={{ maxHeight: "2rem" }}>
                     <TableCell
                       component="th"
                       scope="row"
@@ -851,7 +857,11 @@ export default function Timetable() {
                           backgroundColor: setColumnCollor(atribuicao.nome),
                           padding: "3px",
                           width: "100%",
-                            ...setBorder(hover, {docente: atribuicao.nome, id_disciplina: null}, "linha")
+                          ...setBorder(
+                            hover,
+                            { docente: atribuicao.nome, id_disciplina: null },
+                            "linha"
+                          ),
                         }}
                         noWrap
                       >
@@ -884,7 +894,14 @@ export default function Timetable() {
                                 }
                               ),
                               padding: "2px",
-                              ...setBorder(hover, {docente: atribuicao.nome, id_disciplina: prioridade.id_disciplina}, "celula"),
+                              ...setBorder(
+                                hover,
+                                {
+                                  docente: atribuicao.nome,
+                                  id_disciplina: prioridade.id_disciplina,
+                                },
+                                "celula"
+                              ),
                             }}
                             onClick={(event) =>
                               handleCellClick(event, {
@@ -914,23 +931,26 @@ export default function Timetable() {
           </TableContainer>
         )}
       </Paper>
-      
-        <AlgoritmoDialog
-          open={openDialog}
-          onClose={handleCloseDialog}
-          onApply={applySolution}
-          onStop={() => interruptExecution()}
-          processing={processing}
-          progress={{
-            current: disciplinasAlocadasRef.current,
-            total: disciplinas.filter((disciplina) => disciplina.ativo).length,
-          }}
-        />
-    
+
+      <AlgoritmoDialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        onApply={applySolution}
+        onStop={() => interruptExecution()}
+        processing={processing}
+        progress={{
+          current: disciplinasAlocadasRef.current,
+          total: disciplinas.filter((disciplina) => disciplina.ativo).length,
+        }}
+      />
 
       {hoveredCourese && <HoveredCourse disciplina={hoveredCourese} />}
 
-      <CleanAlertDialog openDialog={openCleanDialog}  cleanState={cleanStateAtribuicoes} onCloseDialog={() => setOpenCleanDialog(false)} />
+      <CleanAlertDialog
+        openDialog={openCleanDialog}
+        cleanState={cleanStateAtribuicoes}
+        onCloseDialog={() => setOpenCleanDialog(false)}
+      />
     </ThemeProvider>
   );
 }
