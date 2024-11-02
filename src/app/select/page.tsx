@@ -2,23 +2,16 @@
 
 import * as React from "react";
 import Grid from "@mui/material/Grid2";
-import List from "@mui/material/List";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
-import Divider from "@mui/material/Divider";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useGlobalContext } from "@/context/Global";
-import { Disciplina, Docente, isDisciplina } from "@/context/Global/utils";
+import { Disciplina, Docente } from "@/context/Global/utils";
 import { useSolutionHistory } from "@/context/SolutionHistory/hooks";
+import CustomSelector from "./components/CustomSelector";
 
 function not<T>(a: readonly T[], b: readonly T[]) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -125,74 +118,8 @@ export default function Seletor() {
     title: React.ReactNode,
     items: readonly (Disciplina | Docente)[]
   ) => (
-    <Card>
-      <CardHeader
-        sx={{ px: 2, py: 1 }}
-        avatar={
-          <Checkbox
-            onClick={handleToggleAll(items)}
-            checked={
-              numberOfChecked(items) === items.length && items.length !== 0
-            }
-            indeterminate={
-              numberOfChecked(items) !== items.length &&
-              numberOfChecked(items) !== 0
-            }
-            disabled={items.length === 0}
-            inputProps={{
-              "aria-label": "all items selected",
-            }}
-          />
-        }
-        title={title}
-        subheader={`${numberOfChecked(items)}/${items.length} selecionados`}
-      />
-      <Divider />
-      <List
-        sx={{
-          width: 400,
-          height: 500,
-          bgcolor: "background.paper",
-          overflow: "auto",
-        }}
-        dense
-        component="div"
-        role="list"
-      >
-        {items.map((value: Docente | Disciplina) => {
-          const labelId = `transfer-list-all-item-${
-           isDisciplina(value) ? value.id : value.nome
-          }-label`;
-
-          return (
-            <ListItemButton
-              key={isDisciplina(value) ? value.id : value.nome}
-              role="listitem"
-              onClick={handleToggle(value)}
-            >
-              <ListItemIcon>
-                <Checkbox
-                  checked={checked.indexOf(value) !== -1}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{
-                    "aria-labelledby": labelId,
-                  }}
-                />
-              </ListItemIcon>
-              <ListItemText
-                id={labelId}
-                primary={
-        
-                    isDisciplina(value) ? `${value.id} - ${value.nome}` : value.nome 
-                }
-              />
-            </ListItemButton>
-          );
-        })}
-      </List>
-    </Card>
-  );
+    <CustomSelector key={`list_${title}`} title={title} checked={checked} handleToggle={handleToggle} handleToggleAll={handleToggleAll} items={items} numberOfChecked={numberOfChecked}/>
+  )
 
   return (
     <>
