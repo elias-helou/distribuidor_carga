@@ -58,7 +58,7 @@ export default function Seletor() {
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
 
-  const handleToggle = (value: Docente | Disciplina) => () => {
+  const handleToggle = (value: Docente | Disciplina) => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
 
