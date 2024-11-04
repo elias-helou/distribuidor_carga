@@ -121,6 +121,7 @@ export function processAtribuicoesToTree(
     const docente: TreeDocente = {
       ...docentes.find((docente) => docente.nome === docenteAtribuicoes),
       atribuicoes: atribuicoes,
+      conflitos: new Map<string, string>(),
     };
 
     /**
@@ -142,19 +143,22 @@ export function processAtribuicoesToTree(
           string,
           TreeDocente & { prioridade: number | null }
         >();
-        
-        if(docenteFormularioDisciplina !== undefined) {
-             formulariosMap.set(docente.nome, {
+
+        if (docenteFormularioDisciplina !== undefined) {
+          formulariosMap.set(docente.nome, {
             ...docente,
             prioridade: docenteFormularioDisciplina.prioridade,
-            });
+          });
         }
 
         const treeDisciplina: TreeDisciplina = {
           ...disciplina,
           formularios: formulariosMap,
           _cursos: extrairCursos(disciplina.cursos),
-          atribuicoes: new Map<string, TreeDocente & { prioridade: number | null }>(),
+          atribuicoes: new Map<
+            string,
+            TreeDocente & { prioridade: number | null }
+          >(),
         };
 
         treeDisciplina.atribuicoes.set(docente.nome, {
@@ -174,13 +178,13 @@ export function processAtribuicoesToTree(
             formulario.nome_docente === docente.nome
         );
 
-        if(docenteFormularioDisciplina !== undefined) {
-            treeDisciplina.formularios.set(docente.nome, {
-             ...docente,
+        if (docenteFormularioDisciplina !== undefined) {
+          treeDisciplina.formularios.set(docente.nome, {
+            ...docente,
             prioridade: docenteFormularioDisciplina?.prioridade,
-            });
+          });
         }
-        
+
         treeDisciplina.atribuicoes.set(docente.nome, {
           ...docente,
           prioridade: docenteFormularioDisciplina?.prioridade,
@@ -227,7 +231,7 @@ export function processAtribuicoesToTree(
       for (const _docente of _atribuicoes) {
         const prioridade = formulariosMap.get(_docente)?.prioridade;
         const docente = treeDocentes.get(_docente);
-        atribuicoesMap.set(_docente, {...docente, prioridade: prioridade});
+        atribuicoesMap.set(_docente, { ...docente, prioridade: prioridade });
       }
 
       const treeDicsiplina: TreeDisciplina = {
@@ -268,15 +272,53 @@ export function processAtribuicoesToTree(
       for (const _docente of _atribuicoes) {
         const prioridade = treeDicsiplina.formularios.get(_docente)?.prioridade;
         const docente = treeDocentes.get(_docente);
-        treeDicsiplina.atribuicoes.set(
-          _docente,
-          {...docente, prioridade: prioridade}
-        );
+        treeDicsiplina.atribuicoes.set(_docente, {
+          ...docente,
+          prioridade: prioridade,
+        });
       }
 
       treeDisciplinas.set(treeDicsiplina.id, treeDicsiplina);
     }
   }
 
+  setChoqueDeHorarios(treeDocentes)
+
   return { treeDisciplinas: treeDisciplinas, treeDocentes: treeDocentes };
+}
+
+/**
+ * Função que preenche o Map `conflitos` da interface TreeDocente
+ * @param docentes 
+ * @returns 
+ */
+function setChoqueDeHorarios(
+  docentes: Map<string, TreeDocente>,
+) {
+  for (const _docente of docentes.keys()) {
+    const docente = docentes.get(_docente);
+
+    for (const _atribuicao of docente.atribuicoes.keys()) {
+      const disciplinaAtual = docente.atribuicoes.get(_atribuicao);
+
+      // Itera sobre as demais disciplinas do docente para verificar conflitos
+      for (const _outraAtribuicao of docente.atribuicoes.keys()) {
+        if (_atribuicao !== _outraAtribuicao) {
+          // Evita comparar a mesma disciplina
+          const outraDisciplina = docente.atribuicoes.get(_outraAtribuicao);
+
+          // Verifica se as disciplinas têm choque de horários (implementar lógica de verificação)
+          if (disciplinaAtual.conflitos.has(outraDisciplina.id)) {
+            // Se houver conflito, adiciona no Map de conflitos do docente
+            if (!docente.conflitos.has(disciplinaAtual.id)) {
+              docente.conflitos.set(disciplinaAtual.id, outraDisciplina.id);
+              docente.conflitos.set(outraDisciplina.id, disciplinaAtual.id);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return docentes;
 }
