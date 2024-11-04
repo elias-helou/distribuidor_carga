@@ -704,7 +704,8 @@ export default function Timetable() {
           const disciplinaAtual: Disciplina = disciplinas.find(
             (disciplina) => disciplina.id === atribuicoesDocente[j]
           );
-
+          if(disciplinaAtual === undefined) continue;
+          
           if (disciplinaPivo.conflitos.has(disciplinaAtual.id)) {
             return true;
           }
