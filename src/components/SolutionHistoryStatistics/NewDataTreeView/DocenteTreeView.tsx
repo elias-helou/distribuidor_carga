@@ -182,6 +182,7 @@ export default function DocenteTreeView({ docentes }: DocenteTreeViewProps) {
        */
       for (const _disciplina of docente.atribuicoes.keys()) {
         const disciplina = docente.atribuicoes.get(_disciplina);
+        console.log(docente.nome, ' - ', disciplina.id,' - conflito? ',docente.conflitos.has(disciplina.id))
         childrenToRender.push(
           <CustomTreeItem
             key={`child_${docente.nome}_${disciplina.id}`}
@@ -195,6 +196,7 @@ export default function DocenteTreeView({ docentes }: DocenteTreeViewProps) {
                     flexGrow: 1, // Faz o nome do docente crescer e empurrar o contador para a direita
                   }}
                   title={`${disciplina.id} - ${disciplina.nome}`} // Tooltip para mostrar o nome completo ao passar o mouse
+                  color={docente.conflitos.has(disciplina.id) ? '#e53935' : 'inherit'}
                 >
                   {`${disciplina._cursos}`} - {disciplina.nome}
                 </Typography>
