@@ -18,6 +18,7 @@ export const useSolutionHistory = () => {
     setDocentes,
     setTravas,
     setDisciplinas,
+    setFormularios
   } = useGlobalContext();
 
   // Função para remover a solução do histórico
@@ -46,9 +47,10 @@ export const useSolutionHistory = () => {
     // Adicionado o spred com a atribuição manual do id pois por algum motivo os casos em que possuem estatísticas a propriedade
     // idHistorico não estava sendo inserida no state
     setSolucaoAtual({...solutionToRestore.solucao, idHistorico: id});
-    setDisciplinas(solutionToRestore.contexto.disciplinas)
-    setDocentes(solutionToRestore.contexto.docentes)
-    setTravas(solutionToRestore.contexto.travas)
+    setDisciplinas(solutionToRestore.contexto.disciplinas);
+    setDocentes(solutionToRestore.contexto.docentes);
+    setTravas(solutionToRestore.contexto.travas);
+    setFormularios(solutionToRestore.contexto.formularios);
 
     updateAtribuicoes(solutionToRestore.solucao.atribuicoes);
   };
