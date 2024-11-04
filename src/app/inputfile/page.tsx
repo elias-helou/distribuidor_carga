@@ -21,6 +21,7 @@ import {
 import { useGlobalContext } from "@/context/Global";
 import { Atribuicao, Celula, Disciplina, Docente, Formulario, horariosSobrepoem } from "@/context/Global/utils";
 import { Alerta, useAlertsContext } from "@/context/Alerts";
+import { useSolutionHistory } from "@/context/SolutionHistory/hooks";
 
 export default function InputFileUpload() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -28,6 +29,8 @@ export default function InputFileUpload() {
   const {alertas, setAlertas} = useAlertsContext();
   const { setAtribuicoes, setDisciplinas, setDocentes, setFormularios, setTravas, setSolucaoAtual, setHistoricoSolucoes, historicoSolucoes } =
     useGlobalContext();
+
+    const { cleanSolucaoAtual } = useSolutionHistory()
 
   /**
    * Função responsável por validar se um arquivo foi selecionado e se é do tipo permitido.
@@ -158,6 +161,7 @@ export default function InputFileUpload() {
         setUploading(false);
       };
       reader.readAsText(selectedFile);
+      cleanSolucaoAtual();
     }
   };
 
