@@ -21,6 +21,7 @@ import NewDataTreeView from "@/components/SolutionHistoryStatistics/NewDataTreeV
  */
 export interface TreeDocente extends Docente {
   atribuicoes: Map<string, TreeDisciplina & { prioridade: number }>; // Id disciplina, TreeDisciplina
+  conflitos: Map<string, string>;
 }
 
 export interface TreeDisciplina extends Disciplina {
