@@ -163,10 +163,12 @@ function EndIcon() {
 
 export interface DisciplinasTreeViewProps {
   disciplinas: Map<string, TreeDisciplina>;
+  handleClickedItem: (itemId: string) => void;
 }
 
 export default function DisciplinasTreeView({
   disciplinas,
+  handleClickedItem
 }: DisciplinasTreeViewProps) {
   const renderItens = (itens: Map<string, TreeDisciplina>) => {
     const itensToRender = [];
@@ -184,8 +186,8 @@ export default function DisciplinasTreeView({
         const docente = disciplina.atribuicoes.get(_docente);
         childrenToRender.push(
           <CustomTreeItem
-            key={`child_${disciplina.id}_${docente.nome}`}
-            itemId={`child_${disciplina.id}_${docente.nome}`}
+            key={`child_disciplina_${disciplina.id}_docente_${docente.nome}`}
+            itemId={`child_disciplina_${disciplina.id}_docente_${docente.nome}`}
             //label={`${disciplina._cursos} - ${disciplina.nome}`}
             label={
               <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -217,8 +219,8 @@ export default function DisciplinasTreeView({
 
       itensToRender.push(
         <CustomTreeItem
-          key={`item_${disciplina.id}`}
-          itemId={`item_${disciplina.id}`}
+          key={`item_disciplina_${disciplina.id}`}
+          itemId={`item_disciplina_${disciplina.id}`}
           label={
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Typography
@@ -255,6 +257,7 @@ export default function DisciplinasTreeView({
       sx={{ flexGrow: 1, height: "20em", overflowY: "auto" }}
       expansionTrigger="iconContainer"
       defaultExpandedItems={["0"]}
+      onItemClick={(event, itemId) => handleClickedItem(itemId)}
     >
       <CustomTreeItem
         key="disciplinas"

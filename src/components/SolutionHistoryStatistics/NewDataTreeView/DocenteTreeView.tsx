@@ -163,9 +163,10 @@ function EndIcon() {
 
 export interface DocenteTreeViewProps {
   docentes: Map<string, TreeDocente>;
+  handleClickedItem: (itemId: string) => void;
 }
 
-export default function DocenteTreeView({ docentes }: DocenteTreeViewProps) {
+export default function DocenteTreeView({ docentes, handleClickedItem }: DocenteTreeViewProps) {
   // docentes > docente > docente.atribuicoes, docente.formularios
 
   const renderItens = (itens: Map<string, TreeDocente>) => {
@@ -182,12 +183,10 @@ export default function DocenteTreeView({ docentes }: DocenteTreeViewProps) {
        */
       for (const _disciplina of docente.atribuicoes.keys()) {
         const disciplina = docente.atribuicoes.get(_disciplina);
-        console.log(docente.nome, ' - ', disciplina.id,' - conflito? ',docente.conflitos.has(disciplina.id))
         childrenToRender.push(
           <CustomTreeItem
-            key={`child_${docente.nome}_${disciplina.id}`}
-            itemId={`child_${docente.nome}_${disciplina.id}`}
-            //label={`${disciplina._cursos} - ${disciplina.nome}`}
+            key={`child_docente_${docente.nome}_disciplina_${disciplina.id}`}
+            itemId={`child_docente_${docente.nome}_disciplina_${disciplina.id}`}
             label={
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Typography
@@ -210,8 +209,8 @@ export default function DocenteTreeView({ docentes }: DocenteTreeViewProps) {
 
       itensToRender.push(
         <CustomTreeItem
-          key={`item_${docente.nome}`}
-          itemId={`item_${docente.nome}`}
+          key={`item_docente_${docente.nome}`}
+          itemId={`item_docente_${docente.nome}`}
           label={
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Typography
@@ -257,6 +256,7 @@ export default function DocenteTreeView({ docentes }: DocenteTreeViewProps) {
       sx={{ flexGrow: 1, height: "20em", overflowY: "auto" }}
       expansionTrigger="iconContainer"
       defaultExpandedItems={["0"]}
+      onItemClick={(event, itemId) => handleClickedItem(itemId)}
     >
       <CustomTreeItem
         key="docentes"
