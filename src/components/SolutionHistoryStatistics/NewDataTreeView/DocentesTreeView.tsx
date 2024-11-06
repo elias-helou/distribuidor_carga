@@ -239,6 +239,7 @@ export default function DocenteTreeView({
               <Typography
                 key={`typography_hover_${docente.nome}`}
                 component="div"
+                color={docente.conflitos.size > 0 ? "#e53935" : "inherit"}
               >
                 {docente.nome}
               </Typography>
