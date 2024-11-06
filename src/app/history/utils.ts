@@ -216,7 +216,7 @@ export function processAtribuicoesToTree(
         const docente = treeDocentes.get(formulario.nome_docente);
         formulariosMap.set(docente.nome, {
           ...docente,
-          prioridade: formulario?.prioridade,
+          prioridade: formulario.prioridade,
         });
       }
 
@@ -228,8 +228,16 @@ export function processAtribuicoesToTree(
 
       const _atribuicoes = disciplinasAtribuicoes.get(disciplinaAtribuicoes);
 
+      //Ajusta casos em que a atribuição foi feita sem formulário
+      for (const _atribuicao of _atribuicoes) {
+        if (!formulariosMap.has(_atribuicao)) {
+          const docente = treeDocentes.get(_atribuicao);
+          formulariosMap.set(_atribuicao, { ...docente, prioridade: null });
+        }
+      }
+
       for (const _docente of _atribuicoes) {
-        const prioridade = formulariosMap.get(_docente)?.prioridade;
+        const prioridade = formulariosMap.get(_docente).prioridade;
         const docente = treeDocentes.get(_docente);
         atribuicoesMap.set(_docente, { ...docente, prioridade: prioridade });
       }
@@ -258,43 +266,51 @@ export function processAtribuicoesToTree(
         const docente = treeDocentes.get(formulario.nome_docente);
         formulariosMap.set(docente.nome, {
           ...docente,
-          prioridade: formulario?.prioridade,
+          prioridade: formulario.prioridade,
         });
       }
 
+      const _atribuicoes = disciplinasAtribuicoes.get(disciplinaAtribuicoes);
+
+      //Ajusta casos em que a atribuição foi feita sem formulário
+      for (const _atribuicao of _atribuicoes) {
+        if (!formulariosMap.has(_atribuicao)) {
+          const docente = treeDocentes.get(_atribuicao);
+          formulariosMap.set(_atribuicao, { ...docente, prioridade: null });
+        }
+      }
       treeDicsiplina.formularios = formulariosMap;
 
       // Cria as atribuições
       //const atribuicoesMap = new Map<string, TreeDocente & {prioridade: number|null}>();
 
-      const _atribuicoes = disciplinasAtribuicoes.get(disciplinaAtribuicoes);
+      //const _atribuicoes = disciplinasAtribuicoes.get(disciplinaAtribuicoes);
 
       for (const _docente of _atribuicoes) {
         const prioridade = treeDicsiplina.formularios.get(_docente)?.prioridade;
         const docente = treeDocentes.get(_docente);
-        treeDicsiplina.atribuicoes.set(_docente, {
+        const atribuicao: TreeDocente & { prioridade: number | null } = {
           ...docente,
           prioridade: prioridade,
-        });
+        };
+        treeDicsiplina.atribuicoes.set(_docente, atribuicao);
       }
 
       treeDisciplinas.set(treeDicsiplina.id, treeDicsiplina);
     }
   }
 
-  setChoqueDeHorarios(treeDocentes)
+  setChoqueDeHorarios(treeDocentes);
 
   return { treeDisciplinas: treeDisciplinas, treeDocentes: treeDocentes };
 }
 
 /**
  * Função que preenche o Map `conflitos` da interface TreeDocente
- * @param docentes 
- * @returns 
+ * @param docentes
+ * @returns
  */
-function setChoqueDeHorarios(
-  docentes: Map<string, TreeDocente>,
-) {
+function setChoqueDeHorarios(docentes: Map<string, TreeDocente>) {
   for (const _docente of docentes.keys()) {
     const docente = docentes.get(_docente);
 
