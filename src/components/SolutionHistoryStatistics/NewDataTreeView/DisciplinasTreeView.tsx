@@ -235,7 +235,7 @@ export default function DisciplinasTreeView({
             </Box>
           }
           labelIcon={null}
-          labelInfo={`(${disciplina.docentes.length})`}
+          labelInfo={`(${disciplina.atribuicoes.size})`}
         >
           {childrenToRender}
         </CustomTreeItem>

@@ -8,6 +8,7 @@ import DisciplinasTreeView from "./DisciplinasTreeView";
 import { useState } from "react";
 import { FormulariosView } from "./FormulariosView";
 import { HistoricoSolucao } from "@/context/Global/utils";
+import { ArtribuicoesView } from "./ArtribuicoesView";
 
 export interface DataTreeViewProps {
   docentes: Map<string, TreeDocente>;
@@ -21,7 +22,7 @@ export default function NewDataTreeView({
   solucao
 }: DataTreeViewProps) {
   const [lastClickedItem, setLastClickedItem] = useState<{
-    tipo: "docente" | "disciplina";
+    tipo: "docente" | "disciplina" | null;
     id: string;
   } | null>(null);
 
@@ -47,6 +48,8 @@ export default function NewDataTreeView({
           id: tokens[4],
         });
       }
+    } else {
+      setLastClickedItem({tipo: null, id: null})
     }
   };
 
@@ -89,7 +92,16 @@ export default function NewDataTreeView({
       </Grid2>
       <Grid2 size={{ xs: 12, md: 6 }}>
         <Paper elevation={2} sx={{ padding: 2 }}>
-          2
+          <ArtribuicoesView
+            tipo={lastClickedItem?.tipo}
+            id={lastClickedItem?.id}
+            entidade={selecionaEntidade(
+              lastClickedItem?.tipo,
+              lastClickedItem?.id
+            )}
+            solucao={solucao}
+            disciplinas={disciplinas}
+          />
         </Paper>
       </Grid2>
     </Grid2>

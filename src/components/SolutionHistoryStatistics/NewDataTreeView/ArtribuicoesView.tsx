@@ -7,13 +7,12 @@ import {
 import { HistoricoSolucao, isDisciplina } from "@/context/Global/utils";
 import { Box, Grid2, Stack, styled, Typography } from "@mui/material";
 
-export interface FormulariosViewProps {
+export interface ArtribuicoesViewProps {
   tipo: "docente" | "disciplina";
   id: string;
   entidade: TreeDocente | TreeDisciplina;
   solucao: HistoricoSolucao;
   disciplinas: Map<string, TreeDisciplina>;
-  docentes: Map<string, TreeDocente>;
 }
 
 // StyledStack com hover opcional
@@ -30,14 +29,13 @@ const StyledStack = styled(Stack)(() => ({
   margin: 0,
 }));
 
-export function FormulariosView({
+export function ArtribuicoesView({
   tipo,
   id,
   entidade,
   solucao,
   disciplinas,
-  docentes
-}: FormulariosViewProps) {
+}: ArtribuicoesViewProps) {
   const renderFormularios = () => {
     const render = [];
 
@@ -49,8 +47,7 @@ export function FormulariosView({
       if (isDisciplina(entidade)) {
         return render;
       }
-
-      entidade.formularios.forEach((value, key) => {
+      entidade.atribuicoes.forEach((value, key) => {
         render.push(
           <Grid2 key={`TreeViewAssignments_child_grid_${key}`}>
             <HeaderCell
@@ -63,17 +60,17 @@ export function FormulariosView({
             <Box
               sx={{
                 backgroundColor: setCellColor(
-                  value,
+                 value.formularios.get(id)?.prioridade,
                   { id_disciplina: key, nome_docente: id },
                   false,
                   solucao.contexto.maxPriority
                 ),
                 //padding: "2px",
                 textAlign: "center",
-                 minHeight: value ? 'inherit' : '1.5em'
+                minHeight: value.formularios.get(key) ? 'inherit' : '1.5em'
               }}
             >
-              {value}
+              {value.formularios.get(id).prioridade}
             </Box>
           </Grid2>
         );
@@ -84,8 +81,8 @@ export function FormulariosView({
       // Verifica se a entidade é do tipo Disciplina e já retorna um array vazio caso seja
       // Adicionado para evitar erros no lint
       if (isDisciplina(entidade)) {
-        entidade.formularios.forEach((value, key) => {
-          render.push(
+        entidade.atribuicoes.forEach((value, key) => {
+         render.push(
             <Grid2
               key={`TreeViewAssignments_child_grid_${id}_${key}`}
             >
@@ -104,24 +101,24 @@ export function FormulariosView({
                 </Typography>
                 <Typography align="left" style={{ fontSize: "14px" }}>
                   Saldo:{" "}
-                  {(docentes.get(key).saldo < 0 ? "" : "+") +
-                    docentes.get(key).saldo.toFixed(1).toString().replace(".", ",")}
+                  {(value.saldo < 0 ? "" : "+") +
+                    value.saldo.toFixed(1).toString().replace(".", ",")}
                 </Typography>
               </StyledStack>
               <Box
                 sx={{
                   backgroundColor: setCellColor(
-                    value.prioridade,
+                    value.formularios.get(entidade.id),
                     { id_disciplina: id, nome_docente: key },
                     false,
                     solucao.contexto.maxPriority
                   ),
                   //padding: "2px",
                   textAlign: "center",
-                  minHeight: value.prioridade ? 'inherit' : '1.5em'
+                  minHeight: value.formularios.get(entidade.id) ? 'inherit' : '1.5em'
                 }}
               >
-                {value.prioridade}
+                {value.formularios.get(entidade.id)}
               </Box>
             </Grid2>
           );
