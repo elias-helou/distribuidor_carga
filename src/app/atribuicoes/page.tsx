@@ -704,8 +704,8 @@ export default function Timetable() {
           const disciplinaAtual: Disciplina = disciplinas.find(
             (disciplina) => disciplina.id === atribuicoesDocente[j]
           );
-          if(disciplinaAtual === undefined) continue;
-          
+          if (disciplinaAtual === undefined) continue;
+
           if (disciplinaPivo.conflitos.has(disciplinaAtual.id)) {
             return true;
           }
@@ -808,7 +808,7 @@ export default function Timetable() {
                           style={{
                             backgroundColor: "white",
                             margin: 0,
-                            padding: 1  ,
+                            padding: 1,
                             ...setBorder(
                               hover,
                               { docente: null, id_disciplina: disciplina.id },
@@ -945,7 +945,12 @@ export default function Timetable() {
         }}
       />
 
-      {hoveredCourese && <HoveredCourse disciplina={hoveredCourese} />}
+      {hoveredCourese && (
+        <HoveredCourse
+          disciplina={hoveredCourese}
+          setHoveredCourese={setHoveredCourese}
+        />
+      )}
 
       <CleanAlertDialog
         openDialog={openCleanDialog}
