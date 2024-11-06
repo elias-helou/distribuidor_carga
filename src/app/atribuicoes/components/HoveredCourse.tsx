@@ -1,15 +1,22 @@
 import { Disciplina } from "@/context/Global/utils";
 import { Paper, Stack, Typography } from "@mui/material";
+import { Dispatch, SetStateAction } from "react";
 
 interface HoveredCourseProps {
   disciplina: Disciplina;
+  children?: React.ReactNode;
+  setHoveredCourese: Dispatch<SetStateAction<Disciplina | null>>;
 }
 
 /**
  * Componente desenvolvido para exibir as turmas que forem "selecionadas" no cabeçalho da tabela da tela Timetabling,
  * com intuíto de exibir toadas as informações sem preocupação com o tamanho do componente.
  */
-export default function HoveredCourse({ disciplina }: HoveredCourseProps) {
+export default function HoveredCourse({
+  disciplina,
+  children,
+  setHoveredCourese,
+}: HoveredCourseProps) {
   /**
    * Cria o bloco referente aos horários de um adisicplina
    * @param disciplina Disciplina contendo os horários
@@ -48,6 +55,7 @@ export default function HoveredCourse({ disciplina }: HoveredCourseProps) {
     <Paper
       elevation={8}
       sx={{ position: "fixed", zIndex: 99, bottom: "10vh", right: "2vw" }}
+      onMouseLeave={() => setHoveredCourese(null)}
     >
       <Stack
         direction="column"
@@ -83,6 +91,7 @@ export default function HoveredCourse({ disciplina }: HoveredCourseProps) {
           {disciplina.codigo + " " + disciplina.nome}
         </Typography>
         {createHorariosblock(disciplina)}
+        {children}
       </Stack>
     </Paper>
   );
