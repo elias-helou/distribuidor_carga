@@ -2,7 +2,7 @@ import {
   TreeDisciplina,
   TreeDocente,
 } from "@/app/history/components/SolutionHistoryStatistics";
-import { Grid2, Paper } from "@mui/material";
+import { Divider, Grid2, Paper, Typography } from "@mui/material";
 import DocenteTreeView from "./DocentesTreeView";
 import DisciplinasTreeView from "./DisciplinasTreeView";
 import { useState } from "react";
@@ -14,14 +14,16 @@ export interface DataTreeViewProps {
   docentes: Map<string, TreeDocente>;
   disciplinas: Map<string, TreeDisciplina>;
   solucao: HistoricoSolucao;
-  setHoveredCourese: React.Dispatch<React.SetStateAction<TreeDisciplina | null>>;
+  setHoveredCourese: React.Dispatch<
+    React.SetStateAction<TreeDisciplina | null>
+  >;
 }
 
 export default function NewDataTreeView({
   docentes,
   disciplinas,
   solucao,
-  setHoveredCourese
+  setHoveredCourese,
 }: DataTreeViewProps) {
   const [lastClickedItem, setLastClickedItem] = useState<{
     tipo: "docente" | "disciplina" | null;
@@ -51,12 +53,38 @@ export default function NewDataTreeView({
         });
       }
     } else {
-      setLastClickedItem({tipo: null, id: null})
+      setLastClickedItem({ tipo: null, id: null });
     }
   };
 
-  const selecionaEntidade = (tipo: "docente" | "disciplina", id: string) => {
+  const selecionaEntidade = (
+    tipo: "docente" | "disciplina" | null,
+    id: string
+  ) => {
     return tipo === "docente" ? docentes.get(id) : disciplinas.get(id);
+  };
+
+  const textoView = (
+    tipo: "docente" | "disciplina" | null,
+    view: "formularios" | "atribuicoes"
+  ) => {
+    if (view === "formularios") {
+      if (tipo === "docente") {
+        return "Escolhidas pelo docente";
+      } else if (tipo === "disciplina") {
+        return "Escolhida pelos docentes";
+      } else {
+        return "Formulários";
+      }
+    } else {
+      if (tipo === "docente") {
+        return "Atribuídas ao docente";
+      } else if (tipo === "disciplina") {
+        return "Atribuída aos docentes";
+      } else {
+        return "Atribuições";
+      }
+    }
   };
 
   return (
@@ -77,8 +105,12 @@ export default function NewDataTreeView({
           />
         </Paper>
       </Grid2>
-      <Grid2 size={{ xs: 12, md: 6 }}>
+      <Grid2 size={{ xs: 12, md: 6 }} spacing={1}>
         <Paper elevation={2} sx={{ padding: 2 }}>
+          <Typography variant="h6" textAlign="center" alignContent="flex-start">
+            {textoView(lastClickedItem?.tipo, "formularios")}
+          </Typography>
+          <Divider />
           <FormulariosView
             tipo={lastClickedItem?.tipo}
             id={lastClickedItem?.id}
@@ -93,8 +125,12 @@ export default function NewDataTreeView({
           />
         </Paper>
       </Grid2>
-      <Grid2 size={{ xs: 12, md: 6 }}>
+      <Grid2 size={{ xs: 12, md: 6 }} spacing={1}>
         <Paper elevation={2} sx={{ padding: 2 }}>
+          <Typography variant="h6" textAlign="center">
+            {textoView(lastClickedItem?.tipo, "atribuicoes")}
+          </Typography>
+          <Divider />
           <ArtribuicoesView
             tipo={lastClickedItem?.tipo}
             id={lastClickedItem?.id}
