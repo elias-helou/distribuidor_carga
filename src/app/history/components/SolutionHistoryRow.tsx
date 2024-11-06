@@ -1,4 +1,4 @@
-import { Disciplina, HistoricoSolucao } from "@/context/Global/utils";
+import { HistoricoSolucao } from "@/context/Global/utils";
 import {
   Box,
   Collapse,
@@ -14,13 +14,13 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import SolutionHistoryButtonGroup from "./SolutionHistoryButtonGroup";
 import { useSolutionHistory } from "@/context/SolutionHistory/hooks";
 import { useAlertsContext } from "@/context/Alerts";
-import SolutionHistoryStatistics from "./SolutionHistoryStatistics";
+import SolutionHistoryStatistics, { TreeDisciplina } from "./SolutionHistoryStatistics";
 import { exportJson, getFormattedDate } from "@/app/atribuicoes";
 
 interface SolutionHistoryRowProps {
   id: string;
   solucao: HistoricoSolucao;
-  setHoveredCourese: React.Dispatch<React.SetStateAction<Disciplina>>;
+  setHoveredCourese: React.Dispatch<React.SetStateAction<TreeDisciplina | null>>;
 }
 
 const SolutionHistoryRow: React.FC<SolutionHistoryRowProps> = ({

@@ -4,7 +4,7 @@ import {
   TreeDisciplina,
   TreeDocente,
 } from "@/app/history/components/SolutionHistoryStatistics";
-import { HistoricoSolucao, isDisciplina } from "@/context/Global/utils";
+import {HistoricoSolucao, isDisciplina } from "@/context/Global/utils";
 import { Box, Grid2, Stack, styled, Typography } from "@mui/material";
 
 export interface ArtribuicoesViewProps {
@@ -13,6 +13,7 @@ export interface ArtribuicoesViewProps {
   entidade: TreeDocente | TreeDisciplina;
   solucao: HistoricoSolucao;
   disciplinas: Map<string, TreeDisciplina>;
+  setHoveredCourese: React.Dispatch<React.SetStateAction<TreeDisciplina | null>>;
 }
 
 // StyledStack com hover opcional
@@ -35,6 +36,7 @@ export function ArtribuicoesView({
   entidade,
   solucao,
   disciplinas,
+  setHoveredCourese
 }: ArtribuicoesViewProps) {
   const renderFormularios = () => {
     const render = [];
@@ -55,7 +57,7 @@ export function ArtribuicoesView({
               //onHeaderClick={() => null}
               setHeaderCollor={() => "white"}
               key={`TreeViewAssignments_child_grid_${key}_child`}
-              setParentHoveredCourse={() => console.log("hover")}
+              setParentHoveredCourse={setHoveredCourese}
             />
             <Box
               sx={{

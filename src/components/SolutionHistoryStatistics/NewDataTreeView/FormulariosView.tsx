@@ -14,6 +14,7 @@ export interface FormulariosViewProps {
   solucao: HistoricoSolucao;
   disciplinas: Map<string, TreeDisciplina>;
   docentes: Map<string, TreeDocente>;
+  setHoveredCourese: React.Dispatch<React.SetStateAction<TreeDisciplina | null>>;
 }
 
 // StyledStack com hover opcional
@@ -36,7 +37,8 @@ export function FormulariosView({
   entidade,
   solucao,
   disciplinas,
-  docentes
+  docentes,
+  setHoveredCourese
 }: FormulariosViewProps) {
   const renderFormularios = () => {
     const render = [];
@@ -58,7 +60,7 @@ export function FormulariosView({
               //onHeaderClick={() => null}
               setHeaderCollor={() => "white"}
               key={`TreeViewAssignments_child_grid_${key}_child`}
-              setParentHoveredCourse={() => console.log("hover")}
+              setParentHoveredCourse={setHoveredCourese}
             />
             <Box
               sx={{

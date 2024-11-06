@@ -14,12 +14,14 @@ export interface DataTreeViewProps {
   docentes: Map<string, TreeDocente>;
   disciplinas: Map<string, TreeDisciplina>;
   solucao: HistoricoSolucao;
+  setHoveredCourese: React.Dispatch<React.SetStateAction<TreeDisciplina | null>>;
 }
 
 export default function NewDataTreeView({
   docentes,
   disciplinas,
-  solucao
+  solucao,
+  setHoveredCourese
 }: DataTreeViewProps) {
   const [lastClickedItem, setLastClickedItem] = useState<{
     tipo: "docente" | "disciplina" | null;
@@ -87,6 +89,7 @@ export default function NewDataTreeView({
             solucao={solucao}
             disciplinas={disciplinas}
             docentes={docentes}
+            setHoveredCourese={setHoveredCourese}
           />
         </Paper>
       </Grid2>
@@ -101,6 +104,7 @@ export default function NewDataTreeView({
             )}
             solucao={solucao}
             disciplinas={disciplinas}
+            setHoveredCourese={setHoveredCourese}
           />
         </Paper>
       </Grid2>

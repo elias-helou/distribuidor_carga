@@ -31,7 +31,7 @@ export interface TreeDisciplina extends Disciplina {
 interface SolutionHistoryStatisticsProps {
   id: string;
   solucao: HistoricoSolucao;
-  setHoveredCourese: React.Dispatch<React.SetStateAction<Disciplina>>;
+  setHoveredCourese: React.Dispatch<React.SetStateAction<TreeDisciplina | null>>;
 }
 
 const SolutionHistoryStatistics: React.FC<SolutionHistoryStatisticsProps> = ({
@@ -118,6 +118,7 @@ const SolutionHistoryStatistics: React.FC<SolutionHistoryStatisticsProps> = ({
           disciplinas={atribuicoesProcessadas.treeDisciplinas}
           docentes={atribuicoesProcessadas.treeDocentes}
           solucao={solucao}
+          setHoveredCourese={setHoveredCourese}
         />
       </Grid2>
       {/* Gráficos lado a lado dentro do Paper */}

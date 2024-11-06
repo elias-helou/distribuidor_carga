@@ -168,7 +168,7 @@ export interface DisciplinasTreeViewProps {
 
 export default function DisciplinasTreeView({
   disciplinas,
-  handleClickedItem
+  handleClickedItem,
 }: DisciplinasTreeViewProps) {
   const renderItens = (itens: Map<string, TreeDisciplina>) => {
     const itensToRender = [];
@@ -187,32 +187,58 @@ export default function DisciplinasTreeView({
       for (const _docente of disciplina.atribuicoes.keys()) {
         const docente = disciplina.atribuicoes.get(_docente);
         temConflito = docente.conflitos.size > 0;
-        
+
         childrenToRender.push(
           <CustomTreeItem
             key={`child_disciplina_${disciplina.id}_docente_${docente.nome}`}
             itemId={`child_disciplina_${disciplina.id}_docente_${docente.nome}`}
             //label={`${disciplina._cursos} - ${disciplina.nome}`}
             label={
-              <Box sx={{ display: "flex", alignItems: "center" }}>
+              // <Box sx={{ display: "flex", alignItems: "center" }}>
+              //   <Typography
+              //     component="div"
+              //     sx={{
+              //       width: "100%", // Para ocupar todo o espaço horizontal disponível
+              //       flexGrow: 1, // Faz o nome do docente crescer e empurrar o contador para a direita
+              //     }}
+              //     title={docente.nome} // Tooltip para mostrar o nome completo ao passar o mouse
+              //     color={docente.conflitos.size > 0 ? '#e53935' : 'inherit'}
+              //   >
+              //     <div style={{ display: "flex" }}>
+              //       <div style={{ fontFamily: "monospace" }}>
+              //         (
+              //         {(docente.saldo < 0 ? "" : "+") +
+              //           docente.saldo.toFixed(1).toString().replace(".", ",")}
+              //         )&emsp;
+              //       </div>
+              //       {docente.nome}
+              //     </div>
+              //   </Typography>
+              // </Box>
+              <Box
+                key={`box_hover_${docente.nome}`}
+                display="flex"
+                alignItems="center"
+              >
                 <Typography
+                  key={`typography_hover_saldo_${docente.nome}`}
                   component="div"
                   sx={{
-                    width: "100%", // Para ocupar todo o espaço horizontal disponível
-                    flexGrow: 1, // Faz o nome do docente crescer e empurrar o contador para a direita
+                    fontFamily: "monospace",
+                    whiteSpace: "nowrap",
                   }}
-                  title={docente.nome} // Tooltip para mostrar o nome completo ao passar o mouse
-                  color={docente.conflitos.size > 0 ? '#e53935' : 'inherit'}
+                  color={docente?.saldo < 0 ? "error" : "success"}
                 >
-                  <div style={{ display: "flex" }}>
-                    <div style={{ fontFamily: "monospace" }}>
-                      (
-                      {(docente.saldo < 0 ? "" : "+") +
-                        docente.saldo.toFixed(1).toString().replace(".", ",")}
-                      )&emsp;
-                    </div>
-                    {docente.nome}
-                  </div>
+                  (
+                  {(docente?.saldo < 0 ? "" : "+") +
+                    docente?.saldo.toFixed(1).replace(".", ",")}
+                  )&emsp;
+                </Typography>
+                <Typography
+                  key={`typography_hover_${docente.nome}`}
+                  component="div"
+                >
+                  {docente.nome}
                 </Typography>
               </Box>
             }
@@ -234,7 +260,7 @@ export default function DisciplinasTreeView({
                   flexGrow: 1, // Faz o nome da disciplina crescer e empurrar o contador para a direita
                 }}
                 title={`${disciplina.id} - ${disciplina.nome}`} // Tooltip para mostrar o nome completo ao passar o mouse
-                color={temConflito ? '#e53935' : 'inherit'}
+                color={temConflito ? "#e53935" : "inherit"}
               >
                 {`${disciplina._cursos} - ${disciplina.nome}`}
               </Typography>

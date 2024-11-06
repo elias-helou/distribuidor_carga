@@ -166,7 +166,10 @@ export interface DocenteTreeViewProps {
   handleClickedItem: (itemId: string) => void;
 }
 
-export default function DocenteTreeView({ docentes, handleClickedItem }: DocenteTreeViewProps) {
+export default function DocenteTreeView({
+  docentes,
+  handleClickedItem,
+}: DocenteTreeViewProps) {
   // docentes > docente > docente.atribuicoes, docente.formularios
 
   const renderItens = (itens: Map<string, TreeDocente>) => {
@@ -195,7 +198,9 @@ export default function DocenteTreeView({ docentes, handleClickedItem }: Docente
                     flexGrow: 1, // Faz o nome do docente crescer e empurrar o contador para a direita
                   }}
                   title={`${disciplina.id} - ${disciplina.nome}`} // Tooltip para mostrar o nome completo ao passar o mouse
-                  color={docente.conflitos.has(disciplina.id) ? '#e53935' : 'inherit'}
+                  color={
+                    docente.conflitos.has(disciplina.id) ? "#e53935" : "inherit"
+                  }
                 >
                   {`${disciplina._cursos}`} - {disciplina.nome}
                 </Typography>
@@ -212,25 +217,30 @@ export default function DocenteTreeView({ docentes, handleClickedItem }: Docente
           key={`item_docente_${docente.nome}`}
           itemId={`item_docente_${docente.nome}`}
           label={
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box
+              key={`box_hover_${docente.nome}`}
+              display="flex"
+              alignItems="center"
+            >
               <Typography
+                key={`typography_hover_saldo_${docente.nome}`}
                 component="div"
                 sx={{
-                  width: "100%", // Para ocupar todo o espaço horizontal disponível
-                  flexGrow: 1, // Faz o nome do docente crescer e empurrar o contador para a direita
+                  fontFamily: "monospace",
+                  whiteSpace: "nowrap",
                 }}
-                title={docente.nome} // Tooltip para mostrar o nome completo ao passar o mouse
-                color={docente.conflitos.size > 0 ? '#e53935' : 'inherit'}
+                color={docente?.saldo < 0 ? "error" : "success"}
               >
-                <div style={{ display: "flex" }}>
-                  <div style={{ fontFamily: "monospace" }}>
-                    (
-                    {(docente.saldo < 0 ? "" : "+") +
-                      docente.saldo.toFixed(1).toString().replace(".", ",")}
-                    )&emsp;
-                  </div>
-                  {docente.nome}
-                </div>
+                (
+                {(docente?.saldo < 0 ? "" : "+") +
+                  docente?.saldo.toFixed(1).replace(".", ",")}
+                )&emsp;
+              </Typography>
+              <Typography
+                key={`typography_hover_${docente.nome}`}
+                component="div"
+              >
+                {docente.nome}
               </Typography>
             </Box>
           }
