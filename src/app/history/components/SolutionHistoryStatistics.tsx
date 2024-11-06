@@ -6,13 +6,12 @@ import {
   Docente,
   getActiveFormularios,
 } from "@/context/Global/utils";
-import { Grid2, Paper, Typography } from "@mui/material";
+import { Grid2, Paper } from "@mui/material";
 import {
   getDisciplinasAtribuicoes,
   getDocentesAtribuicoes,
   processAtribuicoesToTree,
 } from "../utils";
-import DataTreeView from "@/components/SolutionHistoryStatistics/DataTreeView/DataTreeView";
 import StatusPieChart from "@/components/SolutionHistoryStatistics/StatusPieChart";
 import NewDataTreeView from "@/components/SolutionHistoryStatistics/NewDataTreeView/DataTreeView";
 
@@ -20,7 +19,7 @@ import NewDataTreeView from "@/components/SolutionHistoryStatistics/NewDataTreeV
  * Interfaces para a exibição dos Docentes e Disciplinas
  */
 export interface TreeDocente extends Docente {
-  atribuicoes: Map<string, TreeDisciplina & { prioridade: number }>; // Id disciplina, TreeDisciplina
+  atribuicoes: Map<string, TreeDisciplina & { prioridade: number | null }>; // Id disciplina, TreeDisciplina
   conflitos: Map<string, string>;
 }
 
@@ -87,7 +86,7 @@ const SolutionHistoryStatistics: React.FC<SolutionHistoryStatisticsProps> = ({
   return (
     <Grid2 container spacing={2} key={`grid2_container_${id}`}>
       {/* Componente DataTreeView com as informações dos docentes e atribuições */}
-      <Grid2 size={{ xs: 12 }}>
+      {/* <Grid2 size={{ xs: 12 }}>
         <DataTreeView
           docentes={atribuicoesProcessadas.treeDocentes}
           //atribuicoes={solucao.solucao.atribuicoes}
@@ -106,15 +105,22 @@ const SolutionHistoryStatistics: React.FC<SolutionHistoryStatisticsProps> = ({
           setHoveredCourese={setHoveredCourese}
           entidade="Disciplina"
         />
-      </Grid2>
+      </Grid2> */}
 
       {/* Título e Gráficos de Relação Ativos X Inativos */}
-      <Grid2 size={{ xs: 12 }}>
+      {/* <Grid2 size={{ xs: 12 }}>
         <Typography variant="h6" gutterBottom align="center">
           Relação Ativos X Inativos
         </Typography>
+      </Grid2> */}
+      <Grid2 size={{ xs: 12, md: 12 }}>
+        <NewDataTreeView
+          key="new_data_tree_view"
+          disciplinas={atribuicoesProcessadas.treeDisciplinas}
+          docentes={atribuicoesProcessadas.treeDocentes}
+          solucao={solucao}
+        />
       </Grid2>
-
       {/* Gráficos lado a lado dentro do Paper */}
       <Grid2 container size={{ xs: 12 }} spacing={2}>
         <Grid2 size={{ xs: 12, md: 6 }}>
@@ -153,15 +159,6 @@ const SolutionHistoryStatistics: React.FC<SolutionHistoryStatisticsProps> = ({
           <LineChartsSelector solucao={solucao} />
         </Grid2>
       )}
-
-      <Grid2 size={{ xs: 12, md: 12 }}>
-        <NewDataTreeView
-          key="new_data_tree_view"
-          disciplinas={atribuicoesProcessadas.treeDisciplinas}
-          docentes={atribuicoesProcessadas.treeDocentes}
-          solucao={solucao}
-        />
-      </Grid2>
     </Grid2>
   );
 };
