@@ -182,8 +182,12 @@ export default function DisciplinasTreeView({
       /**
        * Passa por todos os docentes atribuídos as disciplinas
        */
+      let temConflito: boolean = false;
+
       for (const _docente of disciplina.atribuicoes.keys()) {
         const docente = disciplina.atribuicoes.get(_docente);
+        temConflito = docente.conflitos.size > 0;
+        
         childrenToRender.push(
           <CustomTreeItem
             key={`child_disciplina_${disciplina.id}_docente_${docente.nome}`}
@@ -198,6 +202,7 @@ export default function DisciplinasTreeView({
                     flexGrow: 1, // Faz o nome do docente crescer e empurrar o contador para a direita
                   }}
                   title={docente.nome} // Tooltip para mostrar o nome completo ao passar o mouse
+                  color={docente.conflitos.size > 0 ? '#e53935' : 'inherit'}
                 >
                   <div style={{ display: "flex" }}>
                     <div style={{ fontFamily: "monospace" }}>
@@ -229,6 +234,7 @@ export default function DisciplinasTreeView({
                   flexGrow: 1, // Faz o nome da disciplina crescer e empurrar o contador para a direita
                 }}
                 title={`${disciplina.id} - ${disciplina.nome}`} // Tooltip para mostrar o nome completo ao passar o mouse
+                color={temConflito ? '#e53935' : 'inherit'}
               >
                 {`${disciplina._cursos} - ${disciplina.nome}`}
               </Typography>

@@ -220,6 +220,7 @@ export default function DocenteTreeView({ docentes, handleClickedItem }: Docente
                   flexGrow: 1, // Faz o nome do docente crescer e empurrar o contador para a direita
                 }}
                 title={docente.nome} // Tooltip para mostrar o nome completo ao passar o mouse
+                color={docente.conflitos.size > 0 ? '#e53935' : 'inherit'}
               >
                 <div style={{ display: "flex" }}>
                   <div style={{ fontFamily: "monospace" }}>

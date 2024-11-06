@@ -2,17 +2,16 @@ import LineChartsSelector from "@/components/SolutionHistoryStatistics/LineChart
 import {
   Disciplina,
   HistoricoSolucao,
-  TipoTrava,
   Docente,
   getActiveFormularios,
 } from "@/context/Global/utils";
-import { Grid2, Paper } from "@mui/material";
+import { Grid2 } from "@mui/material";
 import {
   getDisciplinasAtribuicoes,
   getDocentesAtribuicoes,
   processAtribuicoesToTree,
 } from "../utils";
-import StatusPieChart from "@/components/SolutionHistoryStatistics/StatusPieChart";
+//import StatusPieChart from "@/components/SolutionHistoryStatistics/StatusPieChart";
 import NewDataTreeView from "@/components/SolutionHistoryStatistics/NewDataTreeView/DataTreeView";
 
 /**
@@ -72,16 +71,16 @@ const SolutionHistoryStatistics: React.FC<SolutionHistoryStatisticsProps> = ({
   );
 
   //const qtdDisciplinasAtivas: number = solucao.contexto.disciplinas.filter(disciplina => disciplina.ativo).length
-  const qtdDocentesTravados: number = solucao.contexto.travas.filter(
-    (trava) =>
-      trava.tipo_trava === TipoTrava.Row &&
-      docentesAtribuicoes.has(trava.nome_docente)
-  ).length;
-  const qtdDisciplinasTravadas: number = solucao.contexto.travas.filter(
-    (trava) =>
-      trava.tipo_trava === TipoTrava.Column &&
-      disciplinasAtribuicoes.has(trava.id_disciplina)
-  ).length;
+  // const qtdDocentesTravados: number = solucao.contexto.travas.filter(
+  //   (trava) =>
+  //     trava.tipo_trava === TipoTrava.Row &&
+  //     docentesAtribuicoes.has(trava.nome_docente)
+  // ).length;
+  // const qtdDisciplinasTravadas: number = solucao.contexto.travas.filter(
+  //   (trava) =>
+  //     trava.tipo_trava === TipoTrava.Column &&
+  //     disciplinasAtribuicoes.has(trava.id_disciplina)
+  // ).length;
 
   return (
     <Grid2 container spacing={2} key={`grid2_container_${id}`}>
@@ -122,7 +121,7 @@ const SolutionHistoryStatistics: React.FC<SolutionHistoryStatisticsProps> = ({
         />
       </Grid2>
       {/* Gráficos lado a lado dentro do Paper */}
-      <Grid2 container size={{ xs: 12 }} spacing={2}>
+      {/* <Grid2 container size={{ xs: 12 }} spacing={2}>
         <Grid2 size={{ xs: 12, md: 6 }}>
           <Paper elevation={2} sx={{ padding: 2 }}>
             <StatusPieChart
@@ -151,7 +150,7 @@ const SolutionHistoryStatistics: React.FC<SolutionHistoryStatisticsProps> = ({
             />
           </Paper>
         </Grid2>
-      </Grid2>
+      </Grid2> */}
 
       {/* Renderizar o LineChartsSelector se as estatísticas estiverem disponíveis */}
       {solucao.solucao.estatisticas !== undefined && (
