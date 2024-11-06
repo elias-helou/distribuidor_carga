@@ -159,6 +159,7 @@ const SolutionHistoryStatistics: React.FC<SolutionHistoryStatisticsProps> = ({
           key="new_data_tree_view"
           disciplinas={atribuicoesProcessadas.treeDisciplinas}
           docentes={atribuicoesProcessadas.treeDocentes}
+          solucao={solucao}
         />
       </Grid2>
     </Grid2>
