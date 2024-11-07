@@ -19,26 +19,28 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 interface ConstraintCardProps {
   name: string;
-  tipoInicial: string;
+  tipoInicial: "Hard" | "Soft";
   penalidadeInicial: string;
-  onChange: (name: string, tipo: string, penalidade: string) => void;
-  onDelete: (name: string, tipo: string, penalidade: string) => void;
+  descricao: string;
+  onChange: (name: string, tipo: "Hard" | "Soft", penalidade: string) => void;
+  onDelete: (name: string, tipo: "Hard" | "Soft", penalidade: string) => void;
 }
 
 export default function ConstraintCard({
   name,
   penalidadeInicial,
   tipoInicial,
+  descricao,
   onChange,
   onDelete,
 }: ConstraintCardProps) {
-  const [tipo, setTipo] = useState(tipoInicial);
+  const [tipo, setTipo] = useState<"Hard" | "Soft">(tipoInicial);
   const [penalidade, setPenalidade] = useState(penalidadeInicial);
   const [erro, setErro] = useState(false);
 
   const handleTipoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTipo(event.target.value);
-    onChange(name, event.target.value, penalidade); // Atualiza o valor no componente pai
+    setTipo(event.target.value as "Hard" | "Soft");
+    onChange(name, event.target.value as "Hard" | "Soft", penalidade); // Atualiza o valor no componente pai
   };
 
   const handlePenalidadeChange = (
@@ -98,8 +100,15 @@ export default function ConstraintCard({
           size="small"
           placeholder="Digite a penalidade"
           error={erro}
-          helperText={erro ? "Digite apenas números." : ""}
+          helperText={
+            erro
+              ? "Digite apenas números."
+              : tipo === "Hard"
+              ? "Campo desabilitado."
+              : ""
+          }
           sx={{ mt: 2 }}
+          //disabled={tipo === "Hard"}
         />
 
         <Divider sx={{ my: 2 }} />
@@ -127,13 +136,16 @@ export default function ConstraintCard({
             }}
             arrow
           >
-            <IconButton
-              color="info"
-              onClick={() => console.log("Informações")}
-              size="large"
-            >
-              <InfoOutlinedIcon fontSize="inherit" />
-            </IconButton>
+            <span>
+              <IconButton
+                color="info"
+                onClick={() => console.log("Informações")}
+                size="large"
+                disabled={descricao.length === 0}
+              >
+                <InfoOutlinedIcon fontSize="inherit" />
+              </IconButton>
+            </span>
           </Tooltip>
           <Tooltip
             title="Excluir"
