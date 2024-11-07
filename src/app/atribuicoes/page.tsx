@@ -37,6 +37,7 @@ import {
 import HoveredCourse from "./components/HoveredCourse";
 import { useSolutionHistory } from "@/context/SolutionHistory/hooks";
 import CleanAlertDialog from "./components/CleanAlertDialog";
+import { useAlgorithmContext } from "@/context/Algorithm";
 
 // Customizar todos os TableCell
 const customTheme = createTheme({
@@ -110,6 +111,13 @@ export default function Timetable() {
     interrompeRef.current = interrompe;
     disciplinasAlocadasRef.current = disciplinasAlocadas;
   }, [interrompe, disciplinasAlocadas]);
+
+  /**
+   * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+   *                Teste das restrições
+   * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+   */
+  const { hardConstraints, softConstraints } = useAlgorithmContext();
 
   /**
    * Função responsável por gerar as linhas da tabela, criando X espaços de disciplina para cada docente.
@@ -527,7 +535,8 @@ export default function Timetable() {
       maxPriority + 1,
       () => interrompeRef.current,
       setDisciplinasAlocadas,
-      parametros
+      parametros,
+      { hard: hardConstraints, soft: softConstraints }
     );
 
     console.log("Solução:");
@@ -611,7 +620,8 @@ export default function Timetable() {
       pDocentes,
       pDisciplinas,
       maxPriority + 1,
-      parametros
+      parametros,
+      softConstraints
     );
     const contextoExecucao: ContextoExecucao = {
       disciplinas: [...disciplinas],
