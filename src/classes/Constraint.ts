@@ -1,9 +1,17 @@
-import { Atribuicao } from "@/context/Global/utils";
+import { Atribuicao, Disciplina, Docente } from "@/context/Global/utils";
+
+// export interface ConstraintInterface {
+//   readonly name: string;
+//   isHard: boolean;
+//   penalty: number;
+// }
 
 export interface ConstraintInterface {
-  readonly name: string;
-  isHard: boolean;
-  penalty: number;
+  name: string;
+  tipo: "Hard" | "Soft";
+  penalidade: string;
+  descricao: string;
+  constraint: new (...args: any[]) => Constraint;
 }
 
 /**
@@ -61,16 +69,29 @@ export default abstract class Constraint {
   /**
    * Métodos
    */
-  abstract soft(): number;
-  abstract hard(): boolean;
+  abstract soft(
+    atribuicoes?: Atribuicao[],
+    docentes?: Docente[],
+    disciplinas?: Disciplina[]
+  ): number;
+  abstract hard(
+    atribuicoes?: Atribuicao[],
+    docentes?: Docente[],
+    disciplinas?: Disciplina[]
+  ): boolean;
+
+  abstract toObject(): ConstraintInterface;
 }
 
 export class DisciplinaSemDocente extends Constraint {
   constructor(
-    /*name: string, description: string, algorithm: string,*/ isHard: boolean,
+    name: string,
+    description: string,
+    /*algorithm: string,*/
+    isHard: boolean,
     penalty: number
   ) {
-    super("Disciplina sem docente", "", isHard, penalty);
+    super(name, description, isHard, penalty);
   }
 
   soft(atribuicoes?: Atribuicao[]): number {
@@ -93,5 +114,199 @@ export class DisciplinaSemDocente extends Constraint {
     }
 
     return true;
+  }
+
+  toObject(): ConstraintInterface {
+    return {
+      name: this.name,
+      descricao: this.description,
+      tipo: this.isHard ? "Hard" : "Soft",
+      penalidade: String(this.penalty),
+      constraint: DisciplinaSemDocente,
+    };
+  }
+}
+
+export class ChoqueDeHorarios extends Constraint {
+  constructor(
+    name: string,
+    description: string,
+    /*algorithm: string,*/
+    isHard: boolean,
+    penalty: number
+  ) {
+    super(name, description, isHard, penalty);
+  }
+
+  soft(
+    atribuicoes?: Atribuicao[],
+    docentes?: Docente[],
+    disciplinas?: Disciplina[]
+  ): number {
+    let avaliacao: number = 0;
+
+    // Penalizar solução para cada choque de horários encontrados nas atribuições dos docentes
+    for (const docente of docentes) {
+      // Lista com os Ids das disciplinas
+      const atribuicoesDocente: string[] = atribuicoes
+        .filter((atribuicao) => atribuicao.docentes.includes(docente.nome))
+        .map((atribuicao) => atribuicao.id_disciplina);
+
+      // Comparar as atribuições para ver se a `Disciplia.conflitos` não incluem umas as outras
+      for (let i = 0; i < atribuicoesDocente.length; i++) {
+        const disciplinaPivo: Disciplina = disciplinas.find(
+          (disciplina) => disciplina.id === atribuicoesDocente[i]
+        );
+
+        for (let j = i + 1; j < atribuicoesDocente.length; j++) {
+          const disciplinaAtual: Disciplina = disciplinas.find(
+            (disciplina) => disciplina.id === atribuicoesDocente[j]
+          );
+
+          if (disciplinaPivo.conflitos.has(disciplinaAtual.id)) {
+            // k2 penaliza conflitos
+            avaliacao -= this.penalty;
+          }
+        }
+      }
+    }
+
+    return avaliacao;
+  }
+
+  hard(
+    atribuicoes?: Atribuicao[],
+    docentes?: Docente[],
+    disciplinas?: Disciplina[]
+  ): boolean {
+    if (atribuicoes !== undefined) {
+      // Penalizar solução para cada choque de horários encontrados nas atribuições dos docentes
+      for (const docente of docentes) {
+        // Lista com os Ids das disciplinas
+        const atribuicoesDocente: string[] = atribuicoes
+          .filter((atribuicao) => atribuicao.docentes.includes(docente.nome))
+          .map((atribuicao) => atribuicao.id_disciplina);
+
+        // Comparar as atribuições para ver se a `Disciplia.conflitos` não incluem umas as outras
+        for (let i = 0; i < atribuicoesDocente.length; i++) {
+          const disciplinaPivo: Disciplina = disciplinas.find(
+            (disciplina) => disciplina.id === atribuicoesDocente[i]
+          );
+
+          for (let j = i + 1; j < atribuicoesDocente.length; j++) {
+            const disciplinaAtual: Disciplina = disciplinas.find(
+              (disciplina) => disciplina.id === atribuicoesDocente[j]
+            );
+
+            if (disciplinaPivo.conflitos.has(disciplinaAtual.id)) {
+              // k2 penaliza conflitos
+              return false;
+            }
+          }
+        }
+      }
+    }
+
+    /**
+     * TODO: Repensar para quando essa restrição for para verificar apenas um docente com uma disciplina
+     */
+
+    return true;
+  }
+
+  toObject(): ConstraintInterface {
+    return {
+      name: this.name,
+      descricao: this.description,
+      tipo: this.isHard ? "Hard" : "Soft",
+      penalidade: String(this.penalty),
+      constraint: ChoqueDeHorarios,
+    };
+  }
+}
+
+export class AtribuicaoSemFormulario extends Constraint {
+  constructor(
+    name: string,
+    description: string,
+    /*algorithm: string,*/
+    isHard: boolean,
+    penalty: number
+  ) {
+    super(name, description, isHard, penalty);
+  }
+
+  soft(
+    atribuicoes?: Atribuicao[],
+    docentes?: Docente[]
+    //disciplinas?: Disciplina[]
+  ): number {
+    let avaliacao: number = 0;
+
+    // for (const docente of docentes) {
+    //   const docenteAtribuicoes = atribuicoes.filter((atribuicao) =>
+    //     atribuicao.docentes.includes(docente.nome)
+    //   );
+
+    //   for (const atribuicao of docenteAtribuicoes) {
+    //     if (!docente.formularios.has(atribuicao.id_disciplina)) {
+    //       avaliacao -= this.penalty;
+    //     }
+    //   }
+    // }
+    for (const atribuicao of atribuicoes) {
+      for (const docenteAtribuido of atribuicao.docentes) {
+        const docente = docentes.find((obj) => obj.nome === docenteAtribuido);
+
+        if (docente.formularios.get(atribuicao.id_disciplina)) {
+          avaliacao -= this.penalty;
+        }
+      }
+    }
+
+    return avaliacao;
+  }
+
+  hard(
+    atribuicoes?: Atribuicao[],
+    docentes?: Docente[],
+    disciplinas?: Disciplina[]
+  ): boolean {
+    /**
+     * Se a disciplina não foi informado quer dizer que estamos verificando todo o contexto
+     */
+    if (disciplinas === undefined && atribuicoes !== undefined) {
+      for (const docente of docentes) {
+        const docenteAtribuicoes = atribuicoes.filter((atribuicao) =>
+          atribuicao.docentes.includes(docente.nome)
+        );
+
+        for (const atribuicao of docenteAtribuicoes) {
+          if (!docente.formularios.has(atribuicao.id_disciplina)) {
+            return false;
+          }
+        }
+      }
+    } else {
+      // Se a disciplina foi informado quer dizer que estamos verificando um contexto específico
+      for (const docente of docentes) {
+        for (const disciplia of disciplinas) {
+          if (!docente.formularios.has(disciplia.id)) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  toObject(): ConstraintInterface {
+    return {
+      name: this.name,
+      descricao: this.description,
+      tipo: this.isHard ? "Hard" : "Soft",
+      penalidade: String(this.penalty),
+      constraint: AtribuicaoSemFormulario,
+    };
   }
 }
