@@ -1,3 +1,4 @@
+import Constraint from "@/classes/Constraint";
 import {
   Atribuicao,
   Celula as Trava,
@@ -139,19 +140,22 @@ export function atualizarListaTabu(
 
 /**
  * Função para checar se um docente pode ser alocado a uma disciplina
- * @param {Docente} docente 
- * @param {Disciplina} disciplina 
- * @param {Trava[]} travas 
- * @param {Atribuicao[]} atribuicoes 
- * @param {Disciplina[]} disciplinas 
+ * @param {Docente} docente
+ * @param {Disciplina} disciplina
+ * @param {Trava[]} travas
+ * @param {Atribuicao[]} atribuicoes
+ * @param {Disciplina[]} disciplinas
  * @returns {Boolean} Indicação se a atribuição do docente X à disciplina Y pode ser realizada.
  */
 export function podeAtribuir(
   docente: Docente,
   disciplina: Disciplina,
-  travas: Trava[]
+  travas: Trava[],
+  hardConstraints: Map<string, Constraint>
 ): boolean {
-
+  /**
+   * Aqui será o melhor lugar para as hardConstraints
+   */
   if (
     travas.some(
       (trava) =>
@@ -162,9 +166,16 @@ export function podeAtribuir(
     return false;
   }
 
-  // Verifica se o docente apresenta um formulário para a disciplina
+  /*// Verifica se o docente apresenta um formulário para a disciplina
   if (!docente.formularios.has(disciplina.id)) {
     return false;
+  }*/
+
+  for (const _constraint of hardConstraints.keys()) {
+    const constraint = hardConstraints.get(_constraint);
+    if (!constraint.hard(undefined, [docente], [disciplina])) {
+      return false;
+    }
   }
 
   return true;
@@ -176,8 +187,18 @@ export function podeAtribuir(
  * @param {Trava[]} travas Lista de travas.
  * @returns {boolean} True se a disciplina não puder ser manipulada.
  */
-export function disciplinaInvalida(disciplina: Disciplina, travas: Trava[]): boolean {
-  return !disciplina.ativo || travas.some(trava => trava.id_disciplina === disciplina.id && trava.tipo_trava === TipoTrava.Column);
+export function disciplinaInvalida(
+  disciplina: Disciplina,
+  travas: Trava[]
+): boolean {
+  return (
+    !disciplina.ativo ||
+    travas.some(
+      (trava) =>
+        trava.id_disciplina === disciplina.id &&
+        trava.tipo_trava === TipoTrava.Column
+    )
+  );
 }
 
 /**
@@ -187,19 +208,39 @@ export function disciplinaInvalida(disciplina: Disciplina, travas: Trava[]): boo
  * @param {Trava[]} travas Lista de travas.
  * @returns {boolean} True se o docente não puder ser manipulado.
  */
-export function docenteInvalido(docente: Docente, disciplina: Disciplina, travas: Trava[]): boolean {
-  return !docente.ativo || travas.some(trava => trava.nome_docente === docente.nome && trava.id_disciplina === disciplina.id);
+export function docenteInvalido(
+  docente: Docente,
+  disciplina: Disciplina,
+  travas: Trava[]
+): boolean {
+  return (
+    !docente.ativo ||
+    travas.some(
+      (trava) =>
+        trava.nome_docente === docente.nome &&
+        trava.id_disciplina === disciplina.id
+    )
+  );
 }
 
 /**
- * 
- * @param docente 
- * @param disciplina 
- * @param travas 
- * @returns 
+ *
+ * @param docente
+ * @param disciplina
+ * @param travas
+ * @returns
  */
-export function checaTravaCelula(docente: string, disciplina: string, travas: Trava[]) {
-  return travas.filter(trava => trava.id_disciplina === disciplina && trava.nome_docente === docente).length > 0
+export function checaTravaCelula(
+  docente: string,
+  disciplina: string,
+  travas: Trava[]
+) {
+  return (
+    travas.filter(
+      (trava) =>
+        trava.id_disciplina === disciplina && trava.nome_docente === docente
+    ).length > 0
+  );
 }
 
 /**
@@ -216,21 +257,22 @@ export function gerarVizinhoComDocente(
   docentes: Docente[],
   disciplina: Disciplina,
   travas: Trava[],
-  listaTabu: Atribuicao[][]
+  listaTabu: Atribuicao[][],
+  hardConstraints: Map<string, Constraint>
 ): Atribuicao[][] {
   const novosVizinhos: Atribuicao[][] = [];
 
   for (const docente of docentes) {
-    if (!podeAtribuir(docente, disciplina, travas)) continue;
+    if (!podeAtribuir(docente, disciplina, travas, hardConstraints)) continue;
     //const atribuicao = solucaoAtual.find(a => a.id_disciplina === disciplina.id);
-    
+
     // Generalizar
     // if(checaTravaCelula(docente.nome, disciplina.id, travas)) {
     //   continue;
     // }
 
     const vizinho = structuredClone(solucaoAtual);
-    const atrib = vizinho.find(a => a.id_disciplina === disciplina.id);
+    const atrib = vizinho.find((a) => a.id_disciplina === disciplina.id);
     atrib.docentes = [docente.nome];
 
     if (!estaNaListaTabu(listaTabu, vizinho)) {
@@ -251,19 +293,21 @@ export function gerarVizinhoComDocente(
 export function gerarVizinhoComRemocao(
   solucaoAtual: Atribuicao[],
   disciplina: Disciplina,
-  listaTabu: Atribuicao[][],
+  listaTabu: Atribuicao[][]
 ): Atribuicao[][] {
   const novosVizinhos: Atribuicao[][] = [];
-  const atribAtual = solucaoAtual.find(a => a.id_disciplina === disciplina.id);
+  const atribAtual = solucaoAtual.find(
+    (a) => a.id_disciplina === disciplina.id
+  );
 
   if (atribAtual?.docentes.length > 0) {
     // Generalizar
     // if(atribAtual.docentes.some(nome => checaTravaCelula(nome, atribAtual.id_disciplina, travas))) {
     //   return novosVizinhos;;
     // }
-      
+
     const vizinho = structuredClone(solucaoAtual);
-    const atrib = vizinho.find(a => a.id_disciplina === disciplina.id);
+    const atrib = vizinho.find((a) => a.id_disciplina === disciplina.id);
     atrib.docentes = [];
 
     if (!estaNaListaTabu(listaTabu, vizinho)) {
@@ -291,17 +335,28 @@ export function gerarTrocasDeDocentes(
   disciplinas: Disciplina[],
   docentes: Docente[],
   travas: Trava[],
-  listaTabu: Atribuicao[][]
+  listaTabu: Atribuicao[][],
+  hardConstraints: Map<string, Constraint>
 ): Atribuicao[][] {
   const novosVizinhos: Atribuicao[][] = [];
-  const atribDocentePivo = solucaoAtual.find(a => a.id_disciplina === disciplinaPivo.id);
+  const atribDocentePivo = solucaoAtual.find(
+    (a) => a.id_disciplina === disciplinaPivo.id
+  );
 
   // Se a disciplina Pivo não tiver docentes atribuídos, não há o que trocar
-  if (!atribDocentePivo || atribDocentePivo.docentes.length === 0) return novosVizinhos;
+  if (!atribDocentePivo || atribDocentePivo.docentes.length === 0)
+    return novosVizinhos;
 
   // Encontrar todos os docentes alocados na disciplina Pivo
-  const docentesPivo = atribDocentePivo.docentes.map(nome => docentes.find(d => d.nome === nome)).filter(Boolean) as Docente[];
-  if (docentesPivo.some(docente => docenteInvalido(docente, disciplinaPivo, travas))) return novosVizinhos;
+  const docentesPivo = atribDocentePivo.docentes
+    .map((nome) => docentes.find((d) => d.nome === nome))
+    .filter(Boolean) as Docente[];
+  if (
+    docentesPivo.some((docente) =>
+      docenteInvalido(docente, disciplinaPivo, travas)
+    )
+  )
+    return novosVizinhos;
 
   // Ver as travas, se tiver trava continuar
   // if(docentesPivo.some(docente => checaTravaCelula(docente.nome, disciplinaPivo.id, travas))) {
@@ -310,31 +365,52 @@ export function gerarTrocasDeDocentes(
 
   // Percorrer todas as disciplinas e tentar realizar a troca de docentes
   /*for (const disciplinaAtual of disciplinas)*/
-  for(let j = index + 1; j < disciplinas.length; j++) {
+  for (let j = index + 1; j < disciplinas.length; j++) {
     const disciplinaAtual = disciplinas[j];
 
-    if (disciplinaPivo.id === disciplinaAtual.id || disciplinaInvalida(disciplinaAtual, travas)) continue;
+    if (
+      disciplinaPivo.id === disciplinaAtual.id ||
+      disciplinaInvalida(disciplinaAtual, travas)
+    )
+      continue;
 
-    const atribDocenteAtual = solucaoAtual.find(a => a.id_disciplina === disciplinaAtual.id);
-    const docentesAtual = atribDocenteAtual?.docentes.map(nome => docentes.find(d => d.nome === nome)).filter(Boolean) as Docente[] || [];
+    const atribDocenteAtual = solucaoAtual.find(
+      (a) => a.id_disciplina === disciplinaAtual.id
+    );
+    const docentesAtual =
+      (atribDocenteAtual?.docentes
+        .map((nome) => docentes.find((d) => d.nome === nome))
+        .filter(Boolean) as Docente[]) || [];
 
-    if (docentesAtual.some(docente => docenteInvalido(docente, disciplinaAtual, travas))) continue;
+    if (
+      docentesAtual.some((docente) =>
+        docenteInvalido(docente, disciplinaAtual, travas)
+      )
+    )
+      continue;
 
     // Verificar se a troca pode ser realizada: todos os docentes do Pivo podem ir para a Atual e vice-versa
-    const trocaValida = docentesPivo.every(docente => podeAtribuir(docente, disciplinaAtual, travas)) && 
-                        docentesAtual.every(docente => podeAtribuir(docente, disciplinaPivo, travas) &&
-                        !compareArrays(docentesPivo, docentesAtual));
-
+    const trocaValida =
+      docentesPivo.every((docente) =>
+        podeAtribuir(docente, disciplinaAtual, travas, hardConstraints)
+      ) &&
+      docentesAtual.every(
+        (docente) =>
+          podeAtribuir(docente, disciplinaPivo, travas, hardConstraints) &&
+          !compareArrays(docentesPivo, docentesAtual)
+      );
 
     if (trocaValida) {
       const vizinho = structuredClone(solucaoAtual);
 
-      const atrib1 = vizinho.find(a => a.id_disciplina === disciplinaPivo.id);
-      const atrib2 = vizinho.find(a => a.id_disciplina === disciplinaAtual.id);
+      const atrib1 = vizinho.find((a) => a.id_disciplina === disciplinaPivo.id);
+      const atrib2 = vizinho.find(
+        (a) => a.id_disciplina === disciplinaAtual.id
+      );
 
       // Realizar a troca de docentes entre as duas disciplinas
-      atrib1.docentes = docentesAtual.map(d => d.nome);
-      atrib2.docentes = docentesPivo.map(d => d.nome);
+      atrib1.docentes = docentesAtual.map((d) => d.nome);
+      atrib2.docentes = docentesPivo.map((d) => d.nome);
 
       if (!estaNaListaTabu(listaTabu, vizinho)) {
         novosVizinhos.push(vizinho);
@@ -347,70 +423,85 @@ export function gerarTrocasDeDocentes(
 
 /**
  * Compara duas listas. (``atribuicoesIguais``)
- * @param array1 
- * @param array2 
- * @returns 
+ * @param array1
+ * @param array2
+ * @returns
  */
 export function compareArrays<T>(array1: T[], array2: T[]): boolean {
-  if(array1.length !== array2.length) {return false;}
+  if (array1.length !== array2.length) {
+    return false;
+  }
 
-  for(let i = 0; i < array1.length; i++) {
-    if(array1[i] !== array2[i]) {
+  for (let i = 0; i < array1.length; i++) {
+    if (array1[i] !== array2[i]) {
       return false;
     }
   }
 
-  return true
+  return true;
 }
 
 /**
  * Função utilizada para verificar e ajustar os dados enviados pelo usuário.
- * @param {Atribuicao[]} atribuicoes Atribuições iniciais do algoritmo. 
+ * @param {Atribuicao[]} atribuicoes Atribuições iniciais do algoritmo.
  * @param {Docente[]} docentes Lista com todos os docentes.
- * @param {Disciplina[]} disciplias Lista com todas as disciplinas. 
+ * @param {Disciplina[]} disciplias Lista com todas as disciplinas.
  * @param {Trava[]} travas Lista contendo todas as travas geradas pelo usuário.
  * @returns {Atribuicao[]} Atribuições verificadas e alteradas caso necessário.
  */
-export function processarAtribuicaoInicial(atribuicoes: Atribuicao[], docentes: Docente[], disciplias: Disciplina[], travas: Trava[]): Atribuicao[] {
+export function processarAtribuicaoInicial(
+  atribuicoes: Atribuicao[],
+  docentes: Docente[],
+  disciplias: Disciplina[],
+  travas: Trava[]
+): Atribuicao[] {
   // Passa por cada atribuição e verifica se ela poderia ter sido feita
-  for(const atribuicao of atribuicoes) {
+  for (const atribuicao of atribuicoes) {
     // Verifica se existe alguma atribuição
-    if(atribuicao.docentes.length === 0) {
+    if (atribuicao.docentes.length === 0) {
       continue;
     }
 
-    const disciplia: Disciplina = disciplias.find(disc => disc.id === atribuicao.id_disciplina)
+    const disciplia: Disciplina = disciplias.find(
+      (disc) => disc.id === atribuicao.id_disciplina
+    );
 
     // Verifica se a disciplina está "válida"
-    if(disciplinaInvalida(disciplia, travas)) {
+    if (disciplinaInvalida(disciplia, travas)) {
       // Remove a disciplina das atribuições
       //atribuicoes = atribuicoes.filter(atrib => atrib.id_disciplina !== disciplia.id)
       continue;
     }
 
-    const docentesAtribuidos: Docente[] = docentes.filter(docente => atribuicao.docentes.includes(docente.nome));
+    const docentesAtribuidos: Docente[] = docentes.filter((docente) =>
+      atribuicao.docentes.includes(docente.nome)
+    );
 
     // Verifica se todos os docentes atribuidos a disciplinas são "válidos"
-    if(docentesAtribuidos.every(docente => docenteInvalido(docente, disciplia, travas))) {
+    if (
+      docentesAtribuidos.every((docente) =>
+        docenteInvalido(docente, disciplia, travas)
+      )
+    ) {
       continue;
     }
 
     // TODO 30/09/2024 - Verificar se está correto
     // for(const docente of docentesAtribuidos) {
     //   if(docenteInvalido(docente, disciplia, travas)) {
-    //     atribuicoes = atribuicoes.filter(atrib => atrib.docentes.filter(doc => doc !== docente.nome)) 
+    //     atribuicoes = atribuicoes.filter(atrib => atrib.docentes.filter(doc => doc !== docente.nome))
     //   }
     // }
 
     // Alterar a lista de atribuições caso um docente tenha sido atribuído sem formulário
-    const newDocentes: string[] = []
-    for(const docente of docentesAtribuidos) {
-      if(docente.formularios.has(disciplia.id)) {
-        newDocentes.push(docente.nome)
+    const newDocentes: string[] = [];
+    for (const docente of docentesAtribuidos) {
+      if (docente.formularios.has(disciplia.id)) {
+        newDocentes.push(docente.nome);
       }
     }
 
-    atribuicao.docentes = newDocentes
+    atribuicao.docentes = newDocentes;
   }
 
   return atribuicoes;
