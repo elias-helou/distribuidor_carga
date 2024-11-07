@@ -62,10 +62,18 @@ import {
   Atribuicao,
   Formulario,
   Solucao,
-  Parametros
+  Parametros,
 } from "@/context/Global/utils";
-import { atualizarListaTabu, checaTravaCelula, disciplinaInvalida, gerarTrocasDeDocentes, gerarVizinhoComDocente, gerarVizinhoComRemocao } from "./utils";
+import {
+  atualizarListaTabu,
+  checaTravaCelula,
+  disciplinaInvalida,
+  gerarTrocasDeDocentes,
+  gerarVizinhoComDocente,
+  gerarVizinhoComRemocao,
+} from "./utils";
 import { Dispatch, SetStateAction } from "react";
+import Constraint from "@/classes/Constraint";
 
 /**
  * Função para avaliar uma solução
@@ -80,7 +88,8 @@ export function avaliarSolucao(
   docentes: Docente[],
   disciplinas: Disciplina[],
   maiorPrioridade: number,
-  parametros: Parametros
+  parametros: Parametros,
+  softConstraints: Map<string, Constraint>
 ): number {
   let avaliacao = 0;
 
@@ -88,76 +97,88 @@ export function avaliarSolucao(
 
   parametros.k1; // @@
 
-  console.log( atribuicoes );
+  // Aplicação das softConstraints
+  softConstraints.forEach(
+    (value) => (avaliacao += value.soft(atribuicoes, docentes, disciplinas))
+  );
+
+  console.log(avaliacao);
 
   // Percorre as disciplinas:
   for (const atribuicao of atribuicoes) {
-    
-    // Penaliza disciplina não atribuída:
-    if ( atribuicao.docentes.length == 0 ) {
-      avaliacao -= parametros.k4;
-      continue;
-    }
+    /*// Penaliza disciplina não atribuída:
+    // if (atribuicao.docentes.length == 0) {
+    //   avaliacao -= parametros.k4;
+    //   continue;
+    // }*/
 
     // Percorre todos os docentes atribuídos:
-    for ( const docenteAtribuido of atribuicao.docentes ) {
-      const docente = docentes.find( (obj) => obj.nome === docenteAtribuido );
+    for (const docenteAtribuido of atribuicao.docentes) {
+      const docente = docentes.find((obj) => obj.nome === docenteAtribuido);
 
-      if( docente.formularios.get( atribuicao.id_disciplina ) ) {
+      if (docente.formularios.get(atribuicao.id_disciplina)) {
         // k1 penaliza prioridades
-        avaliacao += parametros.k1 * ( maiorPrioridade - docente.formularios.get(atribuicao.id_disciplina) );
-      }
-      else // Docente não escolheu a disciplina (pode ocorrer em atribuição manual)
-      {
+        avaliacao +=
+          parametros.k1 *
+          (maiorPrioridade - docente.formularios.get(atribuicao.id_disciplina));
+      } // Docente não escolheu a disciplina (pode ocorrer em atribuição manual)
+      /*else {
         avaliacao -= parametros.k1;
-      }
+      }*/
     }
   }
 
+  console.log(avaliacao);
+  console.log("------------------------------------");
 
-  // Penalizar solução para cada choque de horários encontrados nas atribuições dos docentes
-  for( const docente of docentes ) {
+  /*// Penalizar solução para cada choque de horários encontrados nas atribuições dos docentes
+  for (const docente of docentes) {
     // Lista com os Ids das disciplinas
-    const atribuicoesDocente: string[] = atribuicoes.filter(atribuicao => atribuicao.docentes.includes(docente.nome)).map(atribuicao => atribuicao.id_disciplina)
+    const atribuicoesDocente: string[] = atribuicoes
+      .filter((atribuicao) => atribuicao.docentes.includes(docente.nome))
+      .map((atribuicao) => atribuicao.id_disciplina);
 
     // Comparar as atribuições para ver se a `Disciplia.conflitos` não incluem umas as outras
-    for(let i = 0; i < atribuicoesDocente.length; i++) {
-      const disciplinaPivo: Disciplina = disciplinas.find(disciplina => disciplina.id === atribuicoesDocente[i]);
-      
-      for(let j = i + 1; j < atribuicoesDocente.length; j++) {
-        const disciplinaAtual: Disciplina = disciplinas.find(disciplina => disciplina.id === atribuicoesDocente[j]) ;
+    for (let i = 0; i < atribuicoesDocente.length; i++) {
+      const disciplinaPivo: Disciplina = disciplinas.find(
+        (disciplina) => disciplina.id === atribuicoesDocente[i]
+      );
 
-        if(disciplinaPivo.conflitos.has(disciplinaAtual.id)) {
+      for (let j = i + 1; j < atribuicoesDocente.length; j++) {
+        const disciplinaAtual: Disciplina = disciplinas.find(
+          (disciplina) => disciplina.id === atribuicoesDocente[j]
+        );
+
+        if (disciplinaPivo.conflitos.has(disciplinaAtual.id)) {
           // k2 penaliza conflitos
           avaliacao -= parametros.k2;
         }
       }
     }
-  }
+  }*/
 
   // Aqui estamos penalizando o número de disciplinas, mas
   // devemos penalizar o número de créditos. Esta informação
   // deverá constar em dados para próximas versões.
 
-  // Conta número de disciplinas por docente:
-  const tmpDocentes = {};
-  for ( const docente of docentes ) {
-    tmpDocentes[ docente.nome ] = 0;
-  }
-  for ( const atribuicao of atribuicoes ) {
-    for ( const docName of atribuicao.docentes ) {
-      tmpDocentes[ docName ] += 1;
-    }
-  }
-  // Penaliza baseado no saldo:
-  for ( const docente of docentes ) {
-    if ( tmpDocentes[ docente.nome ] > 2 ) {
-      avaliacao -= parametros.k5 * ( docente.saldo < -1.0 ? 0.75 : 1.0 );
-    }
-    else if ( tmpDocentes[ docente.nome ] < 1 ) {
-      avaliacao -= parametros.k5 * ( docente.saldo > 1.0 ? 1.0 : 0.75 );
-    }
-  }
+  // // Conta número de disciplinas por docente:
+  // const tmpDocentes = {};
+  // for (const docente of docentes) {
+  //   tmpDocentes[docente.nome] = 0;
+  // }
+  // for (const atribuicao of atribuicoes) {
+  //   for (const docName of atribuicao.docentes) {
+  //     tmpDocentes[docName] += 1;
+  //   }
+  // }
+  // // Penaliza baseado no saldo:
+  // for (const docente of docentes) {
+  //   if (tmpDocentes[docente.nome] > 2) {
+  //     avaliacao -= parametros.k5 * (docente.saldo < -1.0 ? 0.75 : 1.0);
+  //   } else if (tmpDocentes[docente.nome] < 1) {
+  //     avaliacao -= parametros.k5 * (docente.saldo > 1.0 ? 1.0 : 0.75);
+  //   }
+  // }
 
   return avaliacao;
 }
@@ -168,23 +189,25 @@ export function avaliarSolucao(
  * @param {Docente[]} docentes Lista contendo todos os docentes.
  * @param {Disciplina[]} disciplinas Lista contendo todas as disciplinas.
  * @param {number} maiorPrioridade Maior prioridade encontrada nos formulários.
- * @returns {Solucao} Objeto contendo as atribuições e a avaliação referente a ela. 
+ * @returns {Solucao} Objeto contendo as atribuições e a avaliação referente a ela.
  */
 function criarNovaSolucao(
   atribuicoes: Atribuicao[],
   docentes: Docente[],
   disciplinas: Disciplina[],
   maiorPrioridade: number,
-  parametros: Parametros
+  parametros: Parametros,
+  constraints: { hard: Map<string, Constraint>; soft: Map<string, Constraint> }
 ): Solucao {
-  const novaSolucao: Solucao = {atribuicoes: atribuicoes, avaliacao: 0}
+  const novaSolucao: Solucao = { atribuicoes: atribuicoes, avaliacao: 0 };
   // Reavaliar a nova solução após a mudança
   novaSolucao.avaliacao = avaliarSolucao(
     novaSolucao.atribuicoes,
     docentes,
     disciplinas,
     maiorPrioridade,
-    parametros
+    parametros,
+    constraints.soft
   );
 
   return novaSolucao;
@@ -192,21 +215,35 @@ function criarNovaSolucao(
 
 /**
  * Função que tem como objetivo gerar as soluções para todos os vizinhos.
- * @param {Atribuicao[][]} vizinhos Conjunto contendo todos os vizinhos gerados. 
+ * @param {Atribuicao[][]} vizinhos Conjunto contendo todos os vizinhos gerados.
  * @param {Docente[]} docentes Lista contendo todos os docentes.
  * @param {Disciplina[]} disciplinas Lista contendo todas as disciplinas.
  * @param {number} maiorPrioridade Maior prioridade encontrada nos formulários.
  * @returns {Solucao} Uma lista com todas as soluções para cada conjunto de vizinhos, em ordem decrescente.
  */
-export function gerarSolucoes(vizinhos: Atribuicao[][], docentes: Docente[], disciplinas: Disciplina[], MaiorPrioridade: number, parametros: Parametros): Solucao[] {
-  const solucoesAtuais: Solucao[] = []
+export function gerarSolucoes(
+  vizinhos: Atribuicao[][],
+  docentes: Docente[],
+  disciplinas: Disciplina[],
+  MaiorPrioridade: number,
+  parametros: Parametros,
+  constraints: { hard: Map<string, Constraint>; soft: Map<string, Constraint> }
+): Solucao[] {
+  const solucoesAtuais: Solucao[] = [];
 
-  for(const vizinho of vizinhos) {
-    const solucaoVizinho = criarNovaSolucao(vizinho, docentes, disciplinas, MaiorPrioridade, parametros);
-    solucoesAtuais.push(solucaoVizinho)
+  for (const vizinho of vizinhos) {
+    const solucaoVizinho = criarNovaSolucao(
+      vizinho,
+      docentes,
+      disciplinas,
+      MaiorPrioridade,
+      parametros,
+      constraints
+    );
+    solucoesAtuais.push(solucaoVizinho);
   }
 
-  return solucoesAtuais.sort((a, b) => b.avaliacao - a.avaliacao) // Ordenar o array (decrescente)
+  return solucoesAtuais.sort((a, b) => b.avaliacao - a.avaliacao); // Ordenar o array (decrescente)
 }
 
 /**
@@ -223,35 +260,62 @@ function gerarVizinhos(
   docentes: Docente[],
   disciplinas: Disciplina[],
   travas: Trava[],
-  listaTabu: Atribuicao[][]
+  listaTabu: Atribuicao[][],
+  hardConstraints: Map<string, Constraint>
 ): Atribuicao[][] {
   let vizinhanca: Atribuicao[][] = [];
 
-  for(let i = 0; i < disciplinas.length; i++) {
+  for (let i = 0; i < disciplinas.length; i++) {
     const disciplina = disciplinas[i];
     if (disciplinaInvalida(disciplina, travas)) continue;
-  
-    const atribuicao = solucaoAtual.find(obj => obj.id_disciplina === disciplina.id);
-    if(atribuicao.docentes.some(nome => checaTravaCelula(nome, disciplina.id, travas))){
+
+    const atribuicao = solucaoAtual.find(
+      (obj) => obj.id_disciplina === disciplina.id
+    );
+    if (
+      atribuicao.docentes.some((nome) =>
+        checaTravaCelula(nome, disciplina.id, travas)
+      )
+    ) {
       continue;
     }
 
     // Gera vizinhos com docentes
-    const vizinhancaDocentes = gerarVizinhoComDocente(solucaoAtual, docentes, disciplina, travas, listaTabu)
-    if(vizinhancaDocentes.length > 0) {
-      vizinhanca = vizinhanca.concat(vizinhancaDocentes)
+    const vizinhancaDocentes = gerarVizinhoComDocente(
+      solucaoAtual,
+      docentes,
+      disciplina,
+      travas,
+      listaTabu,
+      hardConstraints
+    );
+    if (vizinhancaDocentes.length > 0) {
+      vizinhanca = vizinhanca.concat(vizinhancaDocentes);
     }
 
     // Gera vizinho com remoção de docentes
-    const vizinhancaRemover = gerarVizinhoComRemocao(solucaoAtual, disciplina, listaTabu)
-    if(vizinhancaRemover.length > 0) {
-      vizinhanca = vizinhanca.concat(vizinhancaRemover)
+    const vizinhancaRemover = gerarVizinhoComRemocao(
+      solucaoAtual,
+      disciplina,
+      listaTabu
+    );
+    if (vizinhancaRemover.length > 0) {
+      vizinhanca = vizinhanca.concat(vizinhancaRemover);
     }
 
     // Gera vizinhos trocando docentes entre disciplinas
-    const vizinhancaTroca = gerarTrocasDeDocentes(solucaoAtual, disciplina, i, disciplinas, docentes, travas, listaTabu);
-    if(vizinhancaTroca.length > 0) {
-      vizinhanca = vizinhanca.concat(vizinhancaTroca)
+    const vizinhancaTroca = gerarTrocasDeDocentes(
+      solucaoAtual,
+      disciplina,
+      i,
+      disciplinas,
+      docentes,
+      travas,
+      listaTabu,
+      hardConstraints
+    );
+    if (vizinhancaTroca.length > 0) {
+      vizinhanca = vizinhanca.concat(vizinhancaTroca);
     }
   }
 
@@ -273,11 +337,12 @@ export async function buscaTabu(
   formularios: Formulario[],
   travas: Trava[],
   atribuicoes: Atribuicao[],
-  NumIterNotChange: number, /*Constante vinda da chamada*/
-  MaiorPrioridade: number, /*Constante vinda da chamada*/
+  NumIterNotChange: number /*Constante vinda da chamada*/,
+  MaiorPrioridade: number /*Constante vinda da chamada*/,
   interrompe: () => boolean,
   setDisciplinasAlocadas: Dispatch<SetStateAction<number>>,
-  parametros: Parametros
+  parametros: Parametros,
+  constraints: { hard: Map<string, Constraint>; soft: Map<string, Constraint> }
 ): Promise<Solucao> {
   /**
    * Variáveis para as estatísticas
@@ -295,7 +360,7 @@ export async function buscaTabu(
 
   // Variável para controlar a quantidade de iterações sem modifiação
   // let iteracoesSemModificacao = 0
-  
+
   // Solução inicial inclui as atribuições fornecidas pelo usuário
   let solucaoAtual: Solucao = {
     atribuicoes: atribuicoes,
@@ -304,7 +369,8 @@ export async function buscaTabu(
       docentes,
       disciplinas,
       MaiorPrioridade,
-      parametros
+      parametros,
+      constraints.soft
     ),
   };
 
@@ -317,21 +383,35 @@ export async function buscaTabu(
   const tempoInicialTotal = performance.now();
 
   // Criar uma função que faça toda a validação do while
-  while(true) {
+  while (true) {
     await delay(1);
     // Tempo de início da iteração
-    tempoInicial = performance.now()
+    tempoInicial = performance.now();
     iteracoes += 1;
-    avaliacaoPorIteracao.set(iteracoes, melhorSolucao.avaliacao)
+    avaliacaoPorIteracao.set(iteracoes, melhorSolucao.avaliacao);
 
     // Gerar vizinhos e selecionar o melhor não tabu
-    const vizinhos: Atribuicao[][] = gerarVizinhos(solucaoAtual.atribuicoes, docentes, disciplinas, travas, listaTabu);
+    const vizinhos: Atribuicao[][] = gerarVizinhos(
+      solucaoAtual.atribuicoes,
+      docentes,
+      disciplinas,
+      travas,
+      listaTabu,
+      constraints.hard
+    );
 
     // Selecionar o vizinho com a maior avaliação
-    const melhorVizinho: Solucao = gerarSolucoes(vizinhos, docentes, disciplinas, MaiorPrioridade, parametros)[0];
+    const melhorVizinho: Solucao = gerarSolucoes(
+      vizinhos,
+      docentes,
+      disciplinas,
+      MaiorPrioridade,
+      parametros,
+      constraints
+    )[0];
 
     // Verifica se o melhor vizinho existe
-    if(melhorVizinho) {
+    if (melhorVizinho) {
       // Atualizar a lista tabu com o conjunto de atribuições do melhor vizinho
       atualizarListaTabu(listaTabu, melhorVizinho.atribuicoes, parametros.k3);
 
@@ -339,27 +419,37 @@ export async function buscaTabu(
       solucaoAtual = melhorVizinho;
       if (solucaoAtual.avaliacao >= melhorSolucao.avaliacao) {
         // Atualiza a maior quantidade de disciplinas alocadas
-        if(solucaoAtual.atribuicoes.filter(obj => obj.docentes.length !== 0).length >= melhorSolucao.atribuicoes.filter(obj => obj.docentes.length !== 0).length) {
-          setDisciplinasAlocadas(solucaoAtual.atribuicoes.filter(obj => obj.docentes.length !== 0).length)
+        if (
+          solucaoAtual.atribuicoes.filter((obj) => obj.docentes.length !== 0)
+            .length >=
+          melhorSolucao.atribuicoes.filter((obj) => obj.docentes.length !== 0)
+            .length
+        ) {
+          setDisciplinasAlocadas(
+            solucaoAtual.atribuicoes.filter((obj) => obj.docentes.length !== 0)
+              .length
+          );
         }
         melhorSolucao = solucaoAtual;
-        
+
         // iteracoesSemModificacao = 0; // Reseta as iterações sem modificação
-      } 
+      }
       // else {
       //   iteracoesSemModificacao++;  // Acrescenta mais um em iteração sem modificação
       // }
-    } 
+    }
     // else {
     //   iteracoesSemModificacao++;  // Acrescenta mais um em iteração sem modificação
     // }
 
     // Tempo final da iteração
-    tempoFinal = performance.now()
-    tempoPorIteracao.set(iteracoes, tempoFinal - tempoInicial)
+    tempoFinal = performance.now();
+    tempoPorIteracao.set(iteracoes, tempoFinal - tempoInicial);
 
-
-    if(/*iteracoesSemModificacao === NumIterNotChange ||*/ interrompe() || !existeDisciplinasQueAindaPodemSerAtribuidas(melhorSolucao, docentes)) {
+    if (
+      /*iteracoesSemModificacao === NumIterNotChange ||*/ interrompe() ||
+      !existeDisciplinasQueAindaPodemSerAtribuidas(melhorSolucao, docentes)
+    ) {
       break;
     }
   }
@@ -367,41 +457,47 @@ export async function buscaTabu(
   // Tempo final, sendo o tempo inicial fora do loop e o último tempo medido.
   const tempoTotal = tempoFinal - tempoInicialTotal;
 
-  
-  return {...melhorSolucao, estatisticas: {
-    avaliacaoPorIteracao: avaliacaoPorIteracao,
-    interrupcao: interrompe(),
-    iteracoes: iteracoes,
-    tempoExecucao: tempoTotal,
-    tempoPorIteracao: tempoPorIteracao
-  }};
+  return {
+    ...melhorSolucao,
+    estatisticas: {
+      avaliacaoPorIteracao: avaliacaoPorIteracao,
+      interrupcao: interrompe(),
+      iteracoes: iteracoes,
+      tempoExecucao: tempoTotal,
+      tempoPorIteracao: tempoPorIteracao,
+    },
+  };
 }
 
-function existeDisciplinasQueAindaPodemSerAtribuidas(solucao: Solucao, docentes: Docente[]) {
-  const atribuicoesSemDocentes = solucao.atribuicoes.filter(atrib => atrib.docentes.length === 0)
+function existeDisciplinasQueAindaPodemSerAtribuidas(
+  solucao: Solucao,
+  docentes: Docente[]
+) {
+  const atribuicoesSemDocentes = solucao.atribuicoes.filter(
+    (atrib) => atrib.docentes.length === 0
+  );
 
   //Não existem disciplinas sem docentes alocados
-  if(atribuicoesSemDocentes.length === 0) {
-    return false
+  if (atribuicoesSemDocentes.length === 0) {
+    return false;
   }
 
   //let contadorDePossiveisAtribuicoes = 0
   //Algum docente tem um formulário para as disciplinas não atribuídas ?
-  atribuicoesSemDocentes.map(obj => {
-    for(const docente of docentes) {
-      if(docente.formularios.has(obj.id_disciplina)) {
+  atribuicoesSemDocentes.map((obj) => {
+    for (const docente of docentes) {
+      if (docente.formularios.has(obj.id_disciplina)) {
         //contadorDePossiveisAtribuicoes++;
-        return true
+        return true;
       }
     }
-  })
- 
+  });
+
   //Não existem mais possibilidades de atribuições para as disciplinas sem docentes
   // if(contadorDePossiveisAtribuicoes === 0) {
   //   return false
   // }
 
   //Ainda existe possibilidade
-  return true
+  return true;
 }
-
