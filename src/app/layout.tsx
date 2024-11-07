@@ -2,6 +2,7 @@
 
 import Navbar from "@/components/Navbar";
 import { AlertsWrapper } from "@/context/Alerts";
+import { AlgorithmWrapper } from "@/context/Algorithm";
 import { GlobalWrapper } from "@/context/Global";
 import { ProcessWrapper } from "@/context/Process";
 
@@ -16,9 +17,11 @@ export default function RootLayout({
         <Navbar />
         <GlobalWrapper>
           <ProcessWrapper>
-          <AlertsWrapper>
-            <div style={{ padding: "15px" }}>{children}</div>
-          </AlertsWrapper>
+            <AlgorithmWrapper>
+              <AlertsWrapper>
+                <div style={{ padding: "15px" }}>{children}</div>
+              </AlertsWrapper>
+            </AlgorithmWrapper>
           </ProcessWrapper>
         </GlobalWrapper>
       </body>
