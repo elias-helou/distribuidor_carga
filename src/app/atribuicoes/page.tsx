@@ -91,7 +91,7 @@ export default function Timetable() {
   /**
    * Alertas
    */
-  const { alertas, setAlertas } = useAlertsContext();
+  const { addAlerta } = useAlertsContext();
 
   /**
    * Colorir linha e coluna ao passar o mouse pela célula
@@ -488,15 +488,7 @@ export default function Timetable() {
 
     // Atualiza o estado com a nova lista de atribuições
     setAtribuicoes(atribuicoesLimpa);
-    setAlertas([
-      ...alertas,
-      {
-        id: new Date().getTime(),
-        message: "A solução foi limpa com sucesso!",
-        type: "success",
-      },
-    ]);
-
+    addAlerta("A solução foi limpa com sucesso!", "success");
     setOpenCleanDialog(false);
   };
 
@@ -505,14 +497,7 @@ export default function Timetable() {
    */
   const interruptExecution = () => {
     setInterrompe(true);
-    setAlertas([
-      ...alertas,
-      {
-        id: new Date().getTime(),
-        message: "A execução do algoritmo foi interrompida!",
-        type: "warning",
-      },
-    ]);
+    addAlerta("A execução do algoritmo foi interrompida!", "warning");
   };
 
   /**
@@ -595,14 +580,7 @@ export default function Timetable() {
    */
   const applySolution = () => {
     ApplySolutionToState();
-    setAlertas([
-      ...alertas,
-      {
-        id: new Date().getTime(),
-        message: "A solução foi aplicada com sucesso!",
-        type: "success",
-      },
-    ]);
+    addAlerta("A solução foi aplicada com sucesso!", "success");
     handleCloseDialog();
   };
 
@@ -639,14 +617,7 @@ export default function Timetable() {
       contextoExecucao
     );
 
-    setAlertas([
-      ...alertas,
-      {
-        id: new Date().getTime(),
-        message: "As atribuições foram adicionadas ao histórico!",
-        type: "success",
-      },
-    ]);
+    addAlerta("As atribuições foram adicionadas ao histórico!", "success");
   };
 
   /**
@@ -654,14 +625,7 @@ export default function Timetable() {
    */
   const downalodJson = () => {
     if (!atribuicoes.some((atribuicao) => atribuicao.docentes.length > 0)) {
-      setAlertas([
-        ...alertas,
-        {
-          id: new Date().getTime(),
-          message: "Nenhuma atribuição foi realizada!",
-          type: "warning",
-        },
-      ]);
+      addAlerta("Nenhuma atribuição foi realizada!", "warning");
     }
 
     let filename: string;

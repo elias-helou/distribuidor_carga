@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  Button,
-  Box,
-  Typography,
-  CircularProgress,
-} from "@mui/material";
+import { Button, Box, Typography, CircularProgress } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useState } from "react";
@@ -19,18 +14,33 @@ import {
   processTravas,
 } from "../inputfile/UpdateState";
 import { useGlobalContext } from "@/context/Global";
-import { Atribuicao, Celula, Disciplina, Docente, Formulario, horariosSobrepoem } from "@/context/Global/utils";
-import { Alerta, useAlertsContext } from "@/context/Alerts";
+import {
+  Atribuicao,
+  Celula,
+  Disciplina,
+  Docente,
+  Formulario,
+  horariosSobrepoem,
+} from "@/context/Global/utils";
+import { useAlertsContext } from "@/context/Alerts";
 import { useSolutionHistory } from "@/context/SolutionHistory/hooks";
 
 export default function InputFileUpload() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  const {alertas, setAlertas} = useAlertsContext();
-  const { setAtribuicoes, setDisciplinas, setDocentes, setFormularios, setTravas, setSolucaoAtual, setHistoricoSolucoes, historicoSolucoes } =
-    useGlobalContext();
+  const { addAlerta } = useAlertsContext();
+  const {
+    setAtribuicoes,
+    setDisciplinas,
+    setDocentes,
+    setFormularios,
+    setTravas,
+    setSolucaoAtual,
+    setHistoricoSolucoes,
+    historicoSolucoes,
+  } = useGlobalContext();
 
-    const { cleanSolucaoAtual } = useSolutionHistory()
+  const { cleanSolucaoAtual } = useSolutionHistory();
 
   /**
    * Função responsável por validar se um arquivo foi selecionado e se é do tipo permitido.
@@ -42,11 +52,7 @@ export default function InputFileUpload() {
       if (file.type === "application/json") {
         setSelectedFile(file);
       } else {
-        addAlert({
-          id: new Date().getTime(),
-          type: "warning",
-          message: "Por favor, selecione um arquivo JSON.",
-        });
+        addAlerta("Por favor, selecione um arquivo JSON.", "warning");
       }
     }
   };
@@ -74,7 +80,7 @@ export default function InputFileUpload() {
       processAtribuicoes,
       setAtribuicoes
     );
-    const formularios: Formulario[] =  processAndUpdateState(
+    const formularios: Formulario[] = processAndUpdateState(
       json,
       "formularios",
       processFormularios,
@@ -90,24 +96,28 @@ export default function InputFileUpload() {
 
     // Criar todas as disciplinas no state de atribuições
     if (atribuicoes.length != disciplinas.length) {
-      for(const disciplina of disciplinas) {
-        if(!atribuicoes.find(atribuicao => atribuicao.id_disciplina == disciplina.id)) {
-          atribuicoes.push({id_disciplina: disciplina.id, docentes: []})
+      for (const disciplina of disciplinas) {
+        if (
+          !atribuicoes.find(
+            (atribuicao) => atribuicao.id_disciplina == disciplina.id
+          )
+        ) {
+          atribuicoes.push({ id_disciplina: disciplina.id, docentes: [] });
         }
       }
 
-      setAtribuicoes([...atribuicoes])
+      setAtribuicoes([...atribuicoes]);
     }
 
     // Preenche a lista de conflitos por disciplina
     // Vale ressaltar que, Horário de A e B conflitam, adicionar B em A e A em B, assim pode-se utilizar o j sendo i + 1 (próximo)
-    for(let i = 0; i < disciplinas.length; i++) {
-      for(let j = i + 1; j < disciplinas.length; j++) {
-        for(const horarioPivo of disciplinas[i].horarios) {
-          for(const horarioAtual of disciplinas[j].horarios) {
-            if(horariosSobrepoem(horarioPivo, horarioAtual)) {
-              disciplinas[i].conflitos.add(disciplinas[j].id)
-              disciplinas[j].conflitos.add(disciplinas[i].id)
+    for (let i = 0; i < disciplinas.length; i++) {
+      for (let j = i + 1; j < disciplinas.length; j++) {
+        for (const horarioPivo of disciplinas[i].horarios) {
+          for (const horarioAtual of disciplinas[j].horarios) {
+            if (horariosSobrepoem(horarioPivo, horarioAtual)) {
+              disciplinas[i].conflitos.add(disciplinas[j].id);
+              disciplinas[j].conflitos.add(disciplinas[i].id);
             }
           }
         }
@@ -116,23 +126,36 @@ export default function InputFileUpload() {
 
     // Preenche a lista(Map) de formularios por docente.
     // O key e o value são os mesmo pois neste caso o importante é apenas a velocidade para acessar a informação em um Map
-    for(const docente of docentes) {
-      const docenteFormularios = formularios.filter(formulario => formulario.nome_docente === docente.nome)
-                                              /*.map(formulario => formulario.id_disciplina)*/
-      for(const docenteFormulario of docenteFormularios) {
-        docente.formularios.set(docenteFormulario.id_disciplina, docenteFormulario.prioridade)
+    for (const docente of docentes) {
+      const docenteFormularios = formularios.filter(
+        (formulario) => formulario.nome_docente === docente.nome
+      );
+      /*.map(formulario => formulario.id_disciplina)*/
+      for (const docenteFormulario of docenteFormularios) {
+        docente.formularios.set(
+          docenteFormulario.id_disciplina,
+          docenteFormulario.prioridade
+        );
       }
     }
 
     /**
      * Processa solução e insere no histórico
      */
-    if(json['solucao']) {
-      processSolucao(json['solucao'], atribuicoes, disciplinas, docentes, travas, historicoSolucoes, setHistoricoSolucoes, setSolucaoAtual, formularios);
+    if (json["solucao"]) {
+      processSolucao(
+        json["solucao"],
+        atribuicoes,
+        disciplinas,
+        docentes,
+        travas,
+        historicoSolucoes,
+        setHistoricoSolucoes,
+        setSolucaoAtual,
+        formularios
+      );
     }
-    
   };
-
 
   /**
    * Função que lê o arquivo enviado pelo usuário.
@@ -146,17 +169,12 @@ export default function InputFileUpload() {
           const json = JSON.parse(event.target?.result as string);
           loadContext(json);
           setSelectedFile(null);
-          addAlert({
-            id: new Date().getTime(),
-            type: "success",
-            message: "Arquivo " + selectedFile.name + " carregado com sucesso.",
-          });
+          addAlerta(
+            `Arquivo ${selectedFile.name} carregado com sucesso.`,
+            "success"
+          );
         } catch (error) {
-          addAlert({
-            id: new Date().getTime(),
-            type: "error",
-            message: "Erro ao processar o arquivo JSON.",
-          });
+          addAlerta("Erro ao processar o arquivo JSON.", "error");
         }
         setUploading(false);
       };
@@ -164,23 +182,6 @@ export default function InputFileUpload() {
       cleanSolucaoAtual();
     }
   };
-
-  /**
-   * Função que adiciona um novo alerta no state.
-   * @param newAlert Novo objeto a ser inserido no state de alertas.
-   */
-  const addAlert = (newAlert: Alerta) => {
-    setAlertas([...alertas, newAlert]); // Adiciona novo alerta ao array
-  };
-
-  // /**
-  //  * Remove um objeto do state de alertas.
-  //  * @param index Index do objeto dentro do state.
-  //  */
-  // const removeAlert = (index: number) => {
-  //   const newAlerts = alerts.filter((alert) => alert.id !== index);
-  //   setAlerts([...newAlerts]);
-  // };
 
   return (
     <Box

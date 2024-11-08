@@ -14,24 +14,32 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import SolutionHistoryButtonGroup from "./SolutionHistoryButtonGroup";
 import { useSolutionHistory } from "@/context/SolutionHistory/hooks";
 import { useAlertsContext } from "@/context/Alerts";
-import SolutionHistoryStatistics, { TreeDisciplina } from "./SolutionHistoryStatistics";
+import SolutionHistoryStatistics, {
+  TreeDisciplina,
+} from "./SolutionHistoryStatistics";
 import { exportJson, getFormattedDate } from "@/app/atribuicoes";
 
 interface SolutionHistoryRowProps {
   id: string;
   solucao: HistoricoSolucao;
-  setHoveredCourese: React.Dispatch<React.SetStateAction<TreeDisciplina | null>>;
+  setHoveredCourese: React.Dispatch<
+    React.SetStateAction<TreeDisciplina | null>
+  >;
 }
 
 const SolutionHistoryRow: React.FC<SolutionHistoryRowProps> = ({
   id,
   solucao,
-  setHoveredCourese
+  setHoveredCourese,
 }) => {
   const [open, setOpen] = useState(false);
-  const { removeSolutionFromHistory, restoreHistoryToSolution, solucaoAtual, historicoSolucoes } =
-    useSolutionHistory();
-  const { alertas, setAlertas } = useAlertsContext();
+  const {
+    removeSolutionFromHistory,
+    restoreHistoryToSolution,
+    solucaoAtual,
+    historicoSolucoes,
+  } = useSolutionHistory();
+  const { addAlerta } = useAlertsContext();
 
   /**
    * Função a ser passada para o componente filho a fim de remover uma solução do histórico e apresentar
@@ -39,14 +47,7 @@ const SolutionHistoryRow: React.FC<SolutionHistoryRowProps> = ({
    */
   const handleRemoveSolutionFromHistory = (id: string) => {
     removeSolutionFromHistory(id);
-    setAlertas([
-      ...alertas,
-      {
-        id: new Date().getTime(),
-        message: "A solução foi removida do histórico!",
-        type: "warning",
-      },
-    ]);
+    addAlerta("A solução foi removida do histórico!", "warning");
   };
 
   /**
@@ -55,45 +56,33 @@ const SolutionHistoryRow: React.FC<SolutionHistoryRowProps> = ({
    */
   const handleRestoreHistoryToSolution = (id: string) => {
     restoreHistoryToSolution(id);
-
-    setAlertas([
-      ...alertas,
-      {
-        id: new Date().getTime(),
-        message: `A solução ${solucao.datetime} foi aplicada!`,
-        type: "success",
-      },
-    ]);
+    addAlerta(`A solução ${solucao.datetime} foi aplicada!`, "success");
   };
 
-  const handleDownloadSolutionFromHistory = useCallback((id: string) => {
-    const filename = getFormattedDate() + ".json";
-    exportJson(
-      filename,
-      solucao.contexto.docentes,
-      solucao.contexto.disciplinas,
-      solucao.solucao.atribuicoes,
-      solucao.contexto.travas,
-      historicoSolucoes.get(id)
-    );
+  const handleDownloadSolutionFromHistory = useCallback(
+    (id: string) => {
+      const filename = getFormattedDate() + ".json";
+      exportJson(
+        filename,
+        solucao.contexto.docentes,
+        solucao.contexto.disciplinas,
+        solucao.solucao.atribuicoes,
+        solucao.contexto.travas,
+        historicoSolucoes.get(id)
+      );
 
-    // setAlertas([
-    //   ...alertas,
-    //   {
-    //     id: new Date().getTime(),
-    //     message: `A solução ${solucao.datetime} foi baixada!`,
-    //     type: "success",
-    //   },
-    // ]);
-    setAlertas((prevAlertas) => [
-      ...prevAlertas,
-      {
-        id: new Date().getTime(),
-        message: `A solução ${solucao.datetime} foi baixada!`,
-        type: "success",
-      },
-    ]);
-  }, [historicoSolucoes, setAlertas, solucao.contexto.disciplinas, solucao.contexto.docentes, solucao.contexto.travas, solucao.datetime, solucao.solucao.atribuicoes]);
+      addAlerta(`A solução ${solucao.datetime} foi baixada!`, "success");
+    },
+    [
+      addAlerta,
+      historicoSolucoes,
+      solucao.contexto.disciplinas,
+      solucao.contexto.docentes,
+      solucao.contexto.travas,
+      solucao.datetime,
+      solucao.solucao.atribuicoes,
+    ]
+  );
 
   return (
     <Fragment key={`fragment_${id}`}>

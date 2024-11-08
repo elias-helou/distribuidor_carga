@@ -14,6 +14,7 @@ import Constraint from "@/classes/Constraint";
 import { useAlgorithmContext } from "@/context/Algorithm";
 import AddIcon from "@mui/icons-material/Add";
 import { motion } from "framer-motion";
+import { useAlertsContext } from "@/context/Alerts";
 
 export interface ConstraintInterface {
   name: string;
@@ -66,6 +67,8 @@ export default function Restricoes() {
     setSoftConstraints,
     allConstraints,
   } = useAlgorithmContext();
+
+  const { addAlerta } = useAlertsContext();
 
   const [constraints, setConstraints] = useState<ConstraintInterface[]>(() => {
     const stateConstraints: ConstraintInterface[] = [];
@@ -260,6 +263,7 @@ export default function Restricoes() {
             descricao={constraint.descricao}
             onChange={handleConstraintChange}
             onDelete={removeConstraint}
+            showInformations={addAlerta}
           />
         ))}
         <Grid2
