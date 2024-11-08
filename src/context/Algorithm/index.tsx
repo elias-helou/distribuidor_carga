@@ -14,6 +14,10 @@ export interface AlgorithmInterface {
   setSoftConstraints: React.Dispatch<
     React.SetStateAction<Map<string, Constraint>>
   >;
+  allConstraints: Map<string, Constraint>;
+  setAllConstraints: React.Dispatch<
+    React.SetStateAction<Map<string, Constraint>>
+  >;
 }
 
 const AlgorithmContext = createContext<AlgorithmInterface>({
@@ -21,6 +25,8 @@ const AlgorithmContext = createContext<AlgorithmInterface>({
   softConstraints: new Map<string, Constraint>(),
   setHardConstraints: () => Map<string, Constraint>,
   setSoftConstraints: () => Map<string, Constraint>,
+  allConstraints: new Map<string, Constraint>(),
+  setAllConstraints: () => Map<string, Constraint>,
 });
 
 export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
@@ -56,6 +62,10 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
     ])
   );
 
+  const [allConstraints, setAllConstraints] = useState(
+    new Map([...softConstraints, ...hardConstraints])
+  );
+
   return (
     <AlgorithmContext.Provider
       value={{
@@ -63,6 +73,8 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
         softConstraints: softConstraints,
         setHardConstraints: setHardConstraints,
         setSoftConstraints: setSoftConstraints,
+        allConstraints: allConstraints,
+        setAllConstraints: setAllConstraints,
       }}
     >
       {children}
