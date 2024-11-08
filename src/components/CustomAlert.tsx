@@ -39,10 +39,10 @@
 
 //   return (
 //     <Box sx={{ width: "100%" }}>
-//       <Snackbar 
-//         open={open} 
-//         onClose={handleExited} 
-//         autoHideDuration={props.closeTime * 1000} 
+//       <Snackbar
+//         open={open}
+//         onClose={handleExited}
+//         autoHideDuration={props.closeTime * 1000}
 //         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
 //         TransitionComponent={GrowTransition}
 //       >
@@ -93,10 +93,11 @@ export default function CustomAlert(props: IAlertProps) {
   const handleExited = () => {
     // Executa quando a animação de colapso termina
     if (props.handleClose) {
-      setOpen(false) // Fecha alerta
-      setTimeout(() => {
-        props.handleClose(); // Chama a função no elemento pai que remove o alerta da fila
-      }, 1000) // Adiciona um delay para remover o arleta da fila do estado visando deixa-lo executar a animação de "fechar"
+      setOpen(false); // Fecha alerta
+      props.handleClose();
+      // setTimeout(() => {
+      //   props.handleClose(); // Chama a função no elemento pai que remove o alerta da fila
+      // }, 1000); // Adiciona um delay para remover o arleta da fila do estado visando deixa-lo executar a animação de "fechar"
     }
   };
 
@@ -110,7 +111,7 @@ export default function CustomAlert(props: IAlertProps) {
   });
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "30em" }}>
       <Collapse in={open} onExited={handleExited}>
         <Alert
           key={props.id}

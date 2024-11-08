@@ -24,6 +24,11 @@ interface ConstraintCardProps {
   descricao: string;
   onChange: (name: string, tipo: "Hard" | "Soft", penalidade: string) => void;
   onDelete: (name: string, tipo: "Hard" | "Soft", penalidade: string) => void;
+  showInformations: (
+    message: string,
+    type: "success" | "info" | "warning" | "error",
+    closeTime?: number
+  ) => void;
 }
 
 export default function ConstraintCard({
@@ -33,6 +38,7 @@ export default function ConstraintCard({
   descricao,
   onChange,
   onDelete,
+  showInformations,
 }: ConstraintCardProps) {
   const [tipo, setTipo] = useState<"Hard" | "Soft">(tipoInicial);
   const [penalidade, setPenalidade] = useState(penalidadeInicial);
@@ -133,7 +139,7 @@ export default function ConstraintCard({
             <span>
               <IconButton
                 color="info"
-                onClick={() => console.log("Informações")}
+                onClick={() => showInformations(descricao, "info", 10)}
                 size="large"
                 disabled={descricao.length === 0}
               >
