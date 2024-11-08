@@ -100,13 +100,7 @@ export default function ConstraintCard({
           size="small"
           placeholder="Digite a penalidade"
           error={erro}
-          helperText={
-            erro
-              ? "Digite apenas números."
-              : tipo === "Hard"
-              ? "Campo desabilitado."
-              : ""
-          }
+          helperText={erro ? "Digite apenas números." : ""}
           sx={{ mt: 2 }}
           //disabled={tipo === "Hard"}
         />
