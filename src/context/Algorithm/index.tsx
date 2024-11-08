@@ -47,7 +47,7 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
     new Map<string, Constraint>([
       [
         "Disciplina sem docente",
-        new DisciplinaSemDocente("Disciplina sem docente", "", false, 100),
+        new DisciplinaSemDocente("Disciplina sem docente", "", false, 10000),
       ],
       [
         "Choque de horários",
@@ -55,7 +55,7 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
           "Choque de horários",
           "Essa restrição verifica se os docentes foram atribuídos a disciplinas que ocorrem ao mesmo tempo ou apresentam conflitos de início e fim de aula.",
           false,
-          1000
+          100000
         ),
       ],
       // Adicione outras restrições conforme necessário
