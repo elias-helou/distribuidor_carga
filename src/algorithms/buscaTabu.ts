@@ -102,8 +102,6 @@ export function avaliarSolucao(
     (value) => (avaliacao += value.soft(atribuicoes, docentes, disciplinas))
   );
 
-  console.log(avaliacao);
-
   // Percorre as disciplinas:
   for (const atribuicao of atribuicoes) {
     /*// Penaliza disciplina não atribuída:
@@ -127,9 +125,6 @@ export function avaliarSolucao(
       }*/
     }
   }
-
-  console.log(avaliacao);
-  console.log("------------------------------------");
 
   /*// Penalizar solução para cada choque de horários encontrados nas atribuições dos docentes
   for (const docente of docentes) {
@@ -157,28 +152,28 @@ export function avaliarSolucao(
     }
   }*/
 
-  // Aqui estamos penalizando o número de disciplinas, mas
-  // devemos penalizar o número de créditos. Esta informação
-  // deverá constar em dados para próximas versões.
+  //Aqui estamos penalizando o número de disciplinas, mas
+  //devemos penalizar o número de créditos. Esta informação
+  //deverá constar em dados para próximas versões.
 
-  // // Conta número de disciplinas por docente:
-  // const tmpDocentes = {};
-  // for (const docente of docentes) {
-  //   tmpDocentes[docente.nome] = 0;
-  // }
-  // for (const atribuicao of atribuicoes) {
-  //   for (const docName of atribuicao.docentes) {
-  //     tmpDocentes[docName] += 1;
-  //   }
-  // }
-  // // Penaliza baseado no saldo:
-  // for (const docente of docentes) {
-  //   if (tmpDocentes[docente.nome] > 2) {
-  //     avaliacao -= parametros.k5 * (docente.saldo < -1.0 ? 0.75 : 1.0);
-  //   } else if (tmpDocentes[docente.nome] < 1) {
-  //     avaliacao -= parametros.k5 * (docente.saldo > 1.0 ? 1.0 : 0.75);
-  //   }
-  // }
+  // Conta número de disciplinas por docente:
+  const tmpDocentes = {};
+  for (const docente of docentes) {
+    tmpDocentes[docente.nome] = 0;
+  }
+  for (const atribuicao of atribuicoes) {
+    for (const docName of atribuicao.docentes) {
+      tmpDocentes[docName] += 1;
+    }
+  }
+  // Penaliza baseado no saldo:
+  for (const docente of docentes) {
+    if (tmpDocentes[docente.nome] > 2) {
+      avaliacao -= parametros.k5 * (docente.saldo < -1.0 ? 0.75 : 1.0);
+    } else if (tmpDocentes[docente.nome] < 1) {
+      avaliacao -= parametros.k5 * (docente.saldo > 1.0 ? 1.0 : 0.75);
+    }
+  }
 
   return avaliacao;
 }
