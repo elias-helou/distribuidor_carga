@@ -21,6 +21,7 @@ export interface DisciplinaETL {
   ingles: boolean;
   docentes?: string[];
   ativo: boolean;
+  horarios?: Horario[];
 }
 
 export interface Disciplina {
@@ -67,22 +68,22 @@ export interface Celula {
   id_disciplina?: string;
   nome_docente?: string;
   tipo_trava?: TipoTrava;
-  trava?: boolean
+  trava?: boolean;
 }
 
 // Ver se o melhor lugar para essa interface é aqui
 export interface Horario {
-  dia: "Seg." | "Ter." | "Qua." | "Qui." | "Sex.";
+  dia: "Seg." | "Ter." | "Qua." | "Qui." | "Sex." | "Sáb.";
   inicio: string;
   fim: string;
 }
 
 export interface ContextoExecucao {
-  docentes: Docente[],
-  disciplinas: Disciplina[],
-  travas: Celula[],
-  maxPriority: number,
-  formularios: Formulario[]
+  docentes: Docente[];
+  disciplinas: Disciplina[];
+  travas: Celula[];
+  maxPriority: number;
+  formularios: Formulario[];
 }
 
 export interface Estatisticas {
@@ -97,21 +98,21 @@ export interface Solucao {
   atribuicoes: Atribuicao[];
   avaliacao: number;
   idHistorico?: string;
-  estatisticas?: Estatisticas
+  estatisticas?: Estatisticas;
 }
 
 export enum TipoInsercao {
   Algoritmo = "Algoritmo",
   Manual = "Manual",
-  Importação = "Importação"
+  Importação = "Importação",
 }
 
 export interface HistoricoSolucao {
   id: string;
   datetime: string;
   solucao: Solucao;
-  tipoInsercao: TipoInsercao
-  contexto: ContextoExecucao
+  tipoInsercao: TipoInsercao;
+  contexto: ContextoExecucao;
 }
 
 /**
@@ -142,12 +143,14 @@ export function isDisciplina(obj: Docente | Disciplina): obj is Disciplina {
  * @returns Booleano indicando se o objeto é um Horario.
  */
 export function isHorario(obj: string | Horario): obj is Horario {
-  return typeof obj !== 'string' &&
-         obj !== null &&
-         typeof obj === 'object' &&
-         'dia' in obj &&
-         'inicio' in obj &&
-         'fim' in obj;
+  return (
+    typeof obj !== "string" &&
+    obj !== null &&
+    typeof obj === "object" &&
+    "dia" in obj &&
+    "inicio" in obj &&
+    "fim" in obj
+  );
 }
 
 /**
@@ -180,28 +183,36 @@ function parseHorario(horario: string): Horario[] {
  * @param disciplinas Lista do tipo `DisciplinaETL` contendo todas as disciplinas que serão informadas no algoritmo.
  * @returns Uma lista do tipo `Disciplina` contendo todos os ajustes nos horários.
  */
-export function ajustaHorarioDisciplinas(
+export function ajustaDisciplinas(
+  version: string,
   disciplinas: DisciplinaETL[]
 ): Disciplina[] {
   const newDisciplinas: Disciplina[] = [];
 
+  let newDisciplina;
   // Para cada disciplina, verificar se o horário já está definido; se estiver, transformar a string no objeto da interface Horario
   for (const disciplina of disciplinas) {
-    if (typeof disciplina.horario === "string") {
+    if (typeof disciplina.horario === "string" && version != "2.0") {
       // Converte a string de horários para o objeto esperado
       const horarios = parseHorario(disciplina.horario);
 
       // Desestrutura o objeto e substitui o campo 'horarios'
-      const newDisciplina: Disciplina = {
+      newDisciplina = {
         ...disciplina,
         horarios: horarios, // Atribui o novo valor de horários
         conflitos: new Set(),
-        trava: false
+        trava: false,
       };
-
-      // Adiciona a nova disciplina à lista
-      newDisciplinas.push(newDisciplina);
+    } else {
+      // Desestrutura o objeto e substitui o campo 'horarios'
+      newDisciplina = {
+        ...disciplina,
+        conflitos: new Set(),
+        trava: false,
+      };
     }
+    // Adiciona a nova disciplina à lista
+    newDisciplinas.push(newDisciplina);
   }
 
   return newDisciplinas;
@@ -282,7 +293,9 @@ export function processData(
   travas: Celula[],
   atribuicoes: Atribuicao[]
 ) {
-  const processedDisciplinas: Disciplina[] = structuredClone(getActives(disciplinas));
+  const processedDisciplinas: Disciplina[] = structuredClone(
+    getActives(disciplinas)
+  );
   const processedDocentes: Docente[] = getActives(docentes);
 
   // Pré-processar as disciplinas e docentes ativos em um mapa para acesso rápido
@@ -332,10 +345,17 @@ export function processData(
   };
 }
 
+export function getActiveFormularios(
+  formularios: Formulario[],
+  disciplinas: Disciplina[],
+  docentes: Docente[]
+) {
+  const disciplinasAtivas = getActives(disciplinas).map((obj) => obj.id);
+  const docentesAtivos = getActives(docentes).map((obj) => obj.nome);
 
-export function getActiveFormularios(formularios: Formulario[], disciplinas: Disciplina[], docentes: Docente[]) {
-  const disciplinasAtivas = getActives(disciplinas).map(obj => obj.id);
-  const docentesAtivos = getActives(docentes).map(obj => obj.nome);
-
-  return formularios.filter(formulario => disciplinasAtivas.includes(formulario.id_disciplina) && docentesAtivos.includes(formulario.nome_docente));
+  return formularios.filter(
+    (formulario) =>
+      disciplinasAtivas.includes(formulario.id_disciplina) &&
+      docentesAtivos.includes(formulario.nome_docente)
+  );
 }

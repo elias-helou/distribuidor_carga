@@ -1,6 +1,6 @@
 import { Solucao } from "@/algorithms/utils";
 import {
-  ajustaHorarioDisciplinas,
+  ajustaDisciplinas,
   Atribuicao,
   Celula,
   Disciplina,
@@ -30,7 +30,7 @@ const selecionarArraysPorChaves = (
 export const processAndUpdateState = <T>(
   jsonData: Record<string, any>,
   keys: string | string[],
-  processor: (data: any) => T[],
+  processor: (version: string, data: any) => T[],
   updateState: UpdateStateFunction<T>
 ) => {
   let data;
@@ -42,7 +42,7 @@ export const processAndUpdateState = <T>(
   }
 
   if (data) {
-    const processedData = processor(data);
+    const processedData = processor(jsonData["versao"], data);
     updateState(processedData);
     return processedData;
   }
@@ -50,7 +50,13 @@ export const processAndUpdateState = <T>(
   return [];
 };
 
-export const processDocentes = (data: { saldos: Record<string, number>; docentes: { nome: string; ativo: boolean }[] | string[] }): Docente[] => {
+export const processDocentes = (
+  version: string,
+  data: {
+    saldos: Record<string, number>;
+    docentes: { nome: string; ativo: boolean }[] | string[];
+  }
+): Docente[] => {
   const { saldos, docentes } = data;
 
   const createDocenteFromString = (nome: string): Docente => ({
@@ -61,7 +67,10 @@ export const processDocentes = (data: { saldos: Record<string, number>; docentes
     saldo: saldos ? saldos[nome] : undefined,
   });
 
-  const createDocenteFromObject = (docente: { nome: string; ativo: boolean }): Docente => ({
+  const createDocenteFromObject = (docente: {
+    nome: string;
+    ativo: boolean;
+  }): Docente => ({
     nome: docente.nome,
     ativo: docente.ativo,
     formularios: new Map<string, number>(),
@@ -70,9 +79,9 @@ export const processDocentes = (data: { saldos: Record<string, number>; docentes
   });
 
   if (Array.isArray(docentes)) {
-    return docentes.map(docente => 
-      typeof docente === "string" 
-        ? createDocenteFromString(docente) 
+    return docentes.map((docente) =>
+      typeof docente === "string"
+        ? createDocenteFromString(docente)
         : createDocenteFromObject(docente)
     );
   }
@@ -80,7 +89,10 @@ export const processDocentes = (data: { saldos: Record<string, number>; docentes
   return []; // Retorna um array vazio se `docentes` não for um array
 };
 
-export const processDisciplinas = (data: DisciplinaETL[]): Disciplina[] => {
+export const processDisciplinas = (
+  version: string,
+  data: DisciplinaETL[]
+): Disciplina[] => {
   const disciplinasJson: DisciplinaETL[] = data;
   const newDisciplinas: DisciplinaETL[] = [];
 
@@ -90,6 +102,7 @@ export const processDisciplinas = (data: DisciplinaETL[]): Disciplina[] => {
       turma: disciplina.turma,
       nome: disciplina.nome,
       horario: disciplina.horario,
+      horarios: disciplina?.horarios,
       cursos: disciplina.cursos,
       ementa: disciplina.ementa,
       id: disciplina.id,
@@ -102,10 +115,11 @@ export const processDisciplinas = (data: DisciplinaETL[]): Disciplina[] => {
     });
   }
 
-  return ajustaHorarioDisciplinas(newDisciplinas);
+  return ajustaDisciplinas(version, newDisciplinas);
 };
 
 export const processAtribuicoes = (
+  version: string,
   data: Record<string, string[]>
 ): Atribuicao[] => {
   const atribuicoesJson: Record<string, string[]> = data;
@@ -121,6 +135,7 @@ export const processAtribuicoes = (
 };
 
 export const processFormularios = (
+  version: string,
   data: Record<string, Disciplina[]>
 ): Formulario[] => {
   const formulariosJson: Record<string, Disciplina[]> = data;
@@ -144,23 +159,23 @@ export const processFormularios = (
  * @param data Travas vindas do arquivo importado.
  * @returns Lista com todas as travas no arquivo de importação.
  */
-export function processTravas(data: Celula[]) {
+export function processTravas(version: string, data: Celula[]) {
   return data;
 }
 
 export function processSolucao(
-  solucaoImportacao: any, 
-  atribuicoes: Atribuicao[], 
-  disciplinas: Disciplina[], 
-  docentes: Docente[], 
-  travas: Celula[], 
-  historicoSolucoes: Map<string, HistoricoSolucao>, 
-  setHistoricoSolucoes: Dispatch<SetStateAction<Map<string, HistoricoSolucao>>>, 
+  version: string,
+  solucaoImportacao: any,
+  atribuicoes: Atribuicao[],
+  disciplinas: Disciplina[],
+  docentes: Docente[],
+  travas: Celula[],
+  historicoSolucoes: Map<string, HistoricoSolucao>,
+  setHistoricoSolucoes: Dispatch<SetStateAction<Map<string, HistoricoSolucao>>>,
   setSolucaoAtual: Dispatch<SetStateAction<Solucao>>,
   formularios: Formulario[]
 ) {
-
-  if(!historicoSolucoes.has(solucaoImportacao.id)) {
+  if (!historicoSolucoes.has(solucaoImportacao.id)) {
     /**
      * Carrega solução no histórico
      */
@@ -168,41 +183,57 @@ export function processSolucao(
       id: solucaoImportacao.id,
       datetime: solucaoImportacao.datetime,
       tipoInsercao: TipoInsercao.Importação,
-      solucao: {idHistorico: solucaoImportacao.id, atribuicoes: atribuicoes, avaliacao: solucaoImportacao.solucao.avaliacao},
-      contexto: {disciplinas: disciplinas, docentes: docentes, travas: travas, maxPriority: solucaoImportacao.maxPriority, formularios: formularios}
-    }
+      solucao: {
+        idHistorico: solucaoImportacao.id,
+        atribuicoes: atribuicoes,
+        avaliacao: solucaoImportacao.solucao.avaliacao,
+      },
+      contexto: {
+        disciplinas: disciplinas,
+        docentes: docentes,
+        travas: travas,
+        maxPriority: solucaoImportacao.maxPriority,
+        formularios: formularios,
+      },
+    };
 
     /**
      * Valida as estatisticas
      */
-      if(solucaoImportacao.solucao.estatisticas) {
-        const tempoPorIteracao = new Map<number, number>(solucaoImportacao.solucao.estatisticas.tempoPorIteracao);
-        const avaliacaoPorIteracao = new Map<number, number>(solucaoImportacao.solucao.estatisticas.avaliacaoPorIteracao); 
+    if (solucaoImportacao.solucao.estatisticas) {
+      const tempoPorIteracao = new Map<number, number>(
+        solucaoImportacao.solucao.estatisticas.tempoPorIteracao
+      );
+      const avaliacaoPorIteracao = new Map<number, number>(
+        solucaoImportacao.solucao.estatisticas.avaliacaoPorIteracao
+      );
 
-        solucaoHistorico.solucao.estatisticas = {
-            avaliacaoPorIteracao: avaliacaoPorIteracao,
-            tempoPorIteracao: tempoPorIteracao,
-            interrupcao: solucaoImportacao.solucao.estatisticas.interrupcao,
-            iteracoes: solucaoImportacao.solucao.estatisticas.iteracoes,
-            tempoExecucao: solucaoImportacao.solucao.estatisticas.tempoExecucao
-          }
-      }
+      solucaoHistorico.solucao.estatisticas = {
+        avaliacaoPorIteracao: avaliacaoPorIteracao,
+        tempoPorIteracao: tempoPorIteracao,
+        interrupcao: solucaoImportacao.solucao.estatisticas.interrupcao,
+        iteracoes: solucaoImportacao.solucao.estatisticas.iteracoes,
+        tempoExecucao: solucaoImportacao.solucao.estatisticas.tempoExecucao,
+      };
+    }
 
-      /**
-       * Altera o state referente ao histórico de soluções
-       */
-      const newHistoricoSolucoes = new Map<string, HistoricoSolucao>(historicoSolucoes);
-      newHistoricoSolucoes.set(solucaoHistorico.id, solucaoHistorico)
-      
-      setHistoricoSolucoes(newHistoricoSolucoes)
+    /**
+     * Altera o state referente ao histórico de soluções
+     */
+    const newHistoricoSolucoes = new Map<string, HistoricoSolucao>(
+      historicoSolucoes
+    );
+    newHistoricoSolucoes.set(solucaoHistorico.id, solucaoHistorico);
 
-      /**
-       * Atualiza a solução atual
-       */
-      setSolucaoAtual(solucaoHistorico.solucao)
+    setHistoricoSolucoes(newHistoricoSolucoes);
 
-      return solucaoHistorico;
+    /**
+     * Atualiza a solução atual
+     */
+    setSolucaoAtual(solucaoHistorico.solucao);
+
+    return solucaoHistorico;
   }
-  
+
   return historicoSolucoes.get(solucaoImportacao.id);
 }
