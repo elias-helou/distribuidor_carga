@@ -35,7 +35,7 @@ export default function CustomSelector({
   const [filter, setFilter] = useState("");
 
   const filteredItems = items.filter((item) =>
-    (isDisciplina(item) ? item.nome : item.nome)
+    (isDisciplina(item) ? `${item.id} - ${item.nome}` : item.nome)
       .toLowerCase()
       .includes(filter.toLowerCase())
   );
@@ -64,25 +64,25 @@ export default function CustomSelector({
         subheader={`${numberOfChecked(items)}/${items.length} selecionados`}
       />
       <Divider />
-        {/* Campo de filtro` */}
+      {/* Campo de filtro` */}
       <Box sx={{ paddingX: 2, paddingY: 1 }}>
         <TextField
           variant="outlined"
           placeholder="Buscar..."
           fullWidth
           sx={{
-            borderRadius: '4px',
-            '& .MuiOutlinedInput-root': {
-              backgroundColor: '#f0f0f0',
+            borderRadius: "4px",
+            "& .MuiOutlinedInput-root": {
+              backgroundColor: "#f0f0f0",
               borderRadius: 2,
-              '& fieldset': {
-                borderColor: '#ddd',
+              "& fieldset": {
+                borderColor: "#ddd",
               },
-              '&:hover fieldset': {
-                borderColor: '#bbb',
+              "&:hover fieldset": {
+                borderColor: "#bbb",
               },
-              '&.Mui-focused fieldset': {
-                borderColor: '#1976d2',
+              "&.Mui-focused fieldset": {
+                borderColor: "#1976d2",
               },
             },
           }}
