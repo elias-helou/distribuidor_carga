@@ -286,6 +286,11 @@ export class AtribuicaoSemFormulario extends Constraint {
         }
       }
     } else {
+      //Caso o docente seja null
+      if (docentes.some((docente) => !docente)) {
+        return false;
+      }
+
       // Se a disciplina foi informado quer dizer que estamos verificando um contexto específico
       for (const docente of docentes) {
         for (const disciplia of disciplinas) {
