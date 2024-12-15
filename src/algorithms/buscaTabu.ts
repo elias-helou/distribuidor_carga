@@ -98,9 +98,12 @@ export function avaliarSolucao(
   parametros.k1; // @@
 
   // Aplicação das softConstraints
-  softConstraints.forEach(
-    (value) => (avaliacao += value.soft(atribuicoes, docentes, disciplinas))
-  );
+  // softConstraints.forEach(
+  //   (value) => (avaliacao += value.soft(atribuicoes, docentes, disciplinas))
+  // );
+  for (const constraint of softConstraints.values()) {
+    avaliacao += constraint.soft(atribuicoes, docentes, disciplinas);
+  }
 
   // Percorre as disciplinas:
   for (const atribuicao of atribuicoes) {
@@ -157,23 +160,23 @@ export function avaliarSolucao(
   //deverá constar em dados para próximas versões.
 
   // Conta número de disciplinas por docente:
-  const tmpDocentes = {};
-  for (const docente of docentes) {
-    tmpDocentes[docente.nome] = 0;
-  }
-  for (const atribuicao of atribuicoes) {
-    for (const docName of atribuicao.docentes) {
-      tmpDocentes[docName] += 1;
-    }
-  }
-  // Penaliza baseado no saldo:
-  for (const docente of docentes) {
-    if (tmpDocentes[docente.nome] > 2) {
-      avaliacao -= parametros.k5 * (docente.saldo < -1.0 ? 0.75 : 1.0);
-    } else if (tmpDocentes[docente.nome] < 1) {
-      avaliacao -= parametros.k5 * (docente.saldo > 1.0 ? 1.0 : 0.75);
-    }
-  }
+  // const tmpDocentes = {};
+  // for (const docente of docentes) {
+  //   tmpDocentes[docente.nome] = 0;
+  // }
+  // for (const atribuicao of atribuicoes) {
+  //   for (const docName of atribuicao.docentes) {
+  //     tmpDocentes[docName] += 1;
+  //   }
+  // }
+  // // Penaliza baseado no saldo:
+  // for (const docente of docentes) {
+  //   if (tmpDocentes[docente.nome] > 2) {
+  //     avaliacao -= parametros.k5 * (docente.saldo < -1.0 ? 0.75 : 1.0);
+  //   } else if (tmpDocentes[docente.nome] < 1) {
+  //     avaliacao -= parametros.k5 * (docente.saldo > 1.0 ? 1.0 : 0.75);
+  //   }
+  // }
 
   return avaliacao;
 }
@@ -262,7 +265,9 @@ function gerarVizinhos(
 
   for (let i = 0; i < disciplinas.length; i++) {
     const disciplina = disciplinas[i];
-    if (disciplinaInvalida(disciplina, travas)) continue;
+    if (disciplinaInvalida(disciplina, travas)) {
+      continue;
+    }
 
     const atribuicao = solucaoAtual.find(
       (obj) => obj.id_disciplina === disciplina.id
@@ -292,7 +297,9 @@ function gerarVizinhos(
     const vizinhancaRemover = gerarVizinhoComRemocao(
       solucaoAtual,
       disciplina,
-      listaTabu
+      listaTabu,
+      travas,
+      hardConstraints
     );
     if (vizinhancaRemover.length > 0) {
       vizinhanca = vizinhanca.concat(vizinhancaRemover);
@@ -309,6 +316,7 @@ function gerarVizinhos(
       listaTabu,
       hardConstraints
     );
+
     if (vizinhancaTroca.length > 0) {
       vizinhanca = vizinhanca.concat(vizinhancaTroca);
     }
@@ -354,7 +362,7 @@ export async function buscaTabu(
   const listaTabu: Atribuicao[][] = [];
 
   // Variável para controlar a quantidade de iterações sem modifiação
-  // let iteracoesSemModificacao = 0
+  /* let iteracoesSemModificacao = 0;*/
 
   // Solução inicial inclui as atribuições fornecidas pelo usuário
   let solucaoAtual: Solucao = {
@@ -427,11 +435,10 @@ export async function buscaTabu(
         }
         melhorSolucao = solucaoAtual;
 
-        // iteracoesSemModificacao = 0; // Reseta as iterações sem modificação
-      }
-      // else {
-      //   iteracoesSemModificacao++;  // Acrescenta mais um em iteração sem modificação
-      // }
+        /* iteracoesSemModificacao = 0; // Reseta as iterações sem modificação*/
+      } /*else {
+        iteracoesSemModificacao++; // Acrescenta mais um em iteração sem modificação
+      }*/
     }
     // else {
     //   iteracoesSemModificacao++;  // Acrescenta mais um em iteração sem modificação
@@ -442,7 +449,8 @@ export async function buscaTabu(
     tempoPorIteracao.set(iteracoes, tempoFinal - tempoInicial);
 
     if (
-      /*iteracoesSemModificacao === NumIterNotChange ||*/ interrompe() ||
+      /*iteracoesSemModificacao === 20 ||*/
+      interrompe() ||
       !existeDisciplinasQueAindaPodemSerAtribuidas(melhorSolucao, docentes)
     ) {
       break;

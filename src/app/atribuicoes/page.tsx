@@ -516,7 +516,7 @@ export default function Timetable() {
       pFormularios,
       pTravas,
       pAtribuicoes,
-      10,
+      5,
       maxPriority + 1,
       () => interrompeRef.current,
       setDisciplinasAlocadas,
@@ -593,6 +593,7 @@ export default function Timetable() {
       atribuicoes
     );
 
+    console.log(softConstraints);
     const avaliacao = avaliarSolucao(
       pAtribuicoes,
       pDocentes,

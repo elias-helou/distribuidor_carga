@@ -106,14 +106,12 @@ export class DisciplinaSemDocente extends Constraint {
     return avaliacao;
   }
 
-  hard(atribuicoes?: Atribuicao[]): boolean {
-    for (const atribuicao of atribuicoes) {
-      if (atribuicao.docentes.length === 0) {
-        return false;
-      }
-    }
-
-    return true;
+  hard(atribuicoes?: Atribuicao[], docentes?: Docente[]): boolean {
+    /**
+     * A restrição precisou ser feita desta forma pois na função `podeAtribuir` o valor do docente quando a chamada vem da
+     * função `gerarVizinhoComRemocao` se é passado o parâmetro Docente como null. A `podeAtribuir` passa [null].
+     */
+    return docentes.length > 0 && !docentes.includes(null);
   }
 
   toObject(): ConstraintInterface {
@@ -258,7 +256,7 @@ export class AtribuicaoSemFormulario extends Constraint {
       for (const docenteAtribuido of atribuicao.docentes) {
         const docente = docentes.find((obj) => obj.nome === docenteAtribuido);
 
-        if (docente.formularios.get(atribuicao.id_disciplina)) {
+        if (!docente.formularios.has(atribuicao.id_disciplina)) {
           avaliacao -= this.penalty;
         }
       }

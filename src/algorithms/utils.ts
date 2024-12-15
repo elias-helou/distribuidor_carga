@@ -157,6 +157,7 @@ export function podeAtribuir(
    * Aqui será o melhor lugar para as hardConstraints
    */
   if (
+    docente !== null &&
     travas.some(
       (trava) =>
         trava.id_disciplina === disciplina.id &&
@@ -263,13 +264,9 @@ export function gerarVizinhoComDocente(
   const novosVizinhos: Atribuicao[][] = [];
 
   for (const docente of docentes) {
-    if (!podeAtribuir(docente, disciplina, travas, hardConstraints)) continue;
-    //const atribuicao = solucaoAtual.find(a => a.id_disciplina === disciplina.id);
-
-    // Generalizar
-    // if(checaTravaCelula(docente.nome, disciplina.id, travas)) {
-    //   continue;
-    // }
+    if (!podeAtribuir(docente, disciplina, travas, hardConstraints)) {
+      continue;
+    }
 
     const vizinho = structuredClone(solucaoAtual);
     const atrib = vizinho.find((a) => a.id_disciplina === disciplina.id);
@@ -293,9 +290,20 @@ export function gerarVizinhoComDocente(
 export function gerarVizinhoComRemocao(
   solucaoAtual: Atribuicao[],
   disciplina: Disciplina,
-  listaTabu: Atribuicao[][]
+  listaTabu: Atribuicao[][],
+  travas: Trava[],
+  hardConstraints: Map<string, Constraint>
 ): Atribuicao[][] {
   const novosVizinhos: Atribuicao[][] = [];
+
+  /**
+   * Acredito ser necessário adicionar a chamada para a função `podeAtribuir` para que seja possível verificar e tornar
+   * possível a restrição (hard) 'Disciplina sem docente'.
+   */
+  if (!podeAtribuir(null, disciplina, travas, hardConstraints)) {
+    return novosVizinhos;
+  }
+
   const atribAtual = solucaoAtual.find(
     (a) => a.id_disciplina === disciplina.id
   );
@@ -371,8 +379,9 @@ export function gerarTrocasDeDocentes(
     if (
       disciplinaPivo.id === disciplinaAtual.id ||
       disciplinaInvalida(disciplinaAtual, travas)
-    )
+    ) {
       continue;
+    }
 
     const atribDocenteAtual = solucaoAtual.find(
       (a) => a.id_disciplina === disciplinaAtual.id
@@ -386,8 +395,9 @@ export function gerarTrocasDeDocentes(
       docentesAtual.some((docente) =>
         docenteInvalido(docente, disciplinaAtual, travas)
       )
-    )
+    ) {
       continue;
+    }
 
     // Verificar se a troca pode ser realizada: todos os docentes do Pivo podem ir para a Atual e vice-versa
     const trocaValida =

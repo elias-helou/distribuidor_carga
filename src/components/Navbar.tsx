@@ -39,7 +39,7 @@ export default function Navbar() {
         sx={{
           backgroundColor: theme.palette.primary.main,
           boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-          borderRadius: "0px 0px 15px 15px",
+          //borderRadius: "0px 0px 15px 15px",
         }}
       >
         <Toolbar>

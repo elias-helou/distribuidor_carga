@@ -134,7 +134,8 @@ export function exportJson(
       codigo: disciplina.codigo,
       turma: disciplina.turma,
       nome: disciplina.nome,
-      horario: disciplina.horario,
+      //horario: disciplina.horario,
+      horario: disciplina.horarios,
       cursos: disciplina.cursos,
       ementa: disciplina.ementa,
       id: disciplina.id,
@@ -181,6 +182,7 @@ export function exportJson(
   }
 
   const dados = {
+    versao: "2.0",
     formularios: formulariosDTO,
     disciplinas: disciplinasDTO,
     docentes: docentesDTO,
