@@ -7,7 +7,7 @@ import {
 import {
   TreeDisciplina,
   TreeDocente,
-} from "./components/SolutionHistoryStatistics";
+} from "./_components/SolutionHistoryStatistics";
 
 /**
  * Função para contra quantas atribuições um docente ativo teve.

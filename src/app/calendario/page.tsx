@@ -103,6 +103,7 @@ export default function ComponenteCalendario() {
                 >
                   {disciplinasPorBloco(dia, horario).map((disciplina) => (
                     <Typography
+                      title={`${disciplina.nome}`}
                       variant="body2"
                       key={disciplina.id}
                       sx={{

@@ -598,7 +598,7 @@ export default function Timetable() {
       pAtribuicoes,
       pDocentes,
       pDisciplinas,
-      maxPriority + 1,
+      maxPriority + 1, // talvez não seja necessário esse +1 (? 14/02/2025)
       parametros,
       softConstraints
     );

@@ -13,10 +13,10 @@ import {
   Grid2,
   Box,
 } from "@mui/material";
-import SolutionHistoryRow from "./components/SolutionHistoryRow";
+import SolutionHistoryRow from "./_components/SolutionHistoryRow";
 import HoveredCourse from "../atribuicoes/components/HoveredCourse";
 import { useState } from "react";
-import { TreeDisciplina } from "./components/SolutionHistoryStatistics";
+import { TreeDisciplina } from "./_components/SolutionHistoryStatistics";
 
 const tableColumns = [
   "Identificador",
