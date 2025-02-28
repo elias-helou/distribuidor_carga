@@ -1,0 +1,119 @@
+{
+    "versao": "1.0",
+    "formularios": {
+        "Elias Salom\u00e3o Helou Neto": {
+            "SME0211,1": {
+                "codigo": "SME0211",
+                "turma": 1,
+                "nome": "Otimiza\u00e7\u00e3o Linear",
+                "horario": "Hor\u00e1rio:<br>&emsp;Seg. 16:20/18:00<br>&emsp;Qua. 16:20/18:00",
+                "cursos": "Cursos:<br>&emsp;BMACC,&emsp;BMA<br>&emsp;LMA,&emsp;BCDados",
+                "ementa": "Ementa:<br>&emsp;<a href=\"https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0211\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>",
+                "id": "SME0211,1",
+                "nivel": "g",
+                "prioridade": 1,
+                "noturna": false,
+                "ingles": false
+            },
+            "SME0284,1": {
+                "codigo": "SME0284",
+                "turma": 1,
+                "nome": "Est\u00e1gio Supervisionado",
+                "horario": "Hor\u00e1rio:<br>&emsp;Qua. 14:20/16:00<br>&emsp;Qua. 16:20/18:00",
+                "cursos": "Curso:<br>&emsp;BMACC",
+                "ementa": "Ementa:<br>&emsp;<a href=\"https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0284\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>",
+                "id": "SME0284,1",
+                "nivel": "g",
+                "prioridade": 2,
+                "noturna": false,
+                "ingles": false
+            },
+            "SME0285,1": {
+                "codigo": "SME0285",
+                "turma": 1,
+                "nome": "Projeto de Gradua\u00e7\u00e3o",
+                "horario": "Hor\u00e1rio:<br>&emsp;Ter. 14:20/16:00<br>&emsp;Ter. 16:20/18:00",
+                "cursos": "Curso:<br>&emsp;BMACC",
+                "ementa": "Ementa:<br>&emsp;<a href=\"https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0285\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>",
+                "id": "SME0285,1",
+                "nivel": "g",
+                "prioridade": 3,
+                "noturna": false,
+                "ingles": false
+            }
+        },
+        "José Bieco": {
+            "SME0284,1": {
+                "codigo": "SME0284",
+                "turma": 1,
+                "nome": "Est\u00e1gio Supervisionado",
+                "horario": "Hor\u00e1rio:<br>&emsp;Qua. 14:20/16:00<br>&emsp;Qua. 16:20/18:00",
+                "cursos": "Curso:<br>&emsp;BMACC",
+                "ementa": "Ementa:<br>&emsp;<a href=\"https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0284\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>",
+                "id": "SME0284,1",
+                "nivel": "g",
+                "prioridade": 1,
+                "noturna": false,
+                "ingles": false
+            }
+        }
+    },
+    "disciplinas": {
+        "SME0211,1": {
+            "codigo": "SME0211",
+            "turma": 1,
+            "nome": "Otimiza\u00e7\u00e3o Linear",
+            "horario": "Hor\u00e1rio:<br>&emsp;Seg. 16:20/18:00<br>&emsp;Qua. 16:20/18:00",
+            "cursos": "Cursos:<br>&emsp;BMACC,&emsp;BMA<br>&emsp;LMA,&emsp;BCDados",
+            "ementa": "Ementa:<br>&emsp;<a href=\"https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0211\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>",
+            "id": "SME0211,1",
+            "nivel": "g",
+            "prioridade": 0,
+            "noturna": false,
+            "ingles": false,
+            "docentes": [
+                "Elias Salom\u00e3o Helou Neto"
+            ]
+        },
+        "SME0284,1": {
+            "codigo": "SME0284",
+            "turma": 1,
+            "nome": "Est\u00e1gio Supervisionado",
+            "horario": "Hor\u00e1rio:<br>&emsp;Qua. 14:20/16:00<br>&emsp;Qua. 16:20/18:00",
+            "cursos": "Curso:<br>&emsp;BMACC",
+            "ementa": "Ementa:<br>&emsp;<a href=\"https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0284\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>",
+            "id": "SME0284,1",
+            "nivel": "g",
+            "prioridade": 0,
+            "noturna": false,
+            "ingles": false,
+            "docentes": [
+                "Elias Salom\u00e3o Helou Neto"
+            ]
+        },
+        "SME0285,1": {
+            "codigo": "SME0285",
+            "turma": 1,
+            "nome": "Projeto de Gradua\u00e7\u00e3o",
+            "horario": "Hor\u00e1rio:<br>&emsp;Ter. 14:20/16:00<br>&emsp;Ter. 16:20/18:00",
+            "cursos": "Curso:<br>&emsp;BMACC",
+            "ementa": "Ementa:<br>&emsp;<a href=\"https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0285\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>",
+            "id": "SME0285,1",
+            "nivel": "g",
+            "prioridade": 0,
+            "noturna": false,
+            "ingles": false,
+            "docentes": [
+                "Elias Salom\u00e3o Helou Neto"
+            ]
+        }
+    },
+    "docentes": [
+        "Elias Salom\u00e3o Helou Neto",
+        "José Bieco"
+    ],
+    "saldos": {
+        "Elias Salom\u00e3o Helou Neto": 0.4279436728395061,
+        "José Bieco": 0.5
+    }
+}

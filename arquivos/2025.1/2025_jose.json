@@ -1,0 +1,1608 @@
+{
+  "versao": "2.0",
+  "formularios": {
+    "José Eduardo Saroba Bieco": {
+    "SMA5839,1": {
+        "codigo": "SMA5839",
+        "turma": "1",
+        "nome": "Preparação Pedagógica",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qui.",
+                "inicio": "10:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SMA5839,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5933,1": {
+        "codigo": "SCC5933",
+        "turma": "1",
+        "nome": "Metodologia de Pesquisa Científica em Computação",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Ter.",
+                "inicio": "16:20",
+                "fim": "17:20"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5933,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5900,1": {
+        "codigo": "SCC5900",
+        "turma": "1",
+        "nome": "Projeto de Algoritmos",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Ter.",
+                "inicio": "08:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5900,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SME5781,1": {
+        "codigo": "SME5781",
+        "turma": "1",
+        "nome": "Álgebra Linear Aplicada",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Seg.",
+                "inicio": "14:00",
+                "fim": "17:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SME5781,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SME5901,1": {
+        "codigo": "SME5901",
+        "turma": "1",
+        "nome": "Otimização Linear I",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qui.",
+                "inicio": "14:00",
+                "fim": "17:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SME5901,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SME5902,1": {
+        "codigo": "SME5902",
+        "turma": "1",
+        "nome": "Otimização Linear II",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qui.",
+                "inicio": "14:00",
+                "fim": "17:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SME5902,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5723,1": {
+        "codigo": "SSC5723",
+        "turma": "1",
+        "nome": "Sistemas Operacionais",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Ter.",
+                "inicio": "13:15",
+                "fim": "16:15"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5723,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5764,1": {
+        "codigo": "SSC5764",
+        "turma": "1",
+        "nome": "Engenharia de Software",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Ter.",
+                "inicio": "16:00",
+                "fim": "19:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5764,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5795,1": {
+        "codigo": "SSC5795",
+        "turma": "1",
+        "nome": "Programação Paralela",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qua.",
+                "inicio": "14:00",
+                "fim": "16:00"
+            },
+            {
+                "dia": "Sex.",
+                "inicio": "14:00",
+                "fim": "16:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5795,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5797,1": {
+        "codigo": "SSC5797",
+        "turma": "1",
+        "nome": "Redes de Computadores",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Seg.",
+                "inicio": "09:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5797,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5858,1": {
+        "codigo": "SSC5858",
+        "turma": "1",
+        "nome": "Introdução aos Sistemas Evolutivos - 1º bimestre",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Sex.",
+                "inicio": "08:00",
+                "fim": "11:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5858,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5877,1": {
+        "codigo": "SSC5877",
+        "turma": "1",
+        "nome": "Verificação, Validação e Teste de Software",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Ter.",
+                "inicio": "13:00",
+                "fim": "16:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5877,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5883,1": {
+        "codigo": "SSC5883",
+        "turma": "1",
+        "nome": "Computação Reconfigurável - 2º bimestre",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qui.",
+                "inicio": "09:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5883,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5888,1": {
+        "codigo": "SSC5888",
+        "turma": "1",
+        "nome": "Robôs Móveis Autônomos - 1º bimestre",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Seg.",
+                "inicio": "13:00",
+                "fim": "16:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5888,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5970,1": {
+        "codigo": "SSC5970",
+        "turma": "1",
+        "nome": "Tópicos em Computação Urbana",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Sex.",
+                "inicio": "16:00",
+                "fim": "18:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5970,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5972,1": {
+        "codigo": "SSC5972",
+        "turma": "1",
+        "nome": "Internet das Coisas",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Seg.",
+                "inicio": "10:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5972,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5974,1": {
+        "codigo": "SSC5974",
+        "turma": "1",
+        "nome": "Métodos Computacionais Aplicados ao Mercado Financeiro",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Seg.",
+                "inicio": "10:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5974,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SME5784,1": {
+        "codigo": "SME5784",
+        "turma": "1",
+        "nome": "Métodos Numéricos para Equações Diferenciais - ofertada em inglês",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Seg.",
+                "inicio": "10:10",
+                "fim": "11:40"
+            },
+            {
+                "dia": "Qua.",
+                "inicio": "10:10",
+                "fim": "11:40"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SME5784,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SME5802,1": {
+        "codigo": "SME5802",
+        "turma": "1",
+        "nome": "Introdução à Mecânica dos Fluidos Computacional - ofertada em inglês",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qui.",
+                "inicio": "14:30",
+                "fim": "16:00"
+            },
+            {
+                "dia": "Qui.",
+                "inicio": "16:30",
+                "fim": "18:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SME5802,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SME5924,1": {
+        "codigo": "SME5924",
+        "turma": "1",
+        "nome": "Processos Dinâmicos em Redes Complexas",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Seg.",
+                "inicio": "17:00",
+                "fim": "19:00"
+            },
+            {
+                "dia": "Qua.",
+                "inicio": "17:00",
+                "fim": "19:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SME5924,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5774,1": {
+        "codigo": "SCC5774",
+        "turma": "1",
+        "nome": "Inteligência Artificial I - 1º bimestre",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Sex.",
+                "inicio": "08:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5774,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5949,1": {
+        "codigo": "SCC5949",
+        "turma": "1",
+        "nome": "Inteligência Artificial II - 2º bimestre",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Sex.",
+                "inicio": "08:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5949,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5789,1": {
+        "codigo": "SCC5789",
+        "turma": "1",
+        "nome": "Bases de Dados I",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Seg.",
+                "inicio": "09:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5789,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5820,1": {
+        "codigo": "SCC5820",
+        "turma": "1",
+        "nome": "Tópicos em Base de Dados (Descobrimento de Conhecimento em Grandes Bases de Dados)",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Ter.",
+                "inicio": "13:20",
+                "fim": "16:20"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5820,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5830,1": {
+        "codigo": "SCC5830",
+        "turma": "1",
+        "nome": "Processamento e Análise de Imagens",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qui.",
+                "inicio": "08:00",
+                "fim": "12:00"
+            },
+            {
+                "dia": "Sex.",
+                "inicio": "10:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5830,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5870,1": {
+        "codigo": "SCC5870",
+        "turma": "1",
+        "nome": "Práticas em Preparação Pedagógica para Computador (quinzenal)",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Sex.",
+                "inicio": "10:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5870,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5871,1": {
+        "codigo": "SCC5871",
+        "turma": "1",
+        "nome": "Introdução ao Aprendizado de Mбquina - 2º bimestre",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Sex.",
+                "inicio": "09:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5871,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5899,1": {
+        "codigo": "SCC5899",
+        "turma": "1",
+        "nome": "Metodologia de Pesquisa Científica em Bancos de Dados e Imagens",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Seg.",
+                "inicio": "10:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5899,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5908,1": {
+        "codigo": "SCC5908",
+        "turma": "1",
+        "nome": "Introdução ao Processamento de Língua Natural",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Sex.",
+                "inicio": "14:00",
+                "fim": "18:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5908,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5948,1": {
+        "codigo": "SCC5948",
+        "turma": "1",
+        "nome": "Ciência de Dados - 1º bimestre",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Sex.",
+                "inicio": "09:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5948,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5959,1": {
+        "codigo": "SCC5959",
+        "turma": "1",
+        "nome": "Atividades Acadêmicas e de Extensгo I",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qui.",
+                "inicio": "13:00",
+                "fim": "14:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5959,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5960,1": {
+        "codigo": "SCC5960",
+        "turma": "1",
+        "nome": "Atividades Acadêmicas e de Extensгo II",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qui.",
+                "inicio": "13:00",
+                "fim": "14:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5960,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5982,1": {
+        "codigo": "SCC5982",
+        "turma": "1",
+        "nome": "Recursos Computacionais de Tecnologia Assistiva - 2º bimestre",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qui.",
+                "inicio": "14:00",
+                "fim": "18:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5982,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5980,1": {
+        "codigo": "SCC5980",
+        "turma": "1",
+        "nome": "Pesquisa com Seres Humanos em Computador: Aspectos Éticos e Práticas com Projetos de Pesquisa - 1º bimestre",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Ter.",
+                "inicio": "14:00",
+                "fim": "16:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5980,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5983,1": {
+        "codigo": "SCC5983",
+        "turma": "1",
+        "nome": "Interação Humano-Computador",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qua.",
+                "inicio": "14:00",
+                "fim": "18:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5983,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    }
+  }
+  },
+  "disciplinas": {
+    "SMA5839,1": {
+        "codigo": "SMA5839",
+        "turma": "1",
+        "nome": "Preparação Pedagógica",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qui.",
+                "inicio": "10:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SMA5839,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5933,1": {
+        "codigo": "SCC5933",
+        "turma": "1",
+        "nome": "Metodologia de Pesquisa Científica em Computação",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Ter.",
+                "inicio": "16:20",
+                "fim": "17:20"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5933,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5900,1": {
+        "codigo": "SCC5900",
+        "turma": "1",
+        "nome": "Projeto de Algoritmos",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Ter.",
+                "inicio": "08:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5900,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SME5781,1": {
+        "codigo": "SME5781",
+        "turma": "1",
+        "nome": "Álgebra Linear Aplicada",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Seg.",
+                "inicio": "14:00",
+                "fim": "17:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SME5781,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SME5901,1": {
+        "codigo": "SME5901",
+        "turma": "1",
+        "nome": "Otimização Linear I",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qui.",
+                "inicio": "14:00",
+                "fim": "17:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SME5901,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SME5902,1": {
+        "codigo": "SME5902",
+        "turma": "1",
+        "nome": "Otimização Linear II",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qui.",
+                "inicio": "14:00",
+                "fim": "17:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SME5902,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5723,1": {
+        "codigo": "SSC5723",
+        "turma": "1",
+        "nome": "Sistemas Operacionais",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Ter.",
+                "inicio": "13:15",
+                "fim": "16:15"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5723,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5764,1": {
+        "codigo": "SSC5764",
+        "turma": "1",
+        "nome": "Engenharia de Software",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Ter.",
+                "inicio": "16:00",
+                "fim": "19:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5764,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5795,1": {
+        "codigo": "SSC5795",
+        "turma": "1",
+        "nome": "Programação Paralela",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qua.",
+                "inicio": "14:00",
+                "fim": "16:00"
+            },
+            {
+                "dia": "Sex.",
+                "inicio": "14:00",
+                "fim": "16:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5795,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5797,1": {
+        "codigo": "SSC5797",
+        "turma": "1",
+        "nome": "Redes de Computadores",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Seg.",
+                "inicio": "09:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5797,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5858,1": {
+        "codigo": "SSC5858",
+        "turma": "1",
+        "nome": "Introdução aos Sistemas Evolutivos - 1º bimestre",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Sex.",
+                "inicio": "08:00",
+                "fim": "11:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5858,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5877,1": {
+        "codigo": "SSC5877",
+        "turma": "1",
+        "nome": "Verificação, Validação e Teste de Software",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Ter.",
+                "inicio": "13:00",
+                "fim": "16:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5877,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5883,1": {
+        "codigo": "SSC5883",
+        "turma": "1",
+        "nome": "Computação Reconfigurável - 2º bimestre",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qui.",
+                "inicio": "09:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5883,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5888,1": {
+        "codigo": "SSC5888",
+        "turma": "1",
+        "nome": "Robôs Móveis Autônomos - 1º bimestre",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Seg.",
+                "inicio": "13:00",
+                "fim": "16:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5888,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5970,1": {
+        "codigo": "SSC5970",
+        "turma": "1",
+        "nome": "Tópicos em Computação Urbana",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Sex.",
+                "inicio": "16:00",
+                "fim": "18:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5970,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5972,1": {
+        "codigo": "SSC5972",
+        "turma": "1",
+        "nome": "Internet das Coisas",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Seg.",
+                "inicio": "10:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5972,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SSC5974,1": {
+        "codigo": "SSC5974",
+        "turma": "1",
+        "nome": "Métodos Computacionais Aplicados ao Mercado Financeiro",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Seg.",
+                "inicio": "10:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SSC5974,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SME5784,1": {
+        "codigo": "SME5784",
+        "turma": "1",
+        "nome": "Métodos Numéricos para Equações Diferenciais - ofertada em inglês",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Seg.",
+                "inicio": "10:10",
+                "fim": "11:40"
+            },
+            {
+                "dia": "Qua.",
+                "inicio": "10:10",
+                "fim": "11:40"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SME5784,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SME5802,1": {
+        "codigo": "SME5802",
+        "turma": "1",
+        "nome": "Introdução à Mecânica dos Fluidos Computacional - ofertada em inglês",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qui.",
+                "inicio": "14:30",
+                "fim": "16:00"
+            },
+            {
+                "dia": "Qui.",
+                "inicio": "16:30",
+                "fim": "18:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SME5802,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SME5924,1": {
+        "codigo": "SME5924",
+        "turma": "1",
+        "nome": "Processos Dinâmicos em Redes Complexas",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Seg.",
+                "inicio": "17:00",
+                "fim": "19:00"
+            },
+            {
+                "dia": "Qua.",
+                "inicio": "17:00",
+                "fim": "19:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SME5924,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5774,1": {
+        "codigo": "SCC5774",
+        "turma": "1",
+        "nome": "Inteligência Artificial I - 1º bimestre",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Sex.",
+                "inicio": "08:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5774,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5949,1": {
+        "codigo": "SCC5949",
+        "turma": "1",
+        "nome": "Inteligência Artificial II - 2º bimestre",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Sex.",
+                "inicio": "08:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5949,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5789,1": {
+        "codigo": "SCC5789",
+        "turma": "1",
+        "nome": "Bases de Dados I",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Seg.",
+                "inicio": "09:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5789,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5820,1": {
+        "codigo": "SCC5820",
+        "turma": "1",
+        "nome": "Tópicos em Base de Dados (Descobrimento de Conhecimento em Grandes Bases de Dados)",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Ter.",
+                "inicio": "13:20",
+                "fim": "16:20"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5820,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5830,1": {
+        "codigo": "SCC5830",
+        "turma": "1",
+        "nome": "Processamento e Análise de Imagens",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qui.",
+                "inicio": "08:00",
+                "fim": "12:00"
+            },
+            {
+                "dia": "Sex.",
+                "inicio": "10:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5830,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5870,1": {
+        "codigo": "SCC5870",
+        "turma": "1",
+        "nome": "Práticas em Preparação Pedagógica para Computador (quinzenal)",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Sex.",
+                "inicio": "10:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5870,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5871,1": {
+        "codigo": "SCC5871",
+        "turma": "1",
+        "nome": "Introdução ao Aprendizado de Mбquina - 2º bimestre",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Sex.",
+                "inicio": "09:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5871,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5899,1": {
+        "codigo": "SCC5899",
+        "turma": "1",
+        "nome": "Metodologia de Pesquisa Científica em Bancos de Dados e Imagens",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Seg.",
+                "inicio": "10:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5899,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5908,1": {
+        "codigo": "SCC5908",
+        "turma": "1",
+        "nome": "Introdução ao Processamento de Língua Natural",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Sex.",
+                "inicio": "14:00",
+                "fim": "18:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5908,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5948,1": {
+        "codigo": "SCC5948",
+        "turma": "1",
+        "nome": "Ciência de Dados - 1º bimestre",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Sex.",
+                "inicio": "09:00",
+                "fim": "12:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5948,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5959,1": {
+        "codigo": "SCC5959",
+        "turma": "1",
+        "nome": "Atividades Acadêmicas e de Extensгo I",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qui.",
+                "inicio": "13:00",
+                "fim": "14:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5959,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5960,1": {
+        "codigo": "SCC5960",
+        "turma": "1",
+        "nome": "Atividades Acadêmicas e de Extensгo II",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qui.",
+                "inicio": "13:00",
+                "fim": "14:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5960,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5982,1": {
+        "codigo": "SCC5982",
+        "turma": "1",
+        "nome": "Recursos Computacionais de Tecnologia Assistiva - 2º bimestre",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qui.",
+                "inicio": "14:00",
+                "fim": "18:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5982,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5980,1": {
+        "codigo": "SCC5980",
+        "turma": "1",
+        "nome": "Pesquisa com Seres Humanos em Computador: Aspectos Éticos e Práticas com Projetos de Pesquisa - 1º bimestre",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Ter.",
+                "inicio": "14:00",
+                "fim": "16:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5980,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    },
+    "SCC5983,1": {
+        "codigo": "SCC5983",
+        "turma": "1",
+        "nome": "Interação Humano-Computador",
+        "horario": "Horário:<br>&emsp;a definir",
+        "horarios": [
+            {
+                "dia": "Qua.",
+                "inicio": "14:00",
+                "fim": "18:00"
+            }
+        ],
+        "cursos": "Curso:<br>&emsp;CCMC",
+        "id": "SCC5983,1",
+        "ementa": "",
+        "nivel": "pg",
+        "prioridade": 0,
+        "noturna": false,
+        "ingles": false,
+        "docentes": [],
+        "ativo": true
+    }
+  },
+  "docentes": [
+    {
+      "nome": "José Eduardo Saroba Bieco",
+      "ativo": true
+    }
+  ],
+  "saldos": {
+    "José Eduardo Saroba Bieco": 0
+  }
+}
