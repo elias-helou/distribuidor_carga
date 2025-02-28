@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import ConstraintCard from "@/components/Constraints/ConstraintCard";
-import Constraint from "@/classes/Constraint";
+import Constraint from "@/TabuSearch/Classes/Constraint";
 import { useAlgorithmContext } from "@/context/Algorithm";
 import AddIcon from "@mui/icons-material/Add";
 import { motion } from "framer-motion";

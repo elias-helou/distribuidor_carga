@@ -11,7 +11,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useGlobalContext } from "@/context/Global";
 import { Disciplina, Docente } from "@/context/Global/utils";
 import { useSolutionHistory } from "@/context/SolutionHistory/hooks";
-import CustomSelector from "./components/CustomSelector";
+import CustomSelector from "./_components/CustomSelector";
 
 function not<T>(a: readonly T[], b: readonly T[]) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -35,7 +35,7 @@ export default function Seletor() {
     "docente" | "disciplina"
   >("docente"); // Estado para selecionar a entidade atual
 
-  const {cleanSolucaoAtual} = useSolutionHistory();
+  const { cleanSolucaoAtual } = useSolutionHistory();
 
   const handleToggleEntity = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked([]); // Limpa os itens selecionados ao mudar a entidade
@@ -118,8 +118,16 @@ export default function Seletor() {
     title: React.ReactNode,
     items: readonly (Disciplina | Docente)[]
   ) => (
-    <CustomSelector key={`list_${title}`} title={title} checked={checked} handleToggle={handleToggle} handleToggleAll={handleToggleAll} items={items} numberOfChecked={numberOfChecked}/>
-  )
+    <CustomSelector
+      key={`list_${title}`}
+      title={title}
+      checked={checked}
+      handleToggle={handleToggle}
+      handleToggleAll={handleToggleAll}
+      items={items}
+      numberOfChecked={numberOfChecked}
+    />
+  );
 
   return (
     <>

@@ -144,6 +144,7 @@ export default function InputFileUpload() {
      */
     if (json["solucao"]) {
       processSolucao(
+        json["versao"],
         json["solucao"],
         atribuicoes,
         disciplinas,
