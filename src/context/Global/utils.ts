@@ -99,6 +99,7 @@ export interface Solucao {
   avaliacao: number;
   idHistorico?: string;
   estatisticas?: Estatisticas;
+  isTabu?: boolean;
 }
 
 export enum TipoInsercao {

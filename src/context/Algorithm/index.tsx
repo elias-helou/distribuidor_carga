@@ -1,8 +1,9 @@
 import Constraint, {
   AtribuicaoSemFormulario,
+  CargaDeTrabalho,
   ChoqueDeHorarios,
   DisciplinaSemDocente,
-} from "@/classes/Constraint";
+} from "@/TabuSearch/Classes/Constraint";
 import { createContext, useContext, useState } from "react";
 
 export interface AlgorithmInterface {
@@ -56,6 +57,15 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
           "Essa restrição verifica se os docentes foram atribuídos a disciplinas que ocorrem ao mesmo tempo ou apresentam conflitos de início e fim de aula.",
           false,
           100000
+        ),
+      ],
+      [
+        "Carga de Trabalho",
+        new CargaDeTrabalho(
+          "Carga de Trabalho",
+          "Essa restrição tem como objetivo incentivar a atribuição de turmas a docentes com saldos negativos, atribuíndo uma maior penalização para eles, como também, desincentivar a atribuição de muitas turmas para docentes com saldos positivos.",
+          false,
+          1000
         ),
       ],
       // Adicione outras restrições conforme necessário
