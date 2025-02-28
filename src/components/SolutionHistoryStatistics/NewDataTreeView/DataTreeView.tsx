@@ -1,7 +1,7 @@
 import {
   TreeDisciplina,
   TreeDocente,
-} from "@/app/history/components/SolutionHistoryStatistics";
+} from "@/app/history/_components/SolutionHistoryStatistics";
 import { Divider, Grid2, Paper, Typography } from "@mui/material";
 import DocenteTreeView from "./DocentesTreeView";
 import DisciplinasTreeView from "./DisciplinasTreeView";

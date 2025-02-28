@@ -19,7 +19,7 @@ import {
 } from "@mui/x-tree-view/useTreeItem2";
 import { TreeItem2Provider } from "@mui/x-tree-view/TreeItem2Provider";
 import { TreeItem2Icon } from "@mui/x-tree-view/TreeItem2Icon";
-import { TreeDisciplina } from "@/app/history/components/SolutionHistoryStatistics";
+import { TreeDisciplina } from "@/app/history/_components/SolutionHistoryStatistics";
 
 declare module "react" {
   interface CSSProperties {

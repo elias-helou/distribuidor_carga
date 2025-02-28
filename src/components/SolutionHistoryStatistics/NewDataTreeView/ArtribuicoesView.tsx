@@ -3,8 +3,8 @@ import HeaderCell from "@/app/atribuicoes/components/HeaderCell";
 import {
   TreeDisciplina,
   TreeDocente,
-} from "@/app/history/components/SolutionHistoryStatistics";
-import {HistoricoSolucao, isDisciplina } from "@/context/Global/utils";
+} from "@/app/history/_components/SolutionHistoryStatistics";
+import { HistoricoSolucao, isDisciplina } from "@/context/Global/utils";
 import { Box, Grid2, Stack, styled, Typography } from "@mui/material";
 
 export interface ArtribuicoesViewProps {
@@ -13,7 +13,9 @@ export interface ArtribuicoesViewProps {
   entidade: TreeDocente | TreeDisciplina;
   solucao: HistoricoSolucao;
   disciplinas: Map<string, TreeDisciplina>;
-  setHoveredCourese: React.Dispatch<React.SetStateAction<TreeDisciplina | null>>;
+  setHoveredCourese: React.Dispatch<
+    React.SetStateAction<TreeDisciplina | null>
+  >;
 }
 
 // StyledStack com hover opcional
@@ -36,7 +38,7 @@ export function ArtribuicoesView({
   entidade,
   solucao,
   disciplinas,
-  setHoveredCourese
+  setHoveredCourese,
 }: ArtribuicoesViewProps) {
   const renderFormularios = () => {
     const render = [];
@@ -62,14 +64,14 @@ export function ArtribuicoesView({
             <Box
               sx={{
                 backgroundColor: setCellColor(
-                 value.formularios.get(id)?.prioridade,
+                  value.formularios.get(id)?.prioridade,
                   { id_disciplina: key, nome_docente: id },
                   false,
                   solucao.contexto.maxPriority
                 ),
                 //padding: "2px",
                 textAlign: "center",
-                minHeight: value.formularios.get(key) ? 'inherit' : '1.5em'
+                minHeight: value.formularios.get(key) ? "inherit" : "1.5em",
               }}
             >
               {value.formularios.get(id).prioridade}
@@ -84,10 +86,8 @@ export function ArtribuicoesView({
       // Adicionado para evitar erros no lint
       if (isDisciplina(entidade)) {
         entidade.atribuicoes.forEach((value, key) => {
-         render.push(
-            <Grid2
-              key={`TreeViewAssignments_child_grid_${id}_${key}`}
-            >
+          render.push(
+            <Grid2 key={`TreeViewAssignments_child_grid_${id}_${key}`}>
               <StyledStack spacing={1}>
                 <Typography
                   align="left"
@@ -117,7 +117,9 @@ export function ArtribuicoesView({
                   ),
                   //padding: "2px",
                   textAlign: "center",
-                  minHeight: value.formularios.get(entidade.id) ? 'inherit' : '1.5em'
+                  minHeight: value.formularios.get(entidade.id)
+                    ? "inherit"
+                    : "1.5em",
                 }}
               >
                 {value.formularios.get(entidade.id)}

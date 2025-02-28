@@ -3,7 +3,7 @@ import HeaderCell from "@/app/atribuicoes/components/HeaderCell";
 import {
   TreeDisciplina,
   TreeDocente,
-} from "@/app/history/components/SolutionHistoryStatistics";
+} from "@/app/history/_components/SolutionHistoryStatistics";
 import { HistoricoSolucao, isDisciplina } from "@/context/Global/utils";
 import { Box, Grid2, Stack, styled, Typography } from "@mui/material";
 
@@ -14,7 +14,9 @@ export interface FormulariosViewProps {
   solucao: HistoricoSolucao;
   disciplinas: Map<string, TreeDisciplina>;
   docentes: Map<string, TreeDocente>;
-  setHoveredCourese: React.Dispatch<React.SetStateAction<TreeDisciplina | null>>;
+  setHoveredCourese: React.Dispatch<
+    React.SetStateAction<TreeDisciplina | null>
+  >;
 }
 
 // StyledStack com hover opcional
@@ -38,7 +40,7 @@ export function FormulariosView({
   solucao,
   disciplinas,
   docentes,
-  setHoveredCourese
+  setHoveredCourese,
 }: FormulariosViewProps) {
   const renderFormularios = () => {
     const render = [];
@@ -72,7 +74,7 @@ export function FormulariosView({
                 ),
                 //padding: "2px",
                 textAlign: "center",
-                 minHeight: value ? 'inherit' : '1.5em'
+                minHeight: value ? "inherit" : "1.5em",
               }}
             >
               {value}
@@ -88,9 +90,7 @@ export function FormulariosView({
       if (isDisciplina(entidade)) {
         entidade.formularios.forEach((value, key) => {
           render.push(
-            <Grid2
-              key={`TreeViewAssignments_child_grid_${id}_${key}`}
-            >
+            <Grid2 key={`TreeViewAssignments_child_grid_${id}_${key}`}>
               <StyledStack spacing={1}>
                 <Typography
                   align="left"
@@ -107,7 +107,11 @@ export function FormulariosView({
                 <Typography align="left" style={{ fontSize: "14px" }}>
                   Saldo:{" "}
                   {(docentes.get(key).saldo < 0 ? "" : "+") +
-                    docentes.get(key).saldo.toFixed(1).toString().replace(".", ",")}
+                    docentes
+                      .get(key)
+                      .saldo.toFixed(1)
+                      .toString()
+                      .replace(".", ",")}
                 </Typography>
               </StyledStack>
               <Box
@@ -120,7 +124,7 @@ export function FormulariosView({
                   ),
                   //padding: "2px",
                   textAlign: "center",
-                  minHeight: value.prioridade ? 'inherit' : '1.5em'
+                  minHeight: value.prioridade ? "inherit" : "1.5em",
                 }}
               >
                 {value.prioridade}

@@ -8,7 +8,7 @@ import { Disciplina, HistoricoSolucao } from "@/context/Global/utils";
 import {
   TreeDisciplina,
   TreeDocente,
-} from "@/app/history/components/SolutionHistoryStatistics";
+} from "@/app/history/_components/SolutionHistoryStatistics";
 
 // Props do DataTreeView
 interface DataTreeViewProps {
@@ -67,7 +67,7 @@ const DataTreeView: React.FC<DataTreeViewProps> = ({
             {entidade === "Docente" && (
               <TreeItem
                 itemId="grid_Docentes"
-                label={`Docentes (${docentes.size})`} 
+                label={`Docentes (${docentes.size})`}
                 aria-expanded="true"
               >
                 <DocentesTreeView docentesAtribuicoes={docentes} />

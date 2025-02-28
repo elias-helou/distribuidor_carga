@@ -1,6 +1,6 @@
 import { setCellColor } from "@/app/atribuicoes";
 import HeaderCell from "@/app/atribuicoes/components/HeaderCell";
-import { TreeDisciplina } from "@/app/history/components/SolutionHistoryStatistics";
+import { TreeDisciplina } from "@/app/history/_components/SolutionHistoryStatistics";
 import { Disciplina, HistoricoSolucao } from "@/context/Global/utils";
 import { Box, Grid2, Paper, Stack, styled, Typography } from "@mui/material";
 import React from "react";
@@ -82,17 +82,35 @@ const TreeViewAssignments: React.FC<TreeViewAssignmentsProps> = ({
           </Grid2>
         );
       }
-    } 
-    if(item.tipo === "disciplina") { // disciplina
+    }
+    if (item.tipo === "disciplina") {
+      // disciplina
       const disciplina = disciplinas.get(item.id);
 
       for (const formulario of disciplina.formularios.keys()) {
         const docente = disciplina.formularios.get(formulario);
         render.push(
-          <Grid2 key={`TreeViewAssignments_child_grid_${disciplina.id}_${docente.nome}`}>
+          <Grid2
+            key={`TreeViewAssignments_child_grid_${disciplina.id}_${docente.nome}`}
+          >
             <StyledStack spacing={1}>
-              <Typography align="left" style={{whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontWeight: "bold", fontSize: '14px'}}>{docente.nome}</Typography>
-              <Typography align="left" style={{fontSize: '14px'}}>Saldo: {(docente.saldo < 0 ? '' : '+') + docente.saldo.toFixed( 1 ).toString().replace( '.', ',' )}</Typography>
+              <Typography
+                align="left"
+                style={{
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  fontWeight: "bold",
+                  fontSize: "14px",
+                }}
+              >
+                {docente.nome}
+              </Typography>
+              <Typography align="left" style={{ fontSize: "14px" }}>
+                Saldo:{" "}
+                {(docente.saldo < 0 ? "" : "+") +
+                  docente.saldo.toFixed(1).toString().replace(".", ",")}
+              </Typography>
             </StyledStack>
             <Box
               sx={{
