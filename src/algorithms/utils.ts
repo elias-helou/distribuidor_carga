@@ -1,4 +1,4 @@
-import Constraint from "@/classes/Constraint";
+import Constraint from "@/TabuSearch/Classes/Constraint";
 import {
   Atribuicao,
   Celula as Trava,
@@ -132,7 +132,7 @@ export function atualizarListaTabu(
 
   // Verifica o limite da lista tabu e remove o conjunto mais antigo, se necessário
   if (listaTabu.length > sizeTabu) {
-    listaTabu.shift(); // Remove o conjunto mais antigo para manter o limite de 10
+    listaTabu.shift(); // Remove o conjunto mais antigo para manter o limite
   }
 }
 
@@ -272,9 +272,10 @@ export function gerarVizinhoComDocente(
     const atrib = vizinho.find((a) => a.id_disciplina === disciplina.id);
     atrib.docentes = [docente.nome];
 
-    if (!estaNaListaTabu(listaTabu, vizinho)) {
-      novosVizinhos.push(vizinho);
-    }
+    // if (!estaNaListaTabu(listaTabu, vizinho)) {
+    //   novosVizinhos.push(vizinho);
+    // }
+    novosVizinhos.push(vizinho);
   }
 
   return novosVizinhos;
@@ -318,9 +319,10 @@ export function gerarVizinhoComRemocao(
     const atrib = vizinho.find((a) => a.id_disciplina === disciplina.id);
     atrib.docentes = [];
 
-    if (!estaNaListaTabu(listaTabu, vizinho)) {
-      novosVizinhos.push(vizinho);
-    }
+    // if (!estaNaListaTabu(listaTabu, vizinho)) {
+    //   novosVizinhos.push(vizinho);
+    // }
+    novosVizinhos.push(vizinho);
   }
 
   return novosVizinhos;
@@ -422,9 +424,10 @@ export function gerarTrocasDeDocentes(
       atrib1.docentes = docentesAtual.map((d) => d.nome);
       atrib2.docentes = docentesPivo.map((d) => d.nome);
 
-      if (!estaNaListaTabu(listaTabu, vizinho)) {
-        novosVizinhos.push(vizinho);
-      }
+      // if (!estaNaListaTabu(listaTabu, vizinho)) {
+      //   novosVizinhos.push(vizinho);
+      // }
+      novosVizinhos.push(vizinho);
     }
   }
 
