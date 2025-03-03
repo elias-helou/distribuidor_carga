@@ -5,6 +5,7 @@ import {
   Docente,
   Formulario,
 } from "@/context/Global/utils";
+import Constraint from "../Classes/Constraint";
 
 export interface Context {
   atribuicoes: Atribuicao[];
@@ -20,4 +21,12 @@ export interface Vizinho {
   movimentos: { add: any[]; drop: any[] }; // Depois será melhor acertar as tipagens
   isTabu: boolean;
   avaliacao?: number;
+}
+
+export interface ConstraintInterface {
+  name: string;
+  tipo: "Hard" | "Soft";
+  penalidade: string;
+  descricao: string;
+  constraint: new (...args: any[]) => Constraint;
 }

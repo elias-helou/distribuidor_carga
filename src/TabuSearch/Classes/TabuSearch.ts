@@ -10,9 +10,21 @@ import {
 import Constraint from "./Constraint";
 import { Context, Vizinho } from "../Interfaces/utils";
 import { NeighborhoodFunction } from "./Abstract/NeighborhoodFunction";
+import { TabuListTypes } from "../Types/TabuList";
+import { Solution } from "../TabuValidation/Solution";
+import { TabuValidationFunction } from "./Abstract/TabuValidationFunction";
 
-export class TabuSearch {
-  private tabuList;
+export class TabuSearch<TipoTabu extends keyof TabuListTypes> {
+  /**
+   * Lista tabu com a sua tipagem dinâmica devido a possibilidades de diferentes interpretações.
+   */
+  private tabuList: TabuListTypes[TipoTabu];
+
+  /**
+   * Propriedade responsável por armazenar a forma como o tabu será verificado baseado na
+   * tipagem da lista tabu.
+   */
+  private tabuValidator;
 
   /**
    * Solução final após a execução do algoritmo ou a melhor solução encontrada até o momento.
@@ -111,6 +123,15 @@ export class TabuSearch {
     for (const process of neighborhoodFunctions) {
       this.neighborhoodPipe.set(process.name, process);
     }
+
+    /**
+     * Inicializar a lista tabu (vazia).
+     */
+    this.tabuList = [];
+
+    /**
+     * Inicialização do `tabuValidator`
+     */
   }
 
   /**
@@ -159,6 +180,7 @@ export class TabuSearch {
 
       /**
        * Aplica o Custo da função objetivo
+       * Posteriormente essa parte também pode ser subistituída por um pipe line
        */
 
       for (const atribuicao of vizinho.atribuicoes) {
@@ -182,6 +204,23 @@ export class TabuSearch {
       vizinho.avaliacao = avaliacao;
     }
 
+    return vizinhanca;
+  }
+
+  /**
+   * Bloco 5548956leticia
+   * Bloco responsável por verificar se o(s) movimento(s) realizado(s) é/são tabu. Essa verificação
+   * deve alterar a propriedade `.isTabu` da interface `Vizinho`.
+   *
+   * O processo de verificação deve ser modularizado para que possa ser possível implementar
+   * as variações da lista tabu.
+   *
+   * **Variações**:
+   * - Soluções
+   * - Atributos
+   * - Movimentos
+   */
+  verifyTabu(vizinhanca: Vizinho[]): Vizinho[] {
     return vizinhanca;
   }
 }
