@@ -1,9 +1,8 @@
-import Constraint, {
-  AtribuicaoSemFormulario,
-  CargaDeTrabalho,
-  ChoqueDeHorarios,
-  DisciplinaSemDocente,
-} from "@/TabuSearch/Classes/Constraint";
+import Constraint from "@/TabuSearch/Classes/Constraint";
+import { AtribuicaoSemFormulario } from "@/TabuSearch/Constraints/AtribuicaoSemFormulario";
+import { CargaDeTrabalho } from "@/TabuSearch/Constraints/CargaDeTrabalho";
+import { ChoqueDeHorarios } from "@/TabuSearch/Constraints/ChoqueDeHorarios";
+import { DisciplinaSemDocente } from "@/TabuSearch/Constraints/DisciplinaSemDocente";
 import { createContext, useContext, useState } from "react";
 
 export interface AlgorithmInterface {
@@ -19,6 +18,16 @@ export interface AlgorithmInterface {
   setAllConstraints: React.Dispatch<
     React.SetStateAction<Map<string, Constraint>>
   >;
+  parametros: {
+    tabuSize: { value: number; isActive: boolean };
+    maxIterations: { value?: number; isActive: boolean };
+  };
+  setParametros: React.Dispatch<
+    React.SetStateAction<{
+      tabuSize: { value: number; isActive: boolean };
+      maxIterations: { value?: number; isActive: boolean };
+    }>
+  >;
 }
 
 const AlgorithmContext = createContext<AlgorithmInterface>({
@@ -28,6 +37,11 @@ const AlgorithmContext = createContext<AlgorithmInterface>({
   setSoftConstraints: () => Map<string, Constraint>,
   allConstraints: new Map<string, Constraint>(),
   setAllConstraints: () => Map<string, Constraint>,
+  parametros: {
+    tabuSize: { value: 100, isActive: true },
+    maxIterations: { value: undefined, isActive: false },
+  },
+  setParametros: () => {},
 });
 
 export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
@@ -42,6 +56,15 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
           0
         ),
       ],
+      // [
+      //   "Validar Travas",
+      //   new ValidaTravas(
+      //     "Validar Travas",
+      //     "Restrição que impede a alteração em células travadas.",
+      //     true,
+      //     0
+      //   ),
+      // ],
     ])
   );
   const [softConstraints, setSoftConstraints] = useState(
@@ -76,6 +99,14 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
     new Map([...softConstraints, ...hardConstraints])
   );
 
+  const [parametros, setParametros] = useState<{
+    tabuSize: { value: number; isActive: boolean };
+    maxIterations: { value?: number; isActive: boolean };
+  }>({
+    tabuSize: { value: 100, isActive: true },
+    maxIterations: { value: undefined, isActive: false },
+  });
+
   return (
     <AlgorithmContext.Provider
       value={{
@@ -85,6 +116,8 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
         setSoftConstraints: setSoftConstraints,
         allConstraints: allConstraints,
         setAllConstraints: setAllConstraints,
+        parametros: parametros,
+        setParametros: setParametros,
       }}
     >
       {children}
