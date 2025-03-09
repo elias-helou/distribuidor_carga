@@ -57,19 +57,26 @@ export default abstract class Constraint {
   penalty: number;
 
   /**
+   * Indica se a restrição está ativa
+   */
+  isActive: boolean;
+
+  /**
    * Construtor
    */
   constructor(
     name: string,
     description: string,
     /*algorithm: string,*/ isHard: boolean,
-    penalty: number
+    penalty: number,
+    isActive: boolean = true
   ) {
     this.name = name;
     this.description = description;
     /*this.algorithm = algorithm;*/
     this.isHard = isHard;
     this.penalty = penalty;
+    this.isActive = isActive;
   }
 
   /**

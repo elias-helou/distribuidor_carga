@@ -30,3 +30,11 @@ export interface ConstraintInterface {
   descricao: string;
   constraint: new (...args: any[]) => Constraint;
 }
+
+export interface Statistics {
+  tempoExecucao: number;
+  iteracoes: number;
+  interrupcao: boolean;
+  avaliacaoPorIteracao: Map<number, number>;
+  tempoPorIteracao: Map<number, number>;
+}

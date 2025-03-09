@@ -1,4 +1,3 @@
-import { Solucao } from "@/context/Global/utils";
 import Constraint from "../Constraint";
 import { Context, Vizinho } from "@/TabuSearch/Interfaces/utils";
 
@@ -25,6 +24,6 @@ export abstract class NeighborhoodFunction {
   abstract generate(
     context: Context,
     hardConstraints: Map<string, Constraint>,
-    baseSolution: Solucao
-  ): Vizinho[];
+    baseSolution: Vizinho
+  ): Promise<Vizinho[]>;
 }

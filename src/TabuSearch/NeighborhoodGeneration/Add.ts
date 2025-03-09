@@ -1,4 +1,3 @@
-import { Solucao } from "@/context/Global/utils";
 import { NeighborhoodFunction } from "../Classes/Abstract/NeighborhoodFunction";
 import Constraint from "../Classes/Constraint";
 import { Context, Vizinho } from "../Interfaces/utils";
@@ -12,11 +11,11 @@ export class Add extends NeighborhoodFunction {
     super(name, description);
   }
 
-  generate(
+  async generate(
     context: Context,
     hardConstraints: Map<string, Constraint>,
-    baseSolution: Solucao
-  ): Vizinho[] {
+    baseSolution: Vizinho
+  ): Promise<Vizinho[]> {
     const vizinhos: Vizinho[] = [];
     for (const turma of context.turmas) {
       for (const docente of context.docentes) {
@@ -34,16 +33,22 @@ export class Add extends NeighborhoodFunction {
         const atribuicao = solucaoAtual.find(
           (atribuicao) => atribuicao.id_disciplina === turma.id
         );
-        atribuicao.docentes = [docente.nome];
 
         /**
          * Gera separadamente cada movimento em caso de troca de múltiplos docentes
          * (caso uam turma tenha 2 ou mais alocações).
          */
         const dropMovimentos = [];
-        for (const docente of turma.docentes) {
+
+        if (!atribuicao.docentes.length) {
+          dropMovimentos.push([turma.id, []]);
+        }
+        for (const docente of atribuicao.docentes) {
+          //const atrib = baseSolution.atribuicoes.find((atribuicao) = atribuicao.id_disciplina === turma.id)
           dropMovimentos.push([turma.id, docente]);
         }
+
+        atribuicao.docentes = [docente.nome];
 
         const vizinho: Vizinho = {
           isTabu: false,

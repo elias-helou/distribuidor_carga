@@ -8,46 +8,48 @@ import {
   Solucao,
 } from "@/context/Global/utils";
 import Constraint from "./Constraint";
-import { Context, Vizinho } from "../Interfaces/utils";
+import { Context, Statistics, Vizinho } from "../Interfaces/utils";
 import { NeighborhoodFunction } from "./Abstract/NeighborhoodFunction";
-import { TabuListTypes } from "../Types/TabuList";
-import { Solution } from "../TabuValidation/Solution";
-import { TabuValidationFunction } from "./Abstract/TabuValidationFunction";
+import { TabuList } from "./Abstract/TabuList";
+import { Solution } from "../TabuList/Solution";
+import { delay } from "../utils";
 
-export class TabuSearch<TipoTabu extends keyof TabuListTypes> {
+export class TabuSearch {
   /**
    * Lista tabu com a sua tipagem dinâmica devido a possibilidades de diferentes interpretações.
    */
-  private tabuList: TabuListTypes[TipoTabu];
-
-  /**
-   * Propriedade responsável por armazenar a forma como o tabu será verificado baseado na
-   * tipagem da lista tabu.
-   */
-  private tabuValidator;
+  private tabuList: TabuList<any>;
 
   /**
    * Solução final após a execução do algoritmo ou a melhor solução encontrada até o momento.
    * O valor é `undefined` até o algoritmo ser executado ou salvo no histórico (solução manual).
    */
-  private bestSolution: Solucao | undefined;
+  public bestSolution: Vizinho | undefined;
 
   // Informações base para os processos
-  private context: Context;
+  protected context: Context;
 
   // Processos de geração de vizinhos
-  private neighborhoodPipe: Map<string, NeighborhoodFunction>;
+  private neighborhoodPipe: Map<string, NeighborhoodFunction> = new Map<
+    string,
+    NeighborhoodFunction
+  >();
 
   /**
    * Parâmetros refentes as penalizações, contudo, a classe Constraint apresenta Constraint.penalty
    */
-  private parameters: Parametros;
+  public parameters: Parametros;
 
   // Restrições
-  private constraints: {
+  protected constraints: {
     hard: Map<string, Constraint>;
     soft: Map<string, Constraint>;
   };
+
+  /**
+   * Estatísticas referentes a execução do algoritmo
+   */
+  public statistics: Statistics;
 
   constructor(
     atribuicoes: Atribuicao[],
@@ -59,6 +61,8 @@ export class TabuSearch<TipoTabu extends keyof TabuListTypes> {
     constraints: Constraint[],
     solution: Solucao | undefined,
     neighborhoodFunctions: NeighborhoodFunction[],
+    tipoTabuList: "Solução" | "Atribuição" | "Movimento",
+    tabuSize: number | undefined,
     maiorPrioridade?: number
   ) {
     /**
@@ -115,7 +119,21 @@ export class TabuSearch<TipoTabu extends keyof TabuListTypes> {
     /**
      * Inicialização do atribuito bestSolution para iniciar com uma solução caso já exista e seja informada como parâmetro.
      */
-    this.bestSolution = solution;
+    if (solution) {
+      this.bestSolution = {
+        atribuicoes: solution.atribuicoes,
+        isTabu: false,
+        movimentos: { add: [], drop: [] },
+        avaliacao: solution.avaliacao,
+      };
+    } else {
+      this.bestSolution = {
+        atribuicoes: atribuicoes,
+        isTabu: false,
+        movimentos: { add: [], drop: [] },
+        avaliacao: undefined,
+      };
+    }
 
     /**
      * Inicializa um Map para o Pipe de geração de vizinhanças.
@@ -125,20 +143,29 @@ export class TabuSearch<TipoTabu extends keyof TabuListTypes> {
     }
 
     /**
-     * Inicializar a lista tabu (vazia).
+     * Inicializar a lista tabu com tipagem correta.
      */
-    this.tabuList = [];
+    if (tipoTabuList === "Solução") {
+      this.tabuList = new Solution(tabuSize);
+    } // TODO: Implementar os demais casos quando as classes forem criadas.
 
     /**
-     * Inicialização do `tabuValidator`
+     * Inicializar a propriedade `statistics`
      */
+    this.statistics = {
+      avaliacaoPorIteracao: new Map<number, number>(),
+      interrupcao: false,
+      iteracoes: 0,
+      tempoExecucao: 0,
+      tempoPorIteracao: new Map<number, number>(),
+    };
   }
 
   /**
    * Bloco responsável por executar todos od processos definidos para o Pipe Line de geração de vizinhanças.
    * @returns Vizinhança gerada.
    */
-  generateNeighborhood(): Vizinho[] {
+  async generateNeighborhood(): Promise<Vizinho[]> {
     const vizinhanca: Vizinho[] = [];
 
     for (const _process of this.neighborhoodPipe.keys()) {
@@ -146,12 +173,12 @@ export class TabuSearch<TipoTabu extends keyof TabuListTypes> {
        * Criar essa variável para caso não sejam gerados vizinhos, aplicar uma condição de não concatenar
        * na vizinhança global.
        */
-      const vizinhancaProcess = this.neighborhoodPipe
+      const vizinhancaProcess = await this.neighborhoodPipe
         .get(_process)
         .generate(this.context, this.constraints.hard, this.bestSolution);
 
       if (vizinhancaProcess.length > 0) {
-        vizinhanca.concat(vizinhancaProcess);
+        vizinhanca.push(...vizinhancaProcess);
       }
     }
 
@@ -163,7 +190,7 @@ export class TabuSearch<TipoTabu extends keyof TabuListTypes> {
    * @param vizinhanca Vizinhança obtida pelo Pipe Line de geração de vizinhança.
    * @returns Vizinhos com a propriedade `.avaliacao` preenchidos.
    */
-  evaluateNeighbors(vizinhanca: Vizinho[]): Vizinho[] {
+  async evaluateNeighbors(vizinhanca: Vizinho[]): Promise<Vizinho[]> {
     for (const vizinho of vizinhanca) {
       let avaliacao = 0;
 
@@ -184,24 +211,34 @@ export class TabuSearch<TipoTabu extends keyof TabuListTypes> {
        */
 
       for (const atribuicao of vizinho.atribuicoes) {
-        const docente: Docente = this.context.docentes.find((d) =>
-          atribuicao.docentes.includes(d.nome)
-        );
+        for (const docenteAtribuido of atribuicao.docentes) {
+          const docente: Docente = this.context.docentes.find(
+            (d) => d.nome === docenteAtribuido
+          );
 
-        if (docente.formularios.get(atribuicao.id_disciplina)) {
-          avaliacao +=
-            this.parameters.k1 *
-            (this.context.maiorPrioridade -
-              docente.formularios.get(atribuicao.id_disciplina));
-        } else {
           /**
-           * Para caso exita uma atribuição de um docnete sem formulário preenchido.
-           * Apenas para casos de inserção manual.
+           * Caso não exista um docente atribuído a turma, o processo deve ir para a próxima iteração.
+           * Penalização já aplicada anteriormente.
            */
-          avaliacao -= this.parameters.k1;
+          if (!docente) {
+            continue;
+          }
+
+          if (docente.formularios.get(atribuicao.id_disciplina)) {
+            avaliacao +=
+              this.parameters.k1 *
+              (this.context.maiorPrioridade -
+                docente.formularios.get(atribuicao.id_disciplina));
+          } else {
+            /**
+             * Para caso exita uma atribuição de um docnete sem formulário preenchido.
+             * Apenas para casos de inserção manual.
+             */
+            avaliacao -= this.parameters.k1;
+          }
         }
+        vizinho.avaliacao = avaliacao;
       }
-      vizinho.avaliacao = avaliacao;
     }
 
     return vizinhanca;
@@ -220,7 +257,122 @@ export class TabuSearch<TipoTabu extends keyof TabuListTypes> {
    * - Atributos
    * - Movimentos
    */
-  verifyTabu(vizinhanca: Vizinho[]): Vizinho[] {
+  async verifyTabu(vizinhanca: Vizinho[]): Promise<Vizinho[]> {
+    for (const vizinho of vizinhanca) {
+      vizinho.isTabu = this.tabuList.has(vizinho);
+    }
     return vizinhanca;
+  }
+
+  /**
+   * (Provisório) Método que define se o processo deve ser encerrado.
+   */
+  async stop(iteracoes: number, interrompe?: () => boolean) {
+    return iteracoes === 100 || (interrompe && interrompe());
+  }
+
+  /**
+   *
+   * @param interrompe Função que pode ser informada ao método run com o intuito de interromper a execução do algoritmo.
+   * @returns
+   */
+  async run(
+    interrompe?: () => boolean,
+    atualizaQuantidadeAlocacoes?: (qtd: number) => void
+  ): Promise<Vizinho> {
+    let iteracoes = 0;
+    let vizinhanca: Vizinho[];
+    /**
+     * Variáveis para o controle do tempo de execução. Também serão utilizados nas estatisticas.
+     */
+    let tempoInicial: number; // Por iteração
+    let tempoFinal: number; // Por iteração
+
+    if (!this.bestSolution.avaliacao) {
+      this.bestSolution = (
+        await this.evaluateNeighbors([this.bestSolution])
+      )[0];
+    }
+
+    // Inicia o tempo inicial total
+    const tempoInicialTotal = performance.now();
+
+    while (!(await this.stop(iteracoes, interrompe))) {
+      await delay(0);
+
+      /**
+       * Atualizar as estatisticas
+       */
+      this.statistics.avaliacaoPorIteracao.set(
+        iteracoes,
+        this.bestSolution.avaliacao
+      );
+
+      /**
+       * Incrementar o contador de iterações
+       */
+      iteracoes += 1;
+
+      /**
+       * Captura o tempo de inicio da iteração
+       */
+      tempoInicial = performance.now();
+
+      /**********************************************************************************************/
+      vizinhanca = await this.generateNeighborhood();
+      vizinhanca = await this.evaluateNeighbors(vizinhanca);
+      vizinhanca = await this.verifyTabu(vizinhanca);
+
+      vizinhanca = vizinhanca.sort((a, b) => b.avaliacao - a.avaliacao);
+
+      vizinhanca = vizinhanca.filter((vizinho) => !vizinho.isTabu);
+
+      if (
+        vizinhanca.length &&
+        this.bestSolution.avaliacao < vizinhanca[0].avaliacao
+      ) {
+        this.bestSolution = vizinhanca[0];
+        this.tabuList.add(vizinhanca[0]);
+      }
+
+      /**********************************************************************************************/
+
+      /**
+       * Captura o tempo final de execução da iteração, como também atualiza o map com as novas informações
+       */
+      tempoFinal = performance.now();
+      this.statistics.tempoPorIteracao.set(
+        iteracoes,
+        tempoFinal - tempoInicial
+      );
+
+      /**
+       * Atualiza um contador para ser utilizado como status de alocação
+       */
+      if (atualizaQuantidadeAlocacoes) {
+        atualizaQuantidadeAlocacoes(
+          this.bestSolution.atribuicoes.filter(
+            (atribuicao) => atribuicao.docentes.length > 0
+          ).length
+        );
+      }
+    }
+
+    /**
+     * Atualizar a lista com as avaliações por iteração (devido ao while o último ficará de fora da lista)
+     */
+    this.statistics.avaliacaoPorIteracao.set(
+      iteracoes,
+      this.bestSolution.avaliacao
+    );
+
+    /**
+     * Finalizar a atualização das estatisticas
+     */
+    this.statistics.interrupcao = interrompe && interrompe();
+    this.statistics.iteracoes = iteracoes;
+    this.statistics.tempoExecucao = tempoInicialTotal;
+
+    return this.bestSolution;
   }
 }

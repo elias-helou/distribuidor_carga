@@ -1,9 +1,15 @@
 import { Vizinho } from "@/TabuSearch/Interfaces/utils";
 
 export abstract class TabuList<T> {
-  private itens: T;
+  protected itens: T;
 
-  private tabuSize: number | undefined;
+  protected tabuSize: number | undefined;
+
+  constructor(tabuSize: number | undefined) {
+    this.tabuSize = tabuSize;
+
+    this.itens = [] as T;
+  }
 
   /**
    * Método que verifica se um vizinho está presente na lista tabu.

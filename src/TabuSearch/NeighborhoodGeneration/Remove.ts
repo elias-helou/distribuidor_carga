@@ -1,4 +1,3 @@
-import { Solucao } from "@/context/Global/utils";
 import { NeighborhoodFunction } from "../Classes/Abstract/NeighborhoodFunction";
 import Constraint from "../Classes/Constraint";
 import { Context, Vizinho } from "../Interfaces/utils";
@@ -13,17 +12,21 @@ export class Remove extends NeighborhoodFunction {
     super(name, description);
   }
 
-  generate(
+  async generate(
     context: Context,
     hardConstraints: Map<string, Constraint>,
-    baseSolution: Solucao
-  ): Vizinho[] {
+    baseSolution: Vizinho
+  ): Promise<Vizinho[]> {
     const vizinhos: Vizinho[] = [];
     for (const turma of context.turmas) {
       /**
        * Verifica se existia um docente atribuído para gerar a vizinhança vazia
        */
-      if (turma.docentes.length == 0) {
+      const atrubuicaoAtual = context.atribuicoes.find(
+        (atrib) => atrib.id_disciplina === turma.id
+      );
+
+      if (atrubuicaoAtual.docentes.length === 0) {
         continue;
       }
 

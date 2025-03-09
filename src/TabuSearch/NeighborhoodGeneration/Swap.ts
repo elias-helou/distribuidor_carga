@@ -1,19 +1,19 @@
-import { Disciplina, Solucao } from "@/context/Global/utils";
+import { Disciplina } from "@/context/Global/utils";
 import { NeighborhoodFunction } from "../Classes/Abstract/NeighborhoodFunction";
 import Constraint from "../Classes/Constraint";
 import { Context, Vizinho } from "../Interfaces/utils";
-import { podeAtribuir } from "./utils";
+import { compareArrays, podeAtribuir } from "./utils";
 
 export class Swap extends NeighborhoodFunction {
   constructor(name: string, description: string | undefined) {
     super(name, description);
   }
 
-  generate(
+  async generate(
     context: Context,
     hardConstraints: Map<string, Constraint>,
-    baseSolution: Solucao
-  ): Vizinho[] {
+    baseSolution: Vizinho
+  ): Promise<Vizinho[]> {
     const vizinhos: Vizinho[] = [];
 
     /**
@@ -41,6 +41,20 @@ export class Swap extends NeighborhoodFunction {
         ).docentes;
 
         /**
+         * Caso ambas as turmas não tenham nenhuma atribuição, o processo deve ir para a próxima iteração.
+         */
+        if (docentesAtual.length === 0 && docentesPivot.length === 0) {
+          continue;
+        }
+
+        /**
+         * Remover depois
+         */
+        if (turmaAtual.id === turmaPivot.id) {
+          continue;
+        }
+
+        /**
          * Verificar se a troca pode ser realizada: todos os docentes do Pivo podem ir para a Atual e vice-versa
          * */
         const trocaValida =
@@ -59,7 +73,8 @@ export class Swap extends NeighborhoodFunction {
               context.travas,
               hardConstraints
             )
-          );
+          ) &&
+          !compareArrays(docentesPivot, docentesAtual);
 
         if (trocaValida) {
           const atribuicoes = structuredClone(baseSolution.atribuicoes);
