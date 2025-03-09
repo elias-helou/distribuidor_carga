@@ -29,6 +29,7 @@ interface ConstraintCardProps {
     type: "success" | "info" | "warning" | "error",
     closeTime?: number
   ) => void;
+  constraint: any;
 }
 
 export default function ConstraintCard({
@@ -39,6 +40,7 @@ export default function ConstraintCard({
   onChange,
   onDelete,
   showInformations,
+  constraint,
 }: ConstraintCardProps) {
   const [tipo, setTipo] = useState<"Hard" | "Soft">(tipoInicial);
   const [penalidade, setPenalidade] = useState(penalidadeInicial);
@@ -92,8 +94,18 @@ export default function ConstraintCard({
             row
             //sx={{ justifyContent: "center" }} // Alinha os radios ao centro
           >
-            <FormControlLabel value="Hard" control={<Radio />} label="Hard" />
-            <FormControlLabel value="Soft" control={<Radio />} label="Soft" />
+            <FormControlLabel
+              value="Hard"
+              control={<Radio />}
+              label="Hard"
+              disabled={!constraint.prototype["hard"]}
+            />
+            <FormControlLabel
+              value="Soft"
+              control={<Radio />}
+              label="Soft"
+              disabled={!constraint.prototype["soft"]}
+            />
           </RadioGroup>
         </FormControl>
 

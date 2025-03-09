@@ -173,6 +173,12 @@ export default function Restricoes() {
     setHardConstraints(newHardConstraints);
   };
 
+  /**
+     constraints.map((constraint) => {
+      console.log(!!constraint.constraint.prototype["hard"]);
+     }); 
+   */
+
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
       <Grid2 container spacing={3} alignItems="center" justifyContent="center">
@@ -264,6 +270,7 @@ export default function Restricoes() {
             onChange={handleConstraintChange}
             onDelete={removeConstraint}
             showInformations={addAlerta}
+            constraint={constraint.constraint}
           />
         ))}
         <Grid2
