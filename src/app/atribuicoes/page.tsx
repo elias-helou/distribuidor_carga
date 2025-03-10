@@ -21,6 +21,7 @@ import {
   ContextoExecucao,
   Disciplina,
   processData,
+  Solucao,
   TipoInsercao,
   TipoTrava,
 } from "@/context/Global/utils";
@@ -38,6 +39,15 @@ import HoveredCourse from "./components/HoveredCourse";
 import { useSolutionHistory } from "@/context/SolutionHistory/hooks";
 import CleanAlertDialog from "./components/CleanAlertDialog";
 import { useAlgorithmContext } from "@/context/Algorithm";
+import { TabuSearch } from "@/TabuSearch/Classes/TabuSearch";
+import { Add } from "@/TabuSearch/NeighborhoodGeneration/Add";
+import { Remove } from "@/TabuSearch/NeighborhoodGeneration/Remove";
+import { Swap } from "@/TabuSearch/NeighborhoodGeneration/Swap";
+import {
+  comparaSolucoes,
+  compareArrays,
+  diferencasEntreSolucoes,
+} from "@/algorithms/utils";
 
 // Customizar todos os TableCell
 const customTheme = createTheme({
@@ -68,6 +78,8 @@ export default function Timetable() {
     updateAtribuicoes,
     parametros,
   } = useGlobalContext();
+
+  const { neighborhoodFunctions } = useAlgorithmContext();
 
   const { cleanSolucaoAtual } = useSolutionHistory();
 
@@ -506,27 +518,87 @@ export default function Timetable() {
   const executeProcess = async () => {
     handleClickOpenDialog(); // Abre a modal imediatamente
     setProcessing(true); // Aciona o botão de loading
-    // p -> Processados
-    const { pDisciplinas, pDocentes, pFormularios, pTravas, pAtribuicoes } =
-      processData(disciplinas, docentes, formularios, travas, atribuicoes);
+    //p -> Processados
+    // const { pDisciplinas, pDocentes, pFormularios, pTravas, pAtribuicoes } =
+    //   processData(disciplinas, docentes, formularios, travas, atribuicoes);
 
-    const solucao = await buscaTabu(
-      pDisciplinas,
-      pDocentes,
-      pFormularios,
-      pTravas,
-      pAtribuicoes,
-      5,
-      maxPriority + 1,
-      () => interrompeRef.current,
-      setDisciplinasAlocadas,
+    // const solucao = await buscaTabu(
+    //   pDisciplinas,
+    //   pDocentes,
+    //   pFormularios,
+    //   pTravas,
+    //   pAtribuicoes,
+    //   5,
+    //   maxPriority + 1,
+    //   () => interrompeRef.current,
+    //   setDisciplinasAlocadas,
+    //   parametros,
+    //   { hard: hardConstraints, soft: softConstraints }
+    // );
+
+    // // console.log("Solução:");
+    // // console.log(solucao);
+    // setSolucaoAtual(solucao); // Atribui a solução encontrada no state local.
+
+    const neighborhood = Array.from(neighborhoodFunctions.values())
+      .filter((entry) => entry.isActive)
+      .map((entry) => entry.instance);
+
+    console.log(neighborhood);
+    const buscaTabu = new TabuSearch(
+      atribuicoes,
+      docentes,
+      disciplinas,
+      travas,
+      formularios,
       parametros,
-      { hard: hardConstraints, soft: softConstraints }
+      [...hardConstraints.values(), ...softConstraints.values()],
+      undefined,
+      // [
+      //   new Add("Adiciona", "Adição"),
+      //   new Remove("Remove", "Remover"),
+      //   new Swap("Troca", "Trocar"),
+      // ],
+      neighborhood,
+      "Solução",
+      100,
+      maxPriority + 1
     );
 
-    console.log("Solução:");
-    console.log(solucao);
-    setSolucaoAtual(solucao); // Atribui a solução encontrada no state local.
+    await new Promise((resolve) => setTimeout(resolve, 0)); // Garante que a UI atualize antes de bloquear
+
+    await buscaTabu.run(() => interrompeRef.current, setDisciplinasAlocadas);
+
+    // for (const i of solucao.estatisticas.melhoresPorIteracao.keys()) {
+    //   const valido = comparaSolucoes(
+    //     solucao.estatisticas.melhoresPorIteracao.get(i).atribuicoes,
+    //     a.melhoresPorIteracao.get(i).atribuicoes
+    //   );
+    //   console.log(
+    //     `Iteração ${i}: Iguais ? ${valido} - Avaliações? ${
+    //       solucao.estatisticas.melhoresPorIteracao.get(i).avaliacao ===
+    //       a.melhoresPorIteracao.get(i).avaliacao
+    //     }`
+    //   );
+
+    //   if (!valido) {
+    //     console.log(
+    //       diferencasEntreSolucoes(
+    //         solucao.estatisticas.melhoresPorIteracao.get(i).atribuicoes,
+    //         a.melhoresPorIteracao.get(i).atribuicoes
+    //       )
+    //     );
+    //   }
+    // }
+    const solucao: Solucao = {
+      atribuicoes: buscaTabu.bestSolution.atribuicoes,
+      avaliacao: buscaTabu.bestSolution.avaliacao,
+      estatisticas: {
+        ...buscaTabu.statistics,
+        melhoresPorIteracao: new Map(),
+      },
+    };
+    setSolucaoAtual(solucao);
 
     setProcessing(false); // Encerra o processamento
     setInterrompe(false); // Altera o state da flag de interupção para falso
@@ -593,7 +665,6 @@ export default function Timetable() {
       atribuicoes
     );
 
-    console.log(softConstraints);
     const avaliacao = avaliarSolucao(
       pAtribuicoes,
       pDocentes,
