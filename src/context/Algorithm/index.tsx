@@ -1,9 +1,18 @@
+import { NeighborhoodFunction } from "@/TabuSearch/Classes/Abstract/NeighborhoodFunction";
 import Constraint from "@/TabuSearch/Classes/Constraint";
 import { AtribuicaoSemFormulario } from "@/TabuSearch/Constraints/AtribuicaoSemFormulario";
 import { CargaDeTrabalho } from "@/TabuSearch/Constraints/CargaDeTrabalho";
 import { ChoqueDeHorarios } from "@/TabuSearch/Constraints/ChoqueDeHorarios";
 import { DisciplinaSemDocente } from "@/TabuSearch/Constraints/DisciplinaSemDocente";
+import { Add } from "@/TabuSearch/NeighborhoodGeneration/Add";
+import { Remove } from "@/TabuSearch/NeighborhoodGeneration/Remove";
+import { Swap } from "@/TabuSearch/NeighborhoodGeneration/Swap";
 import { createContext, useContext, useState } from "react";
+
+type NeighborhoodEntry = {
+  instance: NeighborhoodFunction;
+  isActive: boolean;
+};
 
 export interface AlgorithmInterface {
   hardConstraints: Map<string, Constraint>;
@@ -28,6 +37,10 @@ export interface AlgorithmInterface {
       maxIterations: { value?: number; isActive: boolean };
     }>
   >;
+  neighborhoodFunctions: Map<string, NeighborhoodEntry>;
+  setNeighborhoodFunctions: React.Dispatch<
+    React.SetStateAction<Map<string, NeighborhoodEntry>>
+  >;
 }
 
 const AlgorithmContext = createContext<AlgorithmInterface>({
@@ -42,6 +55,8 @@ const AlgorithmContext = createContext<AlgorithmInterface>({
     maxIterations: { value: undefined, isActive: false },
   },
   setParametros: () => {},
+  neighborhoodFunctions: new Map<string, NeighborhoodEntry>(),
+  setNeighborhoodFunctions: () => Map<string, NeighborhoodEntry>,
 });
 
 export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
@@ -107,6 +122,16 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
     maxIterations: { value: undefined, isActive: false },
   });
 
+  /**
+   * Estado responsável pelos processos de geração de vizinhança
+   */
+  const [neighborhoodFunctions, setNeighborhoodFunctions] = useState(
+    new Map<string, NeighborhoodEntry>([
+      ["Add", { instance: new Add("Adiciona", "Adição"), isActive: true }],
+      ["Remove", { instance: new Remove("Remove", "Remover"), isActive: true }],
+      ["Swap", { instance: new Swap("Troca", "Trocar"), isActive: true }],
+    ])
+  );
   return (
     <AlgorithmContext.Provider
       value={{
@@ -118,6 +143,8 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
         setAllConstraints: setAllConstraints,
         parametros: parametros,
         setParametros: setParametros,
+        neighborhoodFunctions: neighborhoodFunctions,
+        setNeighborhoodFunctions: setNeighborhoodFunctions,
       }}
     >
       {children}
