@@ -15,14 +15,56 @@ import React, { useState } from "react";
 import ParameterComponent from "./_components/ParameterComponent";
 import { useAlertsContext } from "@/context/Alerts";
 import Restricoes from "../restricoes/page";
+import NeighborhoodComponent from "./_components/NeighborhoodComponent";
 
 export default function Configuracoes() {
-  const { parametros, setParametros } = useAlgorithmContext();
+  const {
+    parametros,
+    setParametros,
+    neighborhoodFunctions,
+    setNeighborhoodFunctions,
+  } = useAlgorithmContext();
 
   const { addAlerta } = useAlertsContext();
 
   const [openGlobais, setOpenGlobais] = useState(false);
   const [openRestricoes, setOpenRestricoes] = useState(false);
+  const [openNeighborhoodFunctions, setOpenNeighborhoodFunctions] =
+    useState(false);
+
+  /**
+   * Função responsável por gerar e retornar os componentes referentes as funções
+   * de geração da vizinhança
+   */
+  const renderNeighborhoodFunctions = () => {
+    const toRender = [];
+    for (const _func of neighborhoodFunctions.keys()) {
+      const func = neighborhoodFunctions.get(_func);
+      toRender.push(
+        <NeighborhoodComponent
+          key={_func}
+          name={func.instance.name}
+          isActive={func.isActive}
+          description={func.instance.description}
+          showInformations={addAlerta}
+          setIsActive={(newState: boolean) => {
+            setNeighborhoodFunctions((prev) => {
+              const newMap = new Map(prev); // Criar uma cópia do Map
+              const entry = newMap.get(_func); // Pegar o valor atual da função
+
+              if (entry) {
+                newMap.set(_func, { ...entry, isActive: newState }); // Atualizar a propriedade isActive
+              }
+
+              return newMap; // Retornar o novo Map atualizado
+            });
+          }}
+        />
+      );
+    }
+
+    return toRender;
+  };
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
@@ -123,6 +165,38 @@ export default function Configuracoes() {
         <Divider sx={{ marginBottom: "1em" }} />
         <Collapse in={openRestricoes}>
           <Restricoes />
+        </Collapse>
+
+        {/* Geração de vizinhos */}
+        <Box
+          display="flex"
+          alignItems="center"
+          onClick={() =>
+            setOpenNeighborhoodFunctions(!openNeighborhoodFunctions)
+          }
+          sx={{ cursor: "pointer", marginTop: "2em" }}
+        >
+          <IconButton>
+            {openNeighborhoodFunctions ? (
+              <KeyboardArrowUpIcon />
+            ) : (
+              <KeyboardArrowDownIcon />
+            )}
+          </IconButton>
+          <Typography variant="h5" gutterBottom>
+            Geração da Vizinhança
+          </Typography>
+        </Box>
+        <Divider sx={{ marginBottom: "1em" }} />
+        <Collapse in={openNeighborhoodFunctions}>
+          <Grid2
+            container
+            spacing={2}
+            alignItems="center"
+            justifyContent="center"
+          >
+            {renderNeighborhoodFunctions()}
+          </Grid2>
         </Collapse>
       </Box>
     </Container>
