@@ -9,6 +9,7 @@ import { Add } from "@/TabuSearch/NeighborhoodGeneration/Add";
 import { Remove } from "@/TabuSearch/NeighborhoodGeneration/Remove";
 import { Swap } from "@/TabuSearch/NeighborhoodGeneration/Swap";
 import { IteracoesMaximas } from "@/TabuSearch/StopCriteria/IteracoesMaximas";
+import { IteracoesSemModificacao } from "@/TabuSearch/StopCriteria/IteracoesSemModificacao";
 import { createContext, useContext, useState } from "react";
 
 type NeighborhoodEntry = {
@@ -166,7 +167,7 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
       [
         "Iterações sem Modificação",
         {
-          instance: new IteracoesMaximas(
+          instance: new IteracoesSemModificacao(
             "Iterações sem Modificação",
             "Função que interromperá o algoritmo caso uma determinada quantidade de iterações sem modificação da melhor solução seja atingida.",
             50
