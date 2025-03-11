@@ -13,6 +13,7 @@ import { NeighborhoodFunction } from "./Abstract/NeighborhoodFunction";
 import { TabuList } from "./Abstract/TabuList";
 import { Solution } from "../TabuList/Solution";
 import { delay } from "../utils";
+import { StopCriteria } from "./Abstract/StopCriteria";
 
 export class TabuSearch {
   /**
@@ -51,6 +52,12 @@ export class TabuSearch {
    */
   public statistics: Statistics;
 
+  /**
+   * Lista que armazena os processos que serão responsáveis por interromper a execução
+   * do algoritmo.
+   */
+  private stopPipe: Map<string, StopCriteria> = new Map<string, StopCriteria>();
+
   constructor(
     atribuicoes: Atribuicao[],
     docentes: Docente[],
@@ -63,6 +70,7 @@ export class TabuSearch {
     neighborhoodFunctions: NeighborhoodFunction[],
     tipoTabuList: "Solução" | "Atribuição" | "Movimento",
     tabuSize: number | undefined,
+    stopFunctions: StopCriteria[],
     maiorPrioridade?: number
   ) {
     /**
@@ -159,6 +167,13 @@ export class TabuSearch {
       tempoExecucao: 0,
       tempoPorIteracao: new Map<number, number>(),
     };
+
+    /**
+     * Inicializa a propriedade `stopCriteria`
+     */
+    for (const func of stopFunctions) {
+      this.stopPipe.set(func.name, func);
+    }
   }
 
   /**
@@ -267,8 +282,20 @@ export class TabuSearch {
   /**
    * (Provisório) Método que define se o processo deve ser encerrado.
    */
-  async stop(iteracoes: number, interrompe?: () => boolean) {
-    return iteracoes === 100 || (interrompe && interrompe());
+  async stop(
+    iteracoes: number,
+    melhorVizinhoGerado: Vizinho,
+    interrompe?: () => boolean
+  ) {
+    if (interrompe && interrompe()) return true;
+
+    for (const process of this.stopPipe.values()) {
+      if (process.stop(iteracoes, this.bestSolution, melhorVizinhoGerado)) {
+        return true;
+      }
+    }
+    //return iteracoes === 200 || (interrompe && interrompe());
+    return false;
   }
 
   /**
@@ -297,7 +324,8 @@ export class TabuSearch {
     // Inicia o tempo inicial total
     const tempoInicialTotal = performance.now();
 
-    while (!(await this.stop(iteracoes, interrompe))) {
+    // VAI DAR PROBLEMA EM ``vizinhanca[0]``
+    while (!(await this.stop(iteracoes, vizinhanca[0], interrompe))) {
       await delay(0);
 
       /**
@@ -327,9 +355,11 @@ export class TabuSearch {
 
       vizinhanca = vizinhanca.filter((vizinho) => !vizinho.isTabu);
 
+      //console.log(`Iteração ${iteracoes} - Vizinhos gerados: ${vizinhanca.length}`)
+
       if (
         vizinhanca.length &&
-        this.bestSolution.avaliacao < vizinhanca[0].avaliacao
+        this.bestSolution.avaliacao <= vizinhanca[0].avaliacao
       ) {
         this.bestSolution = vizinhanca[0];
         this.tabuList.add(vizinhanca[0]);
