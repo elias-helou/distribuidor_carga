@@ -96,7 +96,7 @@ export interface Estatisticas {
 
 export interface Solucao {
   atribuicoes: Atribuicao[];
-  avaliacao: number;
+  avaliacao?: number;
   idHistorico?: string;
   estatisticas?: Estatisticas;
   isTabu?: boolean;
