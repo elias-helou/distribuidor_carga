@@ -9,7 +9,7 @@ import {
 
 export interface Solucao {
   atribuicoes: Atribuicao[];
-  avaliacao: number;
+  avaliacao?: number;
 }
 
 // /**
@@ -272,9 +272,9 @@ export function gerarVizinhoComDocente(
     const atrib = vizinho.find((a) => a.id_disciplina === disciplina.id);
     atrib.docentes = [docente.nome];
 
-    // if (!estaNaListaTabu(listaTabu, vizinho)) {
-    //   novosVizinhos.push(vizinho);
-    // }
+    if (!estaNaListaTabu(listaTabu, vizinho)) {
+      novosVizinhos.push(vizinho);
+    }
     novosVizinhos.push(vizinho);
   }
 
@@ -319,9 +319,9 @@ export function gerarVizinhoComRemocao(
     const atrib = vizinho.find((a) => a.id_disciplina === disciplina.id);
     atrib.docentes = [];
 
-    // if (!estaNaListaTabu(listaTabu, vizinho)) {
-    //   novosVizinhos.push(vizinho);
-    // }
+    if (!estaNaListaTabu(listaTabu, vizinho)) {
+      novosVizinhos.push(vizinho);
+    }
     novosVizinhos.push(vizinho);
   }
 
@@ -406,11 +406,10 @@ export function gerarTrocasDeDocentes(
       docentesPivo.every((docente) =>
         podeAtribuir(docente, disciplinaAtual, travas, hardConstraints)
       ) &&
-      docentesAtual.every(
-        (docente) =>
-          podeAtribuir(docente, disciplinaPivo, travas, hardConstraints) &&
-          !compareArrays(docentesPivo, docentesAtual)
-      );
+      docentesAtual.every((docente) =>
+        podeAtribuir(docente, disciplinaPivo, travas, hardConstraints)
+      ) &&
+      !compareArrays(docentesPivo, docentesAtual);
 
     if (trocaValida) {
       const vizinho = structuredClone(solucaoAtual);
@@ -424,9 +423,9 @@ export function gerarTrocasDeDocentes(
       atrib1.docentes = docentesAtual.map((d) => d.nome);
       atrib2.docentes = docentesPivo.map((d) => d.nome);
 
-      // if (!estaNaListaTabu(listaTabu, vizinho)) {
-      //   novosVizinhos.push(vizinho);
-      // }
+      if (!estaNaListaTabu(listaTabu, vizinho)) {
+        novosVizinhos.push(vizinho);
+      }
       novosVizinhos.push(vizinho);
     }
   }
@@ -518,4 +517,64 @@ export function processarAtribuicaoInicial(
   }
 
   return atribuicoes;
+}
+
+export function comparaSolucoes(
+  solucao1: Atribuicao[],
+  solucao2: Atribuicao[]
+) {
+  if (solucao1.length !== solucao2.length) {
+    return false;
+  }
+
+  for (let i = 0; i < solucao1.length; i++) {
+    if (solucao1[i].id_disciplina !== solucao2[i].id_disciplina) {
+      return false;
+    }
+    if (solucao1[i].docentes.length !== solucao2[i].docentes.length) {
+      return false;
+    }
+
+    for (let j = 0; j < solucao1[i].docentes.length; j++) {
+      if (solucao1[i].docentes[j] !== solucao2[i].docentes[j]) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+export function diferencasEntreSolucoes(
+  solucao1: Atribuicao[],
+  solucao2: Atribuicao[]
+) {
+  const diferencas = [];
+
+  if (solucao1.length !== solucao2.length) {
+    diferencas.push("Diferença nos tamanhos");
+  }
+
+  for (let i = 0; i < solucao1.length; i++) {
+    if (solucao1[i].id_disciplina !== solucao2[i].id_disciplina) {
+      diferencas.push(
+        `Ordem errada das Turmas ${solucao1[i].id_disciplina} - ${solucao2[i].id_disciplina}`
+      );
+    }
+    if (solucao1[i].docentes.length !== solucao2[i].docentes.length) {
+      diferencas.push(
+        `Diferença de tamanho entre os docentes ${solucao1[i].docentes.length} - ${solucao2[i].docentes.length}`
+      );
+    }
+
+    for (let j = 0; j < solucao1[i].docentes.length; j++) {
+      if (solucao1[i].docentes[j] !== solucao2[i].docentes[j]) {
+        diferencas.push(
+          `Diferença entre Docentes ${solucao1[i].docentes[j]} - ${solucao2[i].docentes[j]} em ${solucao1[i].id_disciplina} - ${solucao2[i].id_disciplina}`
+        );
+      }
+    }
+  }
+
+  return diferencas;
 }

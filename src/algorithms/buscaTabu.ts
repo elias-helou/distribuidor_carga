@@ -370,13 +370,12 @@ export async function buscaTabu(
    * Variáveis para as estatísticas
    */
 
-  console.log(parametros);
-
   let iteracoes = 0;
   const avaliacaoPorIteracao: Map<number, number> = new Map<number, number>();
   const tempoPorIteracao: Map<number, number> = new Map<number, number>();
   let tempoInicial: number; // Por iteração
   let tempoFinal: number; // Por iteração
+
   /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 
   // Inicializa a lista tabu
@@ -435,18 +434,11 @@ export async function buscaTabu(
       listaTabu
     );
 
-    console.log(
-      `Iteralçao: ${iteracoes} > Vizinhos: ${vizinhos.length} | Soluções: ${vizinhanca.length}`
-    );
-
     // const melhorVizinho: Solucao = lista[0];
 
     for (const item of vizinhanca) {
       if (item.avaliacao >= melhorSolucao.avaliacao) {
         if (item.isTabu) {
-          console.log(
-            `Aspiração por Objetivo ${melhorSolucao.avaliacao} -> ${item.avaliacao}`
-          );
           // Remover da Lista Tabu para inserir novamente
           for (let i = 0; i < listaTabu.length; i++) {
             if (compareArrays(listaTabu[i], item.atribuicoes)) {
@@ -474,10 +466,9 @@ export async function buscaTabu(
 
     // Critério de aspiração Default (nenhum vizinho gerado)
     // Limpar os 10 primeiros itens da lista tabu
-    if (vizinhanca.length === 0) {
-      console.log("Aspiração por vizinhança vazia");
-      listaTabu.splice(0, 10);
-    }
+    // // if (vizinhanca.length === 0) {
+    // //   listaTabu.splice(0, 10);
+    // // }
 
     // // Verifica se o melhor vizinho existe
     // if (melhorVizinho) {
@@ -542,12 +533,13 @@ export async function buscaTabu(
       /*iteracoesSemModificacao === 20 ||*/
       interrompe() ||
       // !existeDisciplinasQueAindaPodemSerAtribuidas(melhorSolucao, docentes) ||
-      iteracoes == 300
+      iteracoes === 200
     ) {
       break;
     }
   }
 
+  avaliacaoPorIteracao.set(iteracoes, melhorSolucao.avaliacao);
   // Tempo final, sendo o tempo inicial fora do loop e o último tempo medido.
   const tempoTotal = tempoFinal - tempoInicialTotal;
 
