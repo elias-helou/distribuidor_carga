@@ -16,6 +16,8 @@ import ParameterComponent from "./_components/ParameterComponent";
 import { useAlertsContext } from "@/context/Alerts";
 import Restricoes from "../restricoes/page";
 import NeighborhoodComponent from "./_components/NeighborhoodComponent";
+import { IteracoesMaximas } from "@/TabuSearch/StopCriteria/IteracoesMaximas";
+import { IteracoesSemModificacao } from "@/TabuSearch/StopCriteria/IteracoesSemModificacao";
 
 export default function Configuracoes() {
   const {
@@ -23,6 +25,8 @@ export default function Configuracoes() {
     setParametros,
     neighborhoodFunctions,
     setNeighborhoodFunctions,
+    stopFunctions,
+    setStopFunctions,
   } = useAlgorithmContext();
 
   const { addAlerta } = useAlertsContext();
@@ -31,6 +35,7 @@ export default function Configuracoes() {
   const [openRestricoes, setOpenRestricoes] = useState(false);
   const [openNeighborhoodFunctions, setOpenNeighborhoodFunctions] =
     useState(false);
+  const [openStopFunctions, setOpenStopFunctions] = useState(false);
 
   /**
    * Função responsável por gerar e retornar os componentes referentes as funções
@@ -59,6 +64,61 @@ export default function Configuracoes() {
               return newMap; // Retornar o novo Map atualizado
             });
           }}
+        />
+      );
+    }
+
+    return toRender;
+  };
+
+  /**
+   * Função responsável por gerar e retornar os componentes referentes as funções
+   * de interrupção do algoritmo.
+   */
+  const renderStopFunctions = () => {
+    const toRender = [];
+
+    for (const _func of stopFunctions.keys()) {
+      const func = stopFunctions.get(_func);
+
+      // Verifica o tipo da instância e seleciona a propriedade correta
+      let value: number;
+      if (func.instance instanceof IteracoesMaximas) {
+        value = func.instance.maxIteracoes;
+      } else if (func.instance instanceof IteracoesSemModificacao) {
+        value = func.instance.limiteIteracoesSemModificacao;
+      } else {
+        value = 0; // Valor padrão caso a instância não corresponda
+      }
+
+      toRender.push(
+        <ParameterComponent
+          name={func.instance.name}
+          isActive={func.isActive}
+          description={func.instance.description}
+          key={_func}
+          value={value}
+          setValue={(newValue: number) => {
+            if (func.instance instanceof IteracoesMaximas) {
+              func.instance.maxIteracoes = newValue;
+            } else if (func.instance instanceof IteracoesSemModificacao) {
+              func.instance.limiteIteracoesSemModificacao = newValue;
+            }
+
+            setStopFunctions((prev) => {
+              const updated = new Map(prev);
+              updated.set(_func, func);
+              return updated;
+            }); // Força atualização do estado
+          }}
+          setIsActive={(newState: boolean) => {
+            setStopFunctions((prev) => {
+              const updated = new Map(prev);
+              updated.set(_func, { ...func, isActive: newState });
+              return updated;
+            });
+          }}
+          showInformations={addAlerta}
         />
       );
     }
@@ -196,6 +256,36 @@ export default function Configuracoes() {
             justifyContent="center"
           >
             {renderNeighborhoodFunctions()}
+          </Grid2>
+        </Collapse>
+
+        {/* Funções de interrupção do algoritmo */}
+        <Box
+          display="flex"
+          alignItems="center"
+          onClick={() => setOpenStopFunctions(!openStopFunctions)}
+          sx={{ cursor: "pointer", marginTop: "2em" }}
+        >
+          <IconButton>
+            {openStopFunctions ? (
+              <KeyboardArrowUpIcon />
+            ) : (
+              <KeyboardArrowDownIcon />
+            )}
+          </IconButton>
+          <Typography variant="h5" gutterBottom>
+            Interrupção do Algoritmo
+          </Typography>
+        </Box>
+        <Divider sx={{ marginBottom: "1em" }} />
+        <Collapse in={openStopFunctions}>
+          <Grid2
+            container
+            spacing={2}
+            alignItems="center"
+            justifyContent="center"
+          >
+            {renderStopFunctions()}
           </Grid2>
         </Collapse>
       </Box>
