@@ -19,7 +19,7 @@ export function delay(ms: number) {
  * @returns {boolean} `True` caso os vizinhos sejam iguais.`False` caso contrário
  */
 export function compararVizihos(vizinho1: Vizinho, vizinho2: Vizinho): boolean {
-  if (vizinho1.avaliacao !== vizinho2.avaliacao) {
+  if (vizinho1?.avaliacao !== vizinho2?.avaliacao) {
     return false;
   }
 
