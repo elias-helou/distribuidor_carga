@@ -47,10 +47,11 @@ export function podeAtribuir(
 }
 
 /**
- * Compara duas listas. (``atribuicoesIguais``)
+ * Compara duas listas, verificando se possuem mesmo tamanho e posteriormente a
+ * ordem de seus itens.
  * @param array1
  * @param array2
- * @returns
+ * @returns {boolean} `True` caso as listas sejam iguais. `False` caso contrário.
  */
 export function compareArrays<T>(array1: T[], array2: T[]): boolean {
   if (array1.length !== array2.length) {
