@@ -33,4 +33,6 @@ export abstract class TabuList<T> {
    * verdadeiros, realiza os processos para remover um item da lista.
    */
   abstract add(vizinho: Vizinho): T;
+
+  abstract indexOf(vizinho: Vizinho): number;
 }

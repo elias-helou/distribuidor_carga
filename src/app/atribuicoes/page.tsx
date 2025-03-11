@@ -74,6 +74,7 @@ export default function Timetable() {
     softConstraints,
     neighborhoodFunctions,
     stopFunctions,
+    aspirationFunctions,
   } = useAlgorithmContext();
 
   const { cleanSolucaoAtual } = useSolutionHistory();
@@ -536,6 +537,10 @@ export default function Timetable() {
       .filter((entry) => entry.isActive)
       .map((entry) => entry.instance);
 
+    const aspiration = Array.from(aspirationFunctions.values())
+      .filter((entry) => entry.isActive)
+      .map((entry) => entry.instance);
+
     const buscaTabu = new TabuSearch(
       atribuicoes,
       docentes,
@@ -549,6 +554,7 @@ export default function Timetable() {
       "Solução",
       100,
       stop,
+      aspiration,
       maxPriority + 1
     );
 
@@ -643,6 +649,11 @@ export default function Timetable() {
     const stop = Array.from(stopFunctions.values())
       .filter((entry) => entry.isActive)
       .map((entry) => entry.instance);
+
+    const aspiration = Array.from(aspirationFunctions.values())
+      .filter((entry) => entry.isActive)
+      .map((entry) => entry.instance);
+
     const buscaTabu = new TabuSearch(
       atribuicoes,
       docentes,
@@ -661,6 +672,7 @@ export default function Timetable() {
       "Solução",
       100,
       stop,
+      aspiration,
       maxPriority + 1
     );
 

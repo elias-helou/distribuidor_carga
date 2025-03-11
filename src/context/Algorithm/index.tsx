@@ -1,3 +1,5 @@
+import { Objective } from "@/TabuSearch/AspirationCriteria/Objective";
+import { AspirationCriteria } from "@/TabuSearch/Classes/Abstract/AspirationCriteria";
 import { NeighborhoodFunction } from "@/TabuSearch/Classes/Abstract/NeighborhoodFunction";
 import { StopCriteria } from "@/TabuSearch/Classes/Abstract/StopCriteria";
 import Constraint from "@/TabuSearch/Classes/Constraint";
@@ -19,6 +21,11 @@ type NeighborhoodEntry = {
 
 type StopCriteriaEntry = {
   instance: StopCriteria;
+  isActive: boolean;
+};
+
+type AspirationCriteriaEntry = {
+  instance: AspirationCriteria;
   isActive: boolean;
 };
 
@@ -53,6 +60,10 @@ export interface AlgorithmInterface {
   setStopFunctions: React.Dispatch<
     React.SetStateAction<Map<string, StopCriteriaEntry>>
   >;
+  aspirationFunctions: Map<string, AspirationCriteriaEntry>;
+  setAspirationFunctions: React.Dispatch<
+    React.SetStateAction<Map<string, AspirationCriteriaEntry>>
+  >;
 }
 
 const AlgorithmContext = createContext<AlgorithmInterface>({
@@ -71,6 +82,8 @@ const AlgorithmContext = createContext<AlgorithmInterface>({
   setNeighborhoodFunctions: () => Map<string, NeighborhoodEntry>,
   stopFunctions: new Map<string, StopCriteriaEntry>(),
   setStopFunctions: () => Map<string, StopCriteriaEntry>,
+  aspirationFunctions: new Map<string, AspirationCriteriaEntry>(),
+  setAspirationFunctions: () => Map<string, AspirationCriteriaEntry>,
 });
 
 export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
@@ -177,6 +190,25 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
       ],
     ])
   );
+
+  /**
+   * Estado responsável pelos critérios de aspiração.
+   */
+  const [aspirationFunctions, setAspirationFunctions] = useState(
+    new Map<string, AspirationCriteriaEntry>([
+      [
+        "Objetivo",
+        {
+          instance: new Objective(
+            "Aspiração por Objetivo",
+            "O tabu será quebrado caso a solução observada apresente um valor objetivo maior que a melhor solução global encontrada."
+          ),
+          isActive: true,
+        },
+      ],
+    ])
+  );
+
   return (
     <AlgorithmContext.Provider
       value={{
@@ -192,6 +224,8 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
         setNeighborhoodFunctions: setNeighborhoodFunctions,
         stopFunctions: stopFunctions,
         setStopFunctions: setStopFunctions,
+        aspirationFunctions: aspirationFunctions,
+        setAspirationFunctions: setAspirationFunctions,
       }}
     >
       {children}

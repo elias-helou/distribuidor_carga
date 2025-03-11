@@ -27,6 +27,8 @@ export default function Configuracoes() {
     setNeighborhoodFunctions,
     stopFunctions,
     setStopFunctions,
+    aspirationFunctions,
+    setAspirationFunctions,
   } = useAlgorithmContext();
 
   const { addAlerta } = useAlertsContext();
@@ -36,6 +38,7 @@ export default function Configuracoes() {
   const [openNeighborhoodFunctions, setOpenNeighborhoodFunctions] =
     useState(false);
   const [openStopFunctions, setOpenStopFunctions] = useState(false);
+  const [openAspirationFunctions, setOpenAspirationFunctions] = useState(false);
 
   /**
    * Função responsável por gerar e retornar os componentes referentes as funções
@@ -126,6 +129,40 @@ export default function Configuracoes() {
     return toRender;
   };
 
+  /**
+   * Função responsável por gerar e retornar os componentes referentes as funções
+   * de geração da vizinhança
+   */
+  const renderAspirationFunctions = () => {
+    const toRender = [];
+    for (const _func of aspirationFunctions.keys()) {
+      const func = aspirationFunctions.get(_func);
+      toRender.push(
+        <NeighborhoodComponent
+          key={_func}
+          name={func.instance.name}
+          isActive={func.isActive}
+          description={func.instance.description}
+          showInformations={addAlerta}
+          setIsActive={(newState: boolean) => {
+            setAspirationFunctions((prev) => {
+              const newMap = new Map(prev); // Criar uma cópia do Map
+              const entry = newMap.get(_func); // Pegar o valor atual da função
+
+              if (entry) {
+                newMap.set(_func, { ...entry, isActive: newState }); // Atualizar a propriedade isActive
+              }
+
+              return newMap; // Retornar o novo Map atualizado
+            });
+          }}
+        />
+      );
+    }
+
+    return toRender;
+  };
+
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>
       <Box sx={{ padding: 2, maxHeight: "80vh", overflowY: "auto" }}>
@@ -175,7 +212,7 @@ export default function Configuracoes() {
               showInformations={addAlerta}
             />
 
-            <ParameterComponent
+            {/* <ParameterComponent
               name={"Iterações Máximas"}
               isActive={parametros.maxIterations.isActive}
               description="Quantidade máxima de iterações que o algoritmo pode atingir."
@@ -200,7 +237,7 @@ export default function Configuracoes() {
                 }))
               }
               showInformations={addAlerta}
-            />
+            /> */}
           </Grid2>
         </Collapse>
 
@@ -286,6 +323,36 @@ export default function Configuracoes() {
             justifyContent="center"
           >
             {renderStopFunctions()}
+          </Grid2>
+        </Collapse>
+
+        {/* Funções de Aspiração */}
+        <Box
+          display="flex"
+          alignItems="center"
+          onClick={() => setOpenAspirationFunctions(!openAspirationFunctions)}
+          sx={{ cursor: "pointer", marginTop: "2em" }}
+        >
+          <IconButton>
+            {openAspirationFunctions ? (
+              <KeyboardArrowUpIcon />
+            ) : (
+              <KeyboardArrowDownIcon />
+            )}
+          </IconButton>
+          <Typography variant="h5" gutterBottom>
+            Critérios de Aspiração
+          </Typography>
+        </Box>
+        <Divider sx={{ marginBottom: "1em" }} />
+        <Collapse in={openAspirationFunctions}>
+          <Grid2
+            container
+            spacing={2}
+            alignItems="center"
+            justifyContent="center"
+          >
+            {renderAspirationFunctions()}
           </Grid2>
         </Collapse>
       </Box>

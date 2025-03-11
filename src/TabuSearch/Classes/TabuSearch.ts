@@ -14,6 +14,7 @@ import { TabuList } from "./Abstract/TabuList";
 import { Solution } from "../TabuList/Solution";
 import { delay } from "../utils";
 import { StopCriteria } from "./Abstract/StopCriteria";
+import { AspirationCriteria } from "./Abstract/AspirationCriteria";
 
 export class TabuSearch {
   /**
@@ -58,6 +59,15 @@ export class TabuSearch {
    */
   private stopPipe: Map<string, StopCriteria> = new Map<string, StopCriteria>();
 
+  /**
+   * Lista que armazena os critérios de aspiração que serão aplicados durante a execução
+   * do algoritmo.
+   */
+  private aspirationPipe: Map<string, AspirationCriteria> = new Map<
+    string,
+    AspirationCriteria
+  >();
+
   constructor(
     atribuicoes: Atribuicao[],
     docentes: Docente[],
@@ -71,6 +81,7 @@ export class TabuSearch {
     tipoTabuList: "Solução" | "Atribuição" | "Movimento",
     tabuSize: number | undefined,
     stopFunctions: StopCriteria[],
+    aspirationFunctions: AspirationCriteria[],
     maiorPrioridade?: number
   ) {
     /**
@@ -173,6 +184,13 @@ export class TabuSearch {
      */
     for (const func of stopFunctions) {
       this.stopPipe.set(func.name, func);
+    }
+
+    /**
+     * Inicializa os critérios de aspiração
+     */
+    for (const func of aspirationFunctions) {
+      this.aspirationPipe.set(func.name, func);
     }
   }
 
@@ -299,6 +317,67 @@ export class TabuSearch {
   }
 
   /**
+   * Esse método tem como objetivo encontrar, e atualizar, o melhor vizinho entre os elementos
+   * da vizinhança gerada e a melhor solução encontrada até o momento.
+   * O método aplicará o `Pipeline` referente aos critéios de aspiração, dessa forma, caso uma nova melhor
+   * solução seja encontrada pelas aspirações, o elemento deve ser removido da lista tabu para ser
+   * adicionado novamente pelo loop principal do algoritmo.
+   * @param vizinhanca Vizinhança gerada pelo método `generateNeighborhood`.
+   * @returns Retorna o melhor vizinho e o indice na vizinhança.
+   */
+  async findBestSolution(vizinhanca: Vizinho[]): Promise<{
+    vizinho: Vizinho;
+    index: number | undefined;
+  }> {
+    /**
+     * O processo de avaliação deve continuar até o momento em que os elementos da vizinhança
+     * apresentem a avaliação menor que a melhor até o momento. Percorrer toda a lista gastaria
+     * muito tempo de execução e não traria nenhum efeito positivo, apenas lentidão.
+     */
+    for (let i = 0; i < vizinhanca.length; i++) {
+      if (vizinhanca[i].avaliacao < this.bestSolution.avaliacao) {
+        break;
+      }
+
+      /**
+       * Se o vizinho for tabu, os critérios de asporação devem ser validados.
+       */
+      if (vizinhanca[i].isTabu) {
+        let fulfills = false;
+        for (const aspiration of this.aspirationPipe.values()) {
+          fulfills =
+            fulfills || aspiration.fulfills(vizinhanca[i], this.bestSolution);
+        }
+
+        /**
+         * Se o vizinho cumprir pelo menos um critério, a melhor solução encontrada deve
+         * ser atualizada e removida da lista tabu.
+         */
+        if (fulfills) {
+          // this.tabuList.remove(this.tabuList.indexOf(vizinhanca[i]));
+          // this.bestSolution = vizinhanca[i];
+          return { vizinho: vizinhanca[i], index: i };
+
+          // /**
+          //  * Como a vizinhança é ordenada de forma decrescente, caso encontremos uma solução com maior
+          //  * avaliação, o processo pode ser interrompido.
+          //  */
+          // break;
+        }
+      } else {
+        /**
+         * Aqui temos a garantia de que o vizinho tem a avaliação `maior ou igual` a melhor encontrada,
+         * como também que ele não é tabu.
+         */
+        return { vizinho: vizinhanca[i], index: i };
+        // this.bestSolution = vizinhanca[i];
+        // break;
+      }
+    }
+    return { vizinho: this.bestSolution, index: undefined };
+  }
+
+  /**
    *
    * @param interrompe Função que pode ser informada ao método run com o intuito de interromper a execução do algoritmo.
    * @returns
@@ -324,7 +403,6 @@ export class TabuSearch {
     // Inicia o tempo inicial total
     const tempoInicialTotal = performance.now();
 
-    // VAI DAR PROBLEMA EM ``vizinhanca[0]``
     while (!this.stop(iteracoes, vizinhanca[0], interrompe)) {
       await delay(0);
 
@@ -348,20 +426,51 @@ export class TabuSearch {
 
       /**********************************************************************************************/
       vizinhanca = await this.generateNeighborhood();
+
       vizinhanca = await this.evaluateNeighbors(vizinhanca);
       vizinhanca = await this.verifyTabu(vizinhanca);
 
       vizinhanca = vizinhanca.sort((a, b) => b.avaliacao - a.avaliacao);
 
-      vizinhanca = vizinhanca.filter((vizinho) => !vizinho.isTabu);
+      /**
+       * Processo de encontrar o melhor vizinho.
+       */
+      const localBestSolution = await this.findBestSolution(vizinhanca);
 
-      if (
-        vizinhanca.length &&
-        this.bestSolution.avaliacao <= vizinhanca[0].avaliacao
-      ) {
-        this.bestSolution = vizinhanca[0];
-        this.tabuList.add(vizinhanca[0]);
+      /**
+       * Verifica se a propriedade `index` está definida, representando uma nova solução encontrada.
+       */
+      if (localBestSolution.index !== undefined) {
+        /**
+         * Verifica se a nova solução encontrada é tabu. Se for, implica-se que algum critério
+         * de aspiração foi atendido.
+         * A solução deve ser rmeovida da lista tabu, melhor solução global atualizada e inserida
+         * novamente na lista tabu.
+         *
+         * Caso contrário, a solução encontrada não é tabu e deve-se apenas ser atualizado o melhor
+         * vizinho e inseri-lo na lista tabu.
+         */
+        if (localBestSolution.vizinho.isTabu) {
+          this.tabuList.remove(
+            this.tabuList.indexOf(localBestSolution.vizinho)
+          );
+          localBestSolution.vizinho.isTabu = false;
+          console.log("Aspiração aplicada");
+        }
+
+        this.bestSolution = localBestSolution.vizinho;
+        this.tabuList.add(localBestSolution.vizinho);
       }
+
+      // //vizinhanca = vizinhanca.filter((vizinho) => !vizinho.isTabu);
+
+      // if (
+      //   vizinhanca.length &&
+      //   this.bestSolution.avaliacao <= vizinhanca[0].avaliacao
+      // ) {
+      //   this.bestSolution = vizinhanca[0];
+      //   this.tabuList.add(vizinhanca[0]);
+      // }
 
       /**********************************************************************************************/
 
