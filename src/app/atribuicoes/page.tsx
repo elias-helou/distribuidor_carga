@@ -20,7 +20,6 @@ import {
   Celula,
   ContextoExecucao,
   Disciplina,
-  processData,
   Solucao,
   TipoInsercao,
   TipoTrava,
@@ -28,7 +27,6 @@ import {
 import { useCallback, useEffect, useRef, useState } from "react";
 import AlgoritmoDialog from "@/components/AlgorithmDialog";
 import { useAlertsContext } from "@/context/Alerts";
-import { avaliarSolucao, buscaTabu } from "@/algorithms/buscaTabu";
 import ButtonGroupHeader from "./components/ButtonGroupHeader";
 import HeaderCell from "./components/HeaderCell";
 import {
@@ -40,14 +38,6 @@ import { useSolutionHistory } from "@/context/SolutionHistory/hooks";
 import CleanAlertDialog from "./components/CleanAlertDialog";
 import { useAlgorithmContext } from "@/context/Algorithm";
 import { TabuSearch } from "@/TabuSearch/Classes/TabuSearch";
-import { Add } from "@/TabuSearch/NeighborhoodGeneration/Add";
-import { Remove } from "@/TabuSearch/NeighborhoodGeneration/Remove";
-import { Swap } from "@/TabuSearch/NeighborhoodGeneration/Swap";
-import {
-  comparaSolucoes,
-  compareArrays,
-  diferencasEntreSolucoes,
-} from "@/algorithms/utils";
 
 // Customizar todos os TableCell
 const customTheme = createTheme({
@@ -79,7 +69,12 @@ export default function Timetable() {
     parametros,
   } = useGlobalContext();
 
-  const { neighborhoodFunctions } = useAlgorithmContext();
+  const {
+    hardConstraints,
+    softConstraints,
+    neighborhoodFunctions,
+    stopFunctions,
+  } = useAlgorithmContext();
 
   const { cleanSolucaoAtual } = useSolutionHistory();
 
@@ -123,13 +118,6 @@ export default function Timetable() {
     interrompeRef.current = interrompe;
     disciplinasAlocadasRef.current = disciplinasAlocadas;
   }, [interrompe, disciplinasAlocadas]);
-
-  /**
-   * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-   *                Teste das restrições
-   * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-   */
-  const { hardConstraints, softConstraints } = useAlgorithmContext();
 
   /**
    * Função responsável por gerar as linhas da tabela, criando X espaços de disciplina para cada docente.
@@ -544,7 +532,10 @@ export default function Timetable() {
       .filter((entry) => entry.isActive)
       .map((entry) => entry.instance);
 
-    console.log(neighborhood);
+    const stop = Array.from(stopFunctions.values())
+      .filter((entry) => entry.isActive)
+      .map((entry) => entry.instance);
+
     const buscaTabu = new TabuSearch(
       atribuicoes,
       docentes,
@@ -553,15 +544,11 @@ export default function Timetable() {
       formularios,
       parametros,
       [...hardConstraints.values(), ...softConstraints.values()],
-      undefined,
-      // [
-      //   new Add("Adiciona", "Adição"),
-      //   new Remove("Remove", "Remover"),
-      //   new Swap("Troca", "Trocar"),
-      // ],
+      { atribuicoes: atribuicoes },
       neighborhood,
       "Solução",
       100,
+      stop,
       maxPriority + 1
     );
 
@@ -569,34 +556,10 @@ export default function Timetable() {
 
     await buscaTabu.run(() => interrompeRef.current, setDisciplinasAlocadas);
 
-    // for (const i of solucao.estatisticas.melhoresPorIteracao.keys()) {
-    //   const valido = comparaSolucoes(
-    //     solucao.estatisticas.melhoresPorIteracao.get(i).atribuicoes,
-    //     a.melhoresPorIteracao.get(i).atribuicoes
-    //   );
-    //   console.log(
-    //     `Iteração ${i}: Iguais ? ${valido} - Avaliações? ${
-    //       solucao.estatisticas.melhoresPorIteracao.get(i).avaliacao ===
-    //       a.melhoresPorIteracao.get(i).avaliacao
-    //     }`
-    //   );
-
-    //   if (!valido) {
-    //     console.log(
-    //       diferencasEntreSolucoes(
-    //         solucao.estatisticas.melhoresPorIteracao.get(i).atribuicoes,
-    //         a.melhoresPorIteracao.get(i).atribuicoes
-    //       )
-    //     );
-    //   }
-    // }
     const solucao: Solucao = {
       atribuicoes: buscaTabu.bestSolution.atribuicoes,
       avaliacao: buscaTabu.bestSolution.avaliacao,
-      estatisticas: {
-        ...buscaTabu.statistics,
-        melhoresPorIteracao: new Map(),
-      },
+      estatisticas: buscaTabu.statistics,
     };
     setSolucaoAtual(solucao);
 
@@ -656,23 +619,60 @@ export default function Timetable() {
     handleCloseDialog();
   };
 
-  const saveAlterations = () => {
-    const { pDisciplinas, pDocentes, pAtribuicoes } = processData(
-      disciplinas,
+  const saveAlterations = async () => {
+    // const { pDisciplinas, pDocentes, pAtribuicoes } = processData(
+    //   disciplinas,
+    //   docentes,
+    //   formularios,
+    //   travas,
+    //   atribuicoes
+    // );
+
+    // const avaliacao = avaliarSolucao(
+    //   pAtribuicoes,
+    //   pDocentes,
+    //   pDisciplinas,
+    //   maxPriority + 1, // talvez não seja necessário esse +1 (? 14/02/2025)
+    //   parametros,
+    //   softConstraints
+    // );
+    const neighborhood = Array.from(neighborhoodFunctions.values())
+      .filter((entry) => entry.isActive)
+      .map((entry) => entry.instance);
+
+    const stop = Array.from(stopFunctions.values())
+      .filter((entry) => entry.isActive)
+      .map((entry) => entry.instance);
+    const buscaTabu = new TabuSearch(
+      atribuicoes,
       docentes,
-      formularios,
+      disciplinas,
       travas,
-      atribuicoes
+      formularios,
+      parametros,
+      [...hardConstraints.values(), ...softConstraints.values()],
+      { atribuicoes: atribuicoes },
+      // [
+      //   new Add("Adiciona", "Adição"),
+      //   new Remove("Remove", "Remover"),
+      //   new Swap("Troca", "Trocar"),
+      // ],
+      neighborhood,
+      "Solução",
+      100,
+      stop,
+      maxPriority + 1
     );
 
-    const avaliacao = avaliarSolucao(
-      pAtribuicoes,
-      pDocentes,
-      pDisciplinas,
-      maxPriority + 1, // talvez não seja necessário esse +1 (? 14/02/2025)
-      parametros,
-      softConstraints
-    );
+    const avaliacao = (
+      await buscaTabu.evaluateNeighbors([
+        {
+          atribuicoes: atribuicoes,
+          isTabu: false,
+          movimentos: { add: [], drop: [] },
+        },
+      ])
+    )[0].avaliacao;
     const contextoExecucao: ContextoExecucao = {
       disciplinas: [...disciplinas],
       docentes: [...docentes],
