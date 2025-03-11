@@ -1,4 +1,5 @@
 import { NeighborhoodFunction } from "@/TabuSearch/Classes/Abstract/NeighborhoodFunction";
+import { StopCriteria } from "@/TabuSearch/Classes/Abstract/StopCriteria";
 import Constraint from "@/TabuSearch/Classes/Constraint";
 import { AtribuicaoSemFormulario } from "@/TabuSearch/Constraints/AtribuicaoSemFormulario";
 import { CargaDeTrabalho } from "@/TabuSearch/Constraints/CargaDeTrabalho";
@@ -7,10 +8,16 @@ import { DisciplinaSemDocente } from "@/TabuSearch/Constraints/DisciplinaSemDoce
 import { Add } from "@/TabuSearch/NeighborhoodGeneration/Add";
 import { Remove } from "@/TabuSearch/NeighborhoodGeneration/Remove";
 import { Swap } from "@/TabuSearch/NeighborhoodGeneration/Swap";
+import { IteracoesMaximas } from "@/TabuSearch/StopCriteria/IteracoesMaximas";
 import { createContext, useContext, useState } from "react";
 
 type NeighborhoodEntry = {
   instance: NeighborhoodFunction;
+  isActive: boolean;
+};
+
+type StopCriteriaEntry = {
+  instance: StopCriteria;
   isActive: boolean;
 };
 
@@ -41,6 +48,10 @@ export interface AlgorithmInterface {
   setNeighborhoodFunctions: React.Dispatch<
     React.SetStateAction<Map<string, NeighborhoodEntry>>
   >;
+  stopFunctions: Map<string, StopCriteriaEntry>;
+  setStopFunctions: React.Dispatch<
+    React.SetStateAction<Map<string, StopCriteriaEntry>>
+  >;
 }
 
 const AlgorithmContext = createContext<AlgorithmInterface>({
@@ -57,6 +68,8 @@ const AlgorithmContext = createContext<AlgorithmInterface>({
   setParametros: () => {},
   neighborhoodFunctions: new Map<string, NeighborhoodEntry>(),
   setNeighborhoodFunctions: () => Map<string, NeighborhoodEntry>,
+  stopFunctions: new Map<string, StopCriteriaEntry>(),
+  setStopFunctions: () => Map<string, StopCriteriaEntry>,
 });
 
 export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
@@ -132,6 +145,37 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
       ["Swap", { instance: new Swap("Troca", "Trocar"), isActive: true }],
     ])
   );
+
+  /**
+   * Estado responsável pelas funções de `stop`, que encerrarão a execução do
+   * algoritmo.
+   */
+  const [stopFunctions, setStopFunctions] = useState(
+    new Map<string, StopCriteriaEntry>([
+      [
+        "Limite de Iterações",
+        {
+          instance: new IteracoesMaximas(
+            "Limite de Iterações",
+            "Função que interromperá o algoritmo caso uma determinada quantidade de iterações seja atingida.",
+            200
+          ),
+          isActive: true,
+        },
+      ],
+      [
+        "Iterações sem Modificação",
+        {
+          instance: new IteracoesMaximas(
+            "Iterações sem Modificação",
+            "Função que interromperá o algoritmo caso uma determinada quantidade de iterações sem modificação da melhor solução seja atingida.",
+            50
+          ),
+          isActive: false,
+        },
+      ],
+    ])
+  );
   return (
     <AlgorithmContext.Provider
       value={{
@@ -145,6 +189,8 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
         setParametros: setParametros,
         neighborhoodFunctions: neighborhoodFunctions,
         setNeighborhoodFunctions: setNeighborhoodFunctions,
+        stopFunctions: stopFunctions,
+        setStopFunctions: setStopFunctions,
       }}
     >
       {children}
