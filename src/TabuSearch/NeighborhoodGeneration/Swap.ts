@@ -43,16 +43,16 @@ export class Swap extends NeighborhoodFunction {
         /**
          * Caso ambas as turmas não tenham nenhuma atribuição, o processo deve ir para a próxima iteração.
          */
-        if (docentesAtual.length === 0 && docentesPivot.length === 0) {
-          continue;
-        }
+        // if (docentesAtual.length === 0 && docentesPivot.length === 0) {
+        //   continue;
+        // }
 
         /**
          * Remover depois
          */
-        if (turmaAtual.id === turmaPivot.id) {
-          continue;
-        }
+        // if (turmaAtual.id === turmaPivot.id) {
+        //   continue;
+        // }
 
         /**
          * Verificar se a troca pode ser realizada: todos os docentes do Pivo podem ir para a Atual e vice-versa
