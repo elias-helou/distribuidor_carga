@@ -59,7 +59,6 @@ export function ProcessWrapper({ children }: { children: React.ReactNode }) {
   );
 
   useEffect(() => {
-    //console.log('Effect Disciplina')
     if (globalDisciplinas.length > 0) {
       // Atualizar a variável disciplinas
       // TODO: implementar um algoritmo de Diff para otimizar o processo, atualizando apenas aquilo que será necessário
@@ -121,12 +120,10 @@ export function ProcessWrapper({ children }: { children: React.ReactNode }) {
         }
       }
       setDisciplinas(newDiciplinas);
-      // console.log(newDiciplinas)
     }
   }, [globalDisciplinas]);
 
   useEffect(() => {
-    //console.log('Effect Docente + Disciplina')
     if (globalDocentes.length > 0) {
       // Atualizar os docentes
       const newDocentes: Map<string, Docente> = new Map<string, Docente>();
@@ -160,7 +157,6 @@ export function ProcessWrapper({ children }: { children: React.ReactNode }) {
         newDocentes.set(newDocente.nome, newDocente);
       }
       setDocentes(newDocentes);
-      //console.log(newDocentes)
     }
   }, [disciplinas, globalDocentes]);
 
