@@ -5,7 +5,7 @@ export class IteracoesMaximas extends StopCriteria {
    * Propriedade privada da classe que representa o limite de iterações que o
    * processo poderá continuar sendo executado.
    */
-  private maxIteracoes: number;
+  public maxIteracoes: number;
 
   constructor(
     name: string,
