@@ -3,14 +3,11 @@ import { Vizinho } from "../Interfaces/utils";
 import { compararVizihos } from "../utils";
 
 export class IteracoesSemModificacao extends StopCriteria {
-  /**
-   * Contador iniciará em -1 pois em todo caso, quando uma nova melhor solução for encontrada,
-   * teremos a subistituição do `melhorVizinho` e neste caso, o melhor vizinho gerado no processo,
-   * comparado com o `melhorVizinho`, serão a mesma solução. Dessa forma o -1 implica o início em 0.
-   */
-  private iteacoesSemModificacao: number = -1;
+  public iteacoesSemModificacao: number = 0;
 
-  private limiteIteracoesSemModificacao: number;
+  public limiteIteracoesSemModificacao: number;
+
+  private prevMelhorVizinho: Vizinho = undefined;
 
   constructor(
     name: string,
@@ -21,17 +18,27 @@ export class IteracoesSemModificacao extends StopCriteria {
     this.limiteIteracoesSemModificacao = limiteIteracoesSemModificacao;
   }
 
-  stop(
-    iteracoes: number,
-    melhorVizinho?: Vizinho,
-    vizinhoGerado?: Vizinho
-  ): boolean {
+  stop(iteracoes?: number, melhorVizinho?: Vizinho): boolean {
     /**
-     * Verifica a melhor solução atual e o melhor vizinho gerado.
+     * Verifica a primeira iteração. A primeira é identificada com `this.prevMelhorVizinho`
+     * sendo `undefined`. Sendo assim, `this.prevMelhorVizinho` recebe o melhor vizinho encontrado.
      */
-    if (compararVizihos(melhorVizinho, vizinhoGerado)) {
+    if (!this.prevMelhorVizinho) {
+      this.prevMelhorVizinho = melhorVizinho;
+      this.iteacoesSemModificacao = 0;
+    }
+
+    /**
+     * Para verificar se um novo melhor vizinho foi encontrado, utiliza-se a função `compararVizihos`,
+     * comparando o `melhorVizinho` enviado pela classe `TabuSearch` com o melhor vizinho armazenado
+     * nesta classe `this.prevMelhorVizinho`.
+     * Caso sejam iguais, o contador deve ser incrementado. Caso contrário, o `this.prevMelhorVizinho`
+     * deve ser atualizado e o contador resetado.
+     */
+    if (compararVizihos(this.prevMelhorVizinho, melhorVizinho)) {
       this.iteacoesSemModificacao += 1;
     } else {
+      this.prevMelhorVizinho = melhorVizinho;
       this.iteacoesSemModificacao = 0;
     }
 
