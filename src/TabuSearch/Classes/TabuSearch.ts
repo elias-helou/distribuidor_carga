@@ -282,11 +282,11 @@ export class TabuSearch {
   /**
    * (Provisório) Método que define se o processo deve ser encerrado.
    */
-  async stop(
+  stop(
     iteracoes: number,
     melhorVizinhoGerado: Vizinho,
     interrompe?: () => boolean
-  ) {
+  ): boolean {
     if (interrompe && interrompe()) return true;
 
     for (const process of this.stopPipe.values()) {
@@ -308,7 +308,7 @@ export class TabuSearch {
     atualizaQuantidadeAlocacoes?: (qtd: number) => void
   ): Promise<Vizinho> {
     let iteracoes = 0;
-    let vizinhanca: Vizinho[];
+    let vizinhanca: Vizinho[] = [];
     /**
      * Variáveis para o controle do tempo de execução. Também serão utilizados nas estatisticas.
      */
@@ -325,7 +325,7 @@ export class TabuSearch {
     const tempoInicialTotal = performance.now();
 
     // VAI DAR PROBLEMA EM ``vizinhanca[0]``
-    while (!(await this.stop(iteracoes, vizinhanca[0], interrompe))) {
+    while (!this.stop(iteracoes, vizinhanca[0], interrompe)) {
       await delay(0);
 
       /**
@@ -354,8 +354,6 @@ export class TabuSearch {
       vizinhanca = vizinhanca.sort((a, b) => b.avaliacao - a.avaliacao);
 
       vizinhanca = vizinhanca.filter((vizinho) => !vizinho.isTabu);
-
-      //console.log(`Iteração ${iteracoes} - Vizinhos gerados: ${vizinhanca.length}`)
 
       if (
         vizinhanca.length &&
