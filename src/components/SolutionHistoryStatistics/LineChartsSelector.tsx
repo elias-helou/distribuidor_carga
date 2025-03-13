@@ -1,5 +1,11 @@
 import { HistoricoSolucao } from "@/context/Global/utils";
-import { Box, Divider, FormControlLabel, FormGroup, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Divider,
+  FormControlLabel,
+  FormGroup,
+  Typography,
+} from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import { LineChart } from "@mui/x-charts";
 import React from "react";
@@ -31,7 +37,7 @@ export default function LineChartsSelector({
   const renderLineChart = () => {
     if (selectedCharts.size === 0) {
       return (
-        <Box height="90%" alignContent="center">
+        <Box height="100%" alignContent="center">
           <Typography variant="h6" color="error" align="center">
             Nenhuma informação selecionada!
           </Typography>
@@ -53,7 +59,7 @@ export default function LineChartsSelector({
     }
     if (selectedCharts.has("Tempo")) {
       const tempoData = Array.from(estatisticas.tempoPorIteracao.values());
-      series.push({ label: "Tempo (ms)", data: tempoData  });
+      series.push({ label: "Tempo (ms)", data: tempoData });
     }
 
     return (
@@ -68,8 +74,8 @@ export default function LineChartsSelector({
   };
 
   return (
-    <Paper elevation={2} sx={{height: "25em", alignItems: "center"}}>
-      <FormGroup row sx={{alignItems: "center", justifyContent: "center"}}>
+    <Box>
+      <FormGroup row sx={{ alignItems: "center", justifyContent: "center" }}>
         <FormControlLabel
           control={
             <Checkbox
@@ -93,6 +99,6 @@ export default function LineChartsSelector({
       </FormGroup>
       <Divider />
       {renderLineChart()}
-    </Paper>
+    </Box>
   );
 }

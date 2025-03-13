@@ -1,4 +1,4 @@
-import LineChartsSelector from "@/components/SolutionHistoryStatistics/LineChartsSelector";
+//import LineChartsSelector from "@/components/SolutionHistoryStatistics/LineChartsSelector";
 import {
   Disciplina,
   HistoricoSolucao,
@@ -31,7 +31,9 @@ export interface TreeDisciplina extends Disciplina {
 interface SolutionHistoryStatisticsProps {
   id: string;
   solucao: HistoricoSolucao;
-  setHoveredCourese: React.Dispatch<React.SetStateAction<TreeDisciplina | null>>;
+  setHoveredCourese: React.Dispatch<
+    React.SetStateAction<TreeDisciplina | null>
+  >;
 }
 
 const SolutionHistoryStatistics: React.FC<SolutionHistoryStatisticsProps> = ({
@@ -154,11 +156,11 @@ const SolutionHistoryStatistics: React.FC<SolutionHistoryStatisticsProps> = ({
       </Grid2> */}
 
       {/* Renderizar o LineChartsSelector se as estatísticas estiverem disponíveis */}
-      {solucao.solucao.estatisticas !== undefined && (
+      {/* {solucao.solucao.estatisticas !== undefined && (
         <Grid2 size={{ xs: 12 }}>
           <LineChartsSelector solucao={solucao} />
         </Grid2>
-      )}
+      )} */}
     </Grid2>
   );
 };

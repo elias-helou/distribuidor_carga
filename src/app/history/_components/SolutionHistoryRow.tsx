@@ -18,6 +18,7 @@ import SolutionHistoryStatistics, {
   TreeDisciplina,
 } from "./SolutionHistoryStatistics";
 import { exportJson, getFormattedDate } from "@/app/atribuicoes";
+import Link from "next/link";
 
 interface SolutionHistoryRowProps {
   id: string;
@@ -115,7 +116,7 @@ const SolutionHistoryRow: React.FC<SolutionHistoryRowProps> = ({
           key={`identificador_${id}`}
           // sx={{fontWeight: solucaoAtual.idHistorico === id ? 'bold' : 'normal'}}
         >
-          {solucao.datetime}
+          <Link href={`/history/${id}`}>{solucao.datetime}</Link>
         </TableCell>
         <TableCell align="center" key={`avaliacao_${id}`}>
           {solucao.solucao.avaliacao}

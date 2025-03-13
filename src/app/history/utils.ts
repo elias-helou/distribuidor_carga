@@ -338,3 +338,18 @@ function setChoqueDeHorarios(docentes: Map<string, TreeDocente>) {
 
   return docentes;
 }
+
+// Função para gerar cores em tons de azul, roxo e verde água
+export function generateColors(count: number) {
+  const hueRanges = [
+    [190, 250], // Azul
+    [250, 290], // Roxo
+    [160, 190], // Verde Água
+  ];
+
+  return Array.from({ length: count }, (_, i) => {
+    const range = hueRanges[i % hueRanges.length]; // Alterna entre os grupos de cores
+    const hue = Math.floor(Math.random() * (range[1] - range[0]) + range[0]); // Cor aleatória dentro do intervalo
+    return `hsl(${hue}, 70%, 50%)`; // Saturação e luminosidade ajustadas para boa visibilidade
+  });
+}
