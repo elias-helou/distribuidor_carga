@@ -32,7 +32,7 @@ export class TabuSearch {
   protected context: Context;
 
   // Processos de geração de vizinhos
-  private neighborhoodPipe: Map<string, NeighborhoodFunction> = new Map<
+  public neighborhoodPipe: Map<string, NeighborhoodFunction> = new Map<
     string,
     NeighborhoodFunction
   >();
@@ -43,7 +43,7 @@ export class TabuSearch {
   public parameters: Parametros;
 
   // Restrições
-  protected constraints: {
+  public constraints: {
     hard: Map<string, Constraint>;
     soft: Map<string, Constraint>;
   };
@@ -57,13 +57,13 @@ export class TabuSearch {
    * Lista que armazena os processos que serão responsáveis por interromper a execução
    * do algoritmo.
    */
-  private stopPipe: Map<string, StopCriteria> = new Map<string, StopCriteria>();
+  public stopPipe: Map<string, StopCriteria> = new Map<string, StopCriteria>();
 
   /**
    * Lista que armazena os critérios de aspiração que serão aplicados durante a execução
    * do algoritmo.
    */
-  private aspirationPipe: Map<string, AspirationCriteria> = new Map<
+  public aspirationPipe: Map<string, AspirationCriteria> = new Map<
     string,
     AspirationCriteria
   >();
@@ -177,6 +177,11 @@ export class TabuSearch {
       iteracoes: 0,
       tempoExecucao: 0,
       tempoPorIteracao: new Map<number, number>(),
+      docentesPrioridade: new Map<number, number>(),
+      qtdOcorrenciasRestricoes: new Map<
+        string,
+        { label: string; qtd: number }[]
+      >(),
     };
 
     /**
@@ -400,6 +405,10 @@ export class TabuSearch {
       )[0];
     }
 
+    /**
+     * Inicializa o primeiro item da lista de tempo por iteração com 0
+     */
+    this.statistics.tempoPorIteracao.set(iteracoes, 0);
     // Inicia o tempo inicial total
     const tempoInicialTotal = performance.now();
 
@@ -455,9 +464,13 @@ export class TabuSearch {
             this.tabuList.indexOf(localBestSolution.vizinho)
           );
           localBestSolution.vizinho.isTabu = false;
-          console.log("Aspiração aplicada");
         }
 
+        if (
+          this.bestSolution.avaliacao === localBestSolution.vizinho.avaliacao
+        ) {
+          console.log("Mesmas avaliações");
+        }
         this.bestSolution = localBestSolution.vizinho;
         this.tabuList.add(localBestSolution.vizinho);
       }
@@ -504,12 +517,76 @@ export class TabuSearch {
     );
 
     /**
-     * Finalizar a atualização das estatisticas
+     * Finalizar a atualização das estatísticas
      */
     this.statistics.interrupcao = interrompe && interrompe();
     this.statistics.iteracoes = iteracoes;
     this.statistics.tempoExecucao = tempoInicialTotal;
 
+    this.generateStatistics();
+
     return this.bestSolution;
+  }
+
+  /**
+   * Metódo responsável por gerar as estatísticas extras presentes na classe {@link Statistics}
+   * @returns {Statistics} Retorna todas as estatísticas geradas.
+   */
+  generateStatistics(): Statistics {
+    /**
+     * Gerar os valores referentes a quantidade de atribuições por prioridade.
+     * O processo tem início com o preenchimento de toda a lista com zeros.
+     */
+    for (let i = 0; i < this.context.maiorPrioridade; i++) {
+      this.statistics.docentesPrioridade.set(i, 0);
+    }
+
+    /**
+     * Caso o docente atribuído não tenha um formulário preenchido, o valor '0' representará esses casos.
+     */
+    for (const atribuicao of this.bestSolution.atribuicoes) {
+      for (const _docente of atribuicao.docentes) {
+        const docente = this.context.docentes.find(
+          (doc) => doc.nome === _docente
+        );
+
+        if (docente.formularios.has(atribuicao.id_disciplina)) {
+          const prioridade = docente.formularios.get(atribuicao.id_disciplina);
+          const qtd = this.statistics.docentesPrioridade.get(prioridade);
+          this.statistics.docentesPrioridade.set(prioridade, qtd + 1);
+        } else {
+          const qtd = this.statistics.docentesPrioridade.get(0);
+          this.statistics.docentesPrioridade.set(0, qtd + 1);
+        }
+      }
+    }
+
+    /**
+     * Preenche as estatísticas referentes a quantidade de ocorrências das quebras das restrições.
+     */
+
+    for (const constraint of this.constraints.hard.values()) {
+      this.statistics.qtdOcorrenciasRestricoes.set(
+        constraint.name,
+        constraint.occurrences(
+          this.bestSolution.atribuicoes,
+          this.context.docentes,
+          this.context.turmas,
+          this.context.travas
+        )
+      );
+    }
+    for (const constraint of this.constraints.soft.values()) {
+      this.statistics.qtdOcorrenciasRestricoes.set(
+        constraint.name,
+        constraint.occurrences(
+          this.bestSolution.atribuicoes,
+          this.context.docentes,
+          this.context.turmas,
+          this.context.travas
+        )
+      );
+    }
+    return this.statistics;
   }
 }
