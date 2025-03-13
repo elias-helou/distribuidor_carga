@@ -22,8 +22,8 @@ const navItems: IPages[] = [
   { name: "Atribuições", link: "/atribuicoes" },
   { name: "Seleção", link: "/select" },
   { name: "Histórico", link: "/history" },
-  { name: "Parâmetros", link: "/parameters" },
-  { name: "Restrições", link: "/restricoes" },
+  //{ name: "Parâmetros", link: "/parameters" },
+  //{ name: "Restrições", link: "/restricoes" },
   { name: "Calendário", link: "/calendario" },
   { name: "Configurações", link: "/config" },
 ];
