@@ -37,4 +37,6 @@ export interface Statistics {
   interrupcao: boolean;
   avaliacaoPorIteracao: Map<number, number>;
   tempoPorIteracao: Map<number, number>;
+  docentesPrioridade?: Map<number, number>; // Quantidade de docentes por prioridade (histograma)
+  qtdOcorrenciasRestricoes?: Map<string, { label: string; qtd: number }[]>;
 }

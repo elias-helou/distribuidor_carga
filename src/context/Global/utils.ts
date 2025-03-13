@@ -1,3 +1,5 @@
+import { TabuSearch } from "@/TabuSearch/Classes/TabuSearch";
+
 export interface Docente {
   nome: string;
   saldo?: number;
@@ -92,6 +94,8 @@ export interface Estatisticas {
   interrupcao: boolean;
   avaliacaoPorIteracao: Map<number, number>;
   tempoPorIteracao: Map<number, number>;
+  docentesPrioridade?: Map<number, number>; // Quantidade de docentes por prioridade (histograma)
+  qtdOcorrenciasRestricoes?: Map<string, { label: string; qtd: number }[]>;
 }
 
 export interface Solucao {
@@ -100,6 +104,7 @@ export interface Solucao {
   idHistorico?: string;
   estatisticas?: Estatisticas;
   isTabu?: boolean;
+  algorithm?: TabuSearch;
 }
 
 export enum TipoInsercao {
