@@ -85,4 +85,69 @@ export class ValidaTravas extends Constraint {
       constraint: ValidaTravas,
     };
   }
+
+  occurrences(
+    atribuicoes: Atribuicao[],
+    docentes?: Docente[],
+    disciplinas?: Disciplina[],
+    travas?: Celula[]
+  ): { label: string; qtd: number }[] {
+    const data: { label: string; qtd: number }[] = [];
+    let qtdTravasTurma: number = 0;
+    let qtdTravasDocente: number = 0;
+    let qtdTravasCelula: number = 0;
+    /**
+     * Validar as travas presentes no docente
+     */
+    for (const docente of docentes) {
+      if (
+        travas.some(
+          (trava) =>
+            trava.nome_docente === docente.nome &&
+            trava.tipo_trava === TipoTrava.Row
+        )
+      ) {
+        qtdTravasDocente += 1;
+      }
+    }
+
+    /**
+     * Valida se a trava está na turma
+     */
+    for (const turma of disciplinas) {
+      if (
+        travas.some(
+          (trava) =>
+            trava.id_disciplina === turma.id &&
+            trava.tipo_trava === TipoTrava.Column
+        )
+      ) {
+        qtdTravasTurma += 1;
+      }
+    }
+
+    /**
+     * Valida se a trava não está na célula
+     */
+    for (const turma of disciplinas) {
+      for (const docente of docentes) {
+        if (
+          travas.some(
+            (trava) =>
+              trava.id_disciplina === turma.id &&
+              trava.nome_docente === docente.nome
+          )
+        ) {
+          qtdTravasCelula += 1;
+        }
+      }
+    }
+
+    data.push(
+      { label: "Travas Docentes", qtd: qtdTravasDocente },
+      { label: "Travas Turmas", qtd: qtdTravasTurma },
+      { label: "Travas Células", qtd: qtdTravasCelula }
+    );
+    return data;
+  }
 }

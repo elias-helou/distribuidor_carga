@@ -52,4 +52,40 @@ export class CargaDeTrabalho extends Constraint {
       constraint: CargaDeTrabalho,
     };
   }
+
+  occurrences(
+    atribuicoes: Atribuicao[],
+    docentes?: Docente[]
+  ): { label: string; qtd: number }[] {
+    const data: { label: string; qtd: number }[] = [];
+    let qtdMaisDois: number = 0;
+    let qtdMenosUm: number = 0;
+    /**
+     * Contar a quantidade de atribuições por docente
+     */
+    const qtdAtribDocentes = new Map<string, number>();
+    for (const docente of docentes) {
+      const qtd = atribuicoes.filter((atribuicao) =>
+        atribuicao.docentes.includes(docente.nome)
+      ).length;
+      qtdAtribDocentes.set(docente.nome, qtd);
+    }
+
+    /**
+     * Penalização com base no saldo
+     */
+    for (const docente of docentes) {
+      if (qtdAtribDocentes.get(docente.nome) > 2) {
+        qtdMaisDois += 1;
+      } else if (qtdAtribDocentes.get(docente.nome) < 1) {
+        qtdMenosUm += 1;
+      }
+    }
+
+    data.push(
+      { label: "Mais de 2 Atrib.", qtd: qtdMaisDois },
+      { label: "Menos de 1 Atrib.", qtd: qtdMenosUm }
+    );
+    return data;
+  }
 }

@@ -14,9 +14,9 @@ export class ChoqueDeHorarios extends Constraint {
   }
 
   soft(
-    atribuicoes?: Atribuicao[],
-    docentes?: Docente[],
-    disciplinas?: Disciplina[]
+    atribuicoes: Atribuicao[],
+    docentes: Docente[],
+    disciplinas: Disciplina[]
   ): number {
     let avaliacao: number = 0;
 
@@ -50,9 +50,9 @@ export class ChoqueDeHorarios extends Constraint {
   }
 
   hard(
-    atribuicoes?: Atribuicao[],
-    docentes?: Docente[],
-    disciplinas?: Disciplina[]
+    atribuicoes: Atribuicao[],
+    docentes: Docente[],
+    disciplinas: Disciplina[]
   ): boolean {
     if (atribuicoes !== undefined) {
       // Penalizar solução para cada choque de horários encontrados nas atribuições dos docentes
@@ -97,5 +97,52 @@ export class ChoqueDeHorarios extends Constraint {
       penalidade: String(this.penalty),
       constraint: ChoqueDeHorarios,
     };
+  }
+
+  occurrences(
+    atribuicoes: Atribuicao[],
+    docentes: Docente[],
+    disciplinas: Disciplina[]
+  ): { label: string; qtd: number }[] {
+    const data: { label: string; qtd: number }[] = [];
+
+    if (this.penalty !== 0) {
+      const softEvaluation = this.soft(atribuicoes, docentes, disciplinas);
+
+      data.push({
+        label: "Choque de Horários",
+        qtd: Math.abs(softEvaluation / this.penalty),
+      });
+    } else {
+      let qtd: number = 0;
+
+      // Incrementa o contador para cada choque de horários encontrados nas atribuições dos docentes
+      for (const docente of docentes) {
+        // Lista com os Ids das disciplinas
+        const atribuicoesDocente: string[] = atribuicoes
+          .filter((atribuicao) => atribuicao.docentes.includes(docente.nome))
+          .map((atribuicao) => atribuicao.id_disciplina);
+
+        // Comparar as atribuições para ver se a `Disciplia.conflitos` não incluem umas as outras
+        for (let i = 0; i < atribuicoesDocente.length; i++) {
+          const disciplinaPivo: Disciplina = disciplinas.find(
+            (disciplina) => disciplina.id === atribuicoesDocente[i]
+          );
+
+          for (let j = i + 1; j < atribuicoesDocente.length; j++) {
+            const disciplinaAtual: Disciplina = disciplinas.find(
+              (disciplina) => disciplina.id === atribuicoesDocente[j]
+            );
+
+            if (disciplinaPivo.conflitos.has(disciplinaAtual.id)) {
+              qtd += 1;
+            }
+          }
+        }
+      }
+      data.push({ label: "Choque de Horários", qtd: qtd });
+    }
+
+    return data;
   }
 }

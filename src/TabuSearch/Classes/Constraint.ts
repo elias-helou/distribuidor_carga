@@ -96,6 +96,27 @@ export default abstract class Constraint {
   ): boolean;
 
   abstract toObject(): ConstraintInterface;
+
+  /**
+   * Método responsável por retornar a quantidade de vezes que a restrição é quebrada em um conjunto
+   * de atribuições.
+   * Uma forma simples de implementar esse método é chamar o método `this.soft` e dividir o resultado
+   * pelo valor da penalidade `this.penalty`, resultando em exatamenta a quantidade de vezes que
+   * a restrição foi quebrada.
+   * **Vale ressaltar que para essa ideia funcionar, o valhor de `this.penalty` deve ser diferente de 0.**
+   * @example
+   *  return this.soft(atribuicoes) / this.penalty
+   * @returns {Array<string, number} Quantidade de vezes que a restrição foi quebrada com um
+   * título para representa-lo.
+   * @example
+   * return [{label: docentes, qtd: 5}, {label: turmas, qtd: 1]
+   */
+  occurrences?(
+    atribuicoes: Atribuicao[],
+    docentes?: Docente[],
+    disciplinas?: Disciplina[],
+    travas?: Celula[]
+  ): { label: string; qtd: number }[];
 }
 
 export class DisciplinaSemDocente extends Constraint {

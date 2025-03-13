@@ -14,8 +14,8 @@ export class AtribuicaoSemFormulario extends Constraint {
   }
 
   soft(
-    atribuicoes?: Atribuicao[],
-    docentes?: Docente[]
+    atribuicoes: Atribuicao[],
+    docentes: Docente[]
     //disciplinas?: Disciplina[]
   ): number {
     let avaliacao: number = 0;
@@ -45,9 +45,9 @@ export class AtribuicaoSemFormulario extends Constraint {
   }
 
   hard(
-    atribuicoes?: Atribuicao[],
-    docentes?: Docente[],
-    disciplinas?: Disciplina[]
+    atribuicoes: Atribuicao[],
+    docentes: Docente[],
+    disciplinas: Disciplina[]
   ): boolean {
     /**
      * Se a disciplina não foi informado quer dizer que estamos verificando todo o contexto
@@ -90,5 +90,38 @@ export class AtribuicaoSemFormulario extends Constraint {
       penalidade: String(this.penalty),
       constraint: AtribuicaoSemFormulario,
     };
+  }
+
+  occurrences(
+    atribuicoes: Atribuicao[],
+    docentes: Docente[]
+  ): { label: string; qtd: number }[] {
+    const data: { label: string; qtd: number }[] = [];
+
+    if (this.penalty !== 0) {
+      const softEvaluation = Math.abs(this.soft(atribuicoes, docentes));
+
+      data.push({
+        label: "Sem Formulário",
+        qtd: softEvaluation / this.penalty,
+      });
+    } else {
+      let qtd = 0;
+      for (const atribuicao of atribuicoes) {
+        for (const docenteAtribuido of atribuicao.docentes) {
+          const docente = docentes.find((obj) => obj.nome === docenteAtribuido);
+
+          if (!docente.formularios.has(atribuicao.id_disciplina)) {
+            qtd += 1;
+          }
+        }
+      }
+      data.push({
+        label: "Sem Formulário",
+        qtd: qtd,
+      });
+    }
+
+    return data;
   }
 }

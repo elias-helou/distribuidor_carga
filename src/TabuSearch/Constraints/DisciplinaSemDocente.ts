@@ -13,7 +13,7 @@ export class DisciplinaSemDocente extends Constraint {
     super(name, description, isHard, penalty);
   }
 
-  soft(atribuicoes?: Atribuicao[]): number {
+  soft(atribuicoes: Atribuicao[]): number {
     let avaliacao: number = 0;
 
     for (const atribuicao of atribuicoes) {
@@ -41,5 +41,32 @@ export class DisciplinaSemDocente extends Constraint {
       penalidade: String(this.penalty),
       constraint: DisciplinaSemDocente,
     };
+  }
+
+  occurrences(atribuicoes: Atribuicao[]): { label: string; qtd: number }[] {
+    const data: { label: string; qtd: number }[] = [];
+
+    if (this.penalty !== 0) {
+      const softEvaluation = this.soft(atribuicoes);
+
+      data.push({
+        label: "Sem Docente",
+        qtd: Math.abs(softEvaluation / this.penalty),
+      });
+    } else {
+      let qtd: number = 0;
+
+      for (const atribuicao of atribuicoes) {
+        if (atribuicao.docentes.length === 0) {
+          qtd += 1;
+        }
+      }
+      data.push({
+        label: "Sem Docente",
+        qtd: qtd,
+      });
+    }
+
+    return data;
   }
 }
