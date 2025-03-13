@@ -1,6 +1,5 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import {
   Box,
   Typography,
@@ -21,8 +20,12 @@ import TrendingDownOutlinedIcon from "@mui/icons-material/TrendingDownOutlined";
 import { useSolutionHistory } from "@/context/SolutionHistory/hooks";
 import { BarChart, LineChart } from "@mui/x-charts";
 import ConstraintsBarCharts from "./_components/ConstraintsBarCharts";
+import { useParams } from "next/navigation";
+
+// eslint-disable-next-line @next/next/no-async-client-component
 export default function SolutionDetails() {
   const { id } = useParams(); // Obtém o ID da URL
+  //const { id } = await params;
   const { historicoSolucoes } = useSolutionHistory(); // Obtém os dados do contexto
 
   // Busca a solução no histórico
@@ -194,17 +197,17 @@ export default function SolutionDetails() {
                     {
                       scaleType: "band",
                       label: "Prioridades",
-                      data: solucao.solucao.estatisticas.docentesPrioridade
-                        .keys()
-                        .toArray(),
+                      data: Array.from(
+                        solucao.solucao.estatisticas.docentesPrioridade.keys()
+                      ),
                     },
                   ]}
                   series={[
                     {
                       label: "Prioridade",
-                      data: solucao.solucao.estatisticas.docentesPrioridade
-                        .values()
-                        .toArray(),
+                      data: Array.from(
+                        solucao.solucao.estatisticas.docentesPrioridade.values()
+                      ),
                     },
                   ]}
                   height={300}
@@ -226,17 +229,17 @@ export default function SolutionDetails() {
                 <LineChart
                   xAxis={[
                     {
-                      data: solucao.solucao.estatisticas.avaliacaoPorIteracao
-                        .keys()
-                        .toArray(),
+                      data: Array.from(
+                        solucao.solucao.estatisticas.avaliacaoPorIteracao.keys()
+                      ),
                       label: "Iteração",
                     },
                   ]}
                   series={[
                     {
-                      data: solucao.solucao.estatisticas.avaliacaoPorIteracao
-                        .values()
-                        .toArray(),
+                      data: Array.from(
+                        solucao.solucao.estatisticas.avaliacaoPorIteracao.values()
+                      ),
                       label: "Avaliação",
                     },
                   ]}
@@ -257,18 +260,17 @@ export default function SolutionDetails() {
                 <LineChart
                   xAxis={[
                     {
-                      data: solucao.solucao.estatisticas.tempoPorIteracao
-                        .keys()
-                        .toArray(),
+                      data: Array.from(
+                        solucao.solucao.estatisticas.tempoPorIteracao.keys()
+                      ),
                       label: "Iteração",
                     },
                   ]}
                   series={[
                     {
-                      data: solucao.solucao.estatisticas.tempoPorIteracao
-                        .values()
-                        .toArray()
-                        .map((value) => value / 1000),
+                      data: Array.from(
+                        solucao.solucao.estatisticas.tempoPorIteracao.values()
+                      ).map((value) => value / 1000),
                       label: "Tempo (s)",
                     },
                   ]}
