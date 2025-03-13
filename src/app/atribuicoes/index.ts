@@ -9,6 +9,7 @@ import {
   TipoInsercao,
 } from "@/context/Global/utils";
 import { addNewSolutionToHistory } from "@/context/SolutionHistory/utils";
+import { TabuSearch } from "@/TabuSearch/Classes/TabuSearch";
 
 /**
  * Função que define a colocação da célula na tabela
@@ -252,11 +253,13 @@ export function saveAtribuicoesInHistoryState(
   historicoSolucoes: Map<string, HistoricoSolucao>,
   setHistoricoSolucoes,
   setSolucaoAtual,
-  contextoExecucao: ContextoExecucao
+  contextoExecucao: ContextoExecucao,
+  algorithm?: TabuSearch
 ) {
   const novaSolucao: Solucao = {
     atribuicoes: atribuicoes,
     avaliacao: avaliacao,
+    algorithm: algorithm,
   };
 
   const id = addNewSolutionToHistory(

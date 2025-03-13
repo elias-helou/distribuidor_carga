@@ -566,6 +566,7 @@ export default function Timetable() {
       atribuicoes: buscaTabu.bestSolution.atribuicoes,
       avaliacao: buscaTabu.bestSolution.avaliacao,
       estatisticas: buscaTabu.statistics,
+      algorithm: buscaTabu,
     };
     setSolucaoAtual(solucao);
 
@@ -698,7 +699,8 @@ export default function Timetable() {
       historicoSolucoes,
       setHistoricoSolucoes,
       setSolucaoAtual,
-      contextoExecucao
+      contextoExecucao,
+      buscaTabu
     );
 
     addAlerta("As atribuições foram adicionadas ao histórico!", "success");
