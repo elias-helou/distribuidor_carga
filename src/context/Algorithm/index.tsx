@@ -7,6 +7,7 @@ import { AtribuicaoSemFormulario } from "@/TabuSearch/Constraints/AtribuicaoSemF
 import { CargaDeTrabalho } from "@/TabuSearch/Constraints/CargaDeTrabalho";
 import { ChoqueDeHorarios } from "@/TabuSearch/Constraints/ChoqueDeHorarios";
 import { DisciplinaSemDocente } from "@/TabuSearch/Constraints/DisciplinaSemDocente";
+import { ValidaTravas } from "@/TabuSearch/Constraints/ValidaTravas";
 import { Add } from "@/TabuSearch/NeighborhoodGeneration/Add";
 import { Remove } from "@/TabuSearch/NeighborhoodGeneration/Remove";
 import { Swap } from "@/TabuSearch/NeighborhoodGeneration/Swap";
@@ -98,15 +99,15 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
           0
         ),
       ],
-      // [
-      //   "Validar Travas",
-      //   new ValidaTravas(
-      //     "Validar Travas",
-      //     "Restrição que impede a alteração em células travadas.",
-      //     true,
-      //     0
-      //   ),
-      // ],
+      [
+        "Validar Travas",
+        new ValidaTravas(
+          "Validar Travas",
+          "Restrição que impede a alteração em células travadas.",
+          true,
+          0
+        ),
+      ],
     ])
   );
   const [softConstraints, setSoftConstraints] = useState(
@@ -172,7 +173,7 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
           instance: new IteracoesMaximas(
             "Limite de Iterações",
             "Função que interromperá o algoritmo caso uma determinada quantidade de iterações seja atingida.",
-            200
+            20
           ),
           isActive: true,
         },
