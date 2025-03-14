@@ -20,7 +20,7 @@ export class TabuSearch {
   /**
    * Lista tabu com a sua tipagem dinâmica devido a possibilidades de diferentes interpretações.
    */
-  private tabuList: TabuList<any>;
+  public tabuList: TabuList<any>;
 
   /**
    * Solução final após a execução do algoritmo ou a melhor solução encontrada até o momento.

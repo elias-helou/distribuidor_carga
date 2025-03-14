@@ -1,9 +1,9 @@
 import { Vizinho } from "@/TabuSearch/Interfaces/utils";
 
 export abstract class TabuList<T> {
-  protected itens: T;
+  public itens: T;
 
-  protected tabuSize: number | undefined;
+  public tabuSize: number | undefined;
 
   constructor(tabuSize: number | undefined) {
     this.tabuSize = tabuSize;
