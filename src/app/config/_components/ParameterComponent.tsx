@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Paper, TextField, IconButton, Switch, Tooltip } from "@mui/material";
+import {
+  Paper,
+  TextField,
+  IconButton,
+  Switch,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 export interface ParameterComponentProps {
@@ -19,7 +26,7 @@ export interface ParameterComponentProps {
 export default function ParameterComponent({
   name,
   value,
-  description,
+  description = "",
   isActive,
   setValue,
   setIsActive,
@@ -27,59 +34,61 @@ export default function ParameterComponent({
 }: ParameterComponentProps) {
   const [inputValue, setInputValue] = useState<string>(value?.toString() || "");
 
-  // const [erro, setErro] = useState(false);
-
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
     setInputValue(newValue);
     const parsedValue = parseFloat(newValue);
     if (!isNaN(parsedValue)) {
       setValue(parsedValue);
-      // if (erro === true) {
-      //   setErro(false);
-      // }
     }
-    // } else {
-    //   if (erro === false) {
-    //     setErro(true);
-    //   }
-    // }
   };
 
   return (
     <Paper
-      elevation={2}
+      elevation={3}
       sx={{
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         padding: 2,
-        backgroundColor: isActive ? "background.paper" : "gray",
+        borderRadius: 2,
         width: "100%",
+        maxWidth: 500,
+        backgroundColor: isActive ? "background.paper" : "grey.200",
       }}
     >
-      <span>{name}</span>
+      {/* Nome do Parâmetro */}
+      <Typography variant="subtitle1" fontWeight="bold">
+        {name}
+      </Typography>
+
+      {/* Campo numérico */}
       <TextField
         type="number"
         value={inputValue}
         onChange={handleInputChange}
         variant="outlined"
         size="small"
-        sx={{ width: 80 }}
+        sx={{ width: 100 }}
         disabled={!isActive}
-        // error={erro}
-        // helperText={erro ? "Digite apenas números." : ""}
       />
-      <Tooltip title="Informações">
-        <IconButton
-          color="info"
-          onClick={() => showInformations(description, "info", 10)}
-          disabled={description.length === 0}
-        >
-          <InfoOutlinedIcon fontSize="inherit" />
-        </IconButton>
-      </Tooltip>
-      <Switch checked={isActive} onChange={() => setIsActive(!isActive)} />
+
+      {/* Botão de Informações */}
+      {description && (
+        <Tooltip title={description} enterDelay={300} leaveDelay={200}>
+          <IconButton
+            color="info"
+            onClick={() => showInformations(description, "info", 10)}
+          >
+            <InfoOutlinedIcon />
+          </IconButton>
+        </Tooltip>
+      )}
+
+      {/* Switch de Ativação */}
+      {setIsActive && (
+        <Switch checked={isActive} onChange={() => setIsActive(!isActive)} />
+      )}
     </Paper>
   );
 }

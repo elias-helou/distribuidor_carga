@@ -1,4 +1,4 @@
-import { Paper, IconButton, Switch, Tooltip } from "@mui/material";
+import { Paper, IconButton, Switch, Tooltip, Typography } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 export interface NeighborhoodComponentProps {
@@ -15,36 +15,46 @@ export interface NeighborhoodComponentProps {
 
 export default function NeighborhoodComponent({
   name,
-  description,
+  description = "",
   isActive,
   setIsActive,
   showInformations,
 }: NeighborhoodComponentProps) {
-  // const [erro, setErro] = useState(false);
-
   return (
     <Paper
-      elevation={2}
+      elevation={3}
       sx={{
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         padding: 2,
-        backgroundColor: isActive ? "background.paper" : "gray",
+        borderRadius: 2,
         width: "100%",
+        maxWidth: 500,
+        backgroundColor: isActive ? "background.paper" : "grey.200",
       }}
     >
-      <span>{name}</span>
-      <Tooltip title="Informações">
-        <IconButton
-          color="info"
-          onClick={() => showInformations(description, "info", 10)}
-          disabled={description.length === 0}
-        >
-          <InfoOutlinedIcon fontSize="inherit" />
-        </IconButton>
-      </Tooltip>
-      <Switch checked={isActive} onChange={() => setIsActive(!isActive)} />
+      {/* Nome do Componente */}
+      <Typography variant="subtitle1" fontWeight="bold">
+        {name}
+      </Typography>
+
+      {/* Botão de Informações */}
+      {description && (
+        <Tooltip title={description} enterDelay={300} leaveDelay={200}>
+          <IconButton
+            color="info"
+            onClick={() => showInformations(description, "info", 10)}
+          >
+            <InfoOutlinedIcon />
+          </IconButton>
+        </Tooltip>
+      )}
+
+      {/* Switch de Ativação */}
+      {setIsActive && (
+        <Switch checked={isActive} onChange={() => setIsActive(!isActive)} />
+      )}
     </Paper>
   );
 }
