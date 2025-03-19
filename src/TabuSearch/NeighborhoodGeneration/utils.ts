@@ -1,5 +1,6 @@
 import { Celula, Disciplina, Docente } from "@/context/Global/utils";
 import Constraint from "../Classes/Constraint";
+import { Vizinho } from "../Interfaces/utils";
 
 /**
  * Função para checar se um docente pode ser alocado a uma disciplina
@@ -14,7 +15,8 @@ export function podeAtribuir(
   docente: Docente,
   turma: Disciplina,
   travas: Celula[],
-  hardConstraints: Map<string, Constraint>
+  hardConstraints: Map<string, Constraint>,
+  baseSolution: Vizinho
 ): boolean {
   // if (
   //   docente !== null &&
@@ -38,7 +40,9 @@ export function podeAtribuir(
   // }
   for (const _constraint of hardConstraints.keys()) {
     const constraint = hardConstraints.get(_constraint);
-    if (!constraint.hard(undefined, [docente], [turma], travas)) {
+    if (
+      !constraint.hard(baseSolution.atribuicoes, [docente], [turma], travas)
+    ) {
       return false;
     }
   }

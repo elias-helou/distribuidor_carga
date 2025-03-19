@@ -52,29 +52,45 @@ export class ChoqueDeHorarios extends Constraint {
   hard(
     atribuicoes: Atribuicao[],
     docentes: Docente[],
-    disciplinas: Disciplina[]
+    turmas: Disciplina[]
   ): boolean {
+    // if (atribuicoes !== undefined) {
+    //   // Penalizar solução para cada choque de horários encontrados nas atribuições dos docentes
+    //   for (const docente of docentes) {
+    //     // Lista com os Ids das disciplinas
+    //     const atribuicoesDocente: string[] = atribuicoes
+    //       .filter((atribuicao) => atribuicao.docentes.includes(docente.nome))
+    //       .map((atribuicao) => atribuicao.id_disciplina);
+
+    //     // Comparar as atribuições para ver se a `Disciplia.conflitos` não incluem umas as outras
+    //     for (let i = 0; i < atribuicoesDocente.length; i++) {
+    //       const disciplinaPivo: Disciplina = turmas.find(
+    //         (disciplina) => disciplina.id === atribuicoesDocente[i]
+    //       );
+
+    //       for (let j = i + 1; j < atribuicoesDocente.length; j++) {
+    //         const disciplinaAtual: Disciplina = turmas.find(
+    //           (disciplina) => disciplina.id === atribuicoesDocente[j]
+    //         );
+
+    //         if (disciplinaPivo.conflitos.has(disciplinaAtual.id)) {
+    //           // k2 penaliza conflitos
+    //           return false;
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+
     if (atribuicoes !== undefined) {
-      // Penalizar solução para cada choque de horários encontrados nas atribuições dos docentes
       for (const docente of docentes) {
-        // Lista com os Ids das disciplinas
-        const atribuicoesDocente: string[] = atribuicoes
-          .filter((atribuicao) => atribuicao.docentes.includes(docente.nome))
-          .map((atribuicao) => atribuicao.id_disciplina);
+        const docenteAtribuicoes = atribuicoes.filter((atribuicao) =>
+          atribuicao.docentes.includes(docente.nome)
+        );
 
-        // Comparar as atribuições para ver se a `Disciplia.conflitos` não incluem umas as outras
-        for (let i = 0; i < atribuicoesDocente.length; i++) {
-          const disciplinaPivo: Disciplina = disciplinas.find(
-            (disciplina) => disciplina.id === atribuicoesDocente[i]
-          );
-
-          for (let j = i + 1; j < atribuicoesDocente.length; j++) {
-            const disciplinaAtual: Disciplina = disciplinas.find(
-              (disciplina) => disciplina.id === atribuicoesDocente[j]
-            );
-
-            if (disciplinaPivo.conflitos.has(disciplinaAtual.id)) {
-              // k2 penaliza conflitos
+        for (const turma of turmas) {
+          for (const docAtrib of docenteAtribuicoes) {
+            if (turma.conflitos.has(docAtrib.id_disciplina)) {
               return false;
             }
           }

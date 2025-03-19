@@ -63,7 +63,8 @@ export class Swap extends NeighborhoodFunction {
               context.docentes.find((d) => d.nome === docente),
               turmaAtual,
               context.travas,
-              hardConstraints
+              hardConstraints,
+              baseSolution
             )
           ) &&
           docentesAtual.every((docente) =>
@@ -71,7 +72,8 @@ export class Swap extends NeighborhoodFunction {
               context.docentes.find((d) => d.nome === docente),
               turmaPivot,
               context.travas,
-              hardConstraints
+              hardConstraints,
+              baseSolution
             )
           ) &&
           !compareArrays(docentesPivot, docentesAtual);

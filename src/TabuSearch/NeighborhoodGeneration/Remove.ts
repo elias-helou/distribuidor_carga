@@ -33,7 +33,15 @@ export class Remove extends NeighborhoodFunction {
       /**
        * Verificar se o movimento pode ser realizado através das restrições
        */
-      if (!podeAtribuir(null, turma, context.travas, hardConstraints)) {
+      if (
+        !podeAtribuir(
+          null,
+          turma,
+          context.travas,
+          hardConstraints,
+          baseSolution
+        )
+      ) {
         continue;
       }
 

@@ -22,7 +22,15 @@ export class Add extends NeighborhoodFunction {
         /**
          * Verificar se o movimento pode ser realizado através das restrições
          */
-        if (!podeAtribuir(docente, turma, context.travas, hardConstraints)) {
+        if (
+          !podeAtribuir(
+            docente,
+            turma,
+            context.travas,
+            hardConstraints,
+            baseSolution
+          )
+        ) {
           continue;
         }
 
