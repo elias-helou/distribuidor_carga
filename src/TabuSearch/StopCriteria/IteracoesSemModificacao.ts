@@ -26,6 +26,8 @@ export class IteracoesSemModificacao extends StopCriteria {
     if (!this.prevMelhorVizinho) {
       this.prevMelhorVizinho = melhorVizinho;
       this.iteacoesSemModificacao = 0;
+
+      return false;
     }
 
     /**
@@ -40,6 +42,7 @@ export class IteracoesSemModificacao extends StopCriteria {
     } else {
       this.prevMelhorVizinho = melhorVizinho;
       this.iteacoesSemModificacao = 0;
+      // return false
     }
 
     return this.iteacoesSemModificacao === this.limiteIteracoesSemModificacao;
