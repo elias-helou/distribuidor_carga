@@ -18,6 +18,8 @@ import Restricoes from "../restricoes/page";
 import NeighborhoodComponent from "./_components/NeighborhoodComponent";
 import { IteracoesMaximas } from "@/TabuSearch/StopCriteria/IteracoesMaximas";
 import { IteracoesSemModificacao } from "@/TabuSearch/StopCriteria/IteracoesSemModificacao";
+import IteracoesSemMelhoraAvaliacao from "@/TabuSearch/StopCriteria/IteracoesSemMelhoraAvaliacao";
+import SameObjective from "@/TabuSearch/AspirationCriteria/SameObjective";
 
 export default function Configuracoes() {
   const {
@@ -98,6 +100,8 @@ export default function Configuracoes() {
           ? func.instance.maxIteracoes
           : func.instance instanceof IteracoesSemModificacao
           ? func.instance.limiteIteracoesSemModificacao
+          : func.instance instanceof IteracoesSemMelhoraAvaliacao
+          ? func.instance.limiteIteracoesSemMelhoraAvaliacao
           : 0;
 
       return (
@@ -133,22 +137,54 @@ export default function Configuracoes() {
     });
 
   const renderAspirationFunctions = () =>
-    Array.from(aspirationFunctions.entries()).map(([key, func]) => (
-      <NeighborhoodComponent
-        key={key}
-        name={func.instance.name}
-        isActive={func.isActive}
-        description={func.instance.description}
-        showInformations={addAlerta}
-        setIsActive={(newState) => {
-          setAspirationFunctions((prev) => {
-            const newMap = new Map(prev);
-            newMap.set(key, { ...func, isActive: newState });
-            return newMap;
-          });
-        }}
-      />
-    ));
+    Array.from(aspirationFunctions.entries()).map(([key, func]) => {
+      if (func.instance instanceof SameObjective) {
+        return (
+          <ParameterComponent
+            key={key}
+            name={func.instance.name}
+            isActive={func.isActive}
+            description={func.instance.description}
+            value={func.instance.iteracoesParaAceitacao}
+            setValue={(newValue) => {
+              if (func.instance instanceof SameObjective) {
+                func.instance.iteracoesParaAceitacao = newValue;
+              }
+
+              setAspirationFunctions((prev) => {
+                const updated = new Map(prev);
+                updated.set(key, func);
+                return updated;
+              });
+            }}
+            setIsActive={(newState) => {
+              setAspirationFunctions((prev) => {
+                const updated = new Map(prev);
+                updated.set(key, { ...func, isActive: newState });
+                return updated;
+              });
+            }}
+            showInformations={addAlerta}
+          />
+        );
+      }
+      return (
+        <NeighborhoodComponent
+          key={key}
+          name={func.instance.name}
+          isActive={func.isActive}
+          description={func.instance.description}
+          showInformations={addAlerta}
+          setIsActive={(newState) => {
+            setAspirationFunctions((prev) => {
+              const newMap = new Map(prev);
+              newMap.set(key, { ...func, isActive: newState });
+              return newMap;
+            });
+          }}
+        />
+      );
+    });
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4 }}>

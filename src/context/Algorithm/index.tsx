@@ -1,4 +1,5 @@
 import { Objective } from "@/TabuSearch/AspirationCriteria/Objective";
+import SameObjective from "@/TabuSearch/AspirationCriteria/SameObjective";
 import { AspirationCriteria } from "@/TabuSearch/Classes/Abstract/AspirationCriteria";
 import { NeighborhoodFunction } from "@/TabuSearch/Classes/Abstract/NeighborhoodFunction";
 import { StopCriteria } from "@/TabuSearch/Classes/Abstract/StopCriteria";
@@ -12,6 +13,7 @@ import { Add } from "@/TabuSearch/NeighborhoodGeneration/Add";
 import { Remove } from "@/TabuSearch/NeighborhoodGeneration/Remove";
 import { Swap } from "@/TabuSearch/NeighborhoodGeneration/Swap";
 import { IteracoesMaximas } from "@/TabuSearch/StopCriteria/IteracoesMaximas";
+import IteracoesSemMelhoraAvaliacao from "@/TabuSearch/StopCriteria/IteracoesSemMelhoraAvaliacao";
 import { IteracoesSemModificacao } from "@/TabuSearch/StopCriteria/IteracoesSemModificacao";
 import { createContext, useContext, useState } from "react";
 
@@ -146,7 +148,7 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
     tabuSize: { value: number; isActive: boolean };
     maxIterations: { value?: number; isActive: boolean };
   }>({
-    tabuSize: { value: 100, isActive: true },
+    tabuSize: { value: 25, isActive: true },
     maxIterations: { value: undefined, isActive: false },
   });
 
@@ -173,7 +175,7 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
           instance: new IteracoesMaximas(
             "Limite de Iterações",
             "Função que interromperá o algoritmo caso uma determinada quantidade de iterações seja atingida.",
-            20
+            150
           ),
           isActive: true,
         },
@@ -185,6 +187,17 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
             "Iterações sem Modificação",
             "Função que interromperá o algoritmo caso uma determinada quantidade de iterações sem modificação da melhor solução seja atingida.",
             50
+          ),
+          isActive: false,
+        },
+      ],
+      [
+        "Iterações sem Melhora na Avaliação",
+        {
+          instance: new IteracoesSemMelhoraAvaliacao(
+            "Iterações sem Melhora na Avaliação",
+            "Função que interrompe a execução do algoritmo caso a avaliação das soluções não apresnetem melhora (melhor vizinho encontrado não seja alterado) em uma determinada quantidade de iterações.",
+            10
           ),
           isActive: false,
         },
@@ -204,7 +217,18 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
             "Aspiração por Objetivo",
             "O tabu será quebrado caso a solução observada apresente um valor objetivo maior que a melhor solução global encontrada."
           ),
-          isActive: true,
+          isActive: false,
+        },
+      ],
+      [
+        "Critério de Aceitação de Mesmas Avaliações",
+        {
+          instance: new SameObjective(
+            "Aceitação de Mesmas Avaliações",
+            'Esse critério tem como objetivo aceitar soluções com o valor objetivo (avaliação) maior ou igual ao melhor global após uma determinada quantidade de iterações sem modificação do melhor vizinho. O objetivo é tormar soluções "parecidas" (com mesma avaliação porémcom diferentes atribuições) melhores globais, incentivando a busca por melhores vizinhanças.',
+            10
+          ),
+          isActive: false,
         },
       ],
     ])

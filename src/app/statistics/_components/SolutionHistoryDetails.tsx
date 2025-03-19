@@ -28,6 +28,9 @@ import TimerOutlinedIcon from "@mui/icons-material/TimerOutlined";
 import ShutterSpeedOutlinedIcon from "@mui/icons-material/ShutterSpeedOutlined";
 import PauseCircleOutlineOutlinedIcon from "@mui/icons-material/PauseCircleOutlineOutlined";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
+import IteracoesSemMelhoraAvaliacao from "@/TabuSearch/StopCriteria/IteracoesSemMelhoraAvaliacao";
+import LinearScaleIcon from "@mui/icons-material/LinearScale";
+import SameObjective from "@/TabuSearch/AspirationCriteria/SameObjective";
 
 export default function SolutionHistoryDetails({
   solucao,
@@ -91,10 +94,7 @@ export default function SolutionHistoryDetails({
                 >
                   <Typography variant="body1" sx={{ cursor: "help" }}>
                     <b>Tempo de Execução:</b>{" "}
-                    {(
-                      solucao.solucao.estatisticas.tempoExecucao / 1000
-                    ).toFixed(3)}{" "}
-                    s
+                    {solucao.solucao.estatisticas.tempoExecucao} ms
                   </Typography>
                 </Tooltip>
               </Grid2>
@@ -295,6 +295,14 @@ export default function SolutionHistoryDetails({
                         sx={{ fontSize: 40, marginBottom: 1 }}
                       />
                     );
+                  } else if (stopFunc instanceof IteracoesSemMelhoraAvaliacao) {
+                    details = `Quantidade máxima de iterações sem modificação: ${stopFunc.limiteIteracoesSemMelhoraAvaliacao}`;
+                    icon = (
+                      <LinearScaleIcon
+                        color="error"
+                        sx={{ fontSize: 40, marginBottom: 1 }}
+                      />
+                    );
                   }
 
                   return (
@@ -378,6 +386,16 @@ export default function SolutionHistoryDetails({
                     <Typography variant="body2" color="textSecondary">
                       {aspirationFunc.description}
                     </Typography>
+                    {aspirationFunc instanceof SameObjective && (
+                      <Typography
+                        variant="body2"
+                        color="textPrimary"
+                        fontWeight="bold"
+                      >
+                        Iterações para aceitação:{" "}
+                        {aspirationFunc.iteracoesParaAceitacao}
+                      </Typography>
+                    )}
                   </Card>
                 </Grid2>
               ))}
@@ -421,6 +439,7 @@ export default function SolutionHistoryDetails({
                   grid={{ vertical: false, horizontal: true }}
                   yAxis={[{ label: "Quantidade" }]}
                   margin={{ left: 75, right: 75 }}
+                  barLabel="value"
                 />
               </CardContent>
             </Card>
@@ -477,8 +496,8 @@ export default function SolutionHistoryDetails({
                     {
                       data: Array.from(
                         solucao.solucao.estatisticas.tempoPorIteracao.values()
-                      ).map((value) => value / 1000),
-                      label: "Tempo (s)",
+                      ).map((value) => value),
+                      label: "Tempo (ms)",
                     },
                   ]}
                   grid={{ vertical: true, horizontal: true }}

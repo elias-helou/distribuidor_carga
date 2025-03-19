@@ -55,6 +55,7 @@ export default function ConstraintsBarCharts({
       height={300}
       grid={{ vertical: false, horizontal: true }}
       margin={{ left: 75, right: 75 }}
+      barLabel="value"
     />
   );
 }

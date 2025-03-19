@@ -54,3 +54,49 @@ export function compararVizihos(vizinho1: Vizinho, vizinho2: Vizinho): boolean {
 
   return true;
 }
+
+export function compararVizihosTeste(
+  vizinho1: Vizinho,
+  vizinho2: Vizinho
+): boolean {
+  if (vizinho1?.avaliacao !== vizinho2?.avaliacao) {
+    //console.log("Avaliação");
+
+    return false;
+  }
+
+  if (vizinho1.atribuicoes.length !== vizinho2.atribuicoes.length) {
+    console.log("Tamanho vizinhança");
+    return false;
+  }
+
+  for (let i = 0; i < vizinho1.atribuicoes.length; i++) {
+    if (
+      vizinho1.atribuicoes[i].id_disciplina !==
+      vizinho2.atribuicoes[i].id_disciplina
+    ) {
+      console.log("Ordem das atribuições");
+      return false;
+    }
+
+    if (
+      vizinho1.atribuicoes[i].docentes.length !==
+      vizinho2.atribuicoes[i].docentes.length
+    ) {
+      console.log("Tamanho dos docentes");
+      return false;
+    }
+
+    for (let j = 0; j < vizinho1.atribuicoes[i].docentes.length; j++) {
+      if (
+        vizinho1.atribuicoes[i].docentes[j] !==
+        vizinho2.atribuicoes[i].docentes[j]
+      ) {
+        console.log("Ordem dos docentes na atribuição");
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
