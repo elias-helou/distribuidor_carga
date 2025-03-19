@@ -19,5 +19,9 @@ export abstract class AspirationCriteria {
     this.description = description;
   }
 
-  abstract fulfills(vizinho: Vizinho, melhorVizinho: Vizinho): boolean;
+  abstract fulfills(
+    vizinho: Vizinho,
+    melhorVizinho: Vizinho,
+    iteracao?: number
+  ): boolean;
 }
