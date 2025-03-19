@@ -66,8 +66,10 @@ export default function Timetable() {
     historicoSolucoes,
     setHistoricoSolucoes,
     updateAtribuicoes,
-    parametros,
+    //parametros,
   } = useGlobalContext();
+
+  const { parametros } = useAlgorithmContext();
 
   const {
     hardConstraints,
@@ -507,27 +509,6 @@ export default function Timetable() {
   const executeProcess = async () => {
     handleClickOpenDialog(); // Abre a modal imediatamente
     setProcessing(true); // Aciona o botão de loading
-    //p -> Processados
-    // const { pDisciplinas, pDocentes, pFormularios, pTravas, pAtribuicoes } =
-    //   processData(disciplinas, docentes, formularios, travas, atribuicoes);
-
-    // const solucao = await buscaTabu(
-    //   pDisciplinas,
-    //   pDocentes,
-    //   pFormularios,
-    //   pTravas,
-    //   pAtribuicoes,
-    //   5,
-    //   maxPriority + 1,
-    //   () => interrompeRef.current,
-    //   setDisciplinasAlocadas,
-    //   parametros,
-    //   { hard: hardConstraints, soft: softConstraints }
-    // );
-
-    // // console.log("Solução:");
-    // // console.log(solucao);
-    // setSolucaoAtual(solucao); // Atribui a solução encontrada no state local.
 
     const neighborhood = Array.from(neighborhoodFunctions.values())
       .filter((entry) => entry.isActive)
@@ -547,12 +528,11 @@ export default function Timetable() {
       disciplinas,
       travas,
       formularios,
-      parametros,
       [...hardConstraints.values(), ...softConstraints.values()],
       { atribuicoes: atribuicoes },
       neighborhood,
       "Solução",
-      100,
+      parametros.tabuSize.value, //Number(parametros.tabuSize.value),
       stop,
       aspiration,
       maxPriority + 1
@@ -661,7 +641,6 @@ export default function Timetable() {
       disciplinas,
       travas,
       formularios,
-      parametros,
       [...hardConstraints.values(), ...softConstraints.values()],
       { atribuicoes: atribuicoes },
       // [
