@@ -4,7 +4,7 @@ import {
   Disciplina,
   Docente,
   Formulario,
-  Parametros,
+  //  Parametros,
   Solucao,
 } from "@/context/Global/utils";
 import Constraint from "./Constraint";
@@ -15,6 +15,149 @@ import { Solution } from "../TabuList/Solution";
 import { delay } from "../utils";
 import { StopCriteria } from "./Abstract/StopCriteria";
 import { AspirationCriteria } from "./Abstract/AspirationCriteria";
+
+// const teste = [
+//   {
+//     id_disciplina: "5500004,1",
+//     docentes: ["Francisco Aparecido Rodrigues"],
+//   },
+//   {
+//     id_disciplina: "EST5101,1",
+//     docentes: ["Mário de Castro Andrade Filho"],
+//   },
+//   { id_disciplina: "EST5102,1", docentes: ["Vicente Garibay Cancho"] },
+//   { id_disciplina: "EST5104,1", docentes: ["Ricardo Sandes Ehlers"] },
+//   { id_disciplina: "EST5105,1", docentes: ["Katiane Silva Conceição"] },
+//   { id_disciplina: "EST5107,1", docentes: ["Jorge Luis Bazan Guzman"] },
+//   { id_disciplina: "EST5108,1", docentes: ["Thomas Kauê Dal'Maso Peron"] },
+//   { id_disciplina: "EST5804,1", docentes: ["Francisco Louzada Neto"] },
+//   { id_disciplina: "MAI5015,1", docentes: ["Afonso Paiva Neto"] },
+//   { id_disciplina: "MAI5017,1", docentes: ["Afonso Paiva Neto"] },
+//   { id_disciplina: "MAIXXXX,1", docentes: ["Francisco Louzada Neto"] },
+//   { id_disciplina: "SCC5933,1", docentes: ["Luis Gustavo Nonato"] },
+//   { id_disciplina: "SLC0609,1", docentes: [] },
+//   {
+//     id_disciplina: "SME0104,1",
+//     docentes: ["Cynthia de Oliveira Lage Ferreira"],
+//   },
+//   { id_disciplina: "SME0104,2", docentes: ["Eduardo Fontoura Costa"] },
+//   { id_disciplina: "SME0121,1", docentes: ["Thomas Kauê Dal'Maso Peron"] },
+//   {
+//     id_disciplina: "SME0121,2",
+//     docentes: ["Marinho Gomes de Andrade Filho"],
+//   },
+//   {
+//     id_disciplina: "SME0130,1",
+//     docentes: ["Francisco Aparecido Rodrigues"],
+//   },
+//   { id_disciplina: "SME0202,1", docentes: ["Fabrício Simeoni de Sousa"] },
+//   { id_disciplina: "SME0205,1", docentes: ["Antonio Castelo Filho"] },
+//   {
+//     id_disciplina: "SME0214,1",
+//     docentes: ["Franklina Maria Bragion de Toledo"],
+//   },
+//   { id_disciplina: "SME0221,1", docentes: ["Cibele Maria Russo Noveli"] },
+//   { id_disciplina: "SME0230,1", docentes: ["Marina Andretta"] },
+//   { id_disciplina: "SME0243,1", docentes: ["Luis Gustavo Nonato"] },
+//   { id_disciplina: "SME0253,1", docentes: ["Fabrício Simeoni de Sousa"] },
+//   { id_disciplina: "SME0273,1", docentes: ["Elias Salomão Helou Neto"] },
+//   { id_disciplina: "SME0280,1", docentes: ["Elias Salomão Helou Neto"] },
+//   { id_disciplina: "SME0284,1", docentes: ["Elias Salomão Helou Neto"] },
+//   { id_disciplina: "SME0285,1", docentes: ["Elias Salomão Helou Neto"] },
+//   { id_disciplina: "SME0300,1", docentes: ["Livia Souza Freire Grion"] },
+//   { id_disciplina: "SME0300,2", docentes: ["Leandro Franco de Souza"] },
+//   {
+//     id_disciplina: "SME0300,3",
+//     docentes: ["Franklina Maria Bragion de Toledo"],
+//   },
+//   { id_disciplina: "SME0300,4", docentes: ["Eduardo Fontoura Costa"] },
+//   { id_disciplina: "SME0305,1", docentes: ["Leandro Franco de Souza"] },
+//   { id_disciplina: "SME0305,2", docentes: ["Roberto Federico Ausas"] },
+//   { id_disciplina: "SME0320,1", docentes: ["Fabiano Rodrigues Coelho"] },
+//   { id_disciplina: "SME0320,2", docentes: ["Jorge Luis Bazan Guzman"] },
+//   { id_disciplina: "SME0320,3", docentes: ["Adriano Kamimura Suzuki"] },
+//   { id_disciplina: "SME0320,4", docentes: ["Ricardo Sandes Ehlers"] },
+//   { id_disciplina: "SME0333,1", docentes: ["Livia Souza Freire Grion"] },
+//   {
+//     id_disciplina: "SME0340,1",
+//     docentes: ["Maria Luisa Bambozzi de Oliveira"],
+//   },
+//   {
+//     id_disciplina: "SME0340,2",
+//     docentes: ["Maria Luisa Bambozzi de Oliveira"],
+//   },
+//   {
+//     id_disciplina: "SME0340,3",
+//     docentes: ["Cynthia de Oliveira Lage Ferreira"],
+//   },
+//   { id_disciplina: "SME0340,4", docentes: [] },
+//   {
+//     id_disciplina: "SME0340,5",
+//     docentes: ["Maria Luisa Bambozzi de Oliveira"],
+//   },
+//   { id_disciplina: "SME0340,6", docentes: [] },
+//   { id_disciplina: "SME0341,1", docentes: ["Fabiano Rodrigues Coelho"] },
+//   { id_disciplina: "SME0341,2", docentes: [] },
+//   { id_disciplina: "SME0346,1", docentes: ["Gustavo Carlos Buscaglia"] },
+//   { id_disciplina: "SME0500,1", docentes: ["Gustavo Carlos Buscaglia"] },
+//   { id_disciplina: "SME0520,1", docentes: ["Daiane de Souza Santos"] },
+//   { id_disciplina: "SME0602,1", docentes: ["Roberto Federico Ausas"] },
+//   {
+//     id_disciplina: "SME0610,1",
+//     docentes: ["Franklina Maria Bragion de Toledo"],
+//   },
+//   { id_disciplina: "SME0620,1", docentes: ["Cibele Maria Russo Noveli"] },
+//   { id_disciplina: "SME0801,1", docentes: ["Adriano Kamimura Suzuki"] },
+//   {
+//     id_disciplina: "SME0803,1",
+//     docentes: ["Oilson Alberto Gonzatto Junior"],
+//   },
+//   {
+//     id_disciplina: "SME0806,1",
+//     docentes: ["Mário de Castro Andrade Filho"],
+//   },
+//   { id_disciplina: "SME0807,1", docentes: ["Katiane Silva Conceição"] },
+//   { id_disciplina: "SME0814,1", docentes: ["Mariana Cúri"] },
+//   { id_disciplina: "SME0815,1", docentes: ["Francisco Louzada Neto"] },
+//   { id_disciplina: "SME0816,1", docentes: ["Daiane de Souza Santos"] },
+//   { id_disciplina: "SME0818,1", docentes: ["Reiko Aoki"] },
+//   {
+//     id_disciplina: "SME0821,1",
+//     docentes: ["Oilson Alberto Gonzatto Junior"],
+//   },
+//   { id_disciplina: "SME0825,1", docentes: ["Francisco Louzada Neto"] },
+//   { id_disciplina: "SME0827,1", docentes: ["Marina Andretta"] },
+//   {
+//     id_disciplina: "SME0829,1",
+//     docentes: ["Mário de Castro Andrade Filho"],
+//   },
+//   {
+//     id_disciplina: "SME0852,1",
+//     docentes: ["Francisco Aparecido Rodrigues"],
+//   },
+//   { id_disciplina: "SME0860,1", docentes: [] },
+//   { id_disciplina: "SME0878,1", docentes: ["Mariana Cúri"] },
+//   { id_disciplina: "SME0880,1", docentes: ["Jorge Luis Bazan Guzman"] },
+//   { id_disciplina: "SME0881,1", docentes: ["Katiane Silva Conceição"] },
+//   { id_disciplina: "SME0882,1", docentes: ["Mariana Cúri"] },
+//   { id_disciplina: "SME0890,1", docentes: ["Mariana Cúri"] },
+//   { id_disciplina: "SME0892,1", docentes: ["Fabrício Simeoni de Sousa"] },
+//   { id_disciplina: "SME5781,1", docentes: ["Luis Gustavo Nonato"] },
+//   { id_disciplina: "SME5784,1", docentes: ["Fabrício Simeoni de Sousa"] },
+//   { id_disciplina: "SME5802,1", docentes: ["Fabrício Simeoni de Sousa"] },
+//   {
+//     id_disciplina: "SME5901,1",
+//     docentes: ["Maristela Oliveira dos Santos"],
+//   },
+//   {
+//     id_disciplina: "SME5902,1",
+//     docentes: ["Maristela Oliveira dos Santos"],
+//   },
+//   {
+//     id_disciplina: "SME5924,1",
+//     docentes: ["Francisco Aparecido Rodrigues"],
+//   },
+// ];
 
 export class TabuSearch {
   /**
@@ -29,7 +172,7 @@ export class TabuSearch {
   public bestSolution: Vizinho | undefined;
 
   // Informações base para os processos
-  protected context: Context;
+  public context: Context;
 
   // Processos de geração de vizinhos
   public neighborhoodPipe: Map<string, NeighborhoodFunction> = new Map<
@@ -40,7 +183,7 @@ export class TabuSearch {
   /**
    * Parâmetros refentes as penalizações, contudo, a classe Constraint apresenta Constraint.penalty
    */
-  public parameters: Parametros;
+  //public parameters: Parametros;
 
   // Restrições
   public constraints: {
@@ -74,7 +217,7 @@ export class TabuSearch {
     turmas: Disciplina[],
     travas: Celula[],
     prioridades: Formulario[],
-    parametros: Parametros,
+    //parametros: Parametros,
     constraints: Constraint[],
     solution: Solucao | undefined,
     neighborhoodFunctions: NeighborhoodFunction[],
@@ -82,7 +225,7 @@ export class TabuSearch {
     tabuSize: number | undefined,
     stopFunctions: StopCriteria[],
     aspirationFunctions: AspirationCriteria[],
-    maiorPrioridade?: number
+    maiorPrioridade: number | undefined
   ) {
     /**
      * Processa as atribuições para virarem um Map
@@ -98,14 +241,15 @@ export class TabuSearch {
      */
 
     // Se o parâmetro `maiorPrioridade` não for informado, ele deverá ser encontrado.
-    if (isNaN(maiorPrioridade)) {
-      let maiorPrioridade = 0;
+    if (maiorPrioridade === undefined) {
       for (const a of prioridades) {
-        if (a.prioridade > maiorPrioridade) {
+        if (a.prioridade > maiorPrioridade || !maiorPrioridade) {
           maiorPrioridade = a.prioridade;
         }
       }
+      maiorPrioridade += 1;
     }
+
     this.context = {
       atribuicoes: atribuicoes,
       docentes: docentes,
@@ -118,7 +262,7 @@ export class TabuSearch {
     /**
      * Inicialização dos parâmetros.
      */
-    this.parameters = parametros;
+    //this.parameters = parametros;
 
     /**
      * Inicializa o Map de Retsrições, atribui as restrições passadas para o contrutor.
@@ -262,9 +406,10 @@ export class TabuSearch {
             continue;
           }
 
+          //TODO: Arrumar o parâmetro
           if (docente.formularios.get(atribuicao.id_disciplina)) {
             avaliacao +=
-              this.parameters.k1 *
+              1000 *
               (this.context.maiorPrioridade -
                 docente.formularios.get(atribuicao.id_disciplina));
           } else {
@@ -272,7 +417,7 @@ export class TabuSearch {
              * Para caso exita uma atribuição de um docnete sem formulário preenchido.
              * Apenas para casos de inserção manual.
              */
-            avaliacao -= this.parameters.k1;
+            avaliacao -= 1000;
           }
         }
         vizinho.avaliacao = avaliacao;
@@ -314,6 +459,8 @@ export class TabuSearch {
 
     for (const process of this.stopPipe.values()) {
       if (process.stop(iteracoes, this.bestSolution, melhorVizinhoGerado)) {
+        console.log(`Parado por:${process.name}`);
+
         return true;
       }
     }
@@ -330,9 +477,13 @@ export class TabuSearch {
    * @param vizinhanca Vizinhança gerada pelo método `generateNeighborhood`.
    * @returns Retorna o melhor vizinho e o indice na vizinhança.
    */
-  async findBestSolution(vizinhanca: Vizinho[]): Promise<{
+  async findBestSolution(
+    vizinhanca: Vizinho[],
+    iteracoes: number
+  ): Promise<{
     vizinho: Vizinho;
     index: number | undefined;
+    forceAcceptance: boolean;
   }> {
     /**
      * O processo de avaliação deve continuar até o momento em que os elementos da vizinhança
@@ -351,7 +502,8 @@ export class TabuSearch {
         let fulfills = false;
         for (const aspiration of this.aspirationPipe.values()) {
           fulfills =
-            fulfills || aspiration.fulfills(vizinhanca[i], this.bestSolution);
+            fulfills ||
+            aspiration.fulfills(vizinhanca[i], this.bestSolution, iteracoes);
         }
 
         /**
@@ -361,7 +513,9 @@ export class TabuSearch {
         if (fulfills) {
           // this.tabuList.remove(this.tabuList.indexOf(vizinhanca[i]));
           // this.bestSolution = vizinhanca[i];
-          return { vizinho: vizinhanca[i], index: i };
+          console.log("fulfills");
+
+          return { vizinho: vizinhanca[i], index: i, forceAcceptance: true };
 
           // /**
           //  * Como a vizinhança é ordenada de forma decrescente, caso encontremos uma solução com maior
@@ -371,15 +525,64 @@ export class TabuSearch {
         }
       } else {
         /**
+         * Ajustes muito técnicos pois o "Critério de Aceitação de Mesmas Avaliações"
+         * não deve ser tratado como aspiração apenas, pois é uma forma também de selecionar
+         * vizinhos que possam nem ser inseridos no tabu.
+         */
+        // if (
+        //   this.aspirationPipe.has("Critério de Aceitação de Mesmas Avaliações")
+        // ) {
+        //   const process = this.aspirationPipe.get(
+        //     "Critério de Aceitação de Mesmas Avaliações"
+        //   );
+
+        //   if (process.fulfills(vizinhanca[i], this.bestSolution)) {
+        //     return { vizinho: vizinhanca[i], index: i, forceAcceptance: true };
+        //   }
+        // }
+        /**
          * Aqui temos a garantia de que o vizinho tem a avaliação `maior ou igual` a melhor encontrada,
          * como também que ele não é tabu.
          */
-        return { vizinho: vizinhanca[i], index: i };
+        return { vizinho: vizinhanca[i], index: i, forceAcceptance: true };
         // this.bestSolution = vizinhanca[i];
         // break;
       }
     }
-    return { vizinho: this.bestSolution, index: undefined };
+    return {
+      vizinho: this.bestSolution,
+      index: undefined,
+      forceAcceptance: false,
+    };
+  }
+
+  async findBestSolution2(
+    vizinhanca: Vizinho[]
+    //iteracoes: number
+  ): Promise<{
+    vizinho: Vizinho;
+    index: number | undefined;
+    forceAcceptance: boolean;
+  }> {
+    for (let i = 0; i < vizinhanca.length; i++) {
+      if (
+        vizinhanca[i].avaliacao > this.bestSolution.avaliacao &&
+        !vizinhanca[i].isTabu
+      ) {
+        return { vizinho: vizinhanca[i], index: i, forceAcceptance: false };
+      } /*else if (
+        vizinhanca[i].avaliacao >= this.bestSolution.avaliacao &&
+        !vizinhanca[i].isTabu
+      ) {
+        return { vizinho: vizinhanca[i], index: i, forceAcceptance: true };
+      }*/
+    }
+
+    return {
+      vizinho: this.bestSolution,
+      index: undefined,
+      forceAcceptance: false,
+    };
   }
 
   /**
@@ -418,6 +621,7 @@ export class TabuSearch {
       /**
        * Atualizar as estatisticas
        */
+
       this.statistics.avaliacaoPorIteracao.set(
         iteracoes,
         this.bestSolution.avaliacao
@@ -444,7 +648,10 @@ export class TabuSearch {
       /**
        * Processo de encontrar o melhor vizinho.
        */
-      const localBestSolution = await this.findBestSolution(vizinhanca);
+      const localBestSolution = await this.findBestSolution2(
+        vizinhanca
+        /* iteracoes*/
+      );
 
       /**
        * Verifica se a propriedade `index` está definida, representando uma nova solução encontrada.
@@ -465,17 +672,60 @@ export class TabuSearch {
           );
           localBestSolution.vizinho.isTabu = false;
         }
-
-        if (
-          this.bestSolution.avaliacao === localBestSolution.vizinho.avaliacao
-        ) {
-          console.log("Mesmas avaliações");
-        }
+        // if (
+        //   localBestSolution.vizinho.avaliacao > this.bestSolution.avaliacao ||
+        //   localBestSolution.forceAcceptance === true
+        // ) {
+        //   this.bestSolution = localBestSolution.vizinho;
+        //   listaSelecionados.push(localBestSolution.index);
+        // }
         this.bestSolution = localBestSolution.vizinho;
         this.tabuList.add(localBestSolution.vizinho);
+        // /**
+        //  * A alteração do melhor vizinho ocorrerá apenas se a avaliação for estritamente maior OU
+        //  * se ele atender a um critério de aspiração (`localBestSolution.forceAcceptance`). Inserido
+        //  * principalmente por conta da aspiração `SameObjective`.
+        //  */
+        // if (
+        //   this.bestSolution.avaliacao < localBestSolution.vizinho.avaliacao ||
+        //   localBestSolution.forceAcceptance
+        // ) {
+        //   if (
+        //     this.bestSolution.avaliacao ===
+        //       localBestSolution.vizinho.avaliacao ||
+        //     localBestSolution.forceAcceptance
+        //   ) {
+        //     console.log(
+        //       `Iteração: ${iteracoes} - Avaliação: ${localBestSolution.vizinho.avaliacao}`
+        //     );
+        //   }
+        //   if (localBestSolution.vizinho.isTabu) {
+        //     this.tabuList.remove(
+        //       this.tabuList.indexOf(localBestSolution.vizinho)
+        //     );
+        //     //localBestSolution.vizinho.isTabu = false;
+        //   }
+
+        //   this.bestSolution = localBestSolution.vizinho;
+        //   this.tabuList.add(localBestSolution.vizinho);
+        // } else {
+        //   /**
+        //    * Conforme definido no texto da dissertação, mesmo que o valor não seja maior, ainda assim
+        //    * será inserido na lista tabu. Essa definição incentiva a procura de novas soluções.
+        //    */
+        //   this.tabuList.add(localBestSolution.vizinho);
+        // }
+      } else {
+        if (vizinhanca.length) {
+          /**
+           * Conforme definido no texto da dissertação, mesmo que o valor não seja maior, ainda assim
+           * será inserido na lista tabu. Essa definição incentiva a procura de novas soluções.
+           */
+          this.tabuList.add(vizinhanca[0]);
+        }
       }
 
-      // //vizinhanca = vizinhanca.filter((vizinho) => !vizinho.isTabu);
+      //vizinhanca = vizinhanca.filter((vizinho) => !vizinho.isTabu);
 
       // if (
       //   vizinhanca.length &&
@@ -521,7 +771,7 @@ export class TabuSearch {
      */
     this.statistics.interrupcao = interrompe && interrompe();
     this.statistics.iteracoes = iteracoes;
-    this.statistics.tempoExecucao = tempoInicialTotal;
+    this.statistics.tempoExecucao = tempoFinal - tempoInicialTotal;
 
     this.generateStatistics();
 
