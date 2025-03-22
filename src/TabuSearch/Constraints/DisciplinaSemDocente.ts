@@ -30,7 +30,7 @@ export class DisciplinaSemDocente extends Constraint {
      * A restrição precisou ser feita desta forma pois na função `podeAtribuir` o valor do docente quando a chamada vem da
      * função `gerarVizinhoComRemocao` se é passado o parâmetro Docente como null. A `podeAtribuir` passa [null].
      */
-    return docentes.length > 0 && !docentes.includes(null);
+    return docentes.filter((doc) => doc !== null).length > 0;
   }
 
   toObject(): ConstraintInterface {
@@ -46,7 +46,7 @@ export class DisciplinaSemDocente extends Constraint {
   occurrences(atribuicoes: Atribuicao[]): { label: string; qtd: number }[] {
     const data: { label: string; qtd: number }[] = [];
 
-    if (this.penalty !== 0) {
+    if (this.penalty !== 0 && !this.hard) {
       const softEvaluation = this.soft(atribuicoes);
 
       data.push({

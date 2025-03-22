@@ -13,6 +13,7 @@ import {
   exportJson,
   getFormattedDate,
   getPriorityColor,
+  removeInativos,
   saveAtribuicoesInHistoryState,
 } from ".";
 import {
@@ -522,14 +523,16 @@ export default function Timetable() {
       .filter((entry) => entry.isActive)
       .map((entry) => entry.instance);
 
+    const ativos = removeInativos(docentes, disciplinas, atribuicoes);
+
     const buscaTabu = new TabuSearch(
-      atribuicoes,
-      docentes,
-      disciplinas,
+      ativos.atribuicoes,
+      ativos.docentes,
+      ativos.turmas,
       travas,
       formularios,
       [...hardConstraints.values(), ...softConstraints.values()],
-      { atribuicoes: atribuicoes },
+      { atribuicoes: ativos.atribuicoes },
       neighborhood,
       "Solução",
       parametros.tabuSize.value, //Number(parametros.tabuSize.value),
@@ -635,14 +638,16 @@ export default function Timetable() {
       .filter((entry) => entry.isActive)
       .map((entry) => entry.instance);
 
+    const ativos = removeInativos(docentes, disciplinas, atribuicoes);
+
     const buscaTabu = new TabuSearch(
-      atribuicoes,
-      docentes,
-      disciplinas,
+      ativos.atribuicoes,
+      ativos.docentes,
+      ativos.turmas,
       travas,
       formularios,
       [...hardConstraints.values(), ...softConstraints.values()],
-      { atribuicoes: atribuicoes },
+      { atribuicoes: ativos.atribuicoes },
       // [
       //   new Add("Adiciona", "Adição"),
       //   new Remove("Remove", "Remover"),

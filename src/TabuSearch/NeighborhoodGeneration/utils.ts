@@ -38,6 +38,7 @@ export function podeAtribuir(
   // ) {
   //   return false;
   // }
+
   for (const _constraint of hardConstraints.keys()) {
     const constraint = hardConstraints.get(_constraint);
     if (

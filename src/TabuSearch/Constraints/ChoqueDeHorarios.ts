@@ -122,7 +122,7 @@ export class ChoqueDeHorarios extends Constraint {
   ): { label: string; qtd: number }[] {
     const data: { label: string; qtd: number }[] = [];
 
-    if (this.penalty !== 0) {
+    if (this.penalty !== 0 && !this.hard) {
       const softEvaluation = this.soft(atribuicoes, docentes, disciplinas);
 
       data.push({

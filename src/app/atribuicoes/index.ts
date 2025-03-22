@@ -274,3 +274,39 @@ export function saveAtribuicoesInHistoryState(
 
   setSolucaoAtual(novaSolucao);
 }
+
+export function removeInativos(
+  docentes: Docente[],
+  turmas: Disciplina[],
+  atribuicoes: Atribuicao[]
+) {
+  const activeDocentes = new Map<string, Docente>(
+    docentes.filter((doc) => doc.ativo).map((doc) => [doc.nome, doc])
+  );
+  const activeTurmas = new Map<string, Disciplina>(
+    turmas.filter((disc) => disc.ativo).map((disc) => [disc.id, disc])
+  );
+
+  const activeAtribuicoes: Atribuicao[] = [];
+
+  for (const atribuicao of atribuicoes) {
+    if (activeTurmas.has(atribuicao.id_disciplina)) {
+      const docentesAtribuicaoAtivos = [];
+      for (const docente of atribuicao.docentes) {
+        if (activeDocentes.has(docente)) {
+          docentesAtribuicaoAtivos.push(docente);
+        }
+      }
+      activeAtribuicoes.push({
+        id_disciplina: atribuicao.id_disciplina,
+        docentes: docentesAtribuicaoAtivos,
+      });
+    }
+  }
+
+  return {
+    docentes: Array.from(activeDocentes.values()),
+    turmas: Array.from(activeTurmas.values()),
+    atribuicoes: activeAtribuicoes,
+  };
+}

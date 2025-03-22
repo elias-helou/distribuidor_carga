@@ -98,7 +98,7 @@ export class AtribuicaoSemFormulario extends Constraint {
   ): { label: string; qtd: number }[] {
     const data: { label: string; qtd: number }[] = [];
 
-    if (this.penalty !== 0) {
+    if (this.penalty !== 0 && !this.hard) {
       const softEvaluation = Math.abs(this.soft(atribuicoes, docentes));
 
       data.push({
@@ -121,7 +121,7 @@ export class AtribuicaoSemFormulario extends Constraint {
         qtd: qtd,
       });
     }
-
-    return data;
+    console.log(data);
+    return data ? data : [{ label: "Sem Formulário", qtd: 0 }];
   }
 }

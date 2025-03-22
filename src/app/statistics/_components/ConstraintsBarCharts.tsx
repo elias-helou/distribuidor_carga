@@ -18,7 +18,7 @@ export default function ConstraintsBarCharts({
   for (const constraint of ocorrencias.values()) {
     for (const item of constraint) {
       xLabels.push(item.label);
-      values.push(item.qtd);
+      values.push(item.qtd + 0);
     }
   }
 

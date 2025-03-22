@@ -22,7 +22,7 @@ const ButtonGroupHeader: React.FC<ButtonGroupHeaderProps> = ({
   download,
   saveAlterations,
 }) => {
-  const {solucaoAtual} = useSolutionHistory();
+  const { solucaoAtual } = useSolutionHistory();
 
   return (
     <Grid2
@@ -49,7 +49,11 @@ const ButtonGroupHeader: React.FC<ButtonGroupHeaderProps> = ({
           }}
           arrow
         >
-          <Button variant="outlined" onClick={onExecute}>
+          <Button
+            about="Botão para executar o processo."
+            variant="outlined"
+            onClick={onExecute}
+          >
             <PlayArrowIcon />
           </Button>
         </Tooltip>
@@ -119,7 +123,11 @@ const ButtonGroupHeader: React.FC<ButtonGroupHeaderProps> = ({
           arrow
         >
           <span>
-            <Button variant="outlined" onClick={saveAlterations} disabled={solucaoAtual.idHistorico !== undefined}>
+            <Button
+              variant="outlined"
+              onClick={saveAlterations}
+              disabled={solucaoAtual.idHistorico !== undefined}
+            >
               <SaveAltIcon />
             </Button>
           </span>
