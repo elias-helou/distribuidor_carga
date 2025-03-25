@@ -88,8 +88,8 @@ export default function NewDataTreeView({
   };
 
   return (
-    <Grid2 container size={{ xs: 12 }} spacing={2}>
-      <Grid2 size={{ xs: 12, md: 6 }}>
+    <Grid2 container size={{ xs: 12 }} spacing={2} key="grid_dataTreeView_1">
+      <Grid2 size={{ xs: 12, md: 6 }} key="grid_dataTreeView_2">
         <Paper elevation={2} sx={{ padding: 2 }}>
           <DocenteTreeView
             docentes={docentes}
@@ -97,7 +97,7 @@ export default function NewDataTreeView({
           />
         </Paper>
       </Grid2>
-      <Grid2 size={{ xs: 12, md: 6 }}>
+      <Grid2 size={{ xs: 12, md: 6 }} key="grid_dataTreeView_3">
         <Paper elevation={2} sx={{ padding: 2 }}>
           <DisciplinasTreeView
             disciplinas={disciplinas}
@@ -105,7 +105,7 @@ export default function NewDataTreeView({
           />
         </Paper>
       </Grid2>
-      <Grid2 size={{ xs: 12, md: 6 }} spacing={1}>
+      <Grid2 size={{ xs: 12, md: 6 }} spacing={1} key="grid_dataTreeView_4">
         <Paper elevation={2} sx={{ padding: 2 }}>
           <Typography variant="h6" textAlign="center" alignContent="flex-start">
             {textoView(lastClickedItem?.tipo, "formularios")}
@@ -125,7 +125,7 @@ export default function NewDataTreeView({
           />
         </Paper>
       </Grid2>
-      <Grid2 size={{ xs: 12, md: 6 }} spacing={1}>
+      <Grid2 size={{ xs: 12, md: 6 }} spacing={1} key="grid_dataTreeView_5">
         <Paper elevation={2} sx={{ padding: 2 }}>
           <Typography variant="h6" textAlign="center">
             {textoView(lastClickedItem?.tipo, "atribuicoes")}

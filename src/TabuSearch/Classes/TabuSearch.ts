@@ -412,13 +412,14 @@ export class TabuSearch {
               1000 *
               (this.context.maiorPrioridade -
                 docente.formularios.get(atribuicao.id_disciplina));
-          } else {
-            /**
-             * Para caso exita uma atribuição de um docnete sem formulário preenchido.
-             * Apenas para casos de inserção manual.
-             */
-            avaliacao -= 1000;
           }
+          // else {
+          //   /**
+          //    * Para caso exita uma atribuição de um docnete sem formulário preenchido.
+          //    * Apenas para casos de inserção manual.
+          //    */
+          //   avaliacao -= 1000;
+          // }
         }
         vizinho.avaliacao = avaliacao;
       }
@@ -459,8 +460,6 @@ export class TabuSearch {
 
     for (const process of this.stopPipe.values()) {
       if (process.stop(iteracoes, this.bestSolution, melhorVizinhoGerado)) {
-        console.log(`Parado por:${process.name}`);
-
         return true;
       }
     }
@@ -513,7 +512,6 @@ export class TabuSearch {
         if (fulfills) {
           // this.tabuList.remove(this.tabuList.indexOf(vizinhanca[i]));
           // this.bestSolution = vizinhanca[i];
-          console.log("fulfills");
 
           return { vizinho: vizinhanca[i], index: i, forceAcceptance: true };
 

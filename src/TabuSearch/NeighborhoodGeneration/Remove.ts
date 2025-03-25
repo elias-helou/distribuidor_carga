@@ -22,26 +22,37 @@ export class Remove extends NeighborhoodFunction {
       /**
        * Verifica se existia um docente atribuído para gerar a vizinhança vazia
        */
-      const atrubuicaoAtual = context.atribuicoes.find(
-        (atrib) => atrib.id_disciplina === turma.id
-      );
+      // const atrubuicaoAtual = context.atribuicoes.find(
+      //   (atrib) => atrib.id_disciplina === turma.id
+      // );
 
-      if (atrubuicaoAtual.docentes.length === 0) {
-        continue;
-      }
+      // if (atrubuicaoAtual.docentes.length === 0) {
+      //   continue;
+      // }
 
-      /**
-       * Verificar se o movimento pode ser realizado através das restrições
-       */
+      // if (turma.id == "SME0341,2") {
+      //   console.log(
+      //     `Turma ${turma.id}: Pode atribuir Remove ? ${podeAtribuir(
+      //       undefined,
+      //       turma,
+      //       context.travas,
+      //       hardConstraints,
+      //       baseSolution
+      //     )}`
+      //   );
+      // }
       if (
         !podeAtribuir(
-          null,
+          undefined,
           turma,
           context.travas,
           hardConstraints,
           baseSolution
         )
       ) {
+        /**
+         * Verificar se o movimento pode ser realizado através das restrições
+         */
         continue;
       }
 

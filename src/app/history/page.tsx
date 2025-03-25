@@ -136,6 +136,7 @@ export default function History() {
             spacing={1}
             //sx={{ maxHeight: "10em", overflowY: "auto" }}
             maxWidth="40em"
+            key="grid_history_main"
           >
             {renderHoverCourseChildren(hoveredCourese)}
           </Grid2>

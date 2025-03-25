@@ -140,7 +140,7 @@ export function ArtribuicoesView({
       alignItems="center"
       justifyContent="center"
       sx={{ width: "100%", flexGrow: 1, height: "25em", overflowY: "auto" }}
-      key={"TreeViewAssignments_container_grid"}
+      key={"TreeViewAssignments_container_grid_1"}
     >
       {renderFormularios()}
     </Grid2>

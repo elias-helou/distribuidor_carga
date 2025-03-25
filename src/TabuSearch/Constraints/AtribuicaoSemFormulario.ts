@@ -49,36 +49,41 @@ export class AtribuicaoSemFormulario extends Constraint {
     docentes: Docente[],
     disciplinas: Disciplina[]
   ): boolean {
+    docentes = docentes.filter((doc) => doc !== null && doc !== undefined);
+
+    if (docentes.length === 0) {
+      return true;
+    }
     /**
      * Se a disciplina não foi informado quer dizer que estamos verificando todo o contexto
      */
-    if (disciplinas === undefined && atribuicoes !== undefined) {
-      for (const docente of docentes) {
-        const docenteAtribuicoes = atribuicoes.filter((atribuicao) =>
-          atribuicao.docentes.includes(docente.nome)
-        );
+    // if (disciplinas === undefined && atribuicoes !== undefined) {
+    //   for (const docente of docentes) {
+    //     const docenteAtribuicoes = atribuicoes.filter((atribuicao) =>
+    //       atribuicao.docentes.includes(docente.nome)
+    //     );
 
-        for (const atribuicao of docenteAtribuicoes) {
-          if (!docente.formularios.has(atribuicao.id_disciplina)) {
-            return false;
-          }
-        }
-      }
-    } else {
-      //Caso o docente seja null
-      if (docentes.some((docente) => !docente)) {
-        return false;
-      }
+    //     for (const atribuicao of docenteAtribuicoes) {
+    //       if (!docente.formularios.has(atribuicao.id_disciplina)) {
+    //         return false;
+    //       }
+    //     }
+    //   }
+    // } else {
+    // //Caso o docente seja null
+    // if (docentes.some((docente) => !docente)) {
+    //   return false;
+    // }
 
-      // Se a disciplina foi informado quer dizer que estamos verificando um contexto específico
-      for (const docente of docentes) {
-        for (const disciplia of disciplinas) {
-          if (!docente.formularios.has(disciplia.id)) {
-            return false;
-          }
+    // Se a disciplina foi informado quer dizer que estamos verificando um contexto específico
+    for (const docente of docentes) {
+      for (const disciplia of disciplinas) {
+        if (!docente.formularios.has(disciplia.id)) {
+          return false;
         }
       }
     }
+    //    }
     return true;
   }
 
@@ -121,7 +126,6 @@ export class AtribuicaoSemFormulario extends Constraint {
         qtd: qtd,
       });
     }
-    console.log(data);
     return data ? data : [{ label: "Sem Formulário", qtd: 0 }];
   }
 }

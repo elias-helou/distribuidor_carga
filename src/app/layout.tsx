@@ -1,6 +1,7 @@
 "use client";
 
 import Navbar from "@/components/Navbar";
+import { VLibras } from "@/components/VLibras";
 import { AlertsWrapper } from "@/context/Alerts";
 import { AlgorithmWrapper } from "@/context/Algorithm";
 import { GlobalWrapper } from "@/context/Global";
@@ -24,6 +25,7 @@ export default function RootLayout({
             </AlgorithmWrapper>
           </ProcessWrapper>
         </GlobalWrapper>
+        <VLibras forceOnload />
       </body>
     </html>
   );

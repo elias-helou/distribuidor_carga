@@ -42,6 +42,50 @@ export default function SolutionHistoryDetails({
     return <Typography variant="h6">Solução não encontrada!</Typography>;
   }
 
+  const renderHistogramaQtdFormuatios = () => {
+    const qtdFormulariosDocentes = new Map<number, number>();
+    let qtdMax = 0;
+
+    for (const docente of solucao.contexto.docentes) {
+      const qtd = docente.formularios.size;
+
+      if (qtd > qtdMax) {
+        qtdMax = qtd;
+      }
+    }
+
+    for (let i = 0; i <= qtdMax; i++) {
+      qtdFormulariosDocentes.set(i, 0);
+    }
+
+    for (const docente of solucao.contexto.docentes) {
+      const qtdAtual = qtdFormulariosDocentes.get(docente.formularios.size);
+      qtdFormulariosDocentes.set(docente.formularios.size, qtdAtual + 1);
+    }
+
+    return (
+      <BarChart
+        xAxis={[
+          {
+            scaleType: "band",
+            label: "Formulários",
+            data: Array.from(qtdFormulariosDocentes.keys()),
+          },
+        ]}
+        series={[
+          {
+            //label: "Quantidade",
+            data: Array.from(qtdFormulariosDocentes.values()),
+          },
+        ]}
+        height={300}
+        grid={{ vertical: false, horizontal: true }}
+        yAxis={[{ label: "Quantidade" }]}
+        margin={{ left: 75, right: 75 }}
+        barLabel="value"
+      />
+    );
+  };
   return (
     <Box sx={{ padding: 3 }}>
       <Paper elevation={3} sx={{ padding: 3, borderRadius: 2 }}>
@@ -520,6 +564,18 @@ export default function SolutionHistoryDetails({
                     solucao.solucao.estatisticas.qtdOcorrenciasRestricoes
                   }
                 />
+              </CardContent>
+            </Card>
+          </Grid2>
+
+          {/* Quantidade de FOrmulários por docentes*/}
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <Card elevation={3}>
+              <CardContent>
+                <Typography variant="h6" align="center" gutterBottom>
+                  Histograma Quantidade de Formulários por Docente
+                </Typography>
+                {renderHistogramaQtdFormuatios()}
               </CardContent>
             </Card>
           </Grid2>

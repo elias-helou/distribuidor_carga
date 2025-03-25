@@ -55,32 +55,34 @@ export function FormulariosView({
       }
 
       entidade.formularios.forEach((value, key) => {
-        render.push(
-          <Grid2 key={`TreeViewAssignments_child_grid_${key}`}>
-            <HeaderCell
-              disciplina={disciplinas.get(key)}
-              //onHeaderClick={() => null}
-              setHeaderCollor={() => "white"}
-              key={`TreeViewAssignments_child_grid_${key}_child`}
-              setParentHoveredCourse={setHoveredCourese}
-            />
-            <Box
-              sx={{
-                backgroundColor: setCellColor(
-                  value,
-                  { id_disciplina: key, nome_docente: id },
-                  false,
-                  solucao.contexto.maxPriority
-                ),
-                //padding: "2px",
-                textAlign: "center",
-                minHeight: value ? "inherit" : "1.5em",
-              }}
-            >
-              {value}
-            </Box>
-          </Grid2>
-        );
+        if (disciplinas.get(key)) {
+          render.push(
+            <Grid2 key={`TreeViewAssignments_child_grid_${key}`}>
+              <HeaderCell
+                disciplina={disciplinas.get(key)}
+                //onHeaderClick={() => null}
+                setHeaderCollor={() => "white"}
+                key={`TreeViewAssignments_child_grid_${key}_child`}
+                setParentHoveredCourse={setHoveredCourese}
+              />
+              <Box
+                sx={{
+                  backgroundColor: setCellColor(
+                    value,
+                    { id_disciplina: key, nome_docente: id },
+                    false,
+                    solucao.contexto.maxPriority
+                  ),
+                  //padding: "2px",
+                  textAlign: "center",
+                  minHeight: value ? "inherit" : "1.5em",
+                }}
+              >
+                {value}
+              </Box>
+            </Grid2>
+          );
+        }
       });
     }
 
@@ -145,7 +147,7 @@ export function FormulariosView({
       alignItems="center"
       justifyContent="center"
       sx={{ width: "100%", flexGrow: 1, height: "25em", overflowY: "auto" }}
-      key={"TreeViewAssignments_container_grid"}
+      key={"TreeViewAssignments_container_grid_2"}
     >
       {renderFormularios()}
     </Grid2>

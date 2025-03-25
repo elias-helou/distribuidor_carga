@@ -66,7 +66,6 @@ export function compararVizihosTeste(
   }
 
   if (vizinho1.atribuicoes.length !== vizinho2.atribuicoes.length) {
-    console.log("Tamanho vizinhança");
     return false;
   }
 
@@ -75,7 +74,6 @@ export function compararVizihosTeste(
       vizinho1.atribuicoes[i].id_disciplina !==
       vizinho2.atribuicoes[i].id_disciplina
     ) {
-      console.log("Ordem das atribuições");
       return false;
     }
 
@@ -83,7 +81,6 @@ export function compararVizihosTeste(
       vizinho1.atribuicoes[i].docentes.length !==
       vizinho2.atribuicoes[i].docentes.length
     ) {
-      console.log("Tamanho dos docentes");
       return false;
     }
 
@@ -92,7 +89,6 @@ export function compararVizihosTeste(
         vizinho1.atribuicoes[i].docentes[j] !==
         vizinho2.atribuicoes[i].docentes[j]
       ) {
-        console.log("Ordem dos docentes na atribuição");
         return false;
       }
     }
