@@ -568,12 +568,12 @@ export class TabuSearch {
         !vizinhanca[i].isTabu
       ) {
         return { vizinho: vizinhanca[i], index: i, forceAcceptance: false };
-      } /*else if (
+      } else if (
         vizinhanca[i].avaliacao >= this.bestSolution.avaliacao &&
         !vizinhanca[i].isTabu
       ) {
         return { vizinho: vizinhanca[i], index: i, forceAcceptance: true };
-      }*/
+      }
     }
 
     return {
