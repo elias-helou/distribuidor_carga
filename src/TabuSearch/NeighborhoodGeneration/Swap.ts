@@ -3,6 +3,7 @@ import { NeighborhoodFunction } from "../Classes/Abstract/NeighborhoodFunction";
 import Constraint from "../Classes/Constraint";
 import { Context, Vizinho } from "../Interfaces/utils";
 import { compareArrays, podeAtribuir } from "./utils";
+import { Movimento } from "../TabuList/Moviment";
 
 export class Swap extends NeighborhoodFunction {
   constructor(name: string, description: string | undefined) {
@@ -96,20 +97,32 @@ export class Swap extends NeighborhoodFunction {
            * Gera separadamente cada movimento em caso de troca de múltiplos docentes
            * (caso uam turma tenha 2 ou mais alocações).
            */
-          const addMovimentos = [];
+          const addMovimentos: Movimento[] = [];
           for (const docente of docentesAtual) {
-            addMovimentos.push([turmaPivot.id, docente]);
+            addMovimentos.push({ turmaId: turmaPivot.id, docente: docente });
+          }
+          if (docentesAtual.length === 0) {
+            addMovimentos.push({ turmaId: turmaPivot.id, docente: "" });
           }
           for (const docente of docentesPivot) {
-            addMovimentos.push([turmaAtual.id, docente]);
+            addMovimentos.push({ turmaId: turmaAtual.id, docente: docente });
+          }
+          if (docentesPivot.length === 0) {
+            addMovimentos.push({ turmaId: turmaAtual.id, docente: "" });
           }
 
-          const dropMovimentos = [];
+          const dropMovimentos: Movimento[] = [];
           for (const docente of docentesPivot) {
-            dropMovimentos.push([turmaPivot.id, docente]);
+            dropMovimentos.push({ turmaId: turmaPivot.id, docente: docente });
+          }
+          if (docentesAtual.length === 0) {
+            dropMovimentos.push({ turmaId: turmaPivot.id, docente: "" });
           }
           for (const docente of docentesAtual) {
-            dropMovimentos.push([turmaAtual.id, docente]);
+            dropMovimentos.push({ turmaId: turmaAtual.id, docente: docente });
+          }
+          if (docentesAtual.length === 0) {
+            dropMovimentos.push({ turmaId: turmaAtual.id, docente: "" });
           }
 
           const vizinho: Vizinho = {

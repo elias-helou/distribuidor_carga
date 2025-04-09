@@ -1,6 +1,7 @@
 import { NeighborhoodFunction } from "../Classes/Abstract/NeighborhoodFunction";
 import Constraint from "../Classes/Constraint";
 import { Context, Vizinho } from "../Interfaces/utils";
+import { Movimento } from "../TabuList/Moviment";
 import { podeAtribuir } from "./utils";
 
 /**
@@ -71,15 +72,15 @@ export class Remove extends NeighborhoodFunction {
        * (caso uam turma tenha 2 ou mais alocações).
        */
 
-      const dropMovimentos = [];
+      const dropMovimentos: Movimento[] = [];
       for (const docente of turma.docentes) {
-        dropMovimentos.push([turma.id, docente]);
+        dropMovimentos.push({ turmaId: turma.id, docente: docente });
       }
 
       const vizinho: Vizinho = {
         isTabu: false,
         movimentos: {
-          add: [[turma.id, []]],
+          add: [{ turmaId: turma.id, docente: "" }],
           drop: dropMovimentos,
         },
         atribuicoes: solucaoAtual,

@@ -1,6 +1,7 @@
 import { NeighborhoodFunction } from "../Classes/Abstract/NeighborhoodFunction";
 import Constraint from "../Classes/Constraint";
 import { Context, Vizinho } from "../Interfaces/utils";
+import { Movimento } from "../TabuList/Moviment";
 import { podeAtribuir } from "./utils";
 
 /**
@@ -46,14 +47,14 @@ export class Add extends NeighborhoodFunction {
          * Gera separadamente cada movimento em caso de troca de múltiplos docentes
          * (caso uam turma tenha 2 ou mais alocações).
          */
-        const dropMovimentos = [];
+        const dropMovimentos: Movimento[] = [];
 
         if (!atribuicao.docentes.length) {
-          dropMovimentos.push([turma.id, []]);
+          dropMovimentos.push({ turmaId: turma.id, docente: "" });
         }
         for (const docente of atribuicao.docentes) {
           //const atrib = baseSolution.atribuicoes.find((atribuicao) = atribuicao.id_disciplina === turma.id)
-          dropMovimentos.push([turma.id, docente]);
+          dropMovimentos.push({ turmaId: turma.id, docente: docente });
         }
 
         atribuicao.docentes = [docente.nome];
@@ -61,7 +62,7 @@ export class Add extends NeighborhoodFunction {
         const vizinho: Vizinho = {
           isTabu: false,
           movimentos: {
-            add: [[turma.id, docente.nome]],
+            add: [{ turmaId: turma.id, docente: docente.nome }],
             drop: dropMovimentos,
           },
           atribuicoes: solucaoAtual,

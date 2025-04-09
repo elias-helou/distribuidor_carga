@@ -15,6 +15,7 @@ import { Solution } from "../TabuList/Solution";
 import { delay } from "../utils";
 import { StopCriteria } from "./Abstract/StopCriteria";
 import { AspirationCriteria } from "./Abstract/AspirationCriteria";
+import { Moviment } from "../TabuList/Moviment";
 
 // const teste = [
 //   {
@@ -163,7 +164,7 @@ export class TabuSearch {
   /**
    * Lista tabu com a sua tipagem dinâmica devido a possibilidades de diferentes interpretações.
    */
-  public tabuList: TabuList<any>;
+  public tabuList: TabuList<any> | Moviment;
 
   /**
    * Solução final após a execução do algoritmo ou a melhor solução encontrada até o momento.
@@ -310,8 +311,10 @@ export class TabuSearch {
      */
     if (tipoTabuList === "Solução") {
       this.tabuList = new Solution(tabuSize);
-    } // TODO: Implementar os demais casos quando as classes forem criadas.
-
+    } else if (tipoTabuList === "Movimento") {
+      // TODO: Implementar os demais casos quando as classes forem criadas.
+      this.tabuList = new Moviment(3, 17);
+    }
     /**
      * Inicializar a propriedade `statistics`
      */
@@ -441,10 +444,14 @@ export class TabuSearch {
    * - Atributos
    * - Movimentos
    */
-  async verifyTabu(vizinhanca: Vizinho[]): Promise<Vizinho[]> {
+  async verifyTabu(
+    vizinhanca: Vizinho[],
+    iteracaoAtual: number
+  ): Promise<Vizinho[]> {
     for (const vizinho of vizinhanca) {
-      vizinho.isTabu = this.tabuList.has(vizinho);
+      vizinho.isTabu = this.tabuList.has(vizinho, iteracaoAtual);
     }
+
     return vizinhanca;
   }
 
@@ -477,84 +484,6 @@ export class TabuSearch {
    * @returns Retorna o melhor vizinho e o indice na vizinhança.
    */
   async findBestSolution(
-    vizinhanca: Vizinho[],
-    iteracoes: number
-  ): Promise<{
-    vizinho: Vizinho;
-    index: number | undefined;
-    forceAcceptance: boolean;
-  }> {
-    /**
-     * O processo de avaliação deve continuar até o momento em que os elementos da vizinhança
-     * apresentem a avaliação menor que a melhor até o momento. Percorrer toda a lista gastaria
-     * muito tempo de execução e não traria nenhum efeito positivo, apenas lentidão.
-     */
-    for (let i = 0; i < vizinhanca.length; i++) {
-      if (vizinhanca[i].avaliacao < this.bestSolution.avaliacao) {
-        break;
-      }
-
-      /**
-       * Se o vizinho for tabu, os critérios de asporação devem ser validados.
-       */
-      if (vizinhanca[i].isTabu) {
-        let fulfills = false;
-        for (const aspiration of this.aspirationPipe.values()) {
-          fulfills =
-            fulfills ||
-            aspiration.fulfills(vizinhanca[i], this.bestSolution, iteracoes);
-        }
-
-        /**
-         * Se o vizinho cumprir pelo menos um critério, a melhor solução encontrada deve
-         * ser atualizada e removida da lista tabu.
-         */
-        if (fulfills) {
-          // this.tabuList.remove(this.tabuList.indexOf(vizinhanca[i]));
-          // this.bestSolution = vizinhanca[i];
-
-          return { vizinho: vizinhanca[i], index: i, forceAcceptance: true };
-
-          // /**
-          //  * Como a vizinhança é ordenada de forma decrescente, caso encontremos uma solução com maior
-          //  * avaliação, o processo pode ser interrompido.
-          //  */
-          // break;
-        }
-      } else {
-        /**
-         * Ajustes muito técnicos pois o "Critério de Aceitação de Mesmas Avaliações"
-         * não deve ser tratado como aspiração apenas, pois é uma forma também de selecionar
-         * vizinhos que possam nem ser inseridos no tabu.
-         */
-        // if (
-        //   this.aspirationPipe.has("Critério de Aceitação de Mesmas Avaliações")
-        // ) {
-        //   const process = this.aspirationPipe.get(
-        //     "Critério de Aceitação de Mesmas Avaliações"
-        //   );
-
-        //   if (process.fulfills(vizinhanca[i], this.bestSolution)) {
-        //     return { vizinho: vizinhanca[i], index: i, forceAcceptance: true };
-        //   }
-        // }
-        /**
-         * Aqui temos a garantia de que o vizinho tem a avaliação `maior ou igual` a melhor encontrada,
-         * como também que ele não é tabu.
-         */
-        return { vizinho: vizinhanca[i], index: i, forceAcceptance: true };
-        // this.bestSolution = vizinhanca[i];
-        // break;
-      }
-    }
-    return {
-      vizinho: this.bestSolution,
-      index: undefined,
-      forceAcceptance: false,
-    };
-  }
-
-  async findBestSolution2(
     vizinhanca: Vizinho[]
     //iteracoes: number
   ): Promise<{
@@ -572,7 +501,21 @@ export class TabuSearch {
         vizinhanca[i].avaliacao >= this.bestSolution.avaliacao &&
         !vizinhanca[i].isTabu
       ) {
-        return { vizinho: vizinhanca[i], index: i, forceAcceptance: true };
+        return { vizinho: vizinhanca[i], index: i, forceAcceptance: false };
+      } else if (
+        vizinhanca[i].avaliacao >= this.bestSolution.avaliacao &&
+        vizinhanca[i].isTabu
+      ) {
+        let fulfills: boolean = false;
+        for (const aspiracao of this.aspirationPipe.values()) {
+          fulfills =
+            fulfills || aspiracao.fulfills(vizinhanca[i], this.bestSolution);
+        }
+        if (fulfills) {
+          console.log("Aspiração");
+
+          return { vizinho: vizinhanca[i], index: i, forceAcceptance: true };
+        }
       }
     }
 
@@ -639,14 +582,14 @@ export class TabuSearch {
       vizinhanca = await this.generateNeighborhood();
 
       vizinhanca = await this.evaluateNeighbors(vizinhanca);
-      vizinhanca = await this.verifyTabu(vizinhanca);
+      vizinhanca = await this.verifyTabu(vizinhanca, iteracoes);
 
       vizinhanca = vizinhanca.sort((a, b) => b.avaliacao - a.avaliacao);
 
       /**
        * Processo de encontrar o melhor vizinho.
        */
-      const localBestSolution = await this.findBestSolution2(
+      const localBestSolution = await this.findBestSolution(
         vizinhanca
         /* iteracoes*/
       );
@@ -665,10 +608,14 @@ export class TabuSearch {
          * vizinho e inseri-lo na lista tabu.
          */
         if (localBestSolution.vizinho.isTabu) {
-          this.tabuList.remove(
-            this.tabuList.indexOf(localBestSolution.vizinho)
-          );
-          localBestSolution.vizinho.isTabu = false;
+          if (!(this.tabuList instanceof Moviment)) {
+            this.tabuList.remove(
+              this.tabuList.indexOf(localBestSolution.vizinho)
+            );
+            localBestSolution.vizinho.isTabu = false;
+          } else {
+            //
+          }
         }
         // if (
         //   localBestSolution.vizinho.avaliacao > this.bestSolution.avaliacao ||
@@ -678,7 +625,7 @@ export class TabuSearch {
         //   listaSelecionados.push(localBestSolution.index);
         // }
         this.bestSolution = localBestSolution.vizinho;
-        this.tabuList.add(localBestSolution.vizinho);
+        this.tabuList.add(localBestSolution.vizinho, iteracoes);
         // /**
         //  * A alteração do melhor vizinho ocorrerá apenas se a avaliação for estritamente maior OU
         //  * se ele atender a um critério de aspiração (`localBestSolution.forceAcceptance`). Inserido
@@ -719,7 +666,7 @@ export class TabuSearch {
            * Conforme definido no texto da dissertação, mesmo que o valor não seja maior, ainda assim
            * será inserido na lista tabu. Essa definição incentiva a procura de novas soluções.
            */
-          this.tabuList.add(vizinhanca[0]);
+          this.tabuList.add(vizinhanca[0], iteracoes);
         }
       }
 

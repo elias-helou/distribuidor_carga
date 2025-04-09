@@ -6,6 +6,7 @@ import {
   Formulario,
 } from "@/context/Global/utils";
 import Constraint from "../Classes/Constraint";
+import { Movimentos } from "../TabuList/Moviment";
 
 export interface Context {
   atribuicoes: Atribuicao[];
@@ -18,7 +19,7 @@ export interface Context {
 
 export interface Vizinho {
   atribuicoes: Atribuicao[];
-  movimentos: { add: any[]; drop: any[] }; // Depois será melhor acertar as tipagens
+  movimentos: Movimentos; // Depois será melhor acertar as tipagens
   isTabu: boolean;
   avaliacao?: number;
 }

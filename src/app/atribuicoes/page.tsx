@@ -534,7 +534,7 @@ export default function Timetable() {
       [...hardConstraints.values(), ...softConstraints.values()],
       { atribuicoes: ativos.atribuicoes },
       neighborhood,
-      "Solução",
+      "Movimento",
       parametros.tabuSize.value, //Number(parametros.tabuSize.value),
       stop,
       aspiration,
