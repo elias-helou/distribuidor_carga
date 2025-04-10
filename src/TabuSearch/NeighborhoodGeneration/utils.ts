@@ -42,7 +42,13 @@ export function podeAtribuir(
   for (const _constraint of hardConstraints.keys()) {
     const constraint = hardConstraints.get(_constraint);
     if (
-      !constraint.hard(baseSolution.atribuicoes, [docente], [turma], travas)
+      /** Adicionado um ternário para resolver um problema na restrição das travas */
+      !constraint.hard(
+        baseSolution.atribuicoes,
+        docente ? [docente] : [],
+        [turma],
+        travas
+      )
     ) {
       return false;
     }

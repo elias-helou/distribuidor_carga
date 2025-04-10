@@ -175,7 +175,7 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
           instance: new IteracoesMaximas(
             "Limite de Iterações",
             "Função que interromperá o algoritmo caso uma determinada quantidade de iterações seja atingida.",
-            150
+            4
           ),
           isActive: true,
         },
@@ -196,7 +196,7 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
         {
           instance: new IteracoesSemMelhoraAvaliacao(
             "Iterações sem Melhora na Avaliação",
-            "Função que interrompe a execução do algoritmo caso a avaliação das soluções não apresnetem melhora (melhor vizinho encontrado não seja alterado) em uma determinada quantidade de iterações.",
+            "Função que interrompe a execução do algoritmo caso a avaliação das soluções não apresnetem melhora em uma determinada quantidade de iterações.",
             10
           ),
           isActive: false,

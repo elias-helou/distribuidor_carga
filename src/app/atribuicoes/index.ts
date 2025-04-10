@@ -260,6 +260,7 @@ export function saveAtribuicoesInHistoryState(
     atribuicoes: atribuicoes,
     avaliacao: avaliacao,
     algorithm: algorithm,
+    estatisticas: algorithm.statistics,
   };
 
   const id = addNewSolutionToHistory(

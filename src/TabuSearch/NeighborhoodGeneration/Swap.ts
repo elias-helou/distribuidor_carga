@@ -2,7 +2,7 @@ import { Disciplina } from "@/context/Global/utils";
 import { NeighborhoodFunction } from "../Classes/Abstract/NeighborhoodFunction";
 import Constraint from "../Classes/Constraint";
 import { Context, Vizinho } from "../Interfaces/utils";
-import { compareArrays, podeAtribuir } from "./utils";
+import { podeAtribuir } from "./utils";
 import { Movimento } from "../TabuList/Moviment";
 
 export class Swap extends NeighborhoodFunction {
@@ -30,7 +30,10 @@ export class Swap extends NeighborhoodFunction {
        */
       const docentesPivot = baseSolution.atribuicoes.find(
         (atribuicao) => atribuicao.id_disciplina === turmaPivot.id
-      ).docentes;
+      )?.docentes;
+      if (!docentesPivot) {
+        continue;
+      }
 
       for (let j = i + 1; j < context.turmas.length; j++) {
         const turmaAtual: Disciplina = context.turmas[j];
@@ -39,45 +42,40 @@ export class Swap extends NeighborhoodFunction {
          */
         const docentesAtual = baseSolution.atribuicoes.find(
           (atribuicao) => atribuicao.id_disciplina === turmaAtual.id
-        ).docentes;
+        )?.docentes;
 
-        /**
-         * Caso ambas as turmas não tenham nenhuma atribuição, o processo deve ir para a próxima iteração.
-         */
-        // if (docentesAtual.length === 0 && docentesPivot.length === 0) {
-        //   continue;
-        // }
+        if (!docentesAtual) {
+          continue;
+        }
 
-        /**
-         * Remover depois
-         */
-        // if (turmaAtual.id === turmaPivot.id) {
-        //   continue;
-        // }
+        let trocaValida = true;
 
-        /**
-         * Verificar se a troca pode ser realizada: todos os docentes do Pivo podem ir para a Atual e vice-versa
-         * */
-        const trocaValida =
-          docentesPivot.every((docente) =>
+        for (const _docente of docentesPivot) {
+          const docente = context.docentes.find((doc) => doc.nome === _docente);
+          trocaValida =
+            trocaValida &&
             podeAtribuir(
-              context.docentes.find((d) => d.nome === docente),
+              docente,
               turmaAtual,
               context.travas,
               hardConstraints,
               baseSolution
-            )
-          ) &&
-          docentesAtual.every((docente) =>
+            );
+        }
+
+        for (const _docente of docentesAtual) {
+          const docente = context.docentes.find((doc) => doc.nome === _docente);
+          trocaValida =
+            trocaValida &&
             podeAtribuir(
-              context.docentes.find((d) => d.nome === docente),
+              docente,
               turmaPivot,
               context.travas,
               hardConstraints,
               baseSolution
-            )
-          ) &&
-          !compareArrays(docentesPivot, docentesAtual);
+            );
+        }
+        //&& !compareArrays(docentesPivot, docentesAtual);
 
         if (trocaValida) {
           const atribuicoes = structuredClone(baseSolution.atribuicoes);

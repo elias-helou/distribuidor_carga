@@ -313,7 +313,7 @@ export class TabuSearch {
       this.tabuList = new Solution(tabuSize);
     } else if (tipoTabuList === "Movimento") {
       // TODO: Implementar os demais casos quando as classes forem criadas.
-      this.tabuList = new Moviment(3, 17);
+      this.tabuList = new Moviment(3, 3);
     }
     /**
      * Inicializar a propriedade `statistics`
@@ -558,6 +558,16 @@ export class TabuSearch {
 
     while (!this.stop(iteracoes, vizinhanca[0], interrompe)) {
       await delay(0);
+
+      if (this.tabuList instanceof Moviment) {
+        console.log("AddList");
+        console.log(this.tabuList.addList);
+
+        console.log("DropList");
+        console.log(this.tabuList.dropList);
+
+        console.log("\n\n");
+      }
 
       /**
        * Atualizar as estatisticas

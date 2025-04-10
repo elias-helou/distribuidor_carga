@@ -16,7 +16,7 @@ export interface Movimento {
 }
 
 export class Moviment {
-  private tenures: { add: number; drop: number };
+  public tenures: { add: number; drop: number };
 
   /**
    * A lista **Add** define quando um movimento **previamente removido**
@@ -25,7 +25,7 @@ export class Moviment {
    * key: turmaId,docente
    * value: iteração que o movimento ficará disponível
    */
-  private addList: Map<string, number>;
+  public addList: Map<string, number>;
 
   /**
    * A lista **Drop** armazena os **movimentos adicionados**,
@@ -34,7 +34,7 @@ export class Moviment {
    * key: turmaId,docente
    * value: iteração que o movimento ficará disponível
    */
-  private dropList: Map<string, number>;
+  public dropList: Map<string, number>;
 
   constructor(addTenure: number, dropTenure: number) {
     this.tenures = { add: addTenure, drop: dropTenure };

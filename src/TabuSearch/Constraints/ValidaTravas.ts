@@ -23,13 +23,13 @@ export class ValidaTravas extends Constraint {
   }
 
   hard(
-    atribuicoes?: Atribuicao[],
-    docentes?: Docente[],
-    disciplinas?: Disciplina[],
-    travas?: Celula[]
+    atribuicoes: Atribuicao[],
+    docentes: Docente[],
+    disciplinas: Disciplina[],
+    travas: Celula[]
   ): boolean {
     /**
-     * Validar as travas presentes no docente
+     * Trava no Docente
      */
     for (const docente of docentes) {
       if (
@@ -44,7 +44,7 @@ export class ValidaTravas extends Constraint {
     }
 
     /**
-     * Valida se a trava está na turma
+     * Trava na Turma
      */
     for (const turma of disciplinas) {
       if (
@@ -59,23 +59,39 @@ export class ValidaTravas extends Constraint {
     }
 
     /**
-     * Valida se a trava não está na célula
+     * Verifica Docente na Turma
+     *
+     * Se o docente for diferente do qual está na trava, deve ser falso.
      */
-    for (const turma of disciplinas) {
-      for (const docente of docentes) {
+
+    for (const docente of docentes) {
+      for (const turma of disciplinas) {
         if (
           travas.some(
             (trava) =>
               trava.id_disciplina === turma.id &&
-              trava.nome_docente === docente.nome
+              trava.nome_docente !== docente.nome &&
+              trava.tipo_trava === TipoTrava.Cell
+          )
+        ) {
+          return false;
+        } else if (
+          travas.some(
+            (trava) =>
+              trava.id_disciplina === turma.id &&
+              atribuicoes.find((atrib) => atrib.id_disciplina === turma.id)
+                ?.docentes.length === 0 &&
+              trava.tipo_trava === TipoTrava.Cell
           )
         ) {
           return false;
         }
       }
     }
+
     return true;
   }
+
   toObject(): ConstraintInterface {
     return {
       name: this.name,

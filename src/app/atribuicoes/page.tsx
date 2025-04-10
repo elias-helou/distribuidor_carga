@@ -469,26 +469,30 @@ export default function Timetable() {
    */
   const cleanStateAtribuicoes = () => {
     // Varre todo o array e limpa o campo docentes caso não esteja travdo
-    const atribuicoesLimpa = atribuicoes.map((atribuicao) => {
-      if (
-        travas.find(
-          (trava) =>
-            trava.id_disciplina === atribuicao.id_disciplina &&
-            atribuicao.docentes.includes(trava.nome_docente)
-        ) ||
-        !disciplinas.find(
-          (disciplina) => disciplina.id === atribuicao.id_disciplina
-        )?.ativo ||
-        !docentes.find((docente) => atribuicao.docentes.includes(docente.nome))
-          ?.ativo
-      ) {
-        return atribuicao;
+
+    const atribuicoesLimpa: Atribuicao[] = [];
+
+    for (const atribuicao of atribuicoes) {
+      for (const docente of atribuicao.docentes) {
+        if (
+          travas.find(
+            (trava) =>
+              trava.id_disciplina === atribuicao.id_disciplina &&
+              docente === trava.nome_docente
+          )
+        ) {
+          atribuicoesLimpa.push({
+            id_disciplina: atribuicao.id_disciplina,
+            docentes: [docente],
+          });
+        } else {
+          atribuicoesLimpa.push({
+            id_disciplina: atribuicao.id_disciplina,
+            docentes: [],
+          });
+        }
       }
-      return {
-        ...atribuicao, // Mantém os outros campos iguais
-        docentes: [], // Limpa o campo docentes
-      };
-    });
+    }
 
     // Atualiza o estado com a nova lista de atribuições
     setAtribuicoes(atribuicoesLimpa);
@@ -534,7 +538,7 @@ export default function Timetable() {
       [...hardConstraints.values(), ...softConstraints.values()],
       { atribuicoes: ativos.atribuicoes },
       neighborhood,
-      "Movimento",
+      "Solução",
       parametros.tabuSize.value, //Number(parametros.tabuSize.value),
       stop,
       aspiration,
@@ -670,6 +674,8 @@ export default function Timetable() {
         },
       ])
     )[0].avaliacao;
+
+    buscaTabu.generateStatistics();
     const contextoExecucao: ContextoExecucao = {
       disciplinas: [...disciplinas],
       docentes: [...docentes],
