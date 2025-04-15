@@ -1,5 +1,7 @@
 "use client";
 
+//import AccessibilityBar from "@/components/AccessibilityBar";
+//import { AccessibilityProvider } from "@/context/Accessibility";
 import Navbar from "@/components/Navbar";
 import { VLibras } from "@/components/VLibras";
 import { AlertsWrapper } from "@/context/Alerts";
@@ -15,6 +17,8 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body style={{ margin: 0 }}>
+        {/* <AccessibilityProvider>
+          <AccessibilityBar /> */}
         <Navbar />
         <GlobalWrapper>
           <ProcessWrapper>
@@ -26,6 +30,7 @@ export default function RootLayout({
           </ProcessWrapper>
         </GlobalWrapper>
         <VLibras forceOnload />
+        {/* </AccessibilityProvider> */}
       </body>
     </html>
   );
