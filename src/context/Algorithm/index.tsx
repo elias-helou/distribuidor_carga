@@ -175,7 +175,7 @@ export function AlgorithmWrapper({ children }: { children: React.ReactNode }) {
           instance: new IteracoesMaximas(
             "Limite de Iterações",
             "Função que interromperá o algoritmo caso uma determinada quantidade de iterações seja atingida.",
-            4
+            300
           ),
           isActive: true,
         },

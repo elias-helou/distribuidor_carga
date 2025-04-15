@@ -479,20 +479,24 @@ export default function Timetable() {
             (trava) =>
               trava.id_disciplina === atribuicao.id_disciplina &&
               docente === trava.nome_docente
-          )
+          ) ||
+          !docentes.find((doc) => doc.nome === docente).ativo ||
+          !disciplinas.find((disc) => disc.id === atribuicao.id_disciplina)
+            .ativo
         ) {
-          atribuicoesLimpa.push({
-            id_disciplina: atribuicao.id_disciplina,
-            docentes: [docente],
-          });
+          atribuicoesLimpa.push(atribuicao);
         } else {
           atribuicoesLimpa.push({
-            id_disciplina: atribuicao.id_disciplina,
+            ...atribuicao,
             docentes: [],
           });
         }
       }
+      if (!atribuicao.docentes.length) {
+        atribuicoesLimpa.push(atribuicao);
+      }
     }
+    console.log(atribuicoesLimpa);
 
     // Atualiza o estado com a nova lista de atribuições
     setAtribuicoes(atribuicoesLimpa);
@@ -614,22 +618,6 @@ export default function Timetable() {
   };
 
   const saveAlterations = async () => {
-    // const { pDisciplinas, pDocentes, pAtribuicoes } = processData(
-    //   disciplinas,
-    //   docentes,
-    //   formularios,
-    //   travas,
-    //   atribuicoes
-    // );
-
-    // const avaliacao = avaliarSolucao(
-    //   pAtribuicoes,
-    //   pDocentes,
-    //   pDisciplinas,
-    //   maxPriority + 1, // talvez não seja necessário esse +1 (? 14/02/2025)
-    //   parametros,
-    //   softConstraints
-    // );
     const neighborhood = Array.from(neighborhoodFunctions.values())
       .filter((entry) => entry.isActive)
       .map((entry) => entry.instance);

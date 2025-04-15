@@ -49,8 +49,6 @@ export class Add extends NeighborhoodFunction {
          */
         const dropMovimentos: Movimento[] = [];
 
-        console.log(atribuicao);
-
         if (!atribuicao.docentes?.length) {
           dropMovimentos.push({ turmaId: turma.id, docente: "" });
         }

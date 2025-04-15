@@ -60,8 +60,6 @@ export function compararVizihosTeste(
   vizinho2: Vizinho
 ): boolean {
   if (vizinho1?.avaliacao !== vizinho2?.avaliacao) {
-    //console.log("Avaliação");
-
     return false;
   }
 

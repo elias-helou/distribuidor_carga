@@ -60,8 +60,8 @@ const GlobalContext = createContext<GlobalContextInterface>({
     idHistorico: undefined,
   },
   setSolucaoAtual: () => {},
-  parametros: {k1: 0, k2: 0, k3: 0, k4: 0, k5: 0, k6: 0},
-  setParametros: () => {}
+  parametros: { k1: 0, k2: 0, k3: 0, k4: 0, k5: 0, k6: 0 },
+  setParametros: () => {},
 });
 
 export function GlobalWrapper({ children }: { children: React.ReactNode }) {
@@ -86,100 +86,107 @@ export function GlobalWrapper({ children }: { children: React.ReactNode }) {
   /**
    * Mudar de lugar
    */
-  const [parametros, setParametros] = useState<Parametros>({k1: 1000, k2: 100000, k3: 100, k4: 10000, k5: 1000, k6: 0});
+  const [parametros, setParametros] = useState<Parametros>({
+    k1: 1000,
+    k2: 100000,
+    k3: 100,
+    k4: 10000,
+    k5: 1000,
+    k6: 0,
+  });
 
-//   /**
-//    * Caso ocorra alguma modificação nos states globais, o id da solução deve ser alterado para undefined, permitindo salvar essas
-//    * novas modificações
-//    */
-//   // useRef para armazenar os valores anteriores
-//   const prevDocentesRef = useRef(docentes);
-//   const prevDisciplinasRef = useRef(disciplinas);
-//   const prevTravasRef = useRef(travas);
-//   const prevAtribuicoesRef = useRef(atribuicoes);
-//   const prevSolucaoAtualRef = useRef(solucaoAtual);
-//   const prevHistoricoSolucoes = useRef(historicoSolucoes);
+  //   /**
+  //    * Caso ocorra alguma modificação nos states globais, o id da solução deve ser alterado para undefined, permitindo salvar essas
+  //    * novas modificações
+  //    */
+  //   // useRef para armazenar os valores anteriores
+  //   const prevDocentesRef = useRef(docentes);
+  //   const prevDisciplinasRef = useRef(disciplinas);
+  //   const prevTravasRef = useRef(travas);
+  //   const prevAtribuicoesRef = useRef(atribuicoes);
+  //   const prevSolucaoAtualRef = useRef(solucaoAtual);
+  //   const prevHistoricoSolucoes = useRef(historicoSolucoes);
 
-// // UseRef para rastrear o último estado definido de `solucaoAtual`
-// const lastSolucaoAtualRef = useRef(solucaoAtual);
+  // // UseRef para rastrear o último estado definido de `solucaoAtual`
+  // const lastSolucaoAtualRef = useRef(solucaoAtual);
 
-// useEffect(() => {
-//   // Só executa se há um idHistorico válido, ignorando estados indefinidos de `solucaoAtual`
-//   if (solucaoAtual.idHistorico !== undefined) {
-    
-//     // Função para verificar se houve mudanças nos estados observados
-//     const hasChanges = () => {
-//       return (
-//         !_.isEqual(prevDocentesRef.current, docentes) ||
-//         !_.isEqual(prevDisciplinasRef.current, disciplinas) ||
-//         !_.isEqual(prevTravasRef.current, travas) ||
-//         !_.isEqual(prevAtribuicoesRef.current, atribuicoes)
-//       );
-//     };
+  // useEffect(() => {
+  //   // Só executa se há um idHistorico válido, ignorando estados indefinidos de `solucaoAtual`
+  //   if (solucaoAtual.idHistorico !== undefined) {
 
-//     // Função de restauração: verifica se estamos restaurando um histórico existente
-//     const restoring = () => {
-//       return (
-//         prevSolucaoAtualRef.current.idHistorico !== undefined &&
-//         solucaoAtual.idHistorico !== undefined &&
-//         prevSolucaoAtualRef.current.idHistorico !== solucaoAtual.idHistorico &&
-//         prevHistoricoSolucoes.current.has(
-//           prevSolucaoAtualRef.current.idHistorico
-//         ) &&
-//         prevHistoricoSolucoes.current.has(solucaoAtual.idHistorico)
-//       );
-//     };
+  //     // Função para verificar se houve mudanças nos estados observados
+  //     const hasChanges = () => {
+  //       return (
+  //         !_.isEqual(prevDocentesRef.current, docentes) ||
+  //         !_.isEqual(prevDisciplinasRef.current, disciplinas) ||
+  //         !_.isEqual(prevTravasRef.current, travas) ||
+  //         !_.isEqual(prevAtribuicoesRef.current, atribuicoes)
+  //       );
+  //     };
 
-//     // Função de adição: verifica se estamos adicionando um histórico novo
-//     const adding = () => {
-//       return (
-//         !prevHistoricoSolucoes.current.has(solucaoAtual.idHistorico) &&
-//         historicoSolucoes.has(solucaoAtual.idHistorico)
-//       );
-//     };
+  //     // Função de restauração: verifica se estamos restaurando um histórico existente
+  //     const restoring = () => {
+  //       return (
+  //         prevSolucaoAtualRef.current.idHistorico !== undefined &&
+  //         solucaoAtual.idHistorico !== undefined &&
+  //         prevSolucaoAtualRef.current.idHistorico !== solucaoAtual.idHistorico &&
+  //         prevHistoricoSolucoes.current.has(
+  //           prevSolucaoAtualRef.current.idHistorico
+  //         ) &&
+  //         prevHistoricoSolucoes.current.has(solucaoAtual.idHistorico)
+  //       );
+  //     };
 
-//     // Verifica se houve mudanças significativas e se não estamos restaurando ou adicionando
-//     if (hasChanges() && !restoring() && !adding()) {
-//       // Redefine `solucaoAtual` para o estado inicial apenas se ele realmente mudou
-//       setSolucaoAtual({
-//         atribuicoes: [],
-//         avaliacao: undefined,
-//         idHistorico: undefined,
-//         estatisticas: undefined,
-//       });
+  //     // Função de adição: verifica se estamos adicionando um histórico novo
+  //     const adding = () => {
+  //       return (
+  //         !prevHistoricoSolucoes.current.has(solucaoAtual.idHistorico) &&
+  //         historicoSolucoes.has(solucaoAtual.idHistorico)
+  //       );
+  //     };
 
-//       // Armazena o novo estado redefinido em `lastSolucaoAtualRef`
-//       lastSolucaoAtualRef.current = {
-//         atribuicoes: [],
-//         avaliacao: undefined,
-//         idHistorico: undefined,
-//         estatisticas: undefined,
-//       };
-//     } else if (restoring() || adding()) {
-//       // Em caso de restauração ou adição, atualizamos `prevSolucaoAtualRef` com `solucaoAtual`
-//       prevSolucaoAtualRef.current = solucaoAtual;
-//       lastSolucaoAtualRef.current = solucaoAtual; // Atualiza o estado conhecido
-//     }
+  //     // Verifica se houve mudanças significativas e se não estamos restaurando ou adicionando
+  //     if (hasChanges() && !restoring() && !adding()) {
+  //       // Redefine `solucaoAtual` para o estado inicial apenas se ele realmente mudou
+  //       setSolucaoAtual({
+  //         atribuicoes: [],
+  //         avaliacao: undefined,
+  //         idHistorico: undefined,
+  //         estatisticas: undefined,
+  //       });
 
-//     // Atualiza as referências de estado para o próximo ciclo
-//     prevDocentesRef.current = docentes;
-//     prevDisciplinasRef.current = disciplinas;
-//     prevTravasRef.current = travas;
-//     prevAtribuicoesRef.current = atribuicoes;
-//     prevHistoricoSolucoes.current = historicoSolucoes;
+  //       // Armazena o novo estado redefinido em `lastSolucaoAtualRef`
+  //       lastSolucaoAtualRef.current = {
+  //         atribuicoes: [],
+  //         avaliacao: undefined,
+  //         idHistorico: undefined,
+  //         estatisticas: undefined,
+  //       };
+  //     } else if (restoring() || adding()) {
+  //       // Em caso de restauração ou adição, atualizamos `prevSolucaoAtualRef` com `solucaoAtual`
+  //       prevSolucaoAtualRef.current = solucaoAtual;
+  //       lastSolucaoAtualRef.current = solucaoAtual; // Atualiza o estado conhecido
+  //     }
 
-//     console.log("Último estado conhecido de Solução:", lastSolucaoAtualRef.current);
-//     console.log("Solução Atual:", solucaoAtual);
-//     console.log("----------------------------------");
-//   }
-// }, [
-//   docentes,
-//   disciplinas,
-//   travas,
-//   atribuicoes,
-//   solucaoAtual,
-//   historicoSolucoes,
-// ]);
+  //     // Atualiza as referências de estado para o próximo ciclo
+  //     prevDocentesRef.current = docentes;
+  //     prevDisciplinasRef.current = disciplinas;
+  //     prevTravasRef.current = travas;
+  //     prevAtribuicoesRef.current = atribuicoes;
+  //     prevHistoricoSolucoes.current = historicoSolucoes;
+
+  //     console.log("Último estado conhecido de Solução:", lastSolucaoAtualRef.current);
+  //     console.log("Solução Atual:", solucaoAtual);
+  //     console.log("----------------------------------");
+  //   }
+  // }, [
+  //   docentes,
+  //   disciplinas,
+  //   travas,
+  //   atribuicoes,
+  //   solucaoAtual,
+  //   historicoSolucoes,
+  // ]);
 
   return (
     <GlobalContext.Provider
@@ -199,7 +206,7 @@ export function GlobalWrapper({ children }: { children: React.ReactNode }) {
         setSolucaoAtual,
         solucaoAtual,
         parametros,
-        setParametros
+        setParametros,
       }}
     >
       {children}
@@ -219,7 +226,7 @@ export function useGlobalContext() {
    */
   function updateAtribuicoes(novasAtribuicoes: Atribuicao[]) {
     /** Alterar para ver o state solucaoAtual */
-    if (context.atribuicoes.length == novasAtribuicoes.length) {
+    if (context.atribuicoes.length === novasAtribuicoes.length) {
       context.setAtribuicoes(novasAtribuicoes);
     } else {
       const newAtribuicoes = [...context.atribuicoes]; // Cria uma cópia do array original
@@ -244,7 +251,6 @@ export function useGlobalContext() {
           };
         }
       }
-
       // Atualiza o estado com o novo array de atribuições modificado
       context.setAtribuicoes(newAtribuicoes);
     }
