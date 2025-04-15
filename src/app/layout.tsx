@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-      <body>
+      <body style={{ margin: 0 }}>
         <Navbar />
         <GlobalWrapper>
           <ProcessWrapper>
