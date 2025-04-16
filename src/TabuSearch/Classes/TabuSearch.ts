@@ -21,7 +21,14 @@ export class TabuSearch {
   /**
    * Lista tabu com a sua tipagem dinâmica devido a possibilidades de diferentes interpretações.
    */
-  public tabuList: TabuList<any> | Moviment;
+  public tabuList: TabuList<
+    | Vizinho[]
+    | {
+        addList: Map<string, number>;
+        dropList: Map<string, number>;
+      },
+    { addTenure: number; dropTenure: number } | number
+  >;
 
   /**
    * Solução final após a execução do algoritmo ou a melhor solução encontrada até o momento.
@@ -441,14 +448,15 @@ export class TabuSearch {
          * vizinho e inseri-lo na lista tabu.
          */
         if (localBestSolution.vizinho.isTabu) {
-          if (!(this.tabuList instanceof Moviment)) {
-            this.tabuList.remove(
-              this.tabuList.indexOf(localBestSolution.vizinho)
-            );
-            localBestSolution.vizinho.isTabu = false;
-          } else {
-            //
-          }
+          this.tabuList.remove(localBestSolution.vizinho);
+          // if (!(this.tabuList instanceof Moviment)) {
+          //   this.tabuList.remove(
+          //     this.tabuList.indexOf(localBestSolution.vizinho)
+          //   );
+          //   localBestSolution.vizinho.isTabu = false;
+          // } else {
+          //   //
+          // }
         }
 
         /**

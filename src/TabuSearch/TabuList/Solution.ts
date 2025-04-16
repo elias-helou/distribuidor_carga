@@ -3,14 +3,14 @@ import { Vizinho } from "../Interfaces/utils";
 import { atribuicoesIguais } from "../TabuValidation/utils";
 import { compararVizihos } from "../utils";
 
-export class Solution extends TabuList<Vizinho[]> {
+export class Solution extends TabuList<Vizinho[], number> {
   constructor(tabuSize: number | undefined) {
-    super(tabuSize);
+    super(tabuSize, []);
   }
 
   add(vizinho: Vizinho): Vizinho[] {
     if (this.itens.length === this.tabuSize) {
-      this.remove(0);
+      this.remove(this.itens[0]);
     }
     this.itens.push(vizinho);
 
@@ -33,8 +33,10 @@ export class Solution extends TabuList<Vizinho[]> {
     })[0];
   }
 
-  remove(index: number, indexEnd: number = 1): Vizinho[] {
-    this.itens.splice(index, indexEnd);
+  remove(vizinho: Vizinho): Vizinho[] {
+    const index = this.indexOf(vizinho);
+
+    this.itens.splice(index);
 
     return this.itens;
   }

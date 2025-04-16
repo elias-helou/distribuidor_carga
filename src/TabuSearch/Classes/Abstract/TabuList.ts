@@ -1,14 +1,14 @@
 import { Vizinho } from "@/TabuSearch/Interfaces/utils";
 
-export abstract class TabuList<T> {
+export abstract class TabuList<T, K> {
   public itens: T;
 
-  public tabuSize: number | undefined;
+  public tabuSize: K;
 
-  constructor(tabuSize: number | undefined) {
+  constructor(tabuSize: K | undefined, initialItens: T) {
     this.tabuSize = tabuSize;
 
-    this.itens = [] as T;
+    this.itens = initialItens;
   }
 
   /**
@@ -16,14 +16,15 @@ export abstract class TabuList<T> {
    * @param vizinho Vizinho que será verificado.
    * @returns `True` quando o vizinho estiver na lista tabu. `False` caso contrário.
    */
-  abstract has(vizinho: Vizinho): boolean;
+  abstract has(vizinho: Vizinho, iteracaoAtual: number): boolean;
 
   /**
    * Método para remover um item pelo seu indice, ou também remover itens em um range.
    * @param index Índice do item a ser removido ou indice de começo.
    * @param indexEnd Índice final da lista de itens a serem removidos.
    */
-  abstract remove(index: number, indexEnd?: number): T;
+  //abstract remove(index?: number, indexEnd?: number): T;
+  abstract remove(vizinho: Vizinho): T;
 
   /**
    * Método que adiciona um novo tabu a lista.
@@ -32,7 +33,7 @@ export abstract class TabuList<T> {
    * @description Esse método também valida se a lista tabu não excedeu o seu limite, e em casos
    * verdadeiros, realiza os processos para remover um item da lista.
    */
-  abstract add(vizinho: Vizinho): T;
+  abstract add(vizinho: Vizinho, iteracaoAtual: number): T;
 
-  abstract indexOf(vizinho: Vizinho): number;
+  // abstract indexOf(vizinho: Vizinho): number;
 }
