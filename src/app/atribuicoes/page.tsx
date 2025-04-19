@@ -496,7 +496,6 @@ export default function Timetable() {
         atribuicoesLimpa.push(atribuicao);
       }
     }
-    console.log(atribuicoesLimpa);
 
     // Atualiza o estado com a nova lista de atribuições
     setAtribuicoes(atribuicoesLimpa);
@@ -880,6 +879,7 @@ export default function Timetable() {
                         zIndex: 1, // Para manter sobre as demais células,
                         textOverflow: "ellipsis",
                         padding: 0,
+                        paddingRight: 1,
                       }}
                       onClick={(e) =>
                         handleRowClick(e, {

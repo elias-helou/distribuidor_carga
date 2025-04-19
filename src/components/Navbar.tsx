@@ -48,7 +48,7 @@ export default function Navbar() {
   return (
     <AppBar
       component="nav"
-      position="static"
+      position="sticky"
       sx={{
         backgroundColor: theme.palette.primary.main,
         boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
@@ -154,7 +154,13 @@ export default function Navbar() {
           </Box>
 
           {/* Itens da navbar para telas grandes */}
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box
+            sx={{
+              flexGrow: 1,
+              display: { xs: "none", md: "flex" },
+              justifyContent: "center",
+            }}
+          >
             {navItems.map((item) => (
               <Link href={item.link} key={item.name} passHref legacyBehavior>
                 <Button

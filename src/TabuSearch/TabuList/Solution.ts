@@ -3,9 +3,13 @@ import { Vizinho } from "../Interfaces/utils";
 import { atribuicoesIguais } from "../TabuValidation/utils";
 import { compararVizihos } from "../utils";
 
-export class Solution extends TabuList<Vizinho[], number> {
+export class Solution extends TabuList<Vizinho[]> {
+  public tabuSize: number;
+
   constructor(tabuSize: number | undefined) {
-    super(tabuSize, []);
+    super([]);
+
+    this.tabuSize = tabuSize;
   }
 
   add(vizinho: Vizinho): Vizinho[] {

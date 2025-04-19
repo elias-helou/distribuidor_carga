@@ -32,6 +32,7 @@ export default function Home() {
           <a href="mailto:elias@icmc.usp.br">elias@icmc.usp.br</a>
         </li>
       </ul> */}
+
       <Grid2 container spacing={2} alignItems="center" justifyContent="center">
         <Typography
           variant="h4"

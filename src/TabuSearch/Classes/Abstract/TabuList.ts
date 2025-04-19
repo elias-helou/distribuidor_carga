@@ -1,13 +1,9 @@
 import { Vizinho } from "@/TabuSearch/Interfaces/utils";
 
-export abstract class TabuList<T, K> {
+export abstract class TabuList<T> {
   public itens: T;
 
-  public tabuSize: K;
-
-  constructor(tabuSize: K | undefined, initialItens: T) {
-    this.tabuSize = tabuSize;
-
+  constructor(initialItens: T) {
     this.itens = initialItens;
   }
 

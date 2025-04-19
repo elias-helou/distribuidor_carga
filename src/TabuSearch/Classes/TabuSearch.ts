@@ -26,8 +26,7 @@ export class TabuSearch {
     | {
         addList: Map<string, number>;
         dropList: Map<string, number>;
-      },
-    { addTenure: number; dropTenure: number } | number
+      }
   >;
 
   /**
@@ -421,10 +420,6 @@ export class TabuSearch {
       vizinhanca = await this.verifyTabu(vizinhanca, iteracoes);
 
       vizinhanca = vizinhanca.sort((a, b) => b.avaliacao - a.avaliacao);
-
-      if (iteracoes === 299) {
-        console.log(vizinhanca);
-      }
 
       /**
        * Processo de encontrar o melhor vizinho.

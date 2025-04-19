@@ -31,6 +31,28 @@ import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutli
 import IteracoesSemMelhoraAvaliacao from "@/TabuSearch/StopCriteria/IteracoesSemMelhoraAvaliacao";
 import LinearScaleIcon from "@mui/icons-material/LinearScale";
 import SameObjective from "@/TabuSearch/AspirationCriteria/SameObjective";
+import ChartContainer from "./ChartContainer";
+import { Moviment } from "@/TabuSearch/TabuList/Moviment";
+import { Solution } from "@/TabuSearch/TabuList/Solution";
+
+// const getDefs = () => {
+//   const styles = getStyles();
+
+//   return `<defs><style type=\"text/css\"><![CDATA[${styles}}]]></style></defs>`;
+// };
+
+// const stringifyStylesheet = (stylesheet) =>
+//   stylesheet.cssRules
+//     ? Array.from(stylesheet.cssRules)
+//         // @ts-expect-error aaa
+//         .map((rule) => rule.cssText || "")
+//         .join("\n")
+//     : "";
+
+// const getStyles = () =>
+//   Array.from(document.styleSheets)
+//     .map((s) => stringifyStylesheet(s))
+//     .join("\n");
 
 export default function SolutionHistoryDetails({
   solucao,
@@ -42,50 +64,51 @@ export default function SolutionHistoryDetails({
     return <Typography variant="h6">Solução não encontrada!</Typography>;
   }
 
-  const renderHistogramaQtdFormuatios = () => {
-    const qtdFormulariosDocentes = new Map<number, number>();
-    let qtdMax = 0;
+  // const renderHistogramaQtdFormuatios = () => {
+  //   const qtdFormulariosDocentes = new Map<number, number>();
+  //   let qtdMax = 0;
 
-    for (const docente of solucao.contexto.docentes) {
-      const qtd = docente.formularios.size;
+  //   for (const docente of solucao.contexto.docentes) {
+  //     const qtd = docente.formularios.size;
 
-      if (qtd > qtdMax) {
-        qtdMax = qtd;
-      }
-    }
+  //     if (qtd > qtdMax) {
+  //       qtdMax = qtd;
+  //     }
+  //   }
 
-    for (let i = 0; i <= qtdMax; i++) {
-      qtdFormulariosDocentes.set(i, 0);
-    }
+  //   for (let i = 0; i <= qtdMax; i++) {
+  //     qtdFormulariosDocentes.set(i, 0);
+  //   }
 
-    for (const docente of solucao.contexto.docentes) {
-      const qtdAtual = qtdFormulariosDocentes.get(docente.formularios.size);
-      qtdFormulariosDocentes.set(docente.formularios.size, qtdAtual + 1);
-    }
+  //   for (const docente of solucao.contexto.docentes) {
+  //     const qtdAtual = qtdFormulariosDocentes.get(docente.formularios.size);
+  //     qtdFormulariosDocentes.set(docente.formularios.size, qtdAtual + 1);
+  //   }
 
-    return (
-      <BarChart
-        xAxis={[
-          {
-            scaleType: "band",
-            label: "Formulários",
-            data: Array.from(qtdFormulariosDocentes.keys()),
-          },
-        ]}
-        series={[
-          {
-            //label: "Quantidade",
-            data: Array.from(qtdFormulariosDocentes.values()),
-          },
-        ]}
-        height={300}
-        grid={{ vertical: false, horizontal: true }}
-        yAxis={[{ label: "Quantidade" }]}
-        margin={{ left: 75, right: 75 }}
-        barLabel="value"
-      />
-    );
-  };
+  //   return (
+  //     <BarChart
+  //       xAxis={[
+  //         {
+  //           scaleType: "band",
+  //           label: "Formulários",
+  //           data: Array.from(qtdFormulariosDocentes.keys()),
+  //         },
+  //       ]}
+  //       series={[
+  //         {
+  //           //label: "Quantidade",
+  //           data: Array.from(qtdFormulariosDocentes.values()),
+  //         },
+  //       ]}
+  //       height={300}
+  //       grid={{ vertical: false, horizontal: true }}
+  //       yAxis={[{ label: "Quantidade" }]}
+  //       margin={{ left: 75, right: 75 }}
+  //       barLabel="value"
+  //     />
+  //   );
+  // };
+
   return (
     <Box sx={{ padding: 3 }}>
       <Paper elevation={3} sx={{ padding: 3, borderRadius: 2 }}>
@@ -111,15 +134,23 @@ export default function SolutionHistoryDetails({
                   <b>Inserção:</b> {solucao.tipoInsercao}
                 </Typography>
               </Grid2>
-              <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
+              <Grid2
+                size={{ xs: 12, sm: 6, md: 4 }}
+                display="flex"
+                alignContent="center"
+                alignItems="center"
+                flexDirection="row"
+                flexWrap="wrap"
+                justifyContent="flex-start"
+              >
                 <Typography variant="body1">
                   <b>Interrompido:</b>{" "}
-                  {solucao.solucao.estatisticas.interrupcao ? (
-                    <Chip label="Sim" color="error" />
-                  ) : (
-                    <Chip label="Não" color="success" />
-                  )}
                 </Typography>
+                {solucao.solucao.estatisticas.interrupcao ? (
+                  <Chip label="Sim" color="error" />
+                ) : (
+                  <Chip label="Não" color="success" />
+                )}
               </Grid2>
               <Grid2 size={{ xs: 12, sm: 6, md: 4 }}>
                 <Typography variant="body1">
@@ -190,7 +221,11 @@ export default function SolutionHistoryDetails({
                       Tamanho da Lista Tabu
                     </Typography>
                     <Typography variant="h5" color="primary">
-                      {solucao.solucao.algorithm.tabuList.tabuSize}
+                      {solucao.solucao.algorithm.tabuList instanceof Solution
+                        ? solucao.solucao.algorithm.tabuList.tabuSize.toString()
+                        : solucao.solucao.algorithm.tabuList instanceof Moviment
+                        ? `${solucao.solucao.algorithm.tabuList.tenures.add} - ${solucao.solucao.algorithm.tabuList.tenures.drop}`
+                        : ""}
                     </Typography>
                   </Box>
                 </Card>
@@ -461,30 +496,33 @@ export default function SolutionHistoryDetails({
                 <Typography variant="h6" align="center" gutterBottom>
                   Histograma Quantidade de Atribuições por Prioridade
                 </Typography>
-                <BarChart
-                  xAxis={[
-                    {
-                      scaleType: "band",
-                      label: "Prioridades",
-                      data: Array.from(
-                        solucao.solucao.estatisticas.docentesPrioridade.keys()
-                      ),
-                    },
-                  ]}
-                  series={[
-                    {
-                      label: "Prioridade",
-                      data: Array.from(
-                        solucao.solucao.estatisticas.docentesPrioridade.values()
-                      ),
-                    },
-                  ]}
-                  height={300}
-                  grid={{ vertical: false, horizontal: true }}
-                  yAxis={[{ label: "Quantidade" }]}
-                  margin={{ left: 75, right: 75 }}
-                  barLabel="value"
-                />
+                <ChartContainer>
+                  <BarChart
+                    key="teste"
+                    xAxis={[
+                      {
+                        scaleType: "band",
+                        label: "Prioridades",
+                        data: Array.from(
+                          solucao.solucao.estatisticas.docentesPrioridade.keys()
+                        ),
+                      },
+                    ]}
+                    series={[
+                      {
+                        label: "Prioridade",
+                        data: Array.from(
+                          solucao.solucao.estatisticas.docentesPrioridade.values()
+                        ),
+                      },
+                    ]}
+                    height={300}
+                    grid={{ vertical: false, horizontal: true }}
+                    yAxis={[{ label: "Quantidade" }]}
+                    margin={{ left: 75, right: 75 }}
+                    barLabel="value"
+                  />
+                </ChartContainer>
               </CardContent>
             </Card>
           </Grid2>
@@ -568,17 +606,22 @@ export default function SolutionHistoryDetails({
             </Card>
           </Grid2>
 
-          {/* Quantidade de FOrmulários por docentes*/}
-          <Grid2 size={{ xs: 12, md: 6 }}>
+          {/* Quantidade de Formulários por docentes - @@ Repensar nome @@
+          <Grid2 size={{ xs: 12 }}>
             <Card elevation={3}>
               <CardContent>
-                <Typography variant="h6" align="center" gutterBottom>
-                  Histograma Quantidade de Formulários por Docente
+                <Typography
+                  variant="h6"
+                  align="center"
+                  gutterBottom
+                  color="error"
+                >
+                  Histograma Quantidade de Formulários por Quantidade Preenchida
                 </Typography>
                 {renderHistogramaQtdFormuatios()}
               </CardContent>
             </Card>
-          </Grid2>
+          </Grid2> */}
         </Grid2>
       </Paper>
     </Box>

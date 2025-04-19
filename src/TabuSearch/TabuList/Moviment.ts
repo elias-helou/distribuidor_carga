@@ -16,14 +16,11 @@ export interface Movimento {
   docente: string;
 }
 
-export class Moviment extends TabuList<
-  {
-    addList: Map<string, number>;
-    dropList: Map<string, number>;
-  },
-  { addTenure: number; dropTenure: number }
-> {
-  //public tenures: { add: number; drop: number };
+export class Moviment extends TabuList<{
+  addList: Map<string, number>;
+  dropList: Map<string, number>;
+}> {
+  public tenures: { add: number; drop: number };
 
   /**
    * A lista **Add** define quando um movimento **previamente removido**
@@ -44,14 +41,11 @@ export class Moviment extends TabuList<
   //public dropList: Map<string, number>;
 
   constructor(addTenure: number, dropTenure: number) {
-    super(
-      { addTenure: addTenure, dropTenure: dropTenure },
-      {
-        addList: new Map<string, number>(),
-        dropList: new Map<string, number>(),
-      }
-    );
-    // this.tenures = { add: addTenure, drop: dropTenure };
+    super({
+      addList: new Map<string, number>(),
+      dropList: new Map<string, number>(),
+    });
+    this.tenures = { add: addTenure, drop: dropTenure };
 
     // this.addList = new Map<string, number>();
     // this.dropList = new Map<string, number>();
@@ -67,12 +61,12 @@ export class Moviment extends TabuList<
     /** Lembrar que o Add do ENUM é para ser inserido na ``dropList`` */
     for (const movimento of vizinho.movimentos.add) {
       const key = `${movimento.turmaId},${movimento.docente}`;
-      this.itens.dropList.set(key, iteracaoAtual + this.tabuSize.dropTenure);
+      this.itens.dropList.set(key, iteracaoAtual + this.tenures.drop);
     }
 
     for (const movimento of vizinho.movimentos.drop) {
       const key = `${movimento.turmaId},${movimento.docente}`;
-      this.itens.addList.set(key, iteracaoAtual + this.tabuSize.addTenure);
+      this.itens.addList.set(key, iteracaoAtual + this.tenures.add);
     }
 
     return { addList: this.itens.addList, dropList: this.itens.dropList };
