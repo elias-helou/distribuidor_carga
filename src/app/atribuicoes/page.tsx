@@ -815,7 +815,7 @@ export default function Timetable() {
                 <TableRow>
                   <TableCell
                     sx={{
-                      maxWidth: "13rem",
+                      maxWidth: "11rem",
                       position: "sticky",
                       left: 0, // Fixando a célula à esquerda
                       backgroundColor: "white", // Evitando que o fundo fique transparente ao fixar
