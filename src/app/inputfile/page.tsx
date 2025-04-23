@@ -175,7 +175,7 @@ export default function InputFileUpload() {
             "success"
           );
         } catch (error) {
-          addAlerta("Erro ao processar o arquivo JSON.", "error");
+          addAlerta("Erro ao processar o arquivo JSON.\n" + error, "error");
         }
         setUploading(false);
       };
