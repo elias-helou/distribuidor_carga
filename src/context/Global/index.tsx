@@ -255,5 +255,30 @@ export function useGlobalContext() {
       context.setAtribuicoes(newAtribuicoes);
     }
   }
-  return { ...context, updateAtribuicoes };
+
+  function updateAtribuicoesDocente(
+    nome_docente: string,
+    id_disciplina: string
+  ) {
+    const newAtribuicoes = [...context.atribuicoes];
+
+    const index = newAtribuicoes.findIndex(
+      (atribuicao) => atribuicao.id_disciplina === id_disciplina
+    );
+
+    if (index !== -1) {
+      // Atualiza os docentes da atribuição encontrada, evitando duplicações
+      newAtribuicoes[index] = {
+        ...newAtribuicoes[index],
+        docentes: [
+          ...newAtribuicoes[index].docentes.filter(
+            (docente) => docente !== nome_docente
+          ),
+        ],
+      };
+    }
+
+    updateAtribuicoes(newAtribuicoes);
+  }
+  return { ...context, updateAtribuicoes, updateAtribuicoesDocente };
 }

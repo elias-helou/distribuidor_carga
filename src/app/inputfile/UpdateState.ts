@@ -136,18 +136,30 @@ export const processAtribuicoes = (
 
 export const processFormularios = (
   version: string,
-  data: Record<string, Disciplina[]>
+  data: Record<string, Disciplina[] | number>
 ): Formulario[] => {
-  const formulariosJson: Record<string, Disciplina[]> = data;
+  const formulariosJson: Record<string, Disciplina[] | number> = data;
   const newFormularios: Formulario[] = [];
 
-  for (const [nome_docente, disciplinas] of Object.entries(formulariosJson)) {
-    for (const disciplina of Object.values(disciplinas)) {
-      newFormularios.push({
-        nome_docente: nome_docente,
-        id_disciplina: disciplina.id,
-        prioridade: disciplina.prioridade,
-      });
+  if (version.includes("3")) {
+    for (const [nome_docente, formularios] of Object.entries(formulariosJson)) {
+      for (const id_turma of Object.keys(formularios)) {
+        newFormularios.push({
+          nome_docente: nome_docente,
+          id_disciplina: id_turma,
+          prioridade: formularios[id_turma],
+        });
+      }
+    }
+  } else {
+    for (const [nome_docente, disciplinas] of Object.entries(formulariosJson)) {
+      for (const disciplina of Object.values(disciplinas)) {
+        newFormularios.push({
+          nome_docente: nome_docente,
+          id_disciplina: disciplina.id,
+          prioridade: disciplina.prioridade,
+        });
+      }
     }
   }
 

@@ -198,7 +198,10 @@ export function ajustaDisciplinas(
   let newDisciplina;
   // Para cada disciplina, verificar se o horário já está definido; se estiver, transformar a string no objeto da interface Horario
   for (const disciplina of disciplinas) {
-    if (typeof disciplina.horario === "string" && version != "2.0") {
+    if (
+      typeof disciplina.horario === "string" &&
+      !version.includes("2") /*!= "2.0"*/
+    ) {
       // Converte a string de horários para o objeto esperado
       const horarios = parseHorario(disciplina.horario);
 

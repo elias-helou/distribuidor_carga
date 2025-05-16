@@ -1,6 +1,12 @@
 "use client";
 
-import { Button, Box, Typography, CircularProgress } from "@mui/material";
+import {
+  Button,
+  Box,
+  Typography,
+  CircularProgress,
+  Container,
+} from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useState } from "react";
@@ -24,6 +30,7 @@ import {
 } from "@/context/Global/utils";
 import { useAlertsContext } from "@/context/Alerts";
 import { useSolutionHistory } from "@/context/SolutionHistory/hooks";
+// import Charts from "./_components/Charts";
 
 export default function InputFileUpload() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -38,6 +45,8 @@ export default function InputFileUpload() {
     setSolucaoAtual,
     setHistoricoSolucoes,
     historicoSolucoes,
+    // formularios,
+    // docentes,
   } = useGlobalContext();
 
   const { cleanSolucaoAtual } = useSolutionHistory();
@@ -185,61 +194,63 @@ export default function InputFileUpload() {
   };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      p={4}
-      border="1px solid #ccc"
-      borderRadius={2}
-      maxWidth={450}
-      mx="auto"
-      boxShadow={2}
-    >
-      <Typography variant="h6" gutterBottom>
-        Upload de arquivo
-      </Typography>
-
-      <input
-        accept="*"
-        style={{ display: "none" }}
-        id="file-input"
-        type="file"
-        onChange={(event) => handleFileSelect(event.target.files)}
-        multiple={false}
-      />
-      <label htmlFor="file-input">
-        <Button
-          variant={!selectedFile ? "contained" : "outlined"}
-          color="primary"
-          component="span"
-          startIcon={<UploadFileIcon />}
-          fullWidth
-          style={{ marginBottom: 16 }}
-        >
-          Escolher Arquivo
-        </Button>
-      </label>
-
-      {selectedFile && (
-        <Typography variant="body1" gutterBottom>
-          Arquivo Selecionado: {selectedFile.name}
-        </Typography>
-      )}
-
-      <Button
-        variant="contained"
-        color="primary"
-        startIcon={
-          uploading ? <CircularProgress size={24} /> : <CloudUploadIcon />
-        }
-        onClick={handleFileUpload}
-        disabled={!selectedFile} // Desabilita o botão caso nenhum arquivo tenha sido selecionado
-        fullWidth
+    <Container maxWidth="lg" key="container">
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        p={4}
+        border="1px solid #ccc"
+        borderRadius={2}
+        maxWidth={450}
+        mx="auto"
+        boxShadow={2}
       >
-        {uploading ? "Carregando..." : "Carregar Arquivo"}
-      </Button>
-    </Box>
+        <Typography variant="h6" gutterBottom>
+          Upload de arquivo
+        </Typography>
+
+        <input
+          accept="*"
+          style={{ display: "none" }}
+          id="file-input"
+          type="file"
+          onChange={(event) => handleFileSelect(event.target.files)}
+          multiple={false}
+        />
+        <label htmlFor="file-input">
+          <Button
+            variant={!selectedFile ? "contained" : "outlined"}
+            color="primary"
+            component="span"
+            startIcon={<UploadFileIcon />}
+            fullWidth
+            style={{ marginBottom: 16 }}
+          >
+            Escolher Arquivo
+          </Button>
+        </label>
+
+        {selectedFile && (
+          <Typography variant="body1" gutterBottom>
+            Arquivo Selecionado: {selectedFile.name}
+          </Typography>
+        )}
+
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={
+            uploading ? <CircularProgress size={24} /> : <CloudUploadIcon />
+          }
+          onClick={handleFileUpload}
+          disabled={!selectedFile} // Desabilita o botão caso nenhum arquivo tenha sido selecionado
+          fullWidth
+        >
+          {uploading ? "Carregando..." : "Carregar Arquivo"}
+        </Button>
+      </Box>
+    </Container>
   );
 }

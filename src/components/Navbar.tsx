@@ -27,6 +27,7 @@ const navItems: IPages[] = [
   //{ name: "Calendário", link: "/calendario" },
   { name: "Configurações", link: "/config" },
   { name: "Estatísticas", link: "/statistics" },
+  { name: "Novo Componente", link: "/novoComponente" },
 ];
 
 export default function Navbar() {
