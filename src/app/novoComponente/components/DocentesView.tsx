@@ -8,6 +8,7 @@ interface Props {
   atribuicoesMap: Map<string, Disciplina[]>;
   naoAtribuidasMap: Map<string, Disciplina[]>;
   onDeleteAtribuicao: (nome: string, id: string) => void;
+  onAddAtribuicao: (nome: string, id: string) => void;
 }
 
 export default function DocentesView({
@@ -15,6 +16,7 @@ export default function DocentesView({
   atribuicoesMap,
   naoAtribuidasMap,
   onDeleteAtribuicao,
+  onAddAtribuicao,
 }: Props) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const total = docentes.length;
@@ -75,7 +77,7 @@ export default function DocentesView({
                 onClick={() => setSelectedIndex(i)}
                 onDeleteAtribuicao={onDeleteAtribuicao}
                 turmasNaoAtribuidas={naoAtribuidasMap.get(docente.nome) || []}
-                onAddAtribuicao={() => {}} // IMPLEMENTAR
+                onAddAtribuicao={onAddAtribuicao}
               />
             </div>
           );

@@ -58,13 +58,18 @@ function generateNaoAtribuidasMap(
       .map((a) => a.id_disciplina);
 
     const formulariosTurmasNaoAtribuidas = formularios.filter(
-      (f) => !idTurmaAtribuicoesDocente.includes(f.id_disciplina)
+      (f) =>
+        !idTurmaAtribuicoesDocente.includes(f.id_disciplina) &&
+        f.nome_docente === docente.nome
     );
 
     for (const formulario of formulariosTurmasNaoAtribuidas) {
       const turma = structuredClone(
         turmas.find((t) => t.id === formulario.id_disciplina)
       );
+      if (!turma) {
+        continue;
+      }
       turma.prioridade = formulario.prioridade;
 
       turma.docentes = atribuicoes.find(
@@ -86,6 +91,7 @@ export default function DocentesPage() {
     atribuicoes,
     formularios,
     updateAtribuicoesDocente,
+    updateAtribuicoes,
   } = useGlobalContext();
   /**
    * Listar somente os docentes e turmas ativas
@@ -95,6 +101,15 @@ export default function DocentesPage() {
 
   const onDeleteAtribuicao = (nome_docente: string, id_disciplina: string) => {
     updateAtribuicoesDocente(nome_docente, id_disciplina);
+  };
+  const onAddAtribuicao = (nome_docente: string, id_disciplina: string) => {
+    const newAtribuicoes = [...atribuicoes];
+    const atribuicao = newAtribuicoes.find(
+      (a) => a.id_disciplina === id_disciplina
+    );
+
+    atribuicao.docentes = [nome_docente];
+    updateAtribuicoes(newAtribuicoes);
   };
 
   const atribuicoesMap = generateAtribuicoesMap(
@@ -118,6 +133,7 @@ export default function DocentesPage() {
         atribuicoesMap={atribuicoesMap}
         onDeleteAtribuicao={onDeleteAtribuicao}
         naoAtribuidasMap={naoAtribuidasMap}
+        onAddAtribuicao={onAddAtribuicao}
       />
     </Box>
   );

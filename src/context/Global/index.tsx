@@ -256,6 +256,11 @@ export function useGlobalContext() {
     }
   }
 
+  /**
+   * Remove uma turma do docente
+   * @param nome_docente
+   * @param id_disciplina
+   */
   function updateAtribuicoesDocente(
     nome_docente: string,
     id_disciplina: string

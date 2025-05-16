@@ -18,13 +18,16 @@ interface SelectedTurmaProps {
   curso: string;
   ementa: string;
   nivel: string;
-  onRemove: (key: string) => void;
+  onRemove?: (id: string) => void;
+  onAdd?: (id: string) => void;
   //horariosConflito: Set<string>;
   noturna: boolean;
   codigo: string;
   grupo?: string;
   // carga: number;
   prioridade: number;
+  atribuida: boolean;
+  docentes?: string[];
 }
 
 const SelectedTurma = ({
@@ -36,15 +39,22 @@ const SelectedTurma = ({
   ementa,
   nivel,
   onRemove,
+  onAdd,
   //horariosConflito,
   noturna,
   codigo,
   grupo,
   // carga,
   prioridade,
+  atribuida,
+  docentes,
 }: SelectedTurmaProps) => {
   const handleRemove = () => {
     onRemove(id);
+  };
+
+  const handleAdd = () => {
+    onAdd(id);
   };
 
   return (
@@ -163,17 +173,58 @@ const SelectedTurma = ({
           )}
         </Box>
 
-        <Box
-          mt={2}
-          display="flex"
-          alignItems="center"
-          justifyContent="end"
-          gap={2}
-        >
-          <Button variant="contained" onClick={handleRemove} color="error">
-            Remover
-          </Button>
-        </Box>
+        {atribuida && (
+          <Box
+            mt={2}
+            display="flex"
+            alignItems="center"
+            justifyContent="end"
+            gap={2}
+          >
+            <Button variant="contained" onClick={handleRemove} color="error">
+              Remover
+            </Button>
+          </Box>
+        )}
+        {!atribuida && (
+          <Box mt={2}>
+            <Typography variant="subtitle2" color="textPrimary" gutterBottom>
+              Docente atual:
+            </Typography>
+            <Box
+              display="flex"
+              alignItems="center"
+              flexWrap="wrap"
+              gap={1}
+              pl={1}
+            >
+              {docentes.map((docente) => (
+                <Typography
+                  key={"docente_atual" + id + "_" + docente}
+                  variant="subtitle2"
+                  color="text.secondary"
+                  gutterBottom
+                >
+                  {docente}
+                </Typography>
+              ))}
+            </Box>
+          </Box>
+        )}
+
+        {!atribuida && (
+          <Box
+            mt={2}
+            display="flex"
+            alignItems="center"
+            justifyContent="start"
+            gap={2}
+          >
+            <Button variant="contained" onClick={handleAdd} color="info">
+              Adicionar
+            </Button>
+          </Box>
+        )}
       </CardContent>
     </Card>
   );

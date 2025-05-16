@@ -1,4 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Typography, Stack } from "@mui/material";
 import { motion } from "framer-motion";
 import TurmaItem from "./TurmaItem";
 import SelectedTurma from "./SelectedTurma";
@@ -11,7 +11,7 @@ type Props = {
   onClick: () => void;
   onDeleteAtribuicao: (nome_docente: string, id_disciplina: string) => void;
   turmasNaoAtribuidas: Disciplina[];
-  onAddAtribuicao: (nome_docente: string, id_disciplina: string) => void; // Lembrar que isso pode swapar
+  onAddAtribuicao: (nome_docente: string, id_disciplina: string) => void;
 };
 
 export default function DocenteRow({
@@ -20,6 +20,8 @@ export default function DocenteRow({
   selecionado,
   onClick,
   onDeleteAtribuicao,
+  turmasNaoAtribuidas,
+  onAddAtribuicao,
 }: Props) {
   return (
     <motion.div
@@ -29,22 +31,23 @@ export default function DocenteRow({
       animate={{ opacity: 1 }}
       transition={{ duration: 0.1 }}
       style={{
-        display: "flex",
-        alignItems: "center",
         padding: "8px",
         cursor: "pointer",
         backgroundColor: selecionado ? "#e3f2fd" : "transparent",
         borderLeft: selecionado
           ? "4px solid #1976d2"
           : "4px solid rgba(0, 0, 0, 0.5)",
-
         borderBottom: selecionado
           ? "1px solid #1976d2"
           : "1px solid rgba(0, 0, 0, 0.5)",
         borderRadius: "4px",
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        flexWrap: "nowrap",
       }}
     >
-      <Box>
+      <Box mb={1}>
         <Typography
           variant="body1"
           overflow="hidden"
@@ -55,114 +58,66 @@ export default function DocenteRow({
           {nome}
         </Typography>
       </Box>
-      <Stack direction="row" spacing={1}>
-        {turmas.map((turma) =>
-          selecionado ? (
-            <SelectedTurma
-              key={turma.id}
-              nome={turma.nome}
-              codigo={turma.codigo}
-              turma={Number(turma.turma)}
-              horarios={turma.horarios}
-              // carga={0}
-              curso={turma.cursos}
-              ementa="www.google.com"
-              id={turma.id}
-              nivel={turma.nivel}
-              noturna={turma.noturna}
-              onRemove={() => {
-                onDeleteAtribuicao(nome, turma.id);
-              }}
-              grupo="SME"
-              prioridade={turma.prioridade}
-            />
-          ) : (
-            <TurmaItem
-              key={turma.id}
-              nome={turma.nome}
-              codigo={turma.codigo}
-              turma={turma.turma}
-              horarios={turma.horarios}
-              destaque={false}
-              // curso={turma.cursos}
-              //prioridade={turma.prioridade}
-            />
-          )
+
+      <Box display="flex" flexDirection="column" alignItems="flex-start">
+        {/* Turmas atribuídas */}
+        <Stack direction="row" spacing={1} overflow="auto" pb={1}>
+          {turmas.map((turma) =>
+            selecionado ? (
+              <SelectedTurma
+                key={turma.id + "_atribuida"}
+                nome={turma.nome}
+                codigo={turma.codigo}
+                turma={Number(turma.turma)}
+                horarios={turma.horarios}
+                curso={turma.cursos}
+                ementa="www.google.com"
+                id={turma.id}
+                nivel={turma.nivel}
+                noturna={turma.noturna}
+                onRemove={() => onDeleteAtribuicao(nome, turma.id)}
+                grupo="SME"
+                prioridade={turma.prioridade}
+                atribuida={true}
+              />
+            ) : (
+              <TurmaItem
+                key={turma.id + "_naoselecionado"}
+                nome={turma.nome}
+                codigo={turma.codigo}
+                turma={turma.turma}
+                horarios={turma.horarios}
+                destaque={false}
+              />
+            )
+          )}
+        </Stack>
+
+        {/* Turmas não atribuídas (somente se selecionado) */}
+        {selecionado && (
+          <Stack direction="row" spacing={1} overflow="auto" pt={1}>
+            {turmasNaoAtribuidas.map((turma) => (
+              <SelectedTurma
+                key={turma.id + "_naoatribuida" + turma.cursos}
+                nome={turma.nome}
+                codigo={turma.codigo}
+                turma={Number(turma.turma)}
+                horarios={turma.horarios}
+                curso={turma.cursos}
+                ementa="www.google.com"
+                id={turma.id}
+                nivel={turma.nivel}
+                noturna={turma.noturna}
+                onAdd={() => onAddAtribuicao(nome, turma.id)}
+                grupo="SME"
+                prioridade={turma.prioridade}
+                atribuida={false}
+                docentes={turma.docentes}
+              />
+            ))}
+          </Stack>
         )}
-      </Stack>
+      </Box>
     </motion.div>
   );
-  // const theme = useTheme();
-  // return (
-  //   <motion.tr
-  //     layout="size"
-  //     onClick={onClick}
-  //     initial={{ opacity: 0 }}
-  //     animate={{ opacity: 1 }}
-  //     transition={{ duration: 0.1 }}
-  //     style={{
-  //       backgroundColor: selecionado
-  //         ? theme.palette.action.hover
-  //         : "transparent",
-  //       borderLeft: selecionado ? "4px solid #1976d2" : "4px solid transparent",
-  //       cursor: "pointer",
-  //       display: "flex",
-  //       alignItems: "center",
-  //     }}
-  //   >
-  //     {/* Coluna do nome do docente */}
-  //     <TableCell
-  //       component="th"
-  //       scope="row"
-  //       sx={{
-  //         minWidth: "10em",
-  //         whiteSpace: "nowrap",
-  //         overflow: "hidden",
-  //         textOverflow: "ellipsis",
-  //         fontWeight: selecionado ? "bold" : "normal",
-  //       }}
-  //     >
-  //       {nome}
-  //     </TableCell>
-
-  //     {/* Coluna das turmas */}
-  //     <Stack direction="row" spacing={1} flexWrap="nowrap">
-  //       {turmas.map((turma) =>
-  //         selecionado ? (
-  //           <TableCell key={turma.id}>
-  //             <SelectedTurma
-  //               key={turma.id}
-  //               nome={turma.nome}
-  //               codigo={turma.codigo}
-  //               turma={Number(turma.turma)}
-  //               horarios={turma.horarios}
-  //               carga={0}
-  //               curso={turma.cursos}
-  //               ementa="www.google.com"
-  //               id={turma.id}
-  //               nivel={turma.nivel}
-  //               noturna={turma.noturna}
-  //               onRemove={() => {
-  //                 onDeleteAtribuicao(nome, turma.id);
-  //               }}
-  //               grupo="SME"
-  //               prioridade={turma.prioridade}
-  //             />
-  //           </TableCell>
-  //         ) : (
-  //           <TableCell key={turma.id}>
-  //             <TurmaItem
-  //               key={turma.id}
-  //               nome={turma.nome}
-  //               codigo={turma.codigo}
-  //               turma={turma.turma}
-  //               horarios={turma.horarios}
-  //               destaque={false}
-  //             />
-  //           </TableCell>
-  //         )
-  //       )}
-  //     </Stack>
-  //   </motion.tr>
-  // );
 }
