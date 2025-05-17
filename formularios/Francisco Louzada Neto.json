@@ -1,0 +1,22 @@
+{
+  "Francisco Louzada Neto": {
+    "formularios": {
+      "MAI5003,1": 1,
+      "EST5804,1": 2,
+      "MAI5014,1": 3,
+      "SME0815,1": 4,
+      "EST5519,1": 5,
+      "EST5521,1": 6,
+      "SME0880,1": 7,
+      "SME0881,1": 8,
+      "EST5106,1": 9,
+      "SME0809,1": 10
+    },
+    "avaliacao": {
+      "nota": 8,
+      "comentario": "As disciplinas poderiam aparecer juntas por bloco de Estatistica, matemática etc.",
+      "preferencia": "Agrupar"
+    },
+    "semNoturna": false
+  }
+}

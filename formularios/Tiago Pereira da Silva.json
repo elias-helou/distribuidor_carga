@@ -1,0 +1,22 @@
+{
+  "Tiago Pereira ": {
+    "formularios": {
+      "SMA5802,1": 1,
+      "SMA5934,1": 2,
+      "PRG0027,1": 3,
+      "SME0130,1": 5,
+      "SME0142,2": 6,
+      "SME0142,1": 7,
+      "SME0240,1": 8,
+      "SME0245,1": 4,
+      "SME0241,1": 9,
+      "SME0320,1": 10
+    },
+    "avaliacao": {
+      "nota": 10,
+      "comentario": "Eu vou ficar com 4 disciplinas\n\nEDO - pós\nBifurcações - na pós\nTopologia\nFunções Complexas\n\n\nA disciplina de Bifurcações ficará com o novo professor Nijholt. A contratação dele esta sendo realizada\n\nA disciplina de Topologia Ludica será dividida com o Prof Ton.  \n",
+      "preferencia": "Indiferente"
+    },
+    "semNoturna": true
+  }
+}

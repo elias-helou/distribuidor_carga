@@ -1,0 +1,22 @@
+{
+  "Cibele Maria Russo Novelli": {
+    "formularios": {
+      "SME0822,1": 1,
+      "SME0123,1": 2,
+      "SME0123,2": 3,
+      "SME0320,4": 4,
+      "SME0820,1": 5,
+      "SME0828,1": 6,
+      "SME0880,1": 7,
+      "SME5975,1": 9,
+      "EST5507,1": 8,
+      "EST5519,1": 10
+    },
+    "avaliacao": {
+      "nota": 10,
+      "comentario": "",
+      "preferencia": "Agrupar"
+    },
+    "semNoturna": false
+  }
+}

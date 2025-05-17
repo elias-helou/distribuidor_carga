@@ -1,0 +1,22 @@
+{
+  "Livia Souza Freire Grion": {
+    "formularios": {
+      "SME0334,1": 1,
+      "SME0300,1": 2,
+      "SME0300,2": 3,
+      "SME0306,1": 4,
+      "SME0306,2": 5,
+      "SME0824,1": 10,
+      "SME0320,1": 8,
+      "SME0320,3": 9,
+      "SME0332,1": 6,
+      "SME0332,2": 7
+    },
+    "avaliacao": {
+      "nota": 10,
+      "comentario": "",
+      "preferencia": "Indiferente"
+    },
+    "semNoturna": false
+  }
+}

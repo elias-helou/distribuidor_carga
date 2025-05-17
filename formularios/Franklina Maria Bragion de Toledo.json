@@ -1,0 +1,22 @@
+{
+  "Franklina Maria Bragion de Toledo": {
+    "formularios": {
+      "SME0110,1": 3,
+      "SME0110,2": 4,
+      "SME0211,1": 7,
+      "SME0212,1": 9,
+      "SME0213,1": 1,
+      "SME0300,1": 8,
+      "SME0510,1": 5,
+      "SME5962,1": 2,
+      "SME0285,1": 6,
+      "MAI5032,1": 10
+    },
+    "avaliacao": {
+      "nota": 5,
+      "comentario": "Foi preciso trocar turmas uma vez que o tempo de deslocamento entre uma área e outra era de apenas 20 minutos. Sugestão, o modelo proibir este tipo de atribuição.",
+      "preferencia": "Agrupar"
+    },
+    "semNoturna": false
+  }
+}

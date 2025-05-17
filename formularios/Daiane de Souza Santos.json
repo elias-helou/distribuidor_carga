@@ -1,0 +1,22 @@
+{
+  "Daiane de Souza Santos": {
+    "formularios": {
+      "SME0123,1": 1,
+      "SME0220,1": 5,
+      "SME0320,4": 2,
+      "SME0820,1": 9,
+      "SME0320,3": 3,
+      "SME0320,1": 4,
+      "SME0320,2": 6,
+      "SME0123,2": 7,
+      "SME0800,1": 10,
+      "SME0824,1": 8
+    },
+    "avaliacao": {
+      "nota": 10,
+      "comentario": "",
+      "preferencia": "Indiferente"
+    },
+    "semNoturna": false
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "Marinho Gomes de Andrade Filho": {
+    "formularios": {
+      "SME0220,1": 2,
+      "SME0320,2": 6,
+      "SME0320,3": 4,
+      "SME0320,4": 5,
+      "SME0805,1": 3,
+      "SME0808,1": 1,
+      "SME0262,1": 7,
+      "SME0809,1": 8,
+      "SME0823,1": 9,
+      "SME0870,1": 10
+    },
+    "avaliacao": {
+      "nota": 8,
+      "comentario": "",
+      "preferencia": "Agrupar"
+    },
+    "semNoturna": false
+  }
+}

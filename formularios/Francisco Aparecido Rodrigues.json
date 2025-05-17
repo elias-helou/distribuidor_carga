@@ -1,0 +1,22 @@
+{
+  "Francisco Aparecido Rodrigues": {
+    "formularios": {
+      "MAI5003,1": 10,
+      "SME0130,1": 1,
+      "SME0220,1": 6,
+      "SME0241,1": 7,
+      "SME0320,2": 3,
+      "SME0320,3": 5,
+      "SME0800,1": 9,
+      "SME0828,1": 4,
+      "SME5975,1": 2,
+      "SME5978,1": 8
+    },
+    "avaliacao": {
+      "nota": 10,
+      "comentario": "O sistema está excelente, parabéns!",
+      "preferencia": "Agrupar"
+    },
+    "semNoturna": false
+  }
+}

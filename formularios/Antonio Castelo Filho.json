@@ -1,0 +1,22 @@
+{
+  "Antonio Castelo Filho": {
+    "formularios": {
+      "SME0250,1": 1,
+      "SME5827,1": 2,
+      "MAI5002,1": 3,
+      "SME0206,1": 4,
+      "SME0334,1": 5,
+      "SME0300,2": 6,
+      "SME0300,1": 7,
+      "SME0306,1": 8,
+      "SME0306,2": 9,
+      "SME0241,1": 10
+    },
+    "avaliacao": {
+      "nota": 10,
+      "comentario": "",
+      "preferencia": "Agrupar"
+    },
+    "semNoturna": true
+  }
+}

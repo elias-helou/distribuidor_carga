@@ -1,0 +1,22 @@
+{
+  "Marcos Mansano Furlan": {
+    "formularios": {
+      "SME0110,1": 1,
+      "SME0110,2": 2,
+      "SME0211,1": 3,
+      "SME0510,1": 4,
+      "SME0332,1": 5,
+      "SME0332,2": 6,
+      "SME0300,2": 7,
+      "SME0300,1": 8,
+      "SME0212,1": 9,
+      "SME0828,1": 10
+    },
+    "avaliacao": {
+      "nota": 10,
+      "comentario": "",
+      "preferencia": "Indiferente"
+    },
+    "semNoturna": false
+  }
+}

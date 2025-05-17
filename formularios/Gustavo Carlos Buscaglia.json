@@ -1,0 +1,23 @@
+{
+  "Gustavo Carlos Buscaglia": {
+    "formularios": {
+      "MAI5002,1": 10,
+      "SME0123,1": 9,
+      "SME0123,2": 8,
+      "SME0206,1": 3,
+      "SME0241,1": 11,
+      "SME0300,1": 7,
+      "SME0300,2": 6,
+      "SME0306,2": 5,
+      "SME0306,1": 4,
+      "SME0285,1": 2,
+      "SME0284,1": 1
+    },
+    "avaliacao": {
+      "nota": 10,
+      "comentario": "Até aqui não achei onde colocar observações. No meu caso, eu gostaria de ministrar duas disciplinas iguais (sejam de cálculo numérico ou as de estatística do BCC). No caso de me corresponder apenas uma disciplina de cálculo numérico, prefiro que seja a SME206 do BMACC. ",
+      "preferencia": "Agrupar"
+    },
+    "semNoturna": true
+  }
+}

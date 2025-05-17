@@ -1,0 +1,22 @@
+{
+  "Paulo Afonso Faria da Veiga": {
+    "formularios": {
+      "SME0240,1": 1,
+      "SME0341,1": 2,
+      "SME0341,2": 3,
+      "SME0245,1": 4,
+      "SME0142,2": 6,
+      "SME0142,1": 5,
+      "SME0220,1": 9,
+      "SME0800,1": 10,
+      "SME0285,1": 7,
+      "SME0206,1": 8
+    },
+    "avaliacao": {
+      "nota": 6,
+      "comentario": "4hs seguidas de matemática numa sexta feira e ainda mais no noturno, impossível!",
+      "preferencia": "Agrupar"
+    },
+    "semNoturna": false
+  }
+}

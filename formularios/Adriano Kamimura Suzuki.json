@@ -1,0 +1,22 @@
+{
+  "Adriano Kamimura Suzuki": {
+    "formularios": {
+      "SME0800,1": 1,
+      "EST5106,1": 2,
+      "EST5804,1": 3,
+      "SME0320,3": 4,
+      "SME0320,2": 5,
+      "SME0809,1": 6,
+      "SME0810,1": 7,
+      "SME0220,1": 10,
+      "SME0320,4": 8,
+      "SME0320,1": 9
+    },
+    "avaliacao": {
+      "nota": 9,
+      "comentario": "",
+      "preferencia": "Agrupar"
+    },
+    "semNoturna": false
+  }
+}

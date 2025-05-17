@@ -1,0 +1,22 @@
+{
+  "Geovane Augusto Haveroth": {
+    "formularios": {
+      "SME0300,2": 10,
+      "SME0306,2": 9,
+      "SME0334,1": 8,
+      "SME0306,1": 7,
+      "SME0142,2": 6,
+      "SME0206,1": 4,
+      "SME0285,1": 2,
+      "SME0300,1": 5,
+      "SME0142,1": 3,
+      "SME0245,1": 1
+    },
+    "avaliacao": {
+      "nota": 10,
+      "comentario": "",
+      "preferencia": "Indiferente"
+    },
+    "semNoturna": true
+  }
+}

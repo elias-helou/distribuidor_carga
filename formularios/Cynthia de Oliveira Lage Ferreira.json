@@ -1,0 +1,22 @@
+{
+  "Cynthia de Oliveira Lage Ferreira": {
+    "formularios": {
+      "SME0142,1": 1,
+      "SME0142,2": 2,
+      "SME0300,1": 4,
+      "SME0300,2": 8,
+      "SME0306,2": 5,
+      "SME0341,2": 3,
+      "SME0206,1": 6,
+      "SME0240,1": 9,
+      "SME0341,1": 7,
+      "SME0285,1": 10
+    },
+    "avaliacao": {
+      "nota": 10,
+      "comentario": "Neste semestre, acabei ficando com apenas 1 disciplina, pois minha 2a disciplina foi alocada para um novo professor. Normalmente, gosto de concentrar minhas disciplinas na 3a e 5a de manhã e normalmente sou atendida. Tenho preferência por agrupar as disciplinas na parte da manhã.",
+      "preferencia": "Agrupar"
+    },
+    "semNoturna": true
+  }
+}

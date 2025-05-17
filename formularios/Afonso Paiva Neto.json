@@ -1,0 +1,22 @@
+{
+  "Afonso Paiva": {
+    "formularios": {
+      "SME0241,1": 1,
+      "SME0300,1": 2,
+      "SME0300,2": 3,
+      "SME0306,1": 4,
+      "SME0306,2": 6,
+      "SME0250,1": 9,
+      "SME0334,1": 7,
+      "SME0206,1": 5,
+      "SME5827,1": 10,
+      "MAI5014,1": 8
+    },
+    "avaliacao": {
+      "nota": 9,
+      "comentario": "Eu acho que na Etapa 4 as linhas poderiam ser reordenadas de acordo com a prioridade.",
+      "preferencia": "Indiferente"
+    },
+    "semNoturna": true
+  }
+}

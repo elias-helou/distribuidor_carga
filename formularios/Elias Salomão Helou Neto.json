@@ -1,0 +1,23 @@
+{
+  "Elias Salomão Helou Neto": {
+    "formularios": {
+      "SME0211,1": 4,
+      "SME0212,1": 3,
+      "SME0284,1": 1,
+      "SME0285,1": 2,
+      "SME0510,1": 5,
+      "SME0332,1": 6,
+      "SME0332,2": 7,
+      "SME0300,2": 8,
+      "SME0300,1": 9,
+      "SME0306,1": 10,
+      "SME0306,2": 11
+    },
+    "avaliacao": {
+      "nota": 10,
+      "comentario": "Minha nota é 10 porque foi eu que fiz a atribuição anterior",
+      "preferencia": "Agrupar"
+    },
+    "semNoturna": false
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "Katiane Silva Conceição": {
+    "formularios": {
+      "EST5106,1": 2,
+      "SME0123,1": 5,
+      "SME0123,2": 6,
+      "SME0810,1": 1,
+      "SME0320,4": 3,
+      "SME0320,2": 4,
+      "SME0814,1": 7,
+      "SME0815,1": 8,
+      "SME0880,1": 9,
+      "SME0881,1": 10
+    },
+    "avaliacao": {
+      "nota": 10,
+      "comentario": "A distribuição de carga é realizada com base nas competências e preferências de cada docente.",
+      "preferencia": "Agrupar"
+    },
+    "semNoturna": false
+  }
+}

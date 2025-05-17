@@ -1,0 +1,22 @@
+{
+  "Marina Andretta": {
+    "formularios": {
+      "SME0110,1": 4,
+      "SME0110,2": 3,
+      "SME0213,1": 6,
+      "SME0212,1": 1,
+      "SME0211,1": 2,
+      "SME0284,1": 10,
+      "SME0285,1": 9,
+      "SME0332,1": 7,
+      "SME0332,2": 8,
+      "SME0510,1": 5
+    },
+    "avaliacao": {
+      "nota": 9,
+      "comentario": "Minha atribuição ficou ótima. Havia ficado com 10 créditos inicialmente, mas com uma troca ela ficou ótima.",
+      "preferencia": "Agrupar"
+    },
+    "semNoturna": false
+  }
+}

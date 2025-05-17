@@ -1,0 +1,22 @@
+{
+  "Leandro Franco de Souza": {
+    "formularios": {
+      "SME0306,1": 1,
+      "SME0300,1": 2,
+      "SME0306,2": 3,
+      "SME5873,1": 4,
+      "SME0300,2": 5,
+      "SME0252,1": 6,
+      "SME0334,1": 7,
+      "SME0284,1": 8,
+      "SME0285,1": 9,
+      "SME0814,1": 10
+    },
+    "avaliacao": {
+      "nota": 7,
+      "comentario": "Fiquei com 2 disciplinas, mas em todos os dias da semana, exceto na 3a-feira. Se fosse possível agrupar em 2 ou 3 dias por semana no máximo, eu acho melhor.",
+      "preferencia": "Agrupar"
+    },
+    "semNoturna": true
+  }
+}

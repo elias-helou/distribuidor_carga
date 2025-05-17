@@ -1,0 +1,22 @@
+{
+  "Maria Luísa Bambozzi de Oliveira": {
+    "formularios": {
+      "SME0142,1": 6,
+      "SME0142,2": 5,
+      "SME0206,1": 1,
+      "SME0240,1": 4,
+      "SME0300,1": 2,
+      "SME0300,2": 3,
+      "SME0306,2": 9,
+      "SME0341,1": 8,
+      "SME0341,2": 7,
+      "SME0241,1": 15
+    },
+    "avaliacao": {
+      "nota": 5,
+      "comentario": "Não fiquei satisfeita com a atribuição da aula noturna, que era minha última escolha pois era obrigatório escolher uma turma noturna para submeter a seleção.\nAlém disso, foram atribuídas aulas no mesmo dia, de manhã e à noite (9 horas entre fim de uma turma e início de outra).",
+      "preferencia": "Indiferente"
+    },
+    "semNoturna": true
+  }
+}

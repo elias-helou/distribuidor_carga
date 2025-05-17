@@ -1,0 +1,2747 @@
+{
+  "versao": "3.0",
+  "formularios": {
+    "Adriano Kamimura Suzuki": {
+      "SME0800,1": 1,
+      "EST5106,1": 2,
+      "EST5804,1": 3,
+      "SME0320,3": 4,
+      "SME0320,2": 5,
+      "SME0809,1": 6,
+      "SME0810,1": 7,
+      "SME0220,1": 10,
+      "SME0320,4": 8,
+      "SME0320,1": 9
+    },
+    "Afonso Paiva Neto": {
+      "SME0241,1": 1,
+      "SME0300,1": 2,
+      "SME0300,2": 3,
+      "SME0306,1": 4,
+      "SME0306,2": 6,
+      "SME0250,1": 9,
+      "SME0334,1": 7,
+      "SME0206,1": 5,
+      "SME5827,1": 10,
+      "MAI5014,1": 8
+    },
+    "Antonio Castelo Filho": {
+      "SME0250,1": 1,
+      "SME5827,1": 2,
+      "MAI5002,1": 3,
+      "SME0206,1": 4,
+      "SME0334,1": 5,
+      "SME0300,2": 6,
+      "SME0300,1": 7,
+      "SME0306,1": 8,
+      "SME0306,2": 9,
+      "SME0241,1": 10
+    },
+    "Cibele Maria Russo Novelli": {
+      "SME0822,1": 1,
+      "SME0123,1": 2,
+      "SME0123,2": 3,
+      "SME0320,4": 4,
+      "SME0820,1": 5,
+      "SME0828,1": 6,
+      "SME0880,1": 7,
+      "SME5975,1": 9,
+      "EST5507,1": 8,
+      "EST5519,1": 10
+    },
+    "Cynthia de Oliveira Lage Ferreira": {
+      "SME0142,1": 1,
+      "SME0142,2": 2,
+      "SME0300,1": 4,
+      "SME0300,2": 8,
+      "SME0306,2": 5,
+      "SME0341,2": 3,
+      "SME0206,1": 6,
+      "SME0240,1": 9,
+      "SME0341,1": 7,
+      "SME0285,1": 10
+    },
+    "Daiane de Souza Santos": {
+      "SME0123,1": 1,
+      "SME0220,1": 5,
+      "SME0320,4": 2,
+      "SME0820,1": 9,
+      "SME0320,3": 3,
+      "SME0320,1": 4,
+      "SME0320,2": 6,
+      "SME0123,2": 7,
+      "SME0800,1": 10,
+      "SME0824,1": 8
+    },
+    "Daniel Henrique Silva": {
+      "SME0300,2": 1,
+      "SME0300,1": 2,
+      "SME0341,1": 3,
+      "SME0341,2": 4,
+      "SME0510,1": 5,
+      "SME0142,1": 6,
+      "SME0142,2": 7,
+      "SME0110,2": 8,
+      "SME0110,1": 9,
+      "SME0211,1": 10
+    },
+    "Eduardo Fontoura Costa": {
+      "SME0300,2": 2,
+      "SME0300,1": 1,
+      "SME0123,1": 3,
+      "SME0123,2": 4,
+      "SME0320,4": 5,
+      "SME0320,3": 6,
+      "SME0805,1": 8,
+      "SME0306,1": 9,
+      "SME0306,2": 10,
+      "SME0334,1": 7
+    },
+    "Elias Salomão Helou Neto": {
+      "SME0211,1": 4,
+      "SME0212,1": 3,
+      "SME0284,1": 1,
+      "SME0285,1": 2,
+      "SME0510,1": 5,
+      "SME0332,1": 6,
+      "SME0332,2": 7,
+      "SME0300,2": 8,
+      "SME0300,1": 9,
+      "SME0306,1": 10,
+      "SME0306,2": 11
+    },
+    "Fabrício Simeoni de Sousa": {
+      "MAI5014,1": 1,
+      "SME0252,1": 2,
+      "SME5873,1": 3,
+      "SME0206,1": 4,
+      "SME0300,1": 5,
+      "SME0241,1": 6,
+      "SME0250,1": 7,
+      "SME5827,1": 8,
+      "SME0820,1": 9,
+      "SME0300,2": 10
+    },
+    "Francisco Aparecido Rodrigues": {
+      "MAI5003,1": 10,
+      "SME0130,1": 1,
+      "SME0220,1": 6,
+      "SME0241,1": 7,
+      "SME0320,2": 3,
+      "SME0320,3": 5,
+      "SME0800,1": 9,
+      "SME0828,1": 4,
+      "SME5975,1": 2,
+      "SME5978,1": 8
+    },
+    "Francisco Louzada Neto": {
+      "MAI5003,1": 1,
+      "EST5804,1": 2,
+      "MAI5014,1": 3,
+      "SME0815,1": 4,
+      "EST5519,1": 5,
+      "EST5521,1": 6,
+      "SME0880,1": 7,
+      "SME0881,1": 8,
+      "EST5106,1": 9,
+      "SME0809,1": 10
+    },
+    "Franklina Maria Bragion de Toledo": {
+      "SME0110,1": 3,
+      "SME0110,2": 4,
+      "SME0211,1": 7,
+      "SME0212,1": 9,
+      "SME0213,1": 1,
+      "SME0300,1": 8,
+      "SME0510,1": 5,
+      "SME5962,1": 2,
+      "SME0285,1": 6,
+      "MAI5032,1": 10
+    },
+    "Geovane Augusto Haveroth": {
+      "SME0300,2": 10,
+      "SME0306,2": 9,
+      "SME0334,1": 8,
+      "SME0306,1": 7,
+      "SME0142,2": 6,
+      "SME0206,1": 4,
+      "SME0285,1": 2,
+      "SME0300,1": 5,
+      "SME0142,1": 3,
+      "SME0245,1": 1
+    },
+    "Gustavo Carlos Buscaglia": {
+      "MAI5002,1": 10,
+      "SME0123,1": 9,
+      "SME0123,2": 8,
+      "SME0206,1": 3,
+      "SME0241,1": 11,
+      "SME0300,1": 7,
+      "SME0300,2": 6,
+      "SME0306,2": 5,
+      "SME0306,1": 4,
+      "SME0285,1": 2,
+      "SME0284,1": 1
+    },
+    "Katiane Silva Conceição": {
+      "EST5106,1": 2,
+      "SME0123,1": 5,
+      "SME0123,2": 6,
+      "SME0810,1": 1,
+      "SME0320,4": 3,
+      "SME0320,2": 4,
+      "SME0814,1": 7,
+      "SME0815,1": 8,
+      "SME0880,1": 9,
+      "SME0881,1": 10
+    },
+    "Leandro Franco de Souza": {
+      "SME0306,1": 1,
+      "SME0300,1": 2,
+      "SME0306,2": 3,
+      "SME5873,1": 4,
+      "SME0300,2": 5,
+      "SME0252,1": 6,
+      "SME0334,1": 7,
+      "SME0284,1": 8,
+      "SME0285,1": 9,
+      "SME0814,1": 10
+    },
+    "Livia Souza Freire Grion": {
+      "SME0334,1": 1,
+      "SME0300,1": 2,
+      "SME0300,2": 3,
+      "SME0306,1": 4,
+      "SME0306,2": 5,
+      "SME0824,1": 10,
+      "SME0320,1": 8,
+      "SME0320,3": 9,
+      "SME0332,1": 6,
+      "SME0332,2": 7
+    },
+    "Luis Gustavo Nonato": {
+      "SME0142,1": 1,
+      "SME0241,1": 2,
+      "SME0123,2": 4,
+      "SME0300,2": 8,
+      "SME0306,1": 7,
+      "SME0320,2": 9,
+      "SME0334,1": 10,
+      "SME5975,1": 5,
+      "SME0142,2": 3,
+      "MAI5014,1": 6,
+      "SME0808,1": 11
+    },
+    "Marcos Mansano Furlan": {
+      "SME0110,1": 1,
+      "SME0110,2": 2,
+      "SME0211,1": 3,
+      "SME0510,1": 4,
+      "SME0332,1": 5,
+      "SME0332,2": 6,
+      "SME0300,2": 7,
+      "SME0300,1": 8,
+      "SME0212,1": 9,
+      "SME0828,1": 10
+    },
+    "Maria Luísa Bambozzi de Oliveira": {
+      "SME0142,1": 6,
+      "SME0142,2": 5,
+      "SME0206,1": 1,
+      "SME0240,1": 4,
+      "SME0300,1": 2,
+      "SME0300,2": 3,
+      "SME0306,2": 9,
+      "SME0341,1": 8,
+      "SME0341,2": 7,
+      "SME0241,1": 15
+    },
+    "Mariana Cúri": {
+      "SME0814,1": 1,
+      "SME0871,1": 2,
+      "SME0880,1": 4,
+      "SME0815,1": 3,
+      "SME0881,1": 5,
+      "SME5975,1": 6,
+      "SME0123,2": 7,
+      "EST5102,1": 8,
+      "SME0123,1": 9,
+      "SME0870,1": 10
+    },
+    "Marina Andretta": {
+      "SME0110,1": 4,
+      "SME0110,2": 3,
+      "SME0213,1": 6,
+      "SME0212,1": 1,
+      "SME0211,1": 2,
+      "SME0284,1": 10,
+      "SME0285,1": 9,
+      "SME0332,1": 7,
+      "SME0332,2": 8,
+      "SME0510,1": 5
+    },
+    "Marinho Gomes de Andrade Filho": {
+      "SME0220,1": 2,
+      "SME0320,2": 6,
+      "SME0320,3": 4,
+      "SME0320,4": 5,
+      "SME0805,1": 3,
+      "SME0808,1": 1,
+      "SME0262,1": 7,
+      "SME0809,1": 8,
+      "SME0823,1": 9,
+      "SME0870,1": 10
+    },
+    "Maristela Oliveira dos Santos": {
+      "SME0110,1": 1,
+      "SME0110,2": 2,
+      "SME0211,1": 3,
+      "MAI5032,1": 4,
+      "SME0510,1": 5,
+      "SME0213,1": 6,
+      "SME0284,1": 7,
+      "SME0285,1": 8,
+      "SME5962,1": 9,
+      "MAI5014,1": 10
+    },
+    "Mário de Castro Andrade Filho": {
+      "EST5102,1": 2,
+      "EST5507,1": 3,
+      "SME0220,1": 4,
+      "SME0800,1": 6,
+      "SME0871,1": 7,
+      "SME0820,1": 1,
+      "SME0822,1": 5,
+      "EST5802,1": 8,
+      "SME0320,3": 9,
+      "SME0320,4": 10
+    },
+    "Paulo Afonso Faria da Veiga": {
+      "SME0240,1": 1,
+      "SME0341,1": 2,
+      "SME0341,2": 3,
+      "SME0245,1": 4,
+      "SME0142,2": 6,
+      "SME0142,1": 5,
+      "SME0220,1": 9,
+      "SME0800,1": 10,
+      "SME0285,1": 7,
+      "SME0206,1": 8
+    },
+    "Reiko Aoki": {
+      "SME0123,1": 1,
+      "SME0123,2": 3,
+      "SME0320,1": 5,
+      "SME0320,2": 4,
+      "SME0320,3": 7,
+      "SME0320,4": 6,
+      "SME0820,1": 2,
+      "SME0220,1": 8,
+      "SME0814,1": 9,
+      "SME0800,1": 10
+    },
+    "Ricardo Sandes Ehlers": {
+      "SME0320,3": 1,
+      "SME0320,4": 6,
+      "SME0806,1": 5,
+      "SME0808,1": 7,
+      "SME0809,1": 8,
+      "SME0822,1": 9,
+      "EST5106,1": 3,
+      "EST5514,1": 2,
+      "SME0123,1": 4,
+      "SME0220,1": 10
+    },
+    "Roberto Federico Ausas": {
+      "SME0332,1": 1,
+      "SME0332,2": 2,
+      "SME0306,1": 3,
+      "SME0300,1": 4,
+      "SME0306,2": 5,
+      "SME0300,2": 6,
+      "SME5873,1": 7,
+      "SME0252,1": 8,
+      "SME0241,1": 10,
+      "SME0334,1": 9,
+      "SME0284,1": 11,
+      "SME0206,1": 12,
+      "SME0828,1": 13
+    },
+    "Thomas Kauê Dal'Maso Peron": {
+      "SME0123,2": 1,
+      "SME0123,1": 2,
+      "SME0320,3": 3,
+      "SME0320,1": 4,
+      "SME0820,1": 5,
+      "SME0320,2": 6,
+      "SME0320,4": 7,
+      "SME0130,1": 8,
+      "SME0828,1": 9,
+      "SME5978,1": 10
+    },
+    "Tiago Pereira da Silva": {
+      "SMA5802,1": 1,
+      "SMA5934,1": 2,
+      "PRG0027,1": 3,
+      "SME0130,1": 5,
+      "SME0142,2": 6,
+      "SME0142,1": 7,
+      "SME0240,1": 8,
+      "SME0245,1": 4,
+      "SME0241,1": 9,
+      "SME0320,1": 10
+    }
+  },
+  "disciplinas": [
+    {
+      "codigo": "EST5102",
+      "nome": "Inferência Estatística",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.0,
+      "ementa": "https://www.icmc.usp.br/pos-graduacao/disciplinas?programa=104131&disciplina=EST5102",
+      "nivel": "p",
+      "horarios": [],
+      "id": "EST5102,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "PPG-PIPGEs",
+      "docentes": [
+        "Mariana Cúri",
+        "Mário de Castro Andrade Filho"
+      ]
+    },
+    {
+      "codigo": "EST5106",
+      "nome": "Tópicos de pesquisa II ",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.0,
+      "ementa": "https://www.icmc.usp.br/pos-graduacao/disciplinas?programa=104131&disciplina=EST5106",
+      "nivel": "p",
+      "horarios": [],
+      "id": "EST5106,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "PPG-PIPGEs",
+      "docentes": [
+        "Adriano Kamimura Suzuki",
+        "Francisco Louzada Neto",
+        "Katiane Silva Conceição",
+        "Ricardo Sandes Ehlers"
+      ]
+    },
+    {
+      "codigo": "EST5507",
+      "nome": "Modelos de Regressão",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.0,
+      "ementa": "https://www.icmc.usp.br/pos-graduacao/disciplinas?programa=104131&disciplina=EST5507",
+      "nivel": "p",
+      "horarios": [],
+      "id": "EST5507,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "PPG-PIPGEs",
+      "docentes": [
+        "Cibele Maria Russo Novelli",
+        "Mário de Castro Andrade Filho"
+      ]
+    },
+    {
+      "codigo": "EST5514",
+      "nome": "Simulação Estocástica",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.5,
+      "ementa": "https://www.icmc.usp.br/pos-graduacao/disciplinas?programa=104131&disciplina=EST5514",
+      "nivel": "p",
+      "horarios": [],
+      "id": "EST5514,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "PPG-PIPGEs",
+      "docentes": [
+        "Ricardo Sandes Ehlers"
+      ]
+    },
+    {
+      "codigo": "EST5519",
+      "nome": "Capacitação Docente em Estatística I",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 0.5,
+      "ementa": "https://www.icmc.usp.br/pos-graduacao/disciplinas?programa=104131&disciplina=EST5519",
+      "nivel": "p",
+      "horarios": [],
+      "id": "EST5519,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "PPG-PIPGEs",
+      "docentes": [
+        "Cibele Maria Russo Novelli",
+        "Francisco Louzada Neto"
+      ]
+    },
+    {
+      "codigo": "EST5521",
+      "nome": "Capacitação Docente em Estatística II",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 0.5,
+      "ementa": "https://www.icmc.usp.br/pos-graduacao/disciplinas?programa=104131&disciplina=EST5521",
+      "nivel": "p",
+      "horarios": [],
+      "id": "EST5521,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "PPG-PIPGEs",
+      "docentes": [
+        "Francisco Louzada Neto"
+      ]
+    },
+    {
+      "codigo": "EST5525",
+      "nome": "Processos Estocásticos",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.0,
+      "ementa": "https://www.icmc.usp.br/pos-graduacao/disciplinas?programa=104131&disciplina=EST5525",
+      "nivel": "p",
+      "horarios": [],
+      "id": "EST5525,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "PPG-PIPGEs",
+      "docentes": []
+    },
+    {
+      "codigo": "EST5802",
+      "nome": "Inferência Avançada",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.0,
+      "ementa": "https://www.icmc.usp.br/pos-graduacao/disciplinas?programa=104131&disciplina=EST5802",
+      "nivel": "p",
+      "horarios": [],
+      "id": "EST5802,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "PPG-PIPGEs",
+      "docentes": [
+        "Mário de Castro Andrade Filho"
+      ]
+    },
+    {
+      "codigo": "EST5804",
+      "nome": "Tópicos Avançados de Pesquisa I",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.0,
+      "ementa": "https://www.icmc.usp.br/pos-graduacao/disciplinas?programa=104131&disciplina=EST5804",
+      "nivel": "p",
+      "horarios": [],
+      "id": "EST5804,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "PPG-PIPGEs",
+      "docentes": [
+        "Adriano Kamimura Suzuki",
+        "Francisco Louzada Neto"
+      ]
+    },
+    {
+      "codigo": "EST5822",
+      "nome": "Tópicos Avançados em Machine Learning",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.0,
+      "ementa": "https://www.icmc.usp.br/pos-graduacao/disciplinas?programa=104131&disciplina=EST5822",
+      "nivel": "p",
+      "horarios": [],
+      "id": "EST5822,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "PPG-PIPGEs",
+      "docentes": []
+    },
+    {
+      "codigo": "MAI5003",
+      "nome": "Probabilidade e Estatística",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 0.75,
+      "ementa": "https://www.icmc.usp.br/pos-graduacao/disciplinas?programa=55137&disciplina=MAI5003",
+      "nivel": "p",
+      "horarios": [],
+      "id": "MAI5003,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "PPG-MECAI",
+      "docentes": [
+        "Francisco Aparecido Rodrigues",
+        "Francisco Louzada Neto"
+      ]
+    },
+    {
+      "codigo": "MAI5014",
+      "nome": "Metodologia de Pesquisa e Desenvolvimento",
+      "turma": 1,
+      "grupo": "Numérico",
+      "carga": 0.75,
+      "ementa": "https://www.icmc.usp.br/pos-graduacao/disciplinas?programa=55137&disciplina=MAI5014",
+      "nivel": "p",
+      "horarios": [],
+      "id": "MAI5014,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "PPG-MECAI",
+      "docentes": [
+        "Afonso Paiva Neto",
+        "Fabrício Simeoni de Sousa",
+        "Francisco Louzada Neto",
+        "Luis Gustavo Nonato",
+        "Maristela Oliveira dos Santos"
+      ]
+    },
+    {
+      "codigo": "PRG0027",
+      "nome": "Uma jornada lúdica pela topologia geométrica\t",
+      "turma": 1,
+      "grupo": "Matemática",
+      "carga": 0.5,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=PRG0027",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Ter.",
+          "inicio": "16:20",
+          "fim": "18:00"
+        }
+      ],
+      "id": "PRG0027,1",
+      "conflitos": [
+        "SME0332,2",
+        "SME0220,1",
+        "SME0123,2",
+        "SME0285,1",
+        "SME0320,2"
+      ],
+      "noturna": false,
+      "cursos": "Optativa Livre para toda USP",
+      "docentes": [
+        "Tiago Pereira da Silva"
+      ]
+    },
+    {
+      "codigo": "SMA5802",
+      "nome": "Equações Diferenciais Ordinárias",
+      "turma": 1,
+      "grupo": "Matemática",
+      "carga": 1.0,
+      "ementa": "https://www.icmc.usp.br/pos-graduacao/disciplinas?programa=55135&disciplina=SMA5802",
+      "nivel": "p",
+      "horarios": [],
+      "id": "SMA5802,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "PPG-Mat",
+      "docentes": [
+        "Tiago Pereira da Silva"
+      ]
+    },
+    {
+      "codigo": "SMA5934",
+      "nome": "Tópicos em Teoria Algébrica de Invariantes e Bifurcações",
+      "turma": 1,
+      "grupo": "Matemática",
+      "carga": 1.0,
+      "ementa": "https://www.icmc.usp.br/pos-graduacao/disciplinas?programa=55135&disciplina=SMA5934",
+      "nivel": "p",
+      "horarios": [],
+      "id": "SMA5934,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "PPG-Mat",
+      "docentes": [
+        "Tiago Pereira da Silva"
+      ]
+    },
+    {
+      "codigo": "SME0110",
+      "nome": "Programação Matemática",
+      "turma": 1,
+      "grupo": "Otimização",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0110",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Seg.",
+          "inicio": "08:10",
+          "fim": "09:50"
+        },
+        {
+          "dia": "Qua.",
+          "inicio": "10:10",
+          "fim": "11:50"
+        }
+      ],
+      "id": "SME0110,1",
+      "conflitos": [
+        "SME0300,1",
+        "SME0306,2"
+      ],
+      "noturna": false,
+      "cursos": "BCC",
+      "docentes": [
+        "Daniel Henrique Silva",
+        "Franklina Maria Bragion de Toledo",
+        "Marcos Mansano Furlan",
+        "Marina Andretta",
+        "Maristela Oliveira dos Santos"
+      ]
+    },
+    {
+      "codigo": "SME0110",
+      "nome": "Programação Matemática",
+      "turma": 2,
+      "grupo": "Otimização",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0110",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Seg.",
+          "inicio": "10:10",
+          "fim": "11:50"
+        },
+        {
+          "dia": "Qua.",
+          "inicio": "08:10",
+          "fim": "09:50"
+        }
+      ],
+      "id": "SME0110,2",
+      "conflitos": [
+        "SME0320,4",
+        "SME0320,1"
+      ],
+      "noturna": false,
+      "cursos": "BCC",
+      "docentes": [
+        "Daniel Henrique Silva",
+        "Franklina Maria Bragion de Toledo",
+        "Marcos Mansano Furlan",
+        "Marina Andretta",
+        "Maristela Oliveira dos Santos"
+      ]
+    },
+    {
+      "codigo": "SME0123",
+      "nome": "Estatística",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0123",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Ter.",
+          "inicio": "14:20",
+          "fim": "16:00"
+        },
+        {
+          "dia": "Sex.",
+          "inicio": "08:10",
+          "fim": "09:50"
+        }
+      ],
+      "id": "SME0123,1",
+      "conflitos": [
+        "SME0240,1",
+        "SME0332,1",
+        "SME0320,3",
+        "SME0241,1",
+        "SME0285,1",
+        "SME0300,2"
+      ],
+      "noturna": false,
+      "cursos": "BCC",
+      "docentes": [
+        "Cibele Maria Russo Novelli",
+        "Daiane de Souza Santos",
+        "Eduardo Fontoura Costa",
+        "Gustavo Carlos Buscaglia",
+        "Katiane Silva Conceição",
+        "Mariana Cúri",
+        "Reiko Aoki",
+        "Ricardo Sandes Ehlers",
+        "Thomas Kauê Dal'Maso Peron"
+      ]
+    },
+    {
+      "codigo": "SME0123",
+      "nome": "Estatística",
+      "turma": 2,
+      "grupo": "Estatística",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0123",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Ter.",
+          "inicio": "16:20",
+          "fim": "18:00"
+        },
+        {
+          "dia": "Sex.",
+          "inicio": "10:10",
+          "fim": "11:50"
+        }
+      ],
+      "id": "SME0123,2",
+      "conflitos": [
+        "SME0332,2",
+        "PRG0027,1",
+        "SME0341,2",
+        "SME0320,1",
+        "SME0220,1",
+        "SME0306,1",
+        "SME0341,1",
+        "SME0285,1",
+        "SME0320,2"
+      ],
+      "noturna": false,
+      "cursos": "BCC",
+      "docentes": [
+        "Cibele Maria Russo Novelli",
+        "Daiane de Souza Santos",
+        "Eduardo Fontoura Costa",
+        "Gustavo Carlos Buscaglia",
+        "Katiane Silva Conceição",
+        "Luis Gustavo Nonato",
+        "Mariana Cúri",
+        "Reiko Aoki",
+        "Thomas Kauê Dal'Maso Peron"
+      ]
+    },
+    {
+      "codigo": "SME0130 ",
+      "nome": "Redes Complexas",
+      "turma": 1,
+      "grupo": "Ciência de Dados",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0130",
+      "nivel": "g",
+      "horarios": [],
+      "id": "SME0130,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "BCC",
+      "docentes": [
+        "Francisco Aparecido Rodrigues",
+        "Thomas Kauê Dal'Maso Peron",
+        "Tiago Pereira da Silva"
+      ]
+    },
+    {
+      "codigo": "SME0142",
+      "nome": "Algebra Linear e Aplicações",
+      "turma": 1,
+      "grupo": "Matemática",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0142",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Ter.",
+          "inicio": "10:10",
+          "fim": "11:50"
+        },
+        {
+          "dia": "Qui.",
+          "inicio": "10:10",
+          "fim": "11:50"
+        }
+      ],
+      "id": "SME0142,1",
+      "conflitos": [
+        "SME0300,1",
+        "SME0300,2",
+        "SME0341,2",
+        "SME0212,1"
+      ],
+      "noturna": false,
+      "cursos": "BCC, BCDados",
+      "docentes": [
+        "Cynthia de Oliveira Lage Ferreira",
+        "Daniel Henrique Silva",
+        "Geovane Augusto Haveroth",
+        "Luis Gustavo Nonato",
+        "Maria Luísa Bambozzi de Oliveira",
+        "Paulo Afonso Faria da Veiga",
+        "Tiago Pereira da Silva"
+      ]
+    },
+    {
+      "codigo": "SME0142",
+      "nome": "Algebra Linear e Aplicações",
+      "turma": 2,
+      "grupo": "Matemática",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0142",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Ter.",
+          "inicio": "08:10",
+          "fim": "09:50"
+        },
+        {
+          "dia": "Qui.",
+          "inicio": "08:10",
+          "fim": "09:50"
+        }
+      ],
+      "id": "SME0142,2",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "BCC",
+      "docentes": [
+        "Cynthia de Oliveira Lage Ferreira",
+        "Daniel Henrique Silva",
+        "Geovane Augusto Haveroth",
+        "Luis Gustavo Nonato",
+        "Maria Luísa Bambozzi de Oliveira",
+        "Paulo Afonso Faria da Veiga",
+        "Tiago Pereira da Silva"
+      ]
+    },
+    {
+      "codigo": "SME0206",
+      "nome": "Fundamentos de Análise Numérica ",
+      "turma": 1,
+      "grupo": "Numérico",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0206",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Seg.",
+          "inicio": "14:20",
+          "fim": "16:00"
+        },
+        {
+          "dia": "Qua.",
+          "inicio": "14:20",
+          "fim": "16:00"
+        }
+      ],
+      "id": "SME0206,1",
+      "conflitos": [
+        "SME0284,1"
+      ],
+      "noturna": false,
+      "cursos": "BMACC",
+      "docentes": [
+        "Afonso Paiva Neto",
+        "Antonio Castelo Filho",
+        "Cynthia de Oliveira Lage Ferreira",
+        "Fabrício Simeoni de Sousa",
+        "Geovane Augusto Haveroth",
+        "Gustavo Carlos Buscaglia",
+        "Maria Luísa Bambozzi de Oliveira",
+        "Paulo Afonso Faria da Veiga",
+        "Roberto Federico Ausas"
+      ]
+    },
+    {
+      "codigo": "SME0211",
+      "nome": "Otimização Linear",
+      "turma": 1,
+      "grupo": "Otimização",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0211",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Seg.",
+          "inicio": "16:20",
+          "fim": "18:00"
+        },
+        {
+          "dia": "Qua.",
+          "inicio": "16:20",
+          "fim": "18:00"
+        }
+      ],
+      "id": "SME0211,1",
+      "conflitos": [
+        "SME0245,1",
+        "SME0320,4",
+        "SME0320,3",
+        "SME0284,1",
+        "SME0320,2"
+      ],
+      "noturna": false,
+      "cursos": "BMACC",
+      "docentes": [
+        "Daniel Henrique Silva",
+        "Elias Salomão Helou Neto",
+        "Franklina Maria Bragion de Toledo",
+        "Marcos Mansano Furlan",
+        "Marina Andretta",
+        "Maristela Oliveira dos Santos"
+      ]
+    },
+    {
+      "codigo": "SME0212",
+      "nome": "Otimização Não Linear",
+      "turma": 1,
+      "grupo": "Otimização",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0212",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Qui.",
+          "inicio": "10:10",
+          "fim": "11:50"
+        },
+        {
+          "dia": "Qui.",
+          "inicio": "14:10",
+          "fim": "15:50"
+        }
+      ],
+      "id": "SME0212,1",
+      "conflitos": [
+        "SME0240,1",
+        "SME0334,1",
+        "SME0332,1",
+        "SME0341,1",
+        "SME0300,1",
+        "SME0142,1"
+      ],
+      "noturna": false,
+      "cursos": "BCDados, BMACC",
+      "docentes": [
+        "Elias Salomão Helou Neto",
+        "Franklina Maria Bragion de Toledo",
+        "Marcos Mansano Furlan",
+        "Marina Andretta"
+      ]
+    },
+    {
+      "codigo": "SME0213 ",
+      "nome": "Otimização Inteira ",
+      "turma": 1,
+      "grupo": "Otimização",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0213",
+      "nivel": "g",
+      "horarios": [],
+      "id": "SME0213,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "BMACC",
+      "docentes": [
+        "Franklina Maria Bragion de Toledo",
+        "Marina Andretta",
+        "Maristela Oliveira dos Santos"
+      ]
+    },
+    {
+      "codigo": "SME0220",
+      "nome": "Introdução à Teoria das Probabilidades",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0220",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Ter.",
+          "inicio": "16:20",
+          "fim": "18:00"
+        },
+        {
+          "dia": "Qui.",
+          "inicio": "16:20",
+          "fim": "18:00"
+        }
+      ],
+      "id": "SME0220,1",
+      "conflitos": [
+        "SME0332,2",
+        "PRG0027,1",
+        "SME0123,2",
+        "SME0306,1",
+        "SME0285,1",
+        "SME0320,2"
+      ],
+      "noturna": false,
+      "cursos": "BCDados, BMACC, BMA, LMA",
+      "docentes": [
+        "Adriano Kamimura Suzuki",
+        "Daiane de Souza Santos",
+        "Francisco Aparecido Rodrigues",
+        "Marinho Gomes de Andrade Filho",
+        "Mário de Castro Andrade Filho",
+        "Paulo Afonso Faria da Veiga",
+        "Reiko Aoki",
+        "Ricardo Sandes Ehlers"
+      ]
+    },
+    {
+      "codigo": "SME0240",
+      "nome": "Equações Diferenciais Ordinárias ",
+      "turma": 1,
+      "grupo": "Matemática",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0240",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Ter.",
+          "inicio": "14:20",
+          "fim": "16:00"
+        },
+        {
+          "dia": "Qui.",
+          "inicio": "14:20",
+          "fim": "16:00"
+        }
+      ],
+      "id": "SME0240,1",
+      "conflitos": [
+        "SME0334,1",
+        "SME0123,1",
+        "SME0332,1",
+        "SME0320,3",
+        "SME0212,1",
+        "SME0341,1",
+        "SME0241,1",
+        "SME0285,1"
+      ],
+      "noturna": false,
+      "cursos": "BMACC, LMA, BMA",
+      "docentes": [
+        "Cynthia de Oliveira Lage Ferreira",
+        "Maria Luísa Bambozzi de Oliveira",
+        "Paulo Afonso Faria da Veiga",
+        "Tiago Pereira da Silva"
+      ]
+    },
+    {
+      "codigo": "SME0241",
+      "nome": "Introdução à Modelagem Matemática ",
+      "turma": 1,
+      "grupo": "Numérico",
+      "carga": 0.5,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0241",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Ter.",
+          "inicio": "14:20",
+          "fim": "16:00"
+        }
+      ],
+      "id": "SME0241,1",
+      "conflitos": [
+        "SME0240,1",
+        "SME0123,1",
+        "SME0332,1",
+        "SME0320,3",
+        "SME0285,1"
+      ],
+      "noturna": false,
+      "cursos": "BMACC",
+      "docentes": [
+        "Afonso Paiva Neto",
+        "Antonio Castelo Filho",
+        "Fabrício Simeoni de Sousa",
+        "Francisco Aparecido Rodrigues",
+        "Gustavo Carlos Buscaglia",
+        "Luis Gustavo Nonato",
+        "Maria Luísa Bambozzi de Oliveira",
+        "Roberto Federico Ausas",
+        "Tiago Pereira da Silva"
+      ]
+    },
+    {
+      "codigo": "SME0245",
+      "nome": "Funções de Variável Complexa",
+      "turma": 1,
+      "grupo": "Matemática",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0245",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Qua.",
+          "inicio": "16:20",
+          "fim": "18:00"
+        },
+        {
+          "dia": "Sex.",
+          "inicio": "16:20",
+          "fim": "18:00"
+        }
+      ],
+      "id": "SME0245,1",
+      "conflitos": [
+        "SME0211,1",
+        "SME0320,2",
+        "SME0284,1"
+      ],
+      "noturna": false,
+      "cursos": "BMACC, LMA, BMA",
+      "docentes": [
+        "Geovane Augusto Haveroth",
+        "Paulo Afonso Faria da Veiga",
+        "Tiago Pereira da Silva"
+      ]
+    },
+    {
+      "codigo": "SME0250 ",
+      "nome": "Métodos Numéricos para Geração de Malhas ",
+      "turma": 1,
+      "grupo": "Numérico",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0250",
+      "nivel": "g",
+      "horarios": [],
+      "id": "SME0250,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "BMACC",
+      "docentes": [
+        "Afonso Paiva Neto",
+        "Antonio Castelo Filho",
+        "Fabrício Simeoni de Sousa"
+      ]
+    },
+    {
+      "codigo": "SME0252  ",
+      "nome": "Sistemas Esparsos e Computação Paralela ",
+      "turma": 1,
+      "grupo": "Numérico",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0252",
+      "nivel": "g",
+      "horarios": [],
+      "id": "SME0252,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "BMACC",
+      "docentes": [
+        "Fabrício Simeoni de Sousa",
+        "Leandro Franco de Souza",
+        "Roberto Federico Ausas"
+      ]
+    },
+    {
+      "codigo": "SME0262 ",
+      "nome": "Análise de Séries Temporais em Finanças",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0262",
+      "nivel": "g",
+      "horarios": [],
+      "id": "SME0262,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "BCDados",
+      "docentes": [
+        "Marinho Gomes de Andrade Filho"
+      ]
+    },
+    {
+      "codigo": "SME0284",
+      "nome": "Estágio Supervisionado ",
+      "turma": 1,
+      "grupo": "Numérico",
+      "carga": 0.25,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0284",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Qua.",
+          "inicio": "14:20",
+          "fim": "16:00"
+        },
+        {
+          "dia": "Qua.",
+          "inicio": "16:20",
+          "fim": "18:00"
+        }
+      ],
+      "id": "SME0284,1",
+      "conflitos": [
+        "SME0211,1",
+        "SME0320,2",
+        "SME0206,1",
+        "SME0245,1"
+      ],
+      "noturna": false,
+      "cursos": "BMACC",
+      "docentes": [
+        "Elias Salomão Helou Neto",
+        "Gustavo Carlos Buscaglia",
+        "Leandro Franco de Souza",
+        "Marina Andretta",
+        "Maristela Oliveira dos Santos",
+        "Roberto Federico Ausas"
+      ]
+    },
+    {
+      "codigo": "SME0285",
+      "nome": "Trabalho de Conclusão de Curso ",
+      "turma": 1,
+      "grupo": "Numérico",
+      "carga": 0.25,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0285",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Ter.",
+          "inicio": "14:20",
+          "fim": "16:00"
+        },
+        {
+          "dia": "Ter.",
+          "inicio": "16:20",
+          "fim": "18:00"
+        }
+      ],
+      "id": "SME0285,1",
+      "conflitos": [
+        "SME0332,2",
+        "PRG0027,1",
+        "SME0240,1",
+        "SME0220,1",
+        "SME0123,1",
+        "SME0332,1",
+        "SME0320,3",
+        "SME0123,2",
+        "SME0241,1",
+        "SME0320,2"
+      ],
+      "noturna": false,
+      "cursos": "BMACC",
+      "docentes": [
+        "Cynthia de Oliveira Lage Ferreira",
+        "Elias Salomão Helou Neto",
+        "Franklina Maria Bragion de Toledo",
+        "Geovane Augusto Haveroth",
+        "Gustavo Carlos Buscaglia",
+        "Leandro Franco de Souza",
+        "Marina Andretta",
+        "Maristela Oliveira dos Santos",
+        "Paulo Afonso Faria da Veiga"
+      ]
+    },
+    {
+      "codigo": "SME0300 ",
+      "nome": "Cálculo Numérico",
+      "turma": 1,
+      "grupo": "Numérico",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0300",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Qua.",
+          "inicio": "10:10",
+          "fim": "11:50"
+        },
+        {
+          "dia": "Qui.",
+          "inicio": "10:10",
+          "fim": "11:50"
+        }
+      ],
+      "id": "SME0300,1",
+      "conflitos": [
+        "SME0110,1",
+        "SME0212,1",
+        "SME0306,2",
+        "SME0142,1"
+      ],
+      "noturna": false,
+      "cursos": "Elétrica -Eletrônica",
+      "docentes": [
+        "Afonso Paiva Neto",
+        "Antonio Castelo Filho",
+        "Cynthia de Oliveira Lage Ferreira",
+        "Daniel Henrique Silva",
+        "Eduardo Fontoura Costa",
+        "Elias Salomão Helou Neto",
+        "Fabrício Simeoni de Sousa",
+        "Franklina Maria Bragion de Toledo",
+        "Geovane Augusto Haveroth",
+        "Gustavo Carlos Buscaglia",
+        "Leandro Franco de Souza",
+        "Livia Souza Freire Grion",
+        "Marcos Mansano Furlan",
+        "Maria Luísa Bambozzi de Oliveira",
+        "Roberto Federico Ausas"
+      ]
+    },
+    {
+      "codigo": "SME0300 ",
+      "nome": "Cálculo Numérico",
+      "turma": 2,
+      "grupo": "Numérico",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0300",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Ter.",
+          "inicio": "10:10",
+          "fim": "11:50"
+        },
+        {
+          "dia": "Sex.",
+          "inicio": "08:10",
+          "fim": "09:50"
+        }
+      ],
+      "id": "SME0300,2",
+      "conflitos": [
+        "SME0123,1",
+        "SME0341,2",
+        "SME0142,1"
+      ],
+      "noturna": false,
+      "cursos": "Elétrica – Automação",
+      "docentes": [
+        "Afonso Paiva Neto",
+        "Antonio Castelo Filho",
+        "Cynthia de Oliveira Lage Ferreira",
+        "Daniel Henrique Silva",
+        "Eduardo Fontoura Costa",
+        "Elias Salomão Helou Neto",
+        "Fabrício Simeoni de Sousa",
+        "Geovane Augusto Haveroth",
+        "Gustavo Carlos Buscaglia",
+        "Leandro Franco de Souza",
+        "Livia Souza Freire Grion",
+        "Luis Gustavo Nonato",
+        "Marcos Mansano Furlan",
+        "Maria Luísa Bambozzi de Oliveira",
+        "Roberto Federico Ausas"
+      ]
+    },
+    {
+      "codigo": "SME0306 ",
+      "nome": "Métodos Numéricos e Computacionais II",
+      "turma": 1,
+      "grupo": "Numérico",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0306",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Qui.",
+          "inicio": "16:20",
+          "fim": "18:00"
+        },
+        {
+          "dia": "Sex.",
+          "inicio": "10:10",
+          "fim": "11:50"
+        }
+      ],
+      "id": "SME0306,1",
+      "conflitos": [
+        "SME0332,2",
+        "SME0341,2",
+        "SME0320,1",
+        "SME0220,1",
+        "SME0123,2",
+        "SME0341,1"
+      ],
+      "noturna": false,
+      "cursos": "Materiais e\nManufatura\t",
+      "docentes": [
+        "Afonso Paiva Neto",
+        "Antonio Castelo Filho",
+        "Eduardo Fontoura Costa",
+        "Elias Salomão Helou Neto",
+        "Geovane Augusto Haveroth",
+        "Gustavo Carlos Buscaglia",
+        "Leandro Franco de Souza",
+        "Livia Souza Freire Grion",
+        "Luis Gustavo Nonato",
+        "Roberto Federico Ausas"
+      ]
+    },
+    {
+      "codigo": "SME0306 ",
+      "nome": "Métodos Numéricos e Computacionais II",
+      "turma": 2,
+      "grupo": "Numérico",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0306",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Seg.",
+          "inicio": "08:10",
+          "fim": "09:50"
+        },
+        {
+          "dia": "Qua.",
+          "inicio": "10:10",
+          "fim": "11:50"
+        }
+      ],
+      "id": "SME0306,2",
+      "conflitos": [
+        "SME0300,1",
+        "SME0110,1"
+      ],
+      "noturna": false,
+      "cursos": "Civil",
+      "docentes": [
+        "Afonso Paiva Neto",
+        "Antonio Castelo Filho",
+        "Cynthia de Oliveira Lage Ferreira",
+        "Eduardo Fontoura Costa",
+        "Elias Salomão Helou Neto",
+        "Geovane Augusto Haveroth",
+        "Gustavo Carlos Buscaglia",
+        "Leandro Franco de Souza",
+        "Livia Souza Freire Grion",
+        "Maria Luísa Bambozzi de Oliveira",
+        "Roberto Federico Ausas"
+      ]
+    },
+    {
+      "codigo": "SME0320 ",
+      "nome": "Estatística I",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0320",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Qua.",
+          "inicio": "08:10",
+          "fim": "09:50"
+        },
+        {
+          "dia": "Sex.",
+          "inicio": "10:10",
+          "fim": "11:50"
+        }
+      ],
+      "id": "SME0320,1",
+      "conflitos": [
+        "SME0110,2",
+        "SME0341,2",
+        "SME0320,4",
+        "SME0123,2",
+        "SME0306,1",
+        "SME0341,1"
+      ],
+      "noturna": false,
+      "cursos": "Ambiental",
+      "docentes": [
+        "Adriano Kamimura Suzuki",
+        "Daiane de Souza Santos",
+        "Livia Souza Freire Grion",
+        "Reiko Aoki",
+        "Thomas Kauê Dal'Maso Peron",
+        "Tiago Pereira da Silva"
+      ]
+    },
+    {
+      "codigo": "SME0320 ",
+      "nome": "Estatística I",
+      "turma": 2,
+      "grupo": "Estatística",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0320",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Ter.",
+          "inicio": "16:20",
+          "fim": "18:00"
+        },
+        {
+          "dia": "Qua.",
+          "inicio": "16:20",
+          "fim": "18:00"
+        }
+      ],
+      "id": "SME0320,2",
+      "conflitos": [
+        "SME0332,2",
+        "PRG0027,1",
+        "SME0220,1",
+        "SME0245,1",
+        "SME0123,2",
+        "SME0284,1",
+        "SME0285,1",
+        "SME0211,1"
+      ],
+      "noturna": false,
+      "cursos": "Aeronáutica",
+      "docentes": [
+        "Adriano Kamimura Suzuki",
+        "Daiane de Souza Santos",
+        "Francisco Aparecido Rodrigues",
+        "Katiane Silva Conceição",
+        "Luis Gustavo Nonato",
+        "Marinho Gomes de Andrade Filho",
+        "Reiko Aoki",
+        "Thomas Kauê Dal'Maso Peron"
+      ]
+    },
+    {
+      "codigo": "SME0320 ",
+      "nome": "Estatística I",
+      "turma": 3,
+      "grupo": "Estatística",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0320",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Seg.",
+          "inicio": "16:20",
+          "fim": "18:00"
+        },
+        {
+          "dia": "Ter.",
+          "inicio": "14:20",
+          "fim": "16:00"
+        }
+      ],
+      "id": "SME0320,3",
+      "conflitos": [
+        "SME0240,1",
+        "SME0123,1",
+        "SME0332,1",
+        "SME0320,4",
+        "SME0241,1",
+        "SME0285,1",
+        "SME0211,1"
+      ],
+      "noturna": false,
+      "cursos": "Civil",
+      "docentes": [
+        "Adriano Kamimura Suzuki",
+        "Daiane de Souza Santos",
+        "Eduardo Fontoura Costa",
+        "Francisco Aparecido Rodrigues",
+        "Livia Souza Freire Grion",
+        "Marinho Gomes de Andrade Filho",
+        "Mário de Castro Andrade Filho",
+        "Reiko Aoki",
+        "Ricardo Sandes Ehlers",
+        "Thomas Kauê Dal'Maso Peron"
+      ]
+    },
+    {
+      "codigo": "SME0320 ",
+      "nome": "Estatística I",
+      "turma": 4,
+      "grupo": "Estatística",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0320",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Seg.",
+          "inicio": "16:20",
+          "fim": "18:00"
+        },
+        {
+          "dia": "Qua.",
+          "inicio": "08:10",
+          "fim": "09:50"
+        }
+      ],
+      "id": "SME0320,4",
+      "conflitos": [
+        "SME0110,2",
+        "SME0211,1",
+        "SME0320,1",
+        "SME0320,3"
+      ],
+      "noturna": false,
+      "cursos": "Mecatrônica",
+      "docentes": [
+        "Adriano Kamimura Suzuki",
+        "Cibele Maria Russo Novelli",
+        "Daiane de Souza Santos",
+        "Eduardo Fontoura Costa",
+        "Katiane Silva Conceição",
+        "Marinho Gomes de Andrade Filho",
+        "Mário de Castro Andrade Filho",
+        "Reiko Aoki",
+        "Ricardo Sandes Ehlers",
+        "Thomas Kauê Dal'Maso Peron"
+      ]
+    },
+    {
+      "codigo": "SME0332 ",
+      "nome": "Fundamentos da Programação para Computadores",
+      "turma": 1,
+      "grupo": "Numérico",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0332",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Ter.",
+          "inicio": "14:20",
+          "fim": "16:00"
+        },
+        {
+          "dia": "Qui.",
+          "inicio": "14:20",
+          "fim": "16:00"
+        }
+      ],
+      "id": "SME0332,1",
+      "conflitos": [
+        "SME0240,1",
+        "SME0334,1",
+        "SME0123,1",
+        "SME0320,3",
+        "SME0212,1",
+        "SME0341,1",
+        "SME0241,1",
+        "SME0285,1"
+      ],
+      "noturna": false,
+      "cursos": "Física/ Ciências Físicas Biomoleculares",
+      "docentes": [
+        "Elias Salomão Helou Neto",
+        "Livia Souza Freire Grion",
+        "Marcos Mansano Furlan",
+        "Marina Andretta",
+        "Roberto Federico Ausas"
+      ]
+    },
+    {
+      "codigo": "SME0332 ",
+      "nome": "Fundamentos da Programação para Computadores",
+      "turma": 2,
+      "grupo": "Numérico",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0332",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Ter.",
+          "inicio": "16:20",
+          "fim": "18:00"
+        },
+        {
+          "dia": "Qui.",
+          "inicio": "16:20",
+          "fim": "18:00"
+        }
+      ],
+      "id": "SME0332,2",
+      "conflitos": [
+        "PRG0027,1",
+        "SME0220,1",
+        "SME0123,2",
+        "SME0306,1",
+        "SME0285,1",
+        "SME0320,2"
+      ],
+      "noturna": false,
+      "cursos": "Física/Ciências Físicas Biomoleculares",
+      "docentes": [
+        "Elias Salomão Helou Neto",
+        "Livia Souza Freire Grion",
+        "Marcos Mansano Furlan",
+        "Marina Andretta",
+        "Roberto Federico Ausas"
+      ]
+    },
+    {
+      "codigo": "SME0334",
+      "nome": "Computação Numérica e Simulações para Engenharia Ambiental II",
+      "turma": 1,
+      "grupo": "Numérico",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0334",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Qui.",
+          "inicio": "14:20",
+          "fim": "16:00"
+        },
+        {
+          "dia": "Sex.",
+          "inicio": "14:20",
+          "fim": "16:00"
+        }
+      ],
+      "id": "SME0334,1",
+      "conflitos": [
+        "SME0332,1",
+        "SME0240,1",
+        "SME0212,1",
+        "SME0341,1"
+      ],
+      "noturna": false,
+      "cursos": "Ambiental",
+      "docentes": [
+        "Afonso Paiva Neto",
+        "Antonio Castelo Filho",
+        "Eduardo Fontoura Costa",
+        "Geovane Augusto Haveroth",
+        "Leandro Franco de Souza",
+        "Livia Souza Freire Grion",
+        "Luis Gustavo Nonato",
+        "Roberto Federico Ausas"
+      ]
+    },
+    {
+      "codigo": "SME0341",
+      "nome": "Álgebra Linear e Equações Diferenciais",
+      "turma": 1,
+      "grupo": "Matemática",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0341",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Qui.",
+          "inicio": "14:20",
+          "fim": "16:00"
+        },
+        {
+          "dia": "Sex.",
+          "inicio": "10:10",
+          "fim": "11:50"
+        }
+      ],
+      "id": "SME0341,1",
+      "conflitos": [
+        "SME0240,1",
+        "SME0341,2",
+        "SME0320,1",
+        "SME0334,1",
+        "SME0332,1",
+        "SME0123,2",
+        "SME0306,1",
+        "SME0212,1"
+      ],
+      "noturna": false,
+      "cursos": "Civil",
+      "docentes": [
+        "Cynthia de Oliveira Lage Ferreira",
+        "Daniel Henrique Silva",
+        "Maria Luísa Bambozzi de Oliveira",
+        "Paulo Afonso Faria da Veiga"
+      ]
+    },
+    {
+      "codigo": "SME0341",
+      "nome": "Álgebra Linear e Equações Diferenciais",
+      "turma": 2,
+      "grupo": "Matemática",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0341",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Ter.",
+          "inicio": "10:10",
+          "fim": "11:50"
+        },
+        {
+          "dia": "Sex.",
+          "inicio": "10:10",
+          "fim": "11:50"
+        }
+      ],
+      "id": "SME0341,2",
+      "conflitos": [
+        "SME0320,1",
+        "SME0123,2",
+        "SME0306,1",
+        "SME0341,1",
+        "SME0300,2",
+        "SME0142,1"
+      ],
+      "noturna": false,
+      "cursos": "Produção",
+      "docentes": [
+        "Cynthia de Oliveira Lage Ferreira",
+        "Daniel Henrique Silva",
+        "Maria Luísa Bambozzi de Oliveira",
+        "Paulo Afonso Faria da Veiga"
+      ]
+    },
+    {
+      "codigo": "SME0510",
+      "nome": "Introdução à Pesquisa Operacional ",
+      "turma": 1,
+      "grupo": "Otimização",
+      "carga": 1.099609375,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0510",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Seg.",
+          "inicio": "19:00",
+          "fim": "20:40"
+        },
+        {
+          "dia": "Qua.",
+          "inicio": "21:00",
+          "fim": "22:40"
+        }
+      ],
+      "id": "SME0510,1",
+      "conflitos": [
+        "SME0823,1",
+        "SME0809,1"
+      ],
+      "noturna": true,
+      "cursos": "BSI",
+      "docentes": [
+        "Daniel Henrique Silva",
+        "Elias Salomão Helou Neto",
+        "Franklina Maria Bragion de Toledo",
+        "Marcos Mansano Furlan",
+        "Marina Andretta",
+        "Maristela Oliveira dos Santos"
+      ]
+    },
+    {
+      "codigo": "SME0800",
+      "nome": "Probabilidade I",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.099609375,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0800",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Ter.",
+          "inicio": "19:00",
+          "fim": "20:40"
+        },
+        {
+          "dia": "Qui.",
+          "inicio": "21:00",
+          "fim": "22:40"
+        }
+      ],
+      "id": "SME0800,1",
+      "conflitos": [
+        "SME0805,1",
+        "SME0822,1"
+      ],
+      "noturna": true,
+      "cursos": "BECD",
+      "docentes": [
+        "Adriano Kamimura Suzuki",
+        "Daiane de Souza Santos",
+        "Francisco Aparecido Rodrigues",
+        "Mário de Castro Andrade Filho",
+        "Paulo Afonso Faria da Veiga",
+        "Reiko Aoki"
+      ]
+    },
+    {
+      "codigo": "SME0805",
+      "nome": "Processos Estocásticos",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.099609375,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0805",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Ter.",
+          "inicio": "19:00",
+          "fim": "20:40"
+        },
+        {
+          "dia": "Qui.",
+          "inicio": "21:00",
+          "fim": "22:40"
+        }
+      ],
+      "id": "SME0805,1",
+      "conflitos": [
+        "SME0800,1",
+        "SME0822,1"
+      ],
+      "noturna": true,
+      "cursos": "BECD",
+      "docentes": [
+        "Eduardo Fontoura Costa",
+        "Marinho Gomes de Andrade Filho"
+      ]
+    },
+    {
+      "codigo": "SME0806",
+      "nome": "Estatística Computacional",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0806",
+      "nivel": "g",
+      "horarios": [],
+      "id": "SME0806,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "BCC",
+      "docentes": [
+        "Ricardo Sandes Ehlers"
+      ]
+    },
+    {
+      "codigo": "SME0808",
+      "nome": "Séries temporais e aprendizado dinâmico",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.099609375,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0808",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Ter.",
+          "inicio": "21:00",
+          "fim": "22:40"
+        },
+        {
+          "dia": "Qui.",
+          "inicio": "19:00",
+          "fim": "20:40"
+        }
+      ],
+      "id": "SME0808,1",
+      "conflitos": [
+        "SME0820,1",
+        "SME0824,1"
+      ],
+      "noturna": true,
+      "cursos": "BECD, BCDados",
+      "docentes": [
+        "Luis Gustavo Nonato",
+        "Marinho Gomes de Andrade Filho",
+        "Ricardo Sandes Ehlers"
+      ]
+    },
+    {
+      "codigo": "SME0809",
+      "nome": "Inferência Bayesiana",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.099609375,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0809",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Seg.",
+          "inicio": "19:00",
+          "fim": "20:40"
+        },
+        {
+          "dia": "Qua.",
+          "inicio": "21:00",
+          "fim": "22:40"
+        }
+      ],
+      "id": "SME0809,1",
+      "conflitos": [
+        "SME0510,1",
+        "SME0823,1"
+      ],
+      "noturna": true,
+      "cursos": "BECD",
+      "docentes": [
+        "Adriano Kamimura Suzuki",
+        "Francisco Louzada Neto",
+        "Marinho Gomes de Andrade Filho",
+        "Ricardo Sandes Ehlers"
+      ]
+    },
+    {
+      "codigo": "SME0810",
+      "nome": "Métodos não Paramétricos",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.099609375,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0810",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Seg.",
+          "inicio": "21:00",
+          "fim": "22:40"
+        },
+        {
+          "dia": "Qua.",
+          "inicio": "19:00",
+          "fim": "20:40"
+        }
+      ],
+      "id": "SME0810,1",
+      "conflitos": [
+        "SME0828,1"
+      ],
+      "noturna": true,
+      "cursos": "BECD",
+      "docentes": [
+        "Adriano Kamimura Suzuki",
+        "Katiane Silva Conceição"
+      ]
+    },
+    {
+      "codigo": "SME0814",
+      "nome": "Estágio supervisionado em estatística I",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 0.27490234375,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0814",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Sáb.",
+          "inicio": "08:10",
+          "fim": "09:50"
+        },
+        {
+          "dia": "Sáb.",
+          "inicio": "10:10",
+          "fim": "11:50"
+        }
+      ],
+      "id": "SME0814,1",
+      "conflitos": [
+        "SME0880,1",
+        "SME0881,1",
+        "SME0815,1"
+      ],
+      "noturna": false,
+      "cursos": "BECD",
+      "docentes": [
+        "Katiane Silva Conceição",
+        "Leandro Franco de Souza",
+        "Mariana Cúri",
+        "Reiko Aoki"
+      ]
+    },
+    {
+      "codigo": "SME0815",
+      "nome": "Estágio supervisionado em estatística II",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 0.27490234375,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0815",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Sáb.",
+          "inicio": "08:10",
+          "fim": "09:50"
+        },
+        {
+          "dia": "Sáb.",
+          "inicio": "10:10",
+          "fim": "11:50"
+        }
+      ],
+      "id": "SME0815,1",
+      "conflitos": [
+        "SME0880,1",
+        "SME0881,1",
+        "SME0814,1"
+      ],
+      "noturna": false,
+      "cursos": "BECD",
+      "docentes": [
+        "Francisco Louzada Neto",
+        "Katiane Silva Conceição",
+        "Mariana Cúri"
+      ]
+    },
+    {
+      "codigo": "SME0820",
+      "nome": "Modelos de regresão e aprendizado supervisionado I",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.099609375,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0820",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Ter.",
+          "inicio": "21:00",
+          "fim": "22:40"
+        },
+        {
+          "dia": "Sex.",
+          "inicio": "19:00",
+          "fim": "20:40"
+        }
+      ],
+      "id": "SME0820,1",
+      "conflitos": [
+        "SME0808,1"
+      ],
+      "noturna": true,
+      "cursos": "BECD, BCDados",
+      "docentes": [
+        "Cibele Maria Russo Novelli",
+        "Daiane de Souza Santos",
+        "Fabrício Simeoni de Sousa",
+        "Mário de Castro Andrade Filho",
+        "Reiko Aoki",
+        "Thomas Kauê Dal'Maso Peron"
+      ]
+    },
+    {
+      "codigo": "SME0822",
+      "nome": "Análise Multivariada e aprendizado não supervisionado",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.099609375,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0822",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Ter.",
+          "inicio": "19:00",
+          "fim": "20:40"
+        },
+        {
+          "dia": "Qui.",
+          "inicio": "21:00",
+          "fim": "22:40"
+        }
+      ],
+      "id": "SME0822,1",
+      "conflitos": [
+        "SME0805,1",
+        "SME0800,1"
+      ],
+      "noturna": true,
+      "cursos": "BECD, BCDados, BCC",
+      "docentes": [
+        "Cibele Maria Russo Novelli",
+        "Mário de Castro Andrade Filho",
+        "Ricardo Sandes Ehlers"
+      ]
+    },
+    {
+      "codigo": "SME0823",
+      "nome": "Modelos de regresão e aprendizado não supervisionado II",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.099609375,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0823",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Seg.",
+          "inicio": "19:00",
+          "fim": "20:40"
+        },
+        {
+          "dia": "Qua.",
+          "inicio": "21:00",
+          "fim": "22:40"
+        }
+      ],
+      "id": "SME0823,1",
+      "conflitos": [
+        "SME0510,1",
+        "SME0809,1"
+      ],
+      "noturna": true,
+      "cursos": "BECD, BCC",
+      "docentes": [
+        "Marinho Gomes de Andrade Filho"
+      ]
+    },
+    {
+      "codigo": "SME0824",
+      "nome": "Gestão da qualidade",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.099609375,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0824",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Qui.",
+          "inicio": "19:00",
+          "fim": "20:40"
+        },
+        {
+          "dia": "Sex.",
+          "inicio": "21:00",
+          "fim": "22:40"
+        }
+      ],
+      "id": "SME0824,1",
+      "conflitos": [
+        "SME0808,1"
+      ],
+      "noturna": true,
+      "cursos": "BECD",
+      "docentes": [
+        "Daiane de Souza Santos",
+        "Livia Souza Freire Grion"
+      ]
+    },
+    {
+      "codigo": "SME0828",
+      "nome": "Introdução à Ciência de dados",
+      "turma": 1,
+      "grupo": "Ciência de Dados",
+      "carga": 1.099609375,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0828",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Seg.",
+          "inicio": "21:00",
+          "fim": "22:40"
+        },
+        {
+          "dia": "Qua.",
+          "inicio": "19:00",
+          "fim": "20:40"
+        }
+      ],
+      "id": "SME0828,1",
+      "conflitos": [
+        "SME0810,1"
+      ],
+      "noturna": true,
+      "cursos": "BECD",
+      "docentes": [
+        "Cibele Maria Russo Novelli",
+        "Francisco Aparecido Rodrigues",
+        "Marcos Mansano Furlan",
+        "Roberto Federico Ausas",
+        "Thomas Kauê Dal'Maso Peron"
+      ]
+    },
+    {
+      "codigo": "SME0870",
+      "nome": "Tópicos Especiais em Estatística Aplicada I",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.0,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0870",
+      "nivel": "g",
+      "horarios": [],
+      "id": "SME0870,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "BCDados",
+      "docentes": [
+        "Mariana Cúri",
+        "Marinho Gomes de Andrade Filho"
+      ]
+    },
+    {
+      "codigo": "SME0871 ",
+      "nome": "Bioestatística",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.099609375,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0871",
+      "nivel": "g",
+      "horarios": [],
+      "id": "SME0871,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "BECD\t",
+      "docentes": [
+        "Mariana Cúri",
+        "Mário de Castro Andrade Filho"
+      ]
+    },
+    {
+      "codigo": "SME0880",
+      "nome": "Projeto de graduação em estatística I",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 0.27490234375,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0880",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Sáb.",
+          "inicio": "08:10",
+          "fim": "09:50"
+        },
+        {
+          "dia": "Sáb.",
+          "inicio": "10:10",
+          "fim": "11:50"
+        }
+      ],
+      "id": "SME0880,1",
+      "conflitos": [
+        "SME0815,1",
+        "SME0881,1",
+        "SME0814,1"
+      ],
+      "noturna": false,
+      "cursos": "BECD",
+      "docentes": [
+        "Cibele Maria Russo Novelli",
+        "Francisco Louzada Neto",
+        "Katiane Silva Conceição",
+        "Mariana Cúri"
+      ]
+    },
+    {
+      "codigo": "SME0881",
+      "nome": "Projeto de graduação em estatística II",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 0.27490234375,
+      "ementa": "https://uspdigital.usp.br/jupiterweb/obterDisciplina?nomdis=&sgldis=SME0881",
+      "nivel": "g",
+      "horarios": [
+        {
+          "dia": "Sáb.",
+          "inicio": "08:10",
+          "fim": "09:50"
+        },
+        {
+          "dia": "Sáb.",
+          "inicio": "10:10",
+          "fim": "11:50"
+        }
+      ],
+      "id": "SME0881,1",
+      "conflitos": [
+        "SME0815,1",
+        "SME0880,1",
+        "SME0814,1"
+      ],
+      "noturna": false,
+      "cursos": "BECD",
+      "docentes": [
+        "Francisco Louzada Neto",
+        "Katiane Silva Conceição",
+        "Mariana Cúri"
+      ]
+    },
+    {
+      "codigo": "SME5827",
+      "nome": "Geração de malhas",
+      "turma": 1,
+      "grupo": "Numérico",
+      "carga": 1.0,
+      "ementa": "https://www.icmc.usp.br/pos-graduacao/disciplinas?programa=55134&disciplina=SME5827",
+      "nivel": "p",
+      "horarios": [],
+      "id": "SME5827,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "PPG-CCMC",
+      "docentes": [
+        "Afonso Paiva Neto",
+        "Antonio Castelo Filho",
+        "Fabrício Simeoni de Sousa"
+      ]
+    },
+    {
+      "codigo": "SME5873",
+      "nome": "Ferramentas de Programação Paralela para Solução de EDPs",
+      "turma": 1,
+      "grupo": "Numérico",
+      "carga": 0.75,
+      "ementa": "https://www.icmc.usp.br/pos-graduacao/disciplinas?programa=55134&disciplina=SME5873",
+      "nivel": "p",
+      "horarios": [],
+      "id": "SME5873,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "PPG-CCMC",
+      "docentes": [
+        "Fabrício Simeoni de Sousa",
+        "Leandro Franco de Souza",
+        "Roberto Federico Ausas"
+      ]
+    },
+    {
+      "codigo": "SME5962",
+      "nome": "Otimização Inteira",
+      "turma": 1,
+      "grupo": "Otimização",
+      "carga": 0.75,
+      "ementa": "https://www.icmc.usp.br/pos-graduacao/disciplinas?programa=55134&disciplina=SME5962",
+      "nivel": "p",
+      "horarios": [],
+      "id": "SME5962,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "PPG-CCMC",
+      "docentes": [
+        "Franklina Maria Bragion de Toledo",
+        "Maristela Oliveira dos Santos"
+      ]
+    },
+    {
+      "codigo": "SME5975",
+      "nome": "Estatística na Ciência da Computação",
+      "turma": 1,
+      "grupo": "Estatística",
+      "carga": 1.0,
+      "ementa": "https://www.icmc.usp.br/pos-graduacao/disciplinas?programa=55134&disciplina=SME5975",
+      "nivel": "p",
+      "horarios": [],
+      "id": "SME5975,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "PPG-CCMC",
+      "docentes": [
+        "Cibele Maria Russo Novelli",
+        "Francisco Aparecido Rodrigues",
+        "Luis Gustavo Nonato",
+        "Mariana Cúri"
+      ]
+    },
+    {
+      "codigo": "SME5978",
+      "nome": "Sistemas Complexos",
+      "turma": 1,
+      "grupo": "Ciência de Dados",
+      "carga": 1.0,
+      "ementa": "https://www.icmc.usp.br/pos-graduacao/disciplinas?programa=55134&disciplina=SME5978",
+      "nivel": "p",
+      "horarios": [],
+      "id": "SME5978,1",
+      "conflitos": [],
+      "noturna": false,
+      "cursos": "PPG-CCMC",
+      "docentes": [
+        "Francisco Aparecido Rodrigues",
+        "Thomas Kauê Dal'Maso Peron"
+      ]
+    }
+  ],
+  "docentes": [
+    {
+      "nome": "Adriano Kamimura Suzuki",
+      "ativo": true
+    },
+    {
+      "nome": "Afonso Paiva Neto",
+      "ativo": true
+    },
+    {
+      "nome": "André Carlos Ponce de Leon Ferreira de Carvalho",
+      "ativo": true
+    },
+    {
+      "nome": "Antonio Castelo Filho",
+      "ativo": true
+    },
+    {
+      "nome": "Cibele Maria Russo Novelli",
+      "ativo": true
+    },
+    {
+      "nome": "Cynthia de Oliveira Lage Ferreira",
+      "ativo": true
+    },
+    {
+      "nome": "Daiane de Souza Santos",
+      "ativo": true
+    },
+    {
+      "nome": "Daniel Henrique Silva",
+      "ativo": true
+    },
+    {
+      "nome": "Eduardo Fontoura Costa",
+      "ativo": true
+    },
+    {
+      "nome": "Elias Salomão Helou Neto",
+      "ativo": true
+    },
+    {
+      "nome": "Everaldo de Mello Bonotto",
+      "ativo": true
+    },
+    {
+      "nome": "Fabrício Simeoni de Sousa",
+      "ativo": true
+    },
+    {
+      "nome": "Francisco Aparecido Rodrigues",
+      "ativo": true
+    },
+    {
+      "nome": "Francisco Louzada Neto",
+      "ativo": true
+    },
+    {
+      "nome": "Franklina Maria Bragion de Toledo",
+      "ativo": true
+    },
+    {
+      "nome": "Geovane Augusto Haveroth",
+      "ativo": true
+    },
+    {
+      "nome": "Gustavo Carlos Buscaglia",
+      "ativo": true
+    },
+    {
+      "nome": "Jorge Luis Bazán Guzmán",
+      "ativo": true
+    },
+    {
+      "nome": "José Alberto Cuminato",
+      "ativo": true
+    },
+    {
+      "nome": "Katiane Silva Conceição",
+      "ativo": true
+    },
+    {
+      "nome": "Leandro Franco de Souza",
+      "ativo": true
+    },
+    {
+      "nome": "Livia Souza Freire Grion",
+      "ativo": true
+    },
+    {
+      "nome": "Luis Gustavo Nonato",
+      "ativo": true
+    },
+    {
+      "nome": "Marcos Mansano Furlan",
+      "ativo": true
+    },
+    {
+      "nome": "Maria Luísa Bambozzi de Oliveira",
+      "ativo": true
+    },
+    {
+      "nome": "Mariana Cúri",
+      "ativo": true
+    },
+    {
+      "nome": "Marina Andretta",
+      "ativo": true
+    },
+    {
+      "nome": "Marinho Gomes de Andrade Filho",
+      "ativo": true
+    },
+    {
+      "nome": "Mário de Castro Andrade Filho",
+      "ativo": true
+    },
+    {
+      "nome": "Maristela Oliveira dos Santos",
+      "ativo": true
+    },
+    {
+      "nome": "Miguel Vinicius Santini Frasson",
+      "ativo": true
+    },
+    {
+      "nome": "Oilson Alberto Gonzatto Junior",
+      "ativo": true
+    },
+    {
+      "nome": "Paulo Afonso Faria da Veiga",
+      "ativo": true
+    },
+    {
+      "nome": "Reiko Aoki",
+      "ativo": true
+    },
+    {
+      "nome": "Ricardo Sandes Ehlers",
+      "ativo": true
+    },
+    {
+      "nome": "Roberto Federico Ausas",
+      "ativo": true
+    },
+    {
+      "nome": "Thomas Kauê Dal'Maso Peron",
+      "ativo": true
+    },
+    {
+      "nome": "Tiago Pereira da Silva",
+      "ativo": true
+    },
+    {
+      "nome": "Vicente Garibay Cancho",
+      "ativo": true
+    }
+  ],
+  "saldos": {
+    "Adriano Kamimura Suzuki": 1,
+    "Afonso Paiva Neto": 1,
+    "André Carlos Ponce de Leon Ferreira de Carvalho": 1,
+    "Antonio Castelo Filho": 1,
+    "Cibele Maria Russo Novelli": 1,
+    "Cynthia de Oliveira Lage Ferreira": 1,
+    "Daiane de Souza Santos": 1,
+    "Daniel Henrique Silva": 1,
+    "Eduardo Fontoura Costa": 1,
+    "Elias Salomão Helou Neto": 1,
+    "Everaldo de Mello Bonotto": 1,
+    "Fabrício Simeoni de Sousa": 1,
+    "Francisco Aparecido Rodrigues": 1,
+    "Francisco Louzada Neto": 1,
+    "Franklina Maria Bragion de Toledo": 1,
+    "Geovane Augusto Haveroth": 1,
+    "Gustavo Carlos Buscaglia": 1,
+    "Jorge Luis Bazán Guzmán": 1,
+    "José Alberto Cuminato": 1,
+    "Katiane Silva Conceição": 1,
+    "Leandro Franco de Souza": 1,
+    "Livia Souza Freire Grion": 1,
+    "Luis Gustavo Nonato": 1,
+    "Marcos Mansano Furlan": 1,
+    "Maria Luísa Bambozzi de Oliveira": 1,
+    "Mariana Cúri": 1,
+    "Marina Andretta": 1,
+    "Marinho Gomes de Andrade Filho": 1,
+    "Mário de Castro Andrade Filho": 1,
+    "Maristela Oliveira dos Santos": 1,
+    "Miguel Vinicius Santini Frasson": 1,
+    "Oilson Alberto Gonzatto Junior": 1,
+    "Paulo Afonso Faria da Veiga": 1,
+    "Reiko Aoki": 1,
+    "Ricardo Sandes Ehlers": 1,
+    "Roberto Federico Ausas": 1,
+    "Thomas Kauê Dal'Maso Peron": 1,
+    "Tiago Pereira da Silva": 1,
+    "Vicente Garibay Cancho": 1
+  }
+}

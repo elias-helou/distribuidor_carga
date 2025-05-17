@@ -1,0 +1,22 @@
+{
+  "Mariana Curi": {
+    "formularios": {
+      "SME0814,1": 1,
+      "SME0871,1": 2,
+      "SME0880,1": 4,
+      "SME0815,1": 3,
+      "SME0881,1": 5,
+      "SME5975,1": 6,
+      "SME0123,2": 7,
+      "EST5102,1": 8,
+      "SME0123,1": 9,
+      "SME0870,1": 10
+    },
+    "avaliacao": {
+      "nota": 10,
+      "comentario": "Atribuíram as disciplinas de minha preferência, mas destaco que a reunião do grupo é essencial. Isso porque negociações são feitas pelos docentes nesse momento e a atribuição se altera dependendo dessa negociação.",
+      "preferencia": "Agrupar"
+    },
+    "semNoturna": true
+  }
+}

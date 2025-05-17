@@ -1,0 +1,22 @@
+{
+  "Thomas Peron": {
+    "formularios": {
+      "SME0123,2": 1,
+      "SME0123,1": 2,
+      "SME0320,3": 3,
+      "SME0320,1": 4,
+      "SME0820,1": 5,
+      "SME0320,2": 6,
+      "SME0320,4": 7,
+      "SME0130,1": 8,
+      "SME0828,1": 9,
+      "SME5978,1": 10
+    },
+    "avaliacao": {
+      "nota": 10,
+      "comentario": "Neste semestre ministro Processos Estocásticos para duas turmas (BCC 1 e 2), o que me permite unificar a ementa dos dois grupos e agrupar os horários.",
+      "preferencia": "Agrupar"
+    },
+    "semNoturna": false
+  }
+}

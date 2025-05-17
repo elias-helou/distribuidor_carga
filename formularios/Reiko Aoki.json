@@ -1,0 +1,22 @@
+{
+  "Reiko Aoki": {
+    "formularios": {
+      "SME0123,1": 1,
+      "SME0123,2": 3,
+      "SME0320,1": 5,
+      "SME0320,2": 4,
+      "SME0320,3": 7,
+      "SME0320,4": 6,
+      "SME0820,1": 2,
+      "SME0220,1": 8,
+      "SME0814,1": 9,
+      "SME0800,1": 10
+    },
+    "avaliacao": {
+      "nota": 10,
+      "comentario": "",
+      "preferencia": "Agrupar"
+    },
+    "semNoturna": false
+  }
+}
